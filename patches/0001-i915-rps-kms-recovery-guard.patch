@@ -1,0 +1,42 @@
+From: ChatGPT <noreply@openai.com>
+Subject: [PATCH] i915: avoid RPS mutex after GT init failure
+
+NetBSD's Linux-5.6-derived i915 GEM initialization deliberately treats
+-EIO from intel_gt_init() as a wedged-GT condition where GPU submission
+is disabled but KMS remains alive.  The intel_gt_init() error unwind has
+already called intel_gt_pm_fini(), which destroys the RPS mutexes.
+
+The later fbdev/KMS modeset can call intel_rps_mark_interactive().  On a
+GT that failed initialization this attempts to lock the already destroyed
+rps->power.mutex and can panic instead of preserving the intended KMS-only
+recovery path.
+
+Skip RPS interactive accounting only for the explicit wedged-on-init
+state.  Runtime RPS behavior on successfully initialized hardware is
+unchanged.
+
+---
+ sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c b/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
+--- a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
+@@ -650,6 +650,16 @@ static void gen6_rps_set_thresholds(struct intel_rps *rps, u8 val)
+ 
+ void intel_rps_mark_interactive(struct intel_rps *rps, bool interactive)
+ {
++	/*
++	 * intel_gt_init() may fail with -EIO after intel_gt_pm_fini() has
++	 * torn RPS down.  i915_gem_init() deliberately keeps KMS alive for
++	 * that case, so fbdev may still reach this function.  Do not touch
++	 * the destroyed RPS mutex when the GT was wedged during init.
++	 */
++	if (intel_gt_has_init_error(rps_to_gt(rps)))
++		return;
++
+ 	mutex_lock(&rps->power.mutex);
+ 	if (interactive) {
+ 		if (!rps->power.interactive++ && rps->active)
+-- 
+2.0.0
