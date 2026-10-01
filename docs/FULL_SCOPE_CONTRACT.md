@@ -30,7 +30,7 @@ none
 | COV-I915-006 | IRQ install | intel_irq_install | MSI/INTx + i915 masks/handlers | after noirq display | IRQ uninstall | OPEN | IRQ/vblank/HPD verification |
 | COV-I915-007 | Display hardware setup | intel_display_driver_probe_nogem | PPS, GMBUS, CRTCs, planes, DPLLs, outputs, HW-state reconstruction | after IRQ | modeset teardown | OPEN | internal-panel state evidence |
 | COV-I915-008 | GEM/engines/GT init | i915_gem_init | GGTT SW, PAT, workarounds, engine/GT init, uC interfaces | after display nogem | GEM/GT release | OPEN | build + engine init evidence |
-| COV-I915-009 | Protected/uC platform interfaces | intel_pxp_init and platform firmware interfaces | target-appropriate adapter/stub only where evidenced | after GEM | fini paths | OPEN | platform applicability audit |
+| COV-I915-009 | Protected/uC platform interfaces | intel_pxp_init, HAS_PXP/HAS_GT_UC/GSC0 predicates | CHV reference-inapplicable implementation modules; preserve unsupported/no-op control semantics | after GEM | no PXP/uC runtime allocation on CHV; normal no-op/fini | CLOSED | docs/CHV-UC-PXP-EVIDENCE.md + NetBSD uC NOT_SUPPORTED path |
 | COV-I915-010 | Display commit/HPD | intel_display_driver_probe | initial atomic takeover, HPD, overlay, watermark IPC | after GEM/PXP | display remove | OPEN | panel active + console takeover |
 | COV-I915-011 | Driver registration | i915_driver_register | DRM device, GT/perf/display/audio/fb console integration | after display commit | unregister | OPEN | device nodes + console/userland |
 | COV-I915-012 | Runtime PM/power domains | Linux runtime PM + display power domains | NetBSD PM callbacks preserving wake/power ordering | after registration | runtime disable | OPEN | idle/wake cycle evidence |
@@ -42,7 +42,7 @@ none
 Reconcile the existing Cherryview/IOSF/F82 partial work against COV-I915-001 and COV-I915-003, then continue dependency closure into COV-I915-002 and COV-I915-004 without treating any local compile or black-screen change as parent completion.
 
 ## NEXT_UNRESOLVED
-COV-I915-000 through COV-I915-015 remain unresolved; COV-I915-001 and COV-I915-003 are currently IN_PROGRESS.
+COV-I915-009 is CLOSED for the Cherryview target by pinned-reference applicability evidence. COV-I915-000 through COV-I915-008 and COV-I915-010 through COV-I915-015 remain unresolved; COV-I915-001 and COV-I915-003 are currently IN_PROGRESS.
 
 ## PARENT_STATUS
 IN_PROGRESS
