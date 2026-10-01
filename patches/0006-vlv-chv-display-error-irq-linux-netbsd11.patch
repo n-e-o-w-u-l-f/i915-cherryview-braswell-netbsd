@@ -37,7 +37,7 @@
  #define SPCONSTALPHA(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPACONSTALPHA, _SPBCONSTALPHA)
 --- a/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
-@@ -1522,6 +1522,117 @@
+@@ -1522,6 +1522,132 @@
  	}
  }
  
@@ -81,11 +81,25 @@
 + * provide the equivalent hardware snapshots, translated to the old
 + * i915_reg_t and I915_READ adapter.
 + */
-+static void
++static bool
 +vlv_display_plane_fault(struct drm_i915_private *dev_priv,
 +			enum pipe pipe, enum plane_id plane_id)
 +{
++	struct drm_plane *base;
 +	i915_reg_t ctl, surf, live;
++	bool present = false;
++
++	/* Linux skips planes without an installed capture_error callback. */
++	drm_for_each_plane(base, &dev_priv->drm) {
++		struct intel_plane *plane = to_intel_plane(base);
++
++		if (plane->pipe == pipe && plane->id == plane_id) {
++			present = true;
++			break;
++		}
++	}
++	if (!present)
++		return false;
 +
 +	switch (plane_id) {
 +	case PLANE_PRIMARY:
@@ -105,13 +119,14 @@
 +		live = SPSURFLIVE(pipe, plane_id);
 +		break;
 +	default:
-+		return;
++		return false;
 +	}
 +
 +	DRM_ERROR("VLV/CHV pipe %d plane %d GTT fault "
 +		  "(CTL=0x%08x SURF=0x%08x SURFLIVE=0x%08x)\n",
 +		  pipe, plane_id, I915_READ(ctl), I915_READ(surf),
 +		  I915_READ(live));
++	return true;
 +}
 +
 +/* Linux intel_display_irq.c:vlv_pipe_fault_handlers order/bit map. */
@@ -143,8 +158,8 @@
 +
 +			if (!(dpinvgtt & fault))
 +				continue;
-+			vlv_display_plane_fault(dev_priv, pipe, ids[i]);
-+			dpinvgtt &= ~fault;
++			if (vlv_display_plane_fault(dev_priv, pipe, ids[i]))
++				dpinvgtt &= ~fault;
 +		}
 +	}
 +	if (dpinvgtt)
@@ -155,7 +170,7 @@
  static irqreturn_t valleyview_irq_handler(DRM_IRQ_ARGS)
  {
  	struct drm_i915_private *dev_priv = arg;
-@@ -1537,6 +1648,7 @@
+@@ -1537,6 +1663,7 @@
  		u32 iir, gt_iir, pm_iir;
  		u32 pipe_stats[I915_MAX_PIPES] = {};
  		u32 hotplug_status = 0;
@@ -163,7 +178,7 @@
  		u32 ier = 0;
  
  		gt_iir = I915_READ(GTIIR);
-@@ -1577,6 +1689,9 @@
+@@ -1577,6 +1704,9 @@
  		 * signalled in iir */
  		i9xx_pipestat_irq_ack(dev_priv, iir, pipe_stats);
  
@@ -173,7 +188,7 @@
  		if (iir & (I915_LPE_PIPE_A_INTERRUPT |
  			   I915_LPE_PIPE_B_INTERRUPT))
  			intel_lpe_audio_irq_handler(dev_priv);
-@@ -1596,6 +1711,9 @@
+@@ -1596,6 +1726,9 @@
  		if (pm_iir)
  			gen6_rps_irq_handler(&dev_priv->gt.rps, pm_iir);
  
@@ -183,7 +198,7 @@
  		if (hotplug_status)
  			i9xx_hpd_irq_handler(dev_priv, hotplug_status);
  
-@@ -1622,6 +1740,7 @@
+@@ -1622,6 +1755,7 @@
  		u32 master_ctl, iir;
  		u32 pipe_stats[I915_MAX_PIPES] = {};
  		u32 hotplug_status = 0;
@@ -191,7 +206,7 @@
  		u32 gt_iir[4];
  		u32 ier = 0;
  
-@@ -1659,6 +1778,9 @@
+@@ -1659,6 +1793,9 @@
  		 * signalled in iir */
  		i9xx_pipestat_irq_ack(dev_priv, iir, pipe_stats);
  
@@ -201,7 +216,7 @@
  		if (iir & (I915_LPE_PIPE_A_INTERRUPT |
  			   I915_LPE_PIPE_B_INTERRUPT |
  			   I915_LPE_PIPE_C_INTERRUPT))
-@@ -1675,6 +1797,9 @@
+@@ -1675,6 +1812,9 @@
  		I915_WRITE(GEN8_MASTER_IRQ, GEN8_MASTER_IRQ_CONTROL);
  
  		gen8_gt_irq_handler(&dev_priv->gt, master_ctl, gt_iir);
@@ -211,7 +226,7 @@
  
  		if (hotplug_status)
  			i9xx_hpd_irq_handler(dev_priv, hotplug_status);
-@@ -2715,6 +2840,14 @@
+@@ -2715,6 +2855,14 @@
  	else
  		intel_uncore_write(uncore, DPINVGTT, DPINVGTT_STATUS_MASK);
  
@@ -226,7 +241,7 @@
  	i915_hotplug_interrupt_update_locked(dev_priv, 0xffffffff, 0);
  	intel_uncore_write(uncore, PORT_HOTPLUG_STAT, I915_READ(PORT_HOTPLUG_STAT));
  
-@@ -2732,6 +2865,20 @@
+@@ -2732,6 +2880,20 @@
  	u32 enable_mask;
  	enum pipe pipe;
  
@@ -247,7 +262,7 @@
  	pipestat_mask = PIPE_CRC_DONE_INTERRUPT_STATUS;
  
  	i915_enable_pipestat(dev_priv, PIPE_A, PIPE_GMBUS_INTERRUPT_STATUS);
-@@ -2741,6 +2888,7 @@
+@@ -2741,6 +2903,7 @@
  	enable_mask = I915_DISPLAY_PORT_INTERRUPT |
  		I915_DISPLAY_PIPE_A_EVENT_INTERRUPT |
  		I915_DISPLAY_PIPE_B_EVENT_INTERRUPT |
