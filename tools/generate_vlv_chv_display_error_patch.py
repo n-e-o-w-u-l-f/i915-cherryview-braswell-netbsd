@@ -148,7 +148,11 @@ def generate(netbsd: Path, linux: Path, output: Path) -> None:
     reset = (
         "\n\t/* Linux _vlv_display_irq_reset(): reset the EIR/EMR bank. */\n"
         "\tintel_uncore_write(uncore, VLV_EMR, 0xffffffff);\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EMR);\n"
         "\tintel_uncore_write(uncore, VLV_EIR, 0xffffffff);\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EIR);\n"
+        "\tintel_uncore_write(uncore, VLV_EIR, 0xffffffff);\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EIR);\n"
     )
     irq = exactly(irq, reset_anchor, reset_anchor + reset, "VLV IRQ reset")
 
@@ -162,7 +166,11 @@ def generate(netbsd: Path, linux: Path, output: Path) -> None:
         "\t\tintel_uncore_write(uncore, DPINVGTT,\n"
         "\t\t    DPINVGTT_STATUS_MASK | DPINVGTT_EN_MASK);\n"
         "\tintel_uncore_write(uncore, VLV_EIR, 0xffffffff);\n"
-        "\tintel_uncore_write(uncore, VLV_EMR, ~VLV_ERROR_PAGE_TABLE);\n\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EIR);\n"
+        "\tintel_uncore_write(uncore, VLV_EIR, 0xffffffff);\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EIR);\n"
+        "\tintel_uncore_write(uncore, VLV_EMR, ~VLV_ERROR_PAGE_TABLE);\n"
+        "\tintel_uncore_posting_read(uncore, VLV_EMR);\n\n"
     )
     irq = exactly(irq, post_anchor, post + post_anchor, "VLV postinstall")
     mask_anchor = "\t\tI915_DISPLAY_PIPE_B_EVENT_INTERRUPT |\n\t\tI915_LPE_PIPE_A_INTERRUPT |"
