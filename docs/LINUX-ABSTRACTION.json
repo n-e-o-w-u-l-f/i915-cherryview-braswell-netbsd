@@ -1,0 +1,733 @@
+{
+  "schema": "neowulf-linux-driver-abstraction/v1",
+  "generated_from": {
+    "repository": "torvalds/linux",
+    "commit": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+    "path": "drivers/gpu/drm/i915/Makefile"
+  },
+  "target": {
+    "os": "NetBSD 11 amd64",
+    "hardware": "Intel Cherryview/Brasswell 8086:22b1 rev 0x35",
+    "subsystem": "103c:8205"
+  },
+  "build": {
+    "selected_config": {
+      "CONFIG_ACPI": "y",
+      "CONFIG_COMPAT": "y",
+      "CONFIG_PERF_EVENTS": "y",
+      "CONFIG_X86": "y",
+      "CONFIG_HWMON": "y",
+      "CONFIG_DRM_I915_PXP": "y",
+      "CONFIG_DRM_I915_CAPTURE_ERROR": "y",
+      "CONFIG_DRM_I915": "y",
+      "CONFIG_DRM_FBDEV_EMULATION": "y"
+    },
+    "active_translation_units": 323,
+    "sources": [
+      "display/dvo_ch7017.c",
+      "display/dvo_ch7xxx.c",
+      "display/dvo_ivch.c",
+      "display/dvo_ns2501.c",
+      "display/dvo_sil164.c",
+      "display/dvo_tfp410.c",
+      "display/g4x_dp.c",
+      "display/g4x_hdmi.c",
+      "display/hsw_ips.c",
+      "display/i9xx_display_sr.c",
+      "display/i9xx_plane.c",
+      "display/i9xx_wm.c",
+      "display/icl_dsi.c",
+      "display/intel_acpi.c",
+      "display/intel_alpm.c",
+      "display/intel_atomic.c",
+      "display/intel_audio.c",
+      "display/intel_backlight.c",
+      "display/intel_bios.c",
+      "display/intel_bo.c",
+      "display/intel_bw.c",
+      "display/intel_casf.c",
+      "display/intel_cdclk.c",
+      "display/intel_cmtg.c",
+      "display/intel_color.c",
+      "display/intel_color_pipeline.c",
+      "display/intel_colorop.c",
+      "display/intel_combo_phy.c",
+      "display/intel_connector.c",
+      "display/intel_crt.c",
+      "display/intel_crtc.c",
+      "display/intel_crtc_state_dump.c",
+      "display/intel_cursor.c",
+      "display/intel_cx0_phy.c",
+      "display/intel_dbuf_bw.c",
+      "display/intel_ddi.c",
+      "display/intel_ddi_buf_trans.c",
+      "display/intel_de.c",
+      "display/intel_display.c",
+      "display/intel_display_clock_gating.c",
+      "display/intel_display_conversion.c",
+      "display/intel_display_device.c",
+      "display/intel_display_driver.c",
+      "display/intel_display_irq.c",
+      "display/intel_display_params.c",
+      "display/intel_display_power.c",
+      "display/intel_display_power_map.c",
+      "display/intel_display_power_well.c",
+      "display/intel_display_reset.c",
+      "display/intel_display_rpm.c",
+      "display/intel_display_rps.c",
+      "display/intel_display_snapshot.c",
+      "display/intel_display_trace.c",
+      "display/intel_display_utils.c",
+      "display/intel_display_wa.c",
+      "display/intel_dkl_phy.c",
+      "display/intel_dmc.c",
+      "display/intel_dmc_wl.c",
+      "display/intel_dp.c",
+      "display/intel_dp_aux.c",
+      "display/intel_dp_aux_backlight.c",
+      "display/intel_dp_hdcp.c",
+      "display/intel_dp_link_caps.c",
+      "display/intel_dp_link_training.c",
+      "display/intel_dp_mst.c",
+      "display/intel_dp_test.c",
+      "display/intel_dpio_phy.c",
+      "display/intel_dpll.c",
+      "display/intel_dpll_mgr.c",
+      "display/intel_dpt.c",
+      "display/intel_dram.c",
+      "display/intel_drrs.c",
+      "display/intel_dsb.c",
+      "display/intel_dsi.c",
+      "display/intel_dsi_dcs_backlight.c",
+      "display/intel_dsi_vbt.c",
+      "display/intel_dvo.c",
+      "display/intel_encoder.c",
+      "display/intel_fb.c",
+      "display/intel_fbc.c",
+      "display/intel_fbdev.c",
+      "display/intel_fdi.c",
+      "display/intel_fifo_underrun.c",
+      "display/intel_flipq.c",
+      "display/intel_frontbuffer.c",
+      "display/intel_global_state.c",
+      "display/intel_gmbus.c",
+      "display/intel_hdcp.c",
+      "display/intel_hdcp_gsc_message.c",
+      "display/intel_hdmi.c",
+      "display/intel_hotplug.c",
+      "display/intel_hotplug_irq.c",
+      "display/intel_hti.c",
+      "display/intel_initial_plane.c",
+      "display/intel_link_bw.c",
+      "display/intel_load_detect.c",
+      "display/intel_lpe_audio.c",
+      "display/intel_lspcon.c",
+      "display/intel_lt_phy.c",
+      "display/intel_lvds.c",
+      "display/intel_mchbar.c",
+      "display/intel_modeset_lock.c",
+      "display/intel_modeset_setup.c",
+      "display/intel_modeset_verify.c",
+      "display/intel_opregion.c",
+      "display/intel_overlay.c",
+      "display/intel_panel.c",
+      "display/intel_parent.c",
+      "display/intel_pch.c",
+      "display/intel_pch_display.c",
+      "display/intel_pch_refclk.c",
+      "display/intel_pfit.c",
+      "display/intel_plane.c",
+      "display/intel_pmdemand.c",
+      "display/intel_pps.c",
+      "display/intel_psr.c",
+      "display/intel_qp_tables.c",
+      "display/intel_quirks.c",
+      "display/intel_rom.c",
+      "display/intel_sbi.c",
+      "display/intel_sdvo.c",
+      "display/intel_snps_hdmi_pll.c",
+      "display/intel_snps_phy.c",
+      "display/intel_sprite.c",
+      "display/intel_sprite_uapi.c",
+      "display/intel_tc.c",
+      "display/intel_tv.c",
+      "display/intel_vblank.c",
+      "display/intel_vdsc.c",
+      "display/intel_vga.c",
+      "display/intel_vrr.c",
+      "display/intel_wm.c",
+      "display/skl_prefill.c",
+      "display/skl_scaler.c",
+      "display/skl_universal_plane.c",
+      "display/skl_watermark.c",
+      "display/vlv_clock.c",
+      "display/vlv_dsi.c",
+      "display/vlv_dsi_pll.c",
+      "display/vlv_sideband.c",
+      "gem/i915_gem_busy.c",
+      "gem/i915_gem_clflush.c",
+      "gem/i915_gem_context.c",
+      "gem/i915_gem_create.c",
+      "gem/i915_gem_dmabuf.c",
+      "gem/i915_gem_domain.c",
+      "gem/i915_gem_execbuffer.c",
+      "gem/i915_gem_internal.c",
+      "gem/i915_gem_lmem.c",
+      "gem/i915_gem_mman.c",
+      "gem/i915_gem_object.c",
+      "gem/i915_gem_object_frontbuffer.c",
+      "gem/i915_gem_pages.c",
+      "gem/i915_gem_panic.c",
+      "gem/i915_gem_phys.c",
+      "gem/i915_gem_pm.c",
+      "gem/i915_gem_region.c",
+      "gem/i915_gem_shmem.c",
+      "gem/i915_gem_shrinker.c",
+      "gem/i915_gem_stolen.c",
+      "gem/i915_gem_throttle.c",
+      "gem/i915_gem_tiling.c",
+      "gem/i915_gem_ttm.c",
+      "gem/i915_gem_ttm_move.c",
+      "gem/i915_gem_ttm_pm.c",
+      "gem/i915_gem_userptr.c",
+      "gem/i915_gem_wait.c",
+      "gt/gen2_engine_cs.c",
+      "gt/gen6_engine_cs.c",
+      "gt/gen6_ppgtt.c",
+      "gt/gen6_renderstate.c",
+      "gt/gen7_renderclear.c",
+      "gt/gen7_renderstate.c",
+      "gt/gen8_engine_cs.c",
+      "gt/gen8_ppgtt.c",
+      "gt/gen8_renderstate.c",
+      "gt/gen9_renderstate.c",
+      "gt/intel_breadcrumbs.c",
+      "gt/intel_context.c",
+      "gt/intel_context_sseu.c",
+      "gt/intel_engine_cs.c",
+      "gt/intel_engine_heartbeat.c",
+      "gt/intel_engine_pm.c",
+      "gt/intel_engine_user.c",
+      "gt/intel_execlists_submission.c",
+      "gt/intel_ggtt.c",
+      "gt/intel_ggtt_fencing.c",
+      "gt/intel_ggtt_gmch.c",
+      "gt/intel_gsc.c",
+      "gt/intel_gt.c",
+      "gt/intel_gt_buffer_pool.c",
+      "gt/intel_gt_ccs_mode.c",
+      "gt/intel_gt_clock_utils.c",
+      "gt/intel_gt_debugfs.c",
+      "gt/intel_gt_engines_debugfs.c",
+      "gt/intel_gt_irq.c",
+      "gt/intel_gt_mcr.c",
+      "gt/intel_gt_pm.c",
+      "gt/intel_gt_pm_debugfs.c",
+      "gt/intel_gt_pm_irq.c",
+      "gt/intel_gt_requests.c",
+      "gt/intel_gt_sysfs.c",
+      "gt/intel_gt_sysfs_pm.c",
+      "gt/intel_gtt.c",
+      "gt/intel_llc.c",
+      "gt/intel_lrc.c",
+      "gt/intel_migrate.c",
+      "gt/intel_mocs.c",
+      "gt/intel_ppgtt.c",
+      "gt/intel_rc6.c",
+      "gt/intel_region_lmem.c",
+      "gt/intel_renderstate.c",
+      "gt/intel_reset.c",
+      "gt/intel_ring.c",
+      "gt/intel_ring_submission.c",
+      "gt/intel_rps.c",
+      "gt/intel_sa_media.c",
+      "gt/intel_sseu.c",
+      "gt/intel_sseu_debugfs.c",
+      "gt/intel_timeline.c",
+      "gt/intel_tlb.c",
+      "gt/intel_wopcm.c",
+      "gt/intel_workarounds.c",
+      "gt/shmem_utils.c",
+      "gt/sysfs_engines.c",
+      "gt/uc/intel_gsc_fw.c",
+      "gt/uc/intel_gsc_proxy.c",
+      "gt/uc/intel_gsc_uc.c",
+      "gt/uc/intel_gsc_uc_debugfs.c",
+      "gt/uc/intel_gsc_uc_heci_cmd_submit.c",
+      "gt/uc/intel_guc.c",
+      "gt/uc/intel_guc_ads.c",
+      "gt/uc/intel_guc_capture.c",
+      "gt/uc/intel_guc_ct.c",
+      "gt/uc/intel_guc_debugfs.c",
+      "gt/uc/intel_guc_fw.c",
+      "gt/uc/intel_guc_hwconfig.c",
+      "gt/uc/intel_guc_log.c",
+      "gt/uc/intel_guc_log_debugfs.c",
+      "gt/uc/intel_guc_rc.c",
+      "gt/uc/intel_guc_slpc.c",
+      "gt/uc/intel_guc_submission.c",
+      "gt/uc/intel_huc.c",
+      "gt/uc/intel_huc_debugfs.c",
+      "gt/uc/intel_huc_fw.c",
+      "gt/uc/intel_uc.c",
+      "gt/uc/intel_uc_debugfs.c",
+      "gt/uc/intel_uc_fw.c",
+      "i915_active.c",
+      "i915_bo.c",
+      "i915_cmd_parser.c",
+      "i915_config.c",
+      "i915_deps.c",
+      "i915_display_pc8.c",
+      "i915_dpt.c",
+      "i915_driver.c",
+      "i915_drm_client.c",
+      "i915_dsb_buffer.c",
+      "i915_edram.c",
+      "i915_fb_pin.c",
+      "i915_freq.c",
+      "i915_gem.c",
+      "i915_gem_evict.c",
+      "i915_gem_gtt.c",
+      "i915_gem_ww.c",
+      "i915_getparam.c",
+      "i915_gmch.c",
+      "i915_gpu_error.c",
+      "i915_hdcp_gsc.c",
+      "i915_hwmon.c",
+      "i915_initial_plane.c",
+      "i915_ioc32.c",
+      "i915_ioctl.c",
+      "i915_irq.c",
+      "i915_memcpy.c",
+      "i915_mitigations.c",
+      "i915_mm.c",
+      "i915_mmio_range.c",
+      "i915_module.c",
+      "i915_overlay.c",
+      "i915_params.c",
+      "i915_pci.c",
+      "i915_perf.c",
+      "i915_pmu.c",
+      "i915_query.c",
+      "i915_request.c",
+      "i915_scatterlist.c",
+      "i915_scheduler.c",
+      "i915_sw_fence.c",
+      "i915_sw_fence_work.c",
+      "i915_switcheroo.c",
+      "i915_syncmap.c",
+      "i915_sysfs.c",
+      "i915_timer_util.c",
+      "i915_trace_points.c",
+      "i915_ttm_buddy_manager.c",
+      "i915_user_extensions.c",
+      "i915_utils.c",
+      "i915_vgpu.c",
+      "i915_vma.c",
+      "i915_vma_resource.c",
+      "intel_clock_gating.c",
+      "intel_cpu_info.c",
+      "intel_device_info.c",
+      "intel_memory_region.c",
+      "intel_pcode.c",
+      "intel_region_ttm.c",
+      "intel_runtime_pm.c",
+      "intel_step.c",
+      "intel_uncore.c",
+      "intel_uncore_trace.c",
+      "intel_wakeref.c",
+      "pxp/intel_pxp.c",
+      "pxp/intel_pxp_cmd.c",
+      "pxp/intel_pxp_debugfs.c",
+      "pxp/intel_pxp_gsccs.c",
+      "pxp/intel_pxp_huc.c",
+      "pxp/intel_pxp_irq.c",
+      "pxp/intel_pxp_pm.c",
+      "pxp/intel_pxp_session.c",
+      "pxp/intel_pxp_tee.c",
+      "vlv_iosf_sb.c",
+      "vlv_suspend.c"
+    ]
+  },
+  "firmware_boundary": {
+    "cherryview_external_blobs": [],
+    "platform_state": [
+      "UEFI GOP framebuffer",
+      "ACPI OpRegion",
+      "VBT/BIOS child-device data"
+    ],
+    "note": "CHV Gen8 has no DMC/GuC/HuC requirement; newer firmware interfaces remain in whole-driver source closure but are target-inapplicable where Linux platform predicates exclude CHV."
+  },
+  "lifecycle": [
+    {
+      "id": "COV-I915-000",
+      "phase": "PCI/device identification",
+      "reference": [
+        "i915_driver_probe",
+        "pci_enable_device",
+        "i915_driver_create",
+        "intel_display_device_probe"
+      ],
+      "effects": [
+        "PCI enable",
+        "device/display info allocation"
+      ],
+      "adapter": [
+        "NetBSD PCI autoconf"
+      ],
+      "rollback": [
+        "device destroy/detach"
+      ]
+    },
+    {
+      "id": "COV-I915-001",
+      "phase": "early probe",
+      "reference": [
+        "i915_driver_early_probe"
+      ],
+      "effects": [
+        "runtime info",
+        "stepping",
+        "SBI/IOSF locks",
+        "runtime PM early",
+        "workqueues",
+        "VLV suspend",
+        "TTM region device",
+        "GT early",
+        "GEM early",
+        "IRQ early",
+        "display early",
+        "clock-gating hooks"
+      ],
+      "adapter": [
+        "mutex/workqueue/PM/LinuxKPI"
+      ],
+      "rollback": [
+        "intel_irq_fini",
+        "i915_gem_cleanup_early",
+        "intel_gt_driver_late_release_all",
+        "intel_region_ttm_device_fini",
+        "vlv_suspend_cleanup",
+        "workqueue cleanup",
+        "IOSF/SBI fini"
+      ]
+    },
+    {
+      "id": "COV-I915-002",
+      "phase": "GT discovery",
+      "reference": [
+        "intel_gt_probe_all"
+      ],
+      "effects": [
+        "GT topology/context discovery"
+      ],
+      "adapter": [
+        "NetBSD allocation/device glue"
+      ],
+      "rollback": [
+        "GT release"
+      ]
+    },
+    {
+      "id": "COV-I915-003",
+      "phase": "MMIO/uncore/forcewake",
+      "reference": [
+        "i915_driver_mmio_probe",
+        "i915_gmch_bridge_setup",
+        "intel_uncore_init_mmio",
+        "i915_gmch_bar_setup",
+        "intel_gt_init_mmio",
+        "sanitize_gpu"
+      ],
+      "effects": [
+        "BAR/MMIO",
+        "MCHBAR",
+        "forcewake/uncore",
+        "engine MMIO",
+        "GPU sanitization"
+      ],
+      "adapter": [
+        "bus_space/PCI BAR",
+        "LinuxKPI locking"
+      ],
+      "rollback": [
+        "i915_gmch_bar_teardown",
+        "intel_uncore_fini_mmio"
+      ]
+    },
+    {
+      "id": "COV-I915-004",
+      "phase": "DMA/GGTT/memory",
+      "reference": [
+        "i915_driver_hw_probe",
+        "i915_set_dma_info",
+        "i915_ggtt_probe_hw",
+        "i915_ggtt_init_hw",
+        "intel_gt_tiles_init",
+        "intel_memory_regions_hw_probe",
+        "i915_ggtt_enable_hw",
+        "pci_set_master",
+        "pci_enable_msi",
+        "i915_pcode_init"
+      ],
+      "effects": [
+        "DMA masks",
+        "GGTT",
+        "stolen/memory regions",
+        "bus master",
+        "MSI",
+        "pcode"
+      ],
+      "adapter": [
+        "bus_dma",
+        "uvm/pmap",
+        "PCI interrupt"
+      ],
+      "rollback": [
+        "pci_disable_msi",
+        "intel_memory_regions_driver_release",
+        "i915_ggtt_driver_release",
+        "i915_perf_fini"
+      ]
+    },
+    {
+      "id": "COV-I915-005",
+      "phase": "display noirq/VBT/power",
+      "reference": [
+        "intel_display_driver_probe_noirq"
+      ],
+      "effects": [
+        "OpRegion",
+        "VBT",
+        "display power domains",
+        "vblank",
+        "CDCLK/dbuf/bandwidth/FBC",
+        "DMC interface predicate"
+      ],
+      "adapter": [
+        "ACPI",
+        "firmware/VBT parser",
+        "NetBSD power"
+      ],
+      "rollback": [
+        "intel_display_driver_remove_noirq"
+      ]
+    },
+    {
+      "id": "COV-I915-006",
+      "phase": "IRQ install",
+      "reference": [
+        "intel_irq_install"
+      ],
+      "effects": [
+        "IRQ masks/handlers",
+        "vblank/HPD infrastructure"
+      ],
+      "adapter": [
+        "pci_intr/MSI/INTx"
+      ],
+      "rollback": [
+        "intel_irq_uninstall"
+      ]
+    },
+    {
+      "id": "COV-I915-007",
+      "phase": "display hardware setup",
+      "reference": [
+        "intel_display_driver_probe_nogem"
+      ],
+      "effects": [
+        "PPS",
+        "GMBUS",
+        "CRTCs",
+        "planes",
+        "DPLLs",
+        "outputs/encoders",
+        "BIOS state reconstruction"
+      ],
+      "adapter": [
+        "I2C",
+        "drm_kms",
+        "wsdisplay boundary"
+      ],
+      "rollback": [
+        "display modeset teardown"
+      ]
+    },
+    {
+      "id": "COV-I915-008",
+      "phase": "GEM/engines/GT init",
+      "reference": [
+        "i915_gem_init"
+      ],
+      "effects": [
+        "GGTT SW",
+        "PAT",
+        "workarounds",
+        "engines",
+        "contexts",
+        "PPGTT",
+        "RC6/RPS prerequisites"
+      ],
+      "adapter": [
+        "GEM/TTM/UVM",
+        "fences/workqueues"
+      ],
+      "rollback": [
+        "GEM/GT cleanup"
+      ]
+    },
+    {
+      "id": "COV-I915-009",
+      "phase": "protected/uC interfaces",
+      "reference": [
+        "intel_pxp_init",
+        "intel_uc_init"
+      ],
+      "effects": [
+        "platform-predicated PXP/uC state"
+      ],
+      "adapter": [
+        "target predicates/stubs only when reference-inapplicable"
+      ],
+      "rollback": [
+        "PXP/uC fini"
+      ]
+    },
+    {
+      "id": "COV-I915-010",
+      "phase": "display commit/HPD",
+      "reference": [
+        "intel_display_driver_probe"
+      ],
+      "effects": [
+        "initial atomic takeover",
+        "HPD",
+        "overlay",
+        "watermark IPC"
+      ],
+      "adapter": [
+        "DRM atomic/KMS"
+      ],
+      "rollback": [
+        "intel_display_driver_remove"
+      ]
+    },
+    {
+      "id": "COV-I915-011",
+      "phase": "driver registration",
+      "reference": [
+        "i915_driver_register"
+      ],
+      "effects": [
+        "DRM registration",
+        "GT/perf/HWMON",
+        "display register",
+        "runtime PM enable",
+        "fbdev/console integration"
+      ],
+      "adapter": [
+        "drm(4)",
+        "intelfb/drmfb/wsdisplay"
+      ],
+      "rollback": [
+        "i915_driver_unregister"
+      ]
+    },
+    {
+      "id": "COV-I915-012",
+      "phase": "runtime PM",
+      "reference": [
+        "intel_runtime_pm_enable",
+        "intel_display_driver_runtime_pm_enable"
+      ],
+      "effects": [
+        "wakeref/power-domain transitions",
+        "RC6/RPS/display power"
+      ],
+      "adapter": [
+        "pmf/runtime callbacks"
+      ],
+      "rollback": [
+        "runtime PM disable"
+      ]
+    },
+    {
+      "id": "COV-I915-013",
+      "phase": "suspend/resume",
+      "reference": [
+        "i915_drm_suspend",
+        "i915_drm_resume",
+        "i915_drm_resume_early"
+      ],
+      "effects": [
+        "GT/display/GTT save-restore",
+        "power transitions"
+      ],
+      "adapter": [
+        "pmf suspend/resume"
+      ],
+      "rollback": [
+        "resume failure cleanup"
+      ]
+    },
+    {
+      "id": "COV-I915-014",
+      "phase": "reset/recovery",
+      "reference": [
+        "intel_gt_reset",
+        "intel_engine_reset",
+        "display reset paths"
+      ],
+      "effects": [
+        "engine/GT reset",
+        "state reprogramming",
+        "error capture"
+      ],
+      "adapter": [
+        "workqueue/fence/reset integration"
+      ],
+      "rollback": [
+        "full reinit or device wedge"
+      ]
+    },
+    {
+      "id": "COV-I915-015",
+      "phase": "remove/shutdown",
+      "reference": [
+        "i915_driver_remove",
+        "i915_driver_shutdown",
+        "i915_driver_late_release"
+      ],
+      "effects": [
+        "reverse-order teardown",
+        "IRQ/PM/display/GT/GEM release"
+      ],
+      "adapter": [
+        "NetBSD detach/shutdown"
+      ],
+      "rollback": [
+        "safe device-off state"
+      ]
+    }
+  ],
+  "adapter_classes": [
+    "PCI/autoconf",
+    "bus_space",
+    "bus_dma",
+    "interrupt/MSI",
+    "ACPI/OpRegion",
+    "firmware/VBT",
+    "LinuxKPI locks/atomics/workqueues/timers",
+    "GEM/TTM/UVM",
+    "DRM KMS/atomic",
+    "fbdev->drmfb/intelfb/wsdisplay",
+    "pmf suspend/resume/runtime power"
+  ],
+  "invariants": [
+    "Preserve Linux hardware-visible ordering",
+    "No blind register experiments",
+    "F77 recovery remains untouched until runtime verification",
+    "FULL/PARITY labels forbidden until coverage/dependency/adapter/lifecycle/build/source-review gates close"
+  ]
+}
