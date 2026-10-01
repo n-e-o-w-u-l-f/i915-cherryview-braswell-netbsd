@@ -11,9 +11,33 @@
  #define VLV_PCBR	_MMIO(VLV_DISPLAY_BASE + 0x2120)
  #define VLV_PCBR_ADDR_SHIFT	12
  
+@@ -6662,6 +6666,7 @@
+ #define _SPAKEYMINVAL		(VLV_DISPLAY_BASE + 0x72194)
+ #define _SPAKEYMSK		(VLV_DISPLAY_BASE + 0x72198)
+ #define _SPASURF		(VLV_DISPLAY_BASE + 0x7219c)
++#define _SPASURFLIVE		(VLV_DISPLAY_BASE + 0x721ac)
+ #define _SPAKEYMAXVAL		(VLV_DISPLAY_BASE + 0x721a0)
+ #define _SPATILEOFF		(VLV_DISPLAY_BASE + 0x721a4)
+ #define _SPACONSTALPHA		(VLV_DISPLAY_BASE + 0x721a8)
+@@ -6682,6 +6687,7 @@
+ #define _SPBKEYMINVAL		(VLV_DISPLAY_BASE + 0x72294)
+ #define _SPBKEYMSK		(VLV_DISPLAY_BASE + 0x72298)
+ #define _SPBSURF		(VLV_DISPLAY_BASE + 0x7229c)
++#define _SPBSURFLIVE		(VLV_DISPLAY_BASE + 0x722ac)
+ #define _SPBKEYMAXVAL		(VLV_DISPLAY_BASE + 0x722a0)
+ #define _SPBTILEOFF		(VLV_DISPLAY_BASE + 0x722a4)
+ #define _SPBCONSTALPHA		(VLV_DISPLAY_BASE + 0x722a8)
+@@ -6702,6 +6708,7 @@
+ #define SPKEYMINVAL(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPAKEYMINVAL, _SPBKEYMINVAL)
+ #define SPKEYMSK(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPAKEYMSK, _SPBKEYMSK)
+ #define SPSURF(pipe, plane_id)		_MMIO_VLV_SPR((pipe), (plane_id), _SPASURF, _SPBSURF)
++#define SPSURFLIVE(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPASURFLIVE, _SPBSURFLIVE)
+ #define SPKEYMAXVAL(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPAKEYMAXVAL, _SPBKEYMAXVAL)
+ #define SPTILEOFF(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPATILEOFF, _SPBTILEOFF)
+ #define SPCONSTALPHA(pipe, plane_id)	_MMIO_VLV_SPR((pipe), (plane_id), _SPACONSTALPHA, _SPBCONSTALPHA)
 --- a/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
-@@ -1522,6 +1522,55 @@
+@@ -1522,6 +1522,117 @@
  	}
  }
  
@@ -52,24 +76,86 @@
 +}
 +
 +/*
-+ * The frozen Linux tree separately reports each faulted plane. That
-+ * plane-specific callback cannot be transplanted without the newer
-+ * intel_display plane/IRQ adapter, so record the complete enabled
-+ * DPINVGTT fault bitmap here; per-plane attribution remains open.
++ * The frozen Linux plane capture callbacks collect CTL/SURF/SURFLIVE.
++ * NetBSD's imported VLV/CHV primary, sprite and cursor register families
++ * provide the equivalent hardware snapshots, translated to the old
++ * i915_reg_t and I915_READ adapter.
 + */
 +static void
-+vlv_display_error_irq_handler(u32 eir, u32 dpinvgtt)
++vlv_display_plane_fault(struct drm_i915_private *dev_priv,
++			enum pipe pipe, enum plane_id plane_id)
 +{
++	i915_reg_t ctl, surf, live;
++
++	switch (plane_id) {
++	case PLANE_PRIMARY:
++		ctl = DSPCNTR(pipe);
++		surf = DSPSURF(pipe);
++		live = DSPSURFLIVE(pipe);
++		break;
++	case PLANE_CURSOR:
++		ctl = CURCNTR(pipe);
++		surf = CURBASE(pipe);
++		live = CURSURFLIVE(pipe);
++		break;
++	case PLANE_SPRITE0:
++	case PLANE_SPRITE1:
++		ctl = SPCNTR(pipe, plane_id);
++		surf = SPSURF(pipe, plane_id);
++		live = SPSURFLIVE(pipe, plane_id);
++		break;
++	default:
++		return;
++	}
++
++	DRM_ERROR("VLV/CHV pipe %d plane %d GTT fault "
++		  "(CTL=0x%08x SURF=0x%08x SURFLIVE=0x%08x)\n",
++		  pipe, plane_id, I915_READ(ctl), I915_READ(surf),
++		  I915_READ(live));
++}
++
++/* Linux intel_display_irq.c:vlv_pipe_fault_handlers order/bit map. */
++static void
++vlv_display_error_irq_handler(struct drm_i915_private *dev_priv,
++			      u32 eir, u32 dpinvgtt)
++{
++	static const u32 faults[3][4] = {
++		{ PLANEA_INVALID_GTT_STATUS, SPRITEA_INVALID_GTT_STATUS,
++		  SPRITEB_INVALID_GTT_STATUS, CURSORA_INVALID_GTT_STATUS },
++		{ PLANEB_INVALID_GTT_STATUS, SPRITEC_INVALID_GTT_STATUS,
++		  SPRITED_INVALID_GTT_STATUS, CURSORB_INVALID_GTT_STATUS },
++		{ PLANEC_INVALID_GTT_STATUS, SPRITEE_INVALID_GTT_STATUS,
++		  SPRITEF_INVALID_GTT_STATUS, CURSORC_INVALID_GTT_STATUS },
++	};
++	static const enum plane_id ids[4] = {
++		PLANE_PRIMARY, PLANE_SPRITE0, PLANE_SPRITE1, PLANE_CURSOR
++	};
++	enum pipe pipe;
++	unsigned int i;
++
 +	DRM_DEBUG("VLV/CHV Master Error, EIR 0x%08x\n", eir);
-+	if (eir & VLV_ERROR_PAGE_TABLE)
-+		DRM_ERROR("VLV/CHV display page-table faults: 0x%08x\n",
++	if (!(eir & VLV_ERROR_PAGE_TABLE))
++		return;
++
++	for_each_pipe(dev_priv, pipe) {
++		for (i = 0; i < 4; i++) {
++			u32 fault = faults[pipe][i];
++
++			if (!(dpinvgtt & fault))
++				continue;
++			vlv_display_plane_fault(dev_priv, pipe, ids[i]);
++			dpinvgtt &= ~fault;
++		}
++	}
++	if (dpinvgtt)
++		DRM_ERROR("VLV/CHV unreported display GTT faults 0x%08x\n",
 +			  dpinvgtt);
 +}
 +
  static irqreturn_t valleyview_irq_handler(DRM_IRQ_ARGS)
  {
  	struct drm_i915_private *dev_priv = arg;
-@@ -1537,6 +1586,7 @@
+@@ -1537,6 +1648,7 @@
  		u32 iir, gt_iir, pm_iir;
  		u32 pipe_stats[I915_MAX_PIPES] = {};
  		u32 hotplug_status = 0;
@@ -77,7 +163,7 @@
  		u32 ier = 0;
  
  		gt_iir = I915_READ(GTIIR);
-@@ -1577,6 +1627,9 @@
+@@ -1577,6 +1689,9 @@
  		 * signalled in iir */
  		i9xx_pipestat_irq_ack(dev_priv, iir, pipe_stats);
  
@@ -87,17 +173,17 @@
  		if (iir & (I915_LPE_PIPE_A_INTERRUPT |
  			   I915_LPE_PIPE_B_INTERRUPT))
  			intel_lpe_audio_irq_handler(dev_priv);
-@@ -1596,6 +1649,9 @@
+@@ -1596,6 +1711,9 @@
  		if (pm_iir)
  			gen6_rps_irq_handler(&dev_priv->gt.rps, pm_iir);
  
 +		if (iir & I915_MASTER_ERROR_INTERRUPT)
-+			vlv_display_error_irq_handler(eir, dpinvgtt);
++			vlv_display_error_irq_handler(dev_priv, eir, dpinvgtt);
 +
  		if (hotplug_status)
  			i9xx_hpd_irq_handler(dev_priv, hotplug_status);
  
-@@ -1622,6 +1678,7 @@
+@@ -1622,6 +1740,7 @@
  		u32 master_ctl, iir;
  		u32 pipe_stats[I915_MAX_PIPES] = {};
  		u32 hotplug_status = 0;
@@ -105,7 +191,7 @@
  		u32 gt_iir[4];
  		u32 ier = 0;
  
-@@ -1659,6 +1716,9 @@
+@@ -1659,6 +1778,9 @@
  		 * signalled in iir */
  		i9xx_pipestat_irq_ack(dev_priv, iir, pipe_stats);
  
@@ -115,17 +201,17 @@
  		if (iir & (I915_LPE_PIPE_A_INTERRUPT |
  			   I915_LPE_PIPE_B_INTERRUPT |
  			   I915_LPE_PIPE_C_INTERRUPT))
-@@ -1675,6 +1735,9 @@
+@@ -1675,6 +1797,9 @@
  		I915_WRITE(GEN8_MASTER_IRQ, GEN8_MASTER_IRQ_CONTROL);
  
  		gen8_gt_irq_handler(&dev_priv->gt, master_ctl, gt_iir);
 +
 +		if (iir & I915_MASTER_ERROR_INTERRUPT)
-+			vlv_display_error_irq_handler(eir, dpinvgtt);
++			vlv_display_error_irq_handler(dev_priv, eir, dpinvgtt);
  
  		if (hotplug_status)
  			i9xx_hpd_irq_handler(dev_priv, hotplug_status);
-@@ -2715,6 +2778,14 @@
+@@ -2715,6 +2840,14 @@
  	else
  		intel_uncore_write(uncore, DPINVGTT, DPINVGTT_STATUS_MASK);
  
@@ -140,7 +226,7 @@
  	i915_hotplug_interrupt_update_locked(dev_priv, 0xffffffff, 0);
  	intel_uncore_write(uncore, PORT_HOTPLUG_STAT, I915_READ(PORT_HOTPLUG_STAT));
  
-@@ -2732,6 +2803,20 @@
+@@ -2732,6 +2865,20 @@
  	u32 enable_mask;
  	enum pipe pipe;
  
@@ -161,7 +247,7 @@
  	pipestat_mask = PIPE_CRC_DONE_INTERRUPT_STATUS;
  
  	i915_enable_pipestat(dev_priv, PIPE_A, PIPE_GMBUS_INTERRUPT_STATUS);
-@@ -2741,6 +2826,7 @@
+@@ -2741,6 +2888,7 @@
  	enable_mask = I915_DISPLAY_PORT_INTERRUPT |
  		I915_DISPLAY_PIPE_A_EVENT_INTERRUPT |
  		I915_DISPLAY_PIPE_B_EVENT_INTERRUPT |
