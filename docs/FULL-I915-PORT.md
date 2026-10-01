@@ -185,6 +185,29 @@ Existing NetBSD local overrides are reviewed and either:
 2. replaced by new LinuxKPI/DRM compatibility APIs, or
 3. deleted when the current upstream implementation is directly portable.
 
+## Pinned-source staging verified 2026-10-01
+
+The existing `tools/materialize_linux_i915.py` ran successfully on verified
+Legion under the exact pinned Linux HEAD and staged the upstream snapshot at
+`/opt/ChatGPT/hp-driver-port/i915-reference-stage-20261001/`.
+
+The generated `PORT-MANIFEST.json` records SHA-256, file size and path for
+**1,266** staged files, of which **915** belong to `drivers/gpu/drm/i915`;
+the remaining files come from the selected DRM core/display, TTM, include
+and UAPI dependency staging. The independently executed
+`tools/generate_netbsd_i915_filelist.py` generated
+`i915-active.filelist` and its pinned/configured metadata for **323**
+active Linux i915 C translation units. Both staging operations exited 0.
+
+This is reproducible **source materialization**, not a NetBSD source import,
+compiler/API closure, build, semantic adaptation, or proof of driver parity.
+The staging path is not an authority for handwritten source edits and must
+not be confused with the separate uncommitted NetBSD i915 overlay. The
+subsequent aggregate NetBSD structural classifier invocation was rejected
+by external tool safety checks before its result was established; this
+does not imply a source or target build failure, and an aggregate parity
+classification is not claimed. No HP kernel or boot configuration changed.
+
 ## Port pipeline
 
 1. Materialize the complete pinned Linux i915 tree.
