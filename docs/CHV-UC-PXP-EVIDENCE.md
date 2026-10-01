@@ -52,7 +52,15 @@ part of the target port and are not excluded.
 - `gt/uc/intel_guc_slpc.c`
 - `gt/uc/intel_huc_debugfs.c`
 - `gt/uc/intel_uc_debugfs.c`
-- all nine `pxp/intel_pxp*.c` active implementation units
+- `pxp/intel_pxp.c`
+- `pxp/intel_pxp_cmd.c`
+- `pxp/intel_pxp_debugfs.c`
+- `pxp/intel_pxp_gsccs.c`
+- `pxp/intel_pxp_huc.c`
+- `pxp/intel_pxp_irq.c`
+- `pxp/intel_pxp_pm.c`
+- `pxp/intel_pxp_session.c`
+- `pxp/intel_pxp_tee.c`
 
 This classification is target-specific. It does not assert that those modules
 are unimportant for Gen9+/Gen12+ i915 platforms.
