@@ -151,6 +151,16 @@ def head(root: Path) -> str:
         ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
     ).strip()
 
+def pinned_file(root: Path, relative: str) -> str:
+    """Reject a dirty input even when the repository HEAD is pinned."""
+    committed = subprocess.check_output(
+        ["git", "-C", str(root), "show", "HEAD:" + relative], text=True
+    )
+    working = (root / relative).read_text()
+    if working != committed:
+        raise RuntimeError("pinned source modified in working tree: " + relative)
+    return committed
+
 def exactly(text: str, old: str, new: str, label: str) -> str:
     if text.count(old) != 1:
         raise RuntimeError(f"{label}: expected one anchor, got {text.count(old)}")
@@ -193,14 +203,14 @@ def rewrite_function(src: str, name: str) -> str:
 def generate(netbsd: Path, linux: Path, output: Path) -> None:
     if head(linux) != LINUX_PIN or head(netbsd) != NETBSD_PIN:
         raise RuntimeError("frozen Linux/NetBSD HEAD mismatch")
-    upstream = (linux /
-        "drivers/gpu/drm/i915/display/intel_display_irq.c").read_text()
+    upstream = pinned_file(
+        linux, "drivers/gpu/drm/i915/display/intel_display_irq.c")
     for name in ["vlv_display_error_irq_ack", "vlv_page_table_error_irq_ack",
                  "vlv_display_irq_postinstall", "vlv_display_error_irq_handler"]:
         if name not in upstream:
             raise RuntimeError("missing Linux source evidence: " + name)
 
-    orig_regs = (netbsd / REG).read_text()
+    orig_regs = pinned_file(netbsd, REG)
     reg_anchor = "#define VLV_ISR\t\t_MMIO(VLV_DISPLAY_BASE + 0x20ac)\n"
     reg_extra = (
         "#define VLV_EIR\t\t_MMIO(VLV_DISPLAY_BASE + 0x20b0)\n"
@@ -227,7 +237,7 @@ def generate(netbsd: Path, linux: Path, output: Path) -> None:
            "_MMIO_VLV_SPR((pipe), (plane_id), _SPASURFLIVE, _SPBSURFLIVE)\n")
     regs = exactly(regs, old, old + new, "SPSURFLIVE")
 
-    orig_irq = (netbsd / IRQ).read_text()
+    orig_irq = pinned_file(netbsd, IRQ)
     irq = exactly(orig_irq,
         "static irqreturn_t valleyview_irq_handler(DRM_IRQ_ARGS)",
         HELPERS + "static irqreturn_t valleyview_irq_handler(DRM_IRQ_ARGS)",
