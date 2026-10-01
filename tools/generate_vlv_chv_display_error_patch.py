@@ -4,8 +4,8 @@
 Frozen Linux: fd179f8a05be3ccae366b9b96e176b51fbe54aab
 Frozen NetBSD: 03d918f6d0e81fa05b8f1160eca0628ad39988a6
 Implements Linux's EIR/EMR and DPINVGTT ACK/disable sequencing and enables
-the VLV master error IRQ. Plane-specific fault reporting is still an OPEN
-whole-driver task; do not treat this as a FULL IRQ parity claim.
+the VLV master error IRQ. Ports frozen Linux VLV/CHV per-plane fault bits and hardware snapshots.
+This is only an isolated patch; generic IRQ and kernel integration remain OPEN.
 """
 from pathlib import Path
 import argparse
@@ -53,17 +53,79 @@ vlv_display_error_irq_ack(struct drm_i915_private *dev_priv,
 }
 
 /*
- * The frozen Linux tree separately reports each faulted plane. That
- * plane-specific callback cannot be transplanted without the newer
- * intel_display plane/IRQ adapter, so record the complete enabled
- * DPINVGTT fault bitmap here; per-plane attribution remains open.
+ * The frozen Linux plane capture callbacks collect CTL/SURF/SURFLIVE.
+ * NetBSD's imported VLV/CHV primary, sprite and cursor register families
+ * provide the equivalent hardware snapshots, translated to the old
+ * i915_reg_t and I915_READ adapter.
  */
 static void
-vlv_display_error_irq_handler(u32 eir, u32 dpinvgtt)
+vlv_display_plane_fault(struct drm_i915_private *dev_priv,
+			enum pipe pipe, enum plane_id plane_id)
 {
+	i915_reg_t ctl, surf, live;
+
+	switch (plane_id) {
+	case PLANE_PRIMARY:
+		ctl = DSPCNTR(pipe);
+		surf = DSPSURF(pipe);
+		live = DSPSURFLIVE(pipe);
+		break;
+	case PLANE_CURSOR:
+		ctl = CURCNTR(pipe);
+		surf = CURBASE(pipe);
+		live = CURSURFLIVE(pipe);
+		break;
+	case PLANE_SPRITE0:
+	case PLANE_SPRITE1:
+		ctl = SPCNTR(pipe, plane_id);
+		surf = SPSURF(pipe, plane_id);
+		live = SPSURFLIVE(pipe, plane_id);
+		break;
+	default:
+		return;
+	}
+
+	DRM_ERROR("VLV/CHV pipe %d plane %d GTT fault "
+		  "(CTL=0x%08x SURF=0x%08x SURFLIVE=0x%08x)\n",
+		  pipe, plane_id, I915_READ(ctl), I915_READ(surf),
+		  I915_READ(live));
+}
+
+/* Linux intel_display_irq.c:vlv_pipe_fault_handlers order/bit map. */
+static void
+vlv_display_error_irq_handler(struct drm_i915_private *dev_priv,
+			      u32 eir, u32 dpinvgtt)
+{
+	static const u32 faults[3][4] = {
+		{ PLANEA_INVALID_GTT_STATUS, SPRITEA_INVALID_GTT_STATUS,
+		  SPRITEB_INVALID_GTT_STATUS, CURSORA_INVALID_GTT_STATUS },
+		{ PLANEB_INVALID_GTT_STATUS, SPRITEC_INVALID_GTT_STATUS,
+		  SPRITED_INVALID_GTT_STATUS, CURSORB_INVALID_GTT_STATUS },
+		{ PLANEC_INVALID_GTT_STATUS, SPRITEE_INVALID_GTT_STATUS,
+		  SPRITEF_INVALID_GTT_STATUS, CURSORC_INVALID_GTT_STATUS },
+	};
+	static const enum plane_id ids[4] = {
+		PLANE_PRIMARY, PLANE_SPRITE0, PLANE_SPRITE1, PLANE_CURSOR
+	};
+	enum pipe pipe;
+	unsigned int i;
+
 	DRM_DEBUG("VLV/CHV Master Error, EIR 0x%08x\n", eir);
-	if (eir & VLV_ERROR_PAGE_TABLE)
-		DRM_ERROR("VLV/CHV display page-table faults: 0x%08x\n",
+	if (!(eir & VLV_ERROR_PAGE_TABLE))
+		return;
+
+	for_each_pipe(dev_priv, pipe) {
+		for (i = 0; i < 4; i++) {
+			u32 fault = faults[pipe][i];
+
+			if (!(dpinvgtt & fault))
+				continue;
+			vlv_display_plane_fault(dev_priv, pipe, ids[i]);
+			dpinvgtt &= ~fault;
+		}
+	}
+	if (dpinvgtt)
+		DRM_ERROR("VLV/CHV unreported display GTT faults 0x%08x\n",
 			  dpinvgtt);
 }
 
@@ -109,7 +171,7 @@ def rewrite_function(src: str, name: str) -> str:
     hpd = "\t\tif (hotplug_status)\n\t\t\ti9xx_hpd_irq_handler(dev_priv, hotplug_status);"
     body = exactly(body, hpd,
         "\t\tif (iir & I915_MASTER_ERROR_INTERRUPT)\n"
-        "\t\t\tvlv_display_error_irq_handler(eir, dpinvgtt);\n\n" + hpd,
+        "\t\t\tvlv_display_error_irq_handler(dev_priv, eir, dpinvgtt);\n\n" + hpd,
         name + ": report acknowledged error")
     return src[:pos] + body + src[stop:]
 
@@ -132,6 +194,23 @@ def generate(netbsd: Path, linux: Path, output: Path) -> None:
         "#define   VLV_ERROR_PAGE_TABLE\t(1 << 4)\n"
     )
     regs = exactly(orig_regs, reg_anchor, reg_anchor + reg_extra, "VLV regs")
+    for symbol, orig, address in (
+        ("_SPASURFLIVE", "_SPASURF", "0x721ac"),
+        ("_SPBSURFLIVE", "_SPBSURF", "0x722ac"),
+    ):
+        old = next((line for line in regs.splitlines(keepends=True)
+                    if line.startswith("#define " + orig + "\t")), None)
+        if old is None:
+            raise RuntimeError("missing NetBSD sprite surface anchor " + orig)
+        new = "#define " + symbol + "\t\t(VLV_DISPLAY_BASE + " + address + ")\n"
+        regs = exactly(regs, old, old + new, symbol)
+    old = next((line for line in regs.splitlines(keepends=True)
+                if line.startswith("#define SPSURF(pipe, plane_id)")), None)
+    if old is None:
+        raise RuntimeError("missing NetBSD SPSURF macro")
+    new = ("#define SPSURFLIVE(pipe, plane_id)\t"
+           "_MMIO_VLV_SPR((pipe), (plane_id), _SPASURFLIVE, _SPBSURFLIVE)\n")
+    regs = exactly(regs, old, old + new, "SPSURFLIVE")
 
     orig_irq = (netbsd / IRQ).read_text()
     irq = exactly(orig_irq,
