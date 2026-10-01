@@ -1,0 +1,3 @@
+# Python compile/test transients; source and generated reference outputs are tracked explicitly.
+__pycache__/
+*.py[cod]
