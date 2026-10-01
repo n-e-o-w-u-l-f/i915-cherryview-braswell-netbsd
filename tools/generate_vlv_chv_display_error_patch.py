@@ -99,7 +99,7 @@ vlv_display_plane_fault(struct drm_i915_private *dev_priv,
 		return false;
 	}
 
-	DRM_ERROR("VLV/CHV pipe %d plane %d GTT fault "
+	DRM_ERROR_RATELIMITED("VLV/CHV pipe %d plane %d GTT fault "
 		  "(CTL=0x%08x SURF=0x%08x SURFLIVE=0x%08x)\n",
 		  pipe, plane_id, I915_READ(ctl), I915_READ(surf),
 		  I915_READ(live));
@@ -140,7 +140,7 @@ vlv_display_error_irq_handler(struct drm_i915_private *dev_priv,
 		}
 	}
 	if (dpinvgtt)
-		DRM_ERROR("VLV/CHV unreported display GTT faults 0x%08x\n",
+		DRM_ERROR_RATELIMITED("VLV/CHV unreported display GTT faults 0x%08x\n",
 			  dpinvgtt);
 }
 
