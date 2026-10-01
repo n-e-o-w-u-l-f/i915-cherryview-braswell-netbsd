@@ -1,0 +1,30 @@
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
+index faff25ec..b6d3b14e 100644
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
+@@ -7324,6 +7324,8 @@ static void valleyview_crtc_enable(struct intel_atomic_state *state,
+ 	intel_set_pipe_timings(new_crtc_state);
+ 	intel_set_pipe_src_size(new_crtc_state);
+ 
++	I915_WRITE(VLV_PIPE_MSA_MISC(pipe), 0);
++
+ 	if (IS_CHERRYVIEW(dev_priv) && pipe == PIPE_B) {
+ 		I915_WRITE(CHV_BLEND(pipe), CHV_BLEND_LEGACY);
+ 		I915_WRITE(CHV_CANVAS(pipe), 0);
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h b/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
+index a070913d..70ae165e 100644
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
+@@ -6274,6 +6274,12 @@ enum {
+ #define   PIPE_FRAME_LOW_SHIFT    24
+ #define   PIPE_PIXEL_MASK         0x00ffffff
+ #define   PIPE_PIXEL_SHIFT        0
++
++#define _VLV_PIPE_MSA_MISC_A		0x70048
++#define VLV_PIPE_MSA_MISC(pipe)		_MMIO_PIPE2(pipe, _VLV_PIPE_MSA_MISC_A)
++#define   VLV_MSA_MISC1_HW_ENABLE		REG_BIT(31)
++#define   VLV_MSA_MISC1_SW_S3D_MASK		REG_GENMASK(2, 0)
++
+ /* GM45+ just has to be different */
+ #define _PIPEA_FRMCOUNT_G4X	0x70040
+ #define _PIPEA_FLIPCOUNT_G4X	0x70044
