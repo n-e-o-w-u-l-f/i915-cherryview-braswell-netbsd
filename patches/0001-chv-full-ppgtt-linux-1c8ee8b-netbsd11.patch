@@ -48,11 +48,20 @@ diff --git a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c b/sys/external/b
 +	GEM_BUG_ON(intel_vgpu_active(rq->i915));
 +
 +	/*
-+	 * This ordering is required on Gen8 3-level PPGTT.  Preserve the
-+	 * upstream sequence exactly: flush residual context-load work,
++	 * Preserve the pinned Linux Gen8 3-level PPGTT hardware sequence:
++	 * disable arbitration before the residual context-load flush,
 +	 * invalidate, load all four PDP pairs with posted LRI semantics,
-+	 * then let the normal request invalidate continue.
++	 * re-enable arbitration, then let the normal request invalidate
++	 * continue.
 +	 */
++	cs = intel_ring_begin(rq, 2);
++	if (IS_ERR(cs))
++		return PTR_ERR(cs);
++
++	*cs++ = MI_ARB_ON_OFF | MI_ARB_DISABLE;
++	*cs++ = MI_NOOP;
++	intel_ring_advance(rq, cs);
++
 +	err = engine->emit_flush(rq, EMIT_FLUSH);
 +	if (err)
 +		return err;
