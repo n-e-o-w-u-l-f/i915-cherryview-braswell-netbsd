@@ -47,6 +47,7 @@ PRELUDE = r"""
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+typedef uint32_t u32; /* LinuxKPI type supplied by NetBSD in kernel. */
 
 struct drm_device { int unused; };
 struct intel_encoder { struct { struct drm_device *dev; } base; };
