@@ -1,7 +1,8 @@
 From: NEOWULF Cherryview parity work
 Subject: [PATCH] i915/chv: restore full PPGTT and program Gen8 PDPs
 
-Reference: Linux commit 1c8ee8b92fb6ac9d5975147cc902e8c142eca338
+Reference origin: Linux commit 1c8ee8b92fb6ac9d5975147cc902e8c142eca338
+Pinned parity reference: fd179f8a05be3ccae366b9b96e176b51fbe54aab
 Baseline: NetBSD 11 i915 imported from Linux v5.6-rc3
           f8788d86ab28f61f7b46eb6be375f8a726783636
 
@@ -75,7 +76,7 @@ diff --git a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c b/sys/external/b
 +		*cs++ = i915_mmio_reg_offset(GEN8_RING_PDP_LDW(base, i));
 +		*cs++ = lower_32_bits(pd_daddr);
 +	}
-+	*cs++ = MI_NOOP;
++	*cs++ = MI_ARB_ON_OFF | MI_ARB_ENABLE;
 +
 +	intel_ring_advance(rq, cs);
 +
