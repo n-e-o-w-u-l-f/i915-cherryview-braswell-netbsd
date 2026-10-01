@@ -58,11 +58,25 @@ vlv_display_error_irq_ack(struct drm_i915_private *dev_priv,
  * provide the equivalent hardware snapshots, translated to the old
  * i915_reg_t and I915_READ adapter.
  */
-static void
+static bool
 vlv_display_plane_fault(struct drm_i915_private *dev_priv,
 			enum pipe pipe, enum plane_id plane_id)
 {
+	struct drm_plane *base;
 	i915_reg_t ctl, surf, live;
+	bool present = false;
+
+	/* Linux skips planes without an installed capture_error callback. */
+	drm_for_each_plane(base, &dev_priv->drm) {
+		struct intel_plane *plane = to_intel_plane(base);
+
+		if (plane->pipe == pipe && plane->id == plane_id) {
+			present = true;
+			break;
+		}
+	}
+	if (!present)
+		return false;
 
 	switch (plane_id) {
 	case PLANE_PRIMARY:
@@ -82,13 +96,14 @@ vlv_display_plane_fault(struct drm_i915_private *dev_priv,
 		live = SPSURFLIVE(pipe, plane_id);
 		break;
 	default:
-		return;
+		return false;
 	}
 
 	DRM_ERROR("VLV/CHV pipe %d plane %d GTT fault "
 		  "(CTL=0x%08x SURF=0x%08x SURFLIVE=0x%08x)\n",
 		  pipe, plane_id, I915_READ(ctl), I915_READ(surf),
 		  I915_READ(live));
+	return true;
 }
 
 /* Linux intel_display_irq.c:vlv_pipe_fault_handlers order/bit map. */
@@ -120,8 +135,8 @@ vlv_display_error_irq_handler(struct drm_i915_private *dev_priv,
 
 			if (!(dpinvgtt & fault))
 				continue;
-			vlv_display_plane_fault(dev_priv, pipe, ids[i]);
-			dpinvgtt &= ~fault;
+			if (vlv_display_plane_fault(dev_priv, pipe, ids[i]))
+				dpinvgtt &= ~fault;
 		}
 	}
 	if (dpinvgtt)
