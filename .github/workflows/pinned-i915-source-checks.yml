@@ -38,6 +38,7 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+            sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
             sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
             sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
@@ -53,7 +54,7 @@ jobs:
             sys/external/bsd/drm2/dist/drm/drm_dp_helper.c
             sys/external/bsd/drm2/dist/include/drm/drm_dp_helper.h
 
-      - name: Frozen Linux i915 reference (needed file only)
+      - name: Frozen Linux i915 reference (needed source files only)
         uses: actions/checkout@v4
         with:
           repository: torvalds/linux
@@ -66,6 +67,7 @@ jobs:
           sparse-checkout: |
             drivers/gpu/drm/i915/i915_driver.c
             drivers/gpu/drm/i915/display/intel_dp.c
+            drivers/gpu/drm/i915/display/intel_dp_aux.c
             drivers/gpu/drm/i915/display/intel_dpio_phy.c
 
       - name: Check pinned revisions and execute strict source regressions
