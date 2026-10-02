@@ -39,6 +39,8 @@ none
 | COV-I915-015 | Remove/shutdown | i915_driver_remove/shutdown | reverse dependency teardown | final lifecycle | complete cleanup | OPEN | teardown audit |
 
 ## CURRENT_DELTA
+Patch 0006 generator/committed artifact were synchronized in commit d2d86bb152710474ae291ccaf36ae5a01aafcdf0: two IRQ-context DRM_ERROR calls now use the existing NetBSD DRM_ERROR_RATELIMITED macro. On Legion the generator's output is byte-identical to the published patch (cmp exit 0), and git apply --check passes on both frozen clean NetBSD and the preserved six-edit port overlay. This closes only the generated-artifact consistency defect within COV-I915-006; NetBSD object compilation, IRQ integration and runtime evidence remain OPEN.
+
 Six pinned-reference Cherryview/VLV patches (full PPGTT, PHY_CONTROL power-well ordering, PIPE_MSA_MISC reset, AUX precharge, VLV/CHV DP/HDMI post-enable audio sequencing, and VLV/CHV display error IRQ fault capture) pass git apply --check individually against frozen NetBSD. Patches 0005 and 0006 also pass against the existing six-edit overlay; patch 0005 has a strict host-C audio phase test. The sixth patch still requires NetBSD compilation and runtime validation. These are PARTIAL and have no new integration build or runtime verification. Continue source/semantic classification of all 323 active Linux units and the required DRM/TTM/OS-adapter closure before building another full-scope candidate. Preserve the separate modified NetBSD port worktree and F77 safe boot.
 
 ## NEXT_UNRESOLVED
