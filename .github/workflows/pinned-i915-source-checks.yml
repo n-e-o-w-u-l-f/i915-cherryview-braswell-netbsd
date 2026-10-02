@@ -1,0 +1,72 @@
+name: Pinned i915 source regressions
+
+on:
+  push:
+    paths:
+      - ".github/workflows/pinned-i915-source-checks.yml"
+      - "tools/**"
+      - "tests/**"
+      - "patches/**"
+      - "candidates/**"
+  pull_request:
+    paths:
+      - ".github/workflows/pinned-i915-source-checks.yml"
+      - "tools/**"
+      - "tests/**"
+      - "patches/**"
+      - "candidates/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Canonical i915 project
+        uses: actions/checkout@v4
+        with:
+          path: project
+          persist-credentials: false
+
+      - name: Frozen NetBSD reference (needed files only)
+        uses: actions/checkout@v4
+        with:
+          repository: NetBSD/src
+          ref: 03d918f6d0e81fa05b8f1160eca0628ad39988a6
+          path: references/netbsd
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
+            sys/external/bsd/drm2/dist/drm/drm_drv.c
+            sys/external/bsd/drm2/dist/drm/drm_connector.c
+
+      - name: Frozen Linux i915 reference (needed file only)
+        uses: actions/checkout@v4
+        with:
+          repository: torvalds/linux
+          ref: fd179f8a05be3ccae366b9b96e176b51fbe54aab
+          path: references/linux
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            drivers/gpu/drm/i915/i915_driver.c
+
+      - name: Check pinned revisions and execute strict source regressions
+        run: |
+          python3 project/tools/run_pinned_i915_source_checks.py \
+            --netbsd-tree references/netbsd \
+            --linux-tree references/linux
+
+      # A hosted CI runner has no access to the intentionally unpublished
+      # six-edit port overlay. Only a separate authorized run with the real
+      # --overlay-tree may assert frozen-and-overlay applicability.
+      # This workflow does not perform a NetBSD object/kernel build or HP boot.
