@@ -204,6 +204,24 @@ def main() -> None:
 
     # All failures occur after ppgtt_init initialized drm_mm and mutex.
     assert "i915_address_space_init(&ppgtt->vm, VM_CLASS_PPGTT);" in init
+    # Partially allocated scratch must be freed internally exactly once.
+    # The Gen8 creation error for that stage bypasses err_free_scratch.
+    scratch_start = original.index("static int gen8_init_scratch(")
+    scratch_end = original.index("static int gen8_preallocate_top_level_pdp(",
+                                 scratch_start)
+    scratch = original[scratch_start:scratch_end]
+    assert ("ret = setup_scratch_page(vm, __GFP_HIGHMEM);\n"
+            "\tif (ret)\n\t\treturn ret;") in scratch
+    assert ("if (unlikely(setup_page_dma(vm, px_base(&vm->scratch[i]))))\n"
+            "\t\t\tgoto free_scratch;") in scratch
+    assert "free_scratch:\n\tfree_scratch(vm);\n\treturn -ENOMEM;" in scratch
+    create = original[original.index("struct i915_ppgtt *gen8_ppgtt_create("):]
+    assert ("err = gen8_init_scratch(&ppgtt->vm);\n"
+            "\tif (err)\n\t\tgoto err_free;") in create
+    assert ("err = PTR_ERR(ppgtt->pd);\n"
+            "\t\tgoto err_free_scratch;") in create
+    assert ("err_free_scratch:\n\tfree_scratch(&ppgtt->vm);\n"
+            "err_free:") in create
     assert "drm_mm_init(&vm->mm, 0, vm->total);" in vm
     assert "mutex_init(&vm->mutex);" in vm
     fini = vm[vm.index("void i915_address_space_fini("):
