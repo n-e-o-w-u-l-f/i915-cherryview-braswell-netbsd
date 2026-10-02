@@ -31,6 +31,9 @@ jobs:
           path: project
           persist-credentials: false
 
+      - name: Syntax-check Python generators and regressions
+        run: python3 -m compileall -q project/tools project/tests
+
       - name: Frozen NetBSD reference (needed files only)
         uses: actions/checkout@v4
         with:
