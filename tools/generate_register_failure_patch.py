@@ -103,7 +103,6 @@ def probe_changes(body: str) -> str:
         "out_cleanup_registration:\n"
         "\tintel_opregion_unregister(dev_priv);\n"
         "\ti915_gem_suspend(dev_priv);\n"
-        "\tdrm_atomic_helper_shutdown(&dev_priv->drm);\n"
         "\tintel_gvt_driver_remove(dev_priv);\n"
         "\ti915_driver_modeset_remove(dev_priv);\n"
         "\ti915_reset_error_state(dev_priv);\n"
