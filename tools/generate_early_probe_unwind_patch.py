@@ -37,6 +37,7 @@ NEW_CLEANUP = (
     "err_workqueues:\n"
     "\ti915_workqueues_cleanup(dev_priv);\n"
     "err_early:\n"
+    "\tpm_qos_remove_request(&dev_priv->sb_qos);\n"
     "\tmutex_destroy(&dev_priv->hdcp_comp_mutex);\n"
 )
 
