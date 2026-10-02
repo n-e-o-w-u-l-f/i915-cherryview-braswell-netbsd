@@ -1,0 +1,20 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+@@ -540,7 +540,7 @@
+ 
+ 	ret = i915_workqueues_init(dev_priv);
+ 	if (ret < 0)
+-		return ret;
++		goto err_early;
+ 
+ 	ret = vlv_alloc_s0ix_state(dev_priv);
+ 	if (ret < 0)
+@@ -576,6 +576,8 @@
+ 	vlv_free_s0ix_state(dev_priv);
+ err_workqueues:
+ 	i915_workqueues_cleanup(dev_priv);
++err_early:
++	pm_qos_remove_request(&dev_priv->sb_qos);
+ 	mutex_destroy(&dev_priv->hdcp_comp_mutex);
+ 	mutex_destroy(&dev_priv->pps_mutex);
+ 	mutex_destroy(&dev_priv->wm.wm_mutex);
