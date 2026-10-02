@@ -1,0 +1,85 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+@@ -1355,9 +1355,10 @@
+  * Perform any steps necessary to make the driver available via kernel
+  * internal or userspace interfaces.
+  */
+-static void i915_driver_register(struct drm_i915_private *dev_priv)
++static int i915_driver_register(struct drm_i915_private *dev_priv)
+ {
+ 	struct drm_device *dev = &dev_priv->drm;
++	int ret;
+ 
+ 	i915_gem_driver_register(dev_priv);
+ 	i915_pmu_register(dev_priv);
+@@ -1370,15 +1371,21 @@
+ 		I915_WRITE(vgtif_reg(display_ready), VGT_DRV_DISPLAY_READY);
+ 
+ 	/* Reveal our presence to userspace */
+-	if (drm_dev_register(dev, 0) == 0) {
+-		i915_debugfs_register(dev_priv);
+-		i915_setup_sysfs(dev_priv);
+-
+-		/* Depends on sysfs having been initialized */
+-		i915_perf_register(dev_priv);
+-	} else
++	ret = drm_dev_register(dev, 0);
++	if (ret) {
+ 		DRM_ERROR("Failed to register driver for userspace access!\n");
++		drm_dev_unregister(dev);
++		i915_pmu_unregister(dev_priv);
++		i915_gem_driver_unregister(dev_priv);
++		return ret;
++	}
+ 
++	i915_debugfs_register(dev_priv);
++	i915_setup_sysfs(dev_priv);
++
++	/* Depends on sysfs having been initialized */
++	i915_perf_register(dev_priv);
++
+ 	if (HAS_DISPLAY(dev_priv) && INTEL_DISPLAY_ENABLED(dev_priv)) {
+ 		/* Must be done after probing outputs */
+ 		intel_opregion_register(dev_priv);
+@@ -1407,6 +1414,8 @@
+ 
+ 	intel_power_domains_enable(dev_priv);
+ 	intel_runtime_pm_enable(&dev_priv->runtime_pm);
++
++	return 0;
+ }
+ 
+ /**
+@@ -1586,7 +1595,9 @@
+ 	if (ret < 0)
+ 		goto out_cleanup_hw;
+ 
+-	i915_driver_register(dev_priv);
++	ret = i915_driver_register(dev_priv);
++	if (ret)
++		goto out_cleanup_registration;
+ 
+ 	enable_rpm_wakeref_asserts(&dev_priv->runtime_pm);
+ 
+@@ -1594,8 +1605,21 @@
+ 
+ 	return 0;
+ 
++out_cleanup_registration:
++	intel_opregion_unregister(dev_priv);
++	i915_gem_suspend(dev_priv);
++	drm_atomic_helper_shutdown(&dev_priv->drm);
++	intel_gvt_driver_remove(dev_priv);
++	i915_driver_modeset_remove(dev_priv);
++	i915_reset_error_state(dev_priv);
++	i915_gem_driver_remove(dev_priv);
++	intel_power_domains_driver_remove(dev_priv);
++	i915_driver_hw_remove(dev_priv);
++	i915_gem_driver_release(dev_priv);
++	goto out_cleanup_memory;
+ out_cleanup_hw:
+ 	i915_driver_hw_remove(dev_priv);
++out_cleanup_memory:
+ 	intel_memory_regions_driver_release(dev_priv);
+ 	i915_ggtt_driver_release(dev_priv);
+ out_cleanup_mmio:
