@@ -133,7 +133,7 @@ def main() -> None:
         "\tconst void *vbt = NULL;\n"
         "\tu32 vbt_size = 0;\n"
         + branch +
-        "\treturn 0;\n"
+        "\n\treturn 0;\n"
         "out:\n"
         "\treturn 1;\n"
         "}\n"
