@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import itertools
 from pathlib import Path
 import subprocess
 import sys
@@ -60,6 +61,7 @@ def main() -> None:
     p10 = (ROOT / "candidates/0010-netbsd-opregion-rvda-map-failure-unwind.patch").resolve(strict=True)
     p11 = (ROOT / "candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch").resolve(strict=True)
     p12 = (ROOT / "candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch").resolve(strict=True)
+    p13 = (ROOT / "candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_early_probe_unwind.py",
@@ -78,6 +80,9 @@ def main() -> None:
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
     invoke("test_chv_dpio_routing_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
+    invoke("test_edp_aux_irq_fallback.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           "--patch", str(p13), *overlay_args)
     invoke("test_edp_fixed_mode.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p11), *overlay_args)
@@ -85,7 +90,7 @@ def main() -> None:
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p12), *overlay_args)
 
-    # Apply both eDP patches in a disposable copy of the actual pinned
+    # Apply all three independent eDP patches in every possible order to
     # intel_dp.c file in both orders. The original frozen checkout and the
     # unpublished six-edit overlay must remain untouched.
     dp_rel = Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c")
@@ -95,27 +100,27 @@ def main() -> None:
         scratch = Path(name)
         target = scratch / dp_rel
         target.parent.mkdir(parents=True)
-        for pair in ((p11, p12), (p12, p11)):
+        for pair in itertools.permutations((p11, p12, p13)):
             target.write_bytes(dp_original)
             for patch in pair:
                 subprocess.run(["git", "-C", str(scratch),
                                 "apply", str(patch)], check=True)
             combined.append(target.read_bytes())
-    if combined[0] != combined[1] or combined[0] == dp_original:
-        raise AssertionError("0011/0012 combined patch order or changes diverged")
-    print("I915_0011_0012_COMBINED_REAL_GIT_APPLY_BOTH_ORDERS_OK",
+    if len(set(combined)) != 1 or combined[0] == dp_original:
+        raise AssertionError("0011/0012/0013 combined patch orders diverged")
+    print("I915_0011_0012_0013_COMBINED_REAL_GIT_APPLY_6_ORDERS_OK",
           flush=True)
 
     # Standalone patch checks are intentionally on the unchanged frozen
     # worktree, never on a scratch tree already containing prior patches.
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
-        for patch in (p7, p8, p9, p10, p11, p12):
+        for patch in (p7, p8, p9, p10, p11, p12, p13):
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
 
     # Integration gate, not merely six independent git apply --checks:
-    # apply the complete candidate stack to the three actual source files
+    # apply the complete seven-patch stack to the three actual source files
     # in a disposable tree. Include the *real* overlay files only if the
     # caller supplied a distinct checkout. Never mutate the reference,
     # published patch artifacts, or the user's unpublished overlay.
@@ -124,7 +129,7 @@ def main() -> None:
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c"),
     )
-    patch_stack = (p7, p8, p9, p10, p11, p12)
+    patch_stack = (p7, p8, p9, p10, p11, p12, p13)
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
         originals = {relative: (tree / relative).read_bytes()
@@ -158,6 +163,7 @@ def main() -> None:
                  "\t\t\t\tAcpiOsUnmapMemory(opregion->rvda,"),
                 (dp, 'DRM_INFO("failed to find fixed mode for eDP,'),
                 (dp, "(ssize_t)sizeof(sink_rates)) {"),
+                (dp, "if (!cold && i915->drm.irq_enabled &&"),
             )
             for content, anchor in required:
                 if anchor not in content:
@@ -168,7 +174,7 @@ def main() -> None:
                 b"".join(changed[relative] for relative in sources)
             ).hexdigest()
         scope = "OVERLAY" if overlay is not None and tree == overlay else "FROZEN"
-        print("I915_0007_TO_0012_COMBINED_REAL_GIT_APPLY_" +
+        print("I915_0007_TO_0013_COMBINED_REAL_GIT_APPLY_" +
               scope + "_OK sha256=" + fingerprint, flush=True)
 
     print("I915_PINNED_SOURCE_CHECKS_PASS_" +
