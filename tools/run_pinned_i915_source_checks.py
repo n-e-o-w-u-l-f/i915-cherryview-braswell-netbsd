@@ -82,6 +82,9 @@ def main() -> None:
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
     invoke("test_chv_dpio_routing_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
+    invoke("test_chv_full_ppgtt_source_contract.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           *overlay_args)
     invoke("test_edp_aux_irq_fallback.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p13), *overlay_args)
