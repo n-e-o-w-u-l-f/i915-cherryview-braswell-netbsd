@@ -111,7 +111,8 @@ int main(void)
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--netbsd-tree", type=Path, required=True)
-    parser.add_argument("--overlay-tree", type=Path, required=True)
+    parser.add_argument("--overlay-tree", type=Path,
+                        help="optional real unpublished six-edit overlay")
     parser.add_argument("--patch", type=Path, required=True)
     parser.add_argument("--opregion-patch", type=Path, required=True,
                         help="candidate 0009 optional-ASLE cleanup")
@@ -202,13 +203,19 @@ def main() -> None:
         assert "opregion->rvda ? opregion->asle->rvds : 0;" in combined
         print("I915_RVDA_0009_0010_COMBINED_APPLY_OK")
 
-    for tree in (args.netbsd_tree, args.overlay_tree):
+    targets = [args.netbsd_tree]
+    if args.overlay_tree is not None:
+        if args.overlay_tree.resolve() == args.netbsd_tree.resolve():
+            raise RuntimeError("overlay-tree must be distinct from frozen reference")
+        targets.append(args.overlay_tree)
+    for tree in targets:
         for patch in (args.patch, args.opregion_patch):
             subprocess.run(
                 ["git", "-C", str(tree), "apply", "--check", str(patch)],
                 check=True,
             )
-    print("I915_RVDA_0010_APPLY_CHECKS_OK")
+    print("I915_RVDA_0010_APPLY_CHECKS_OK_" +
+          ("FROZEN_AND_OVERLAY" if args.overlay_tree else "FROZEN_ONLY"))
 
 
 if __name__ == "__main__":
