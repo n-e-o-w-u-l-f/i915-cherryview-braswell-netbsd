@@ -1,0 +1,14 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
+@@ -1043,8 +1043,9 @@
+ 		} else {
+ 			DRM_DEBUG_KMS("Invalid VBT in ACPI OpRegion (RVDA)\n");
+ #ifdef __NetBSD__
+-			AcpiOsUnmapMemory(opregion->rvda,
++			if (opregion->rvda)
++				AcpiOsUnmapMemory(opregion->rvda,
+-			    opregion->asle->rvds);
++				    opregion->asle->rvds);
+ #else
+ 			memunmap(opregion->rvda);
+ #endif
