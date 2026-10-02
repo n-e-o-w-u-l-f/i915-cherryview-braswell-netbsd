@@ -38,6 +38,12 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+            sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
+            sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_display_types.h
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_dpio_phy.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_panel.c
@@ -60,6 +66,7 @@ jobs:
           sparse-checkout: |
             drivers/gpu/drm/i915/i915_driver.c
             drivers/gpu/drm/i915/display/intel_dp.c
+            drivers/gpu/drm/i915/display/intel_dpio_phy.c
 
       - name: Check pinned revisions and execute strict source regressions
         run: |
