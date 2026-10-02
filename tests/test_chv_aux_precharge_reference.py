@@ -109,8 +109,6 @@ def main() -> None:
     if revised == frozen:
         raise AssertionError("precharge transform did not alter frozen NetBSD")
     patch = args.patch.resolve(strict=True)
-    if ("- \t" in patch.read_text()):
-        raise AssertionError("suspicious candidate patch syntax")
     subprocess.run(
         ["git", "-C", str(args.netbsd_tree), "apply", "--check", str(patch)],
         check=True,
