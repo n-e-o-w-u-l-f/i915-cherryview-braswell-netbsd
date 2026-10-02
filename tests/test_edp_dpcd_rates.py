@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import resource
+import re
 import runpy
 import subprocess
 import tempfile
@@ -24,6 +25,7 @@ TOOL = runpy.run_path(str(ROOT / "tools/generate_edp_dpcd_rates_patch.py"))
 LINUX_PIN = "fd179f8a05be3ccae366b9b96e176b51fbe54aab"
 LINUX_DP = "drivers/gpu/drm/i915/display/intel_dp.c"
 NETBSD_DRM_DP = "sys/external/bsd/drm2/dist/drm/drm_dp_helper.c"
+NETBSD_DP_HEADER = "sys/external/bsd/drm2/dist/include/drm/drm_dp_helper.h"
 
 PRELUDE = r"""
 #include <assert.h>
@@ -33,7 +35,7 @@ PRELUDE = r"""
 #include <string.h>
 #include <sys/types.h>
 
-#define DP_EDP_14 0x14
+#define DP_EDP_14 0x03
 #define DP_MAX_SUPPORTED_RATES 8
 #define DP_SUPPORTED_LINK_RATES 0x10
 #define ARRAY_SIZE(a) ((int)(sizeof(a) / sizeof((a)[0])))
@@ -98,7 +100,7 @@ MAIN = r"""
 int main(void)
 {
     struct intel_dp dp;
-    reset(&dp, 0x13, 1);
+    reset(&dp, 0x02, 1);
     run_rates(&dp);
     assert(read_calls == 0 && fallback_calls == 1 && common_calls == 1);
     assert(dp.use_rate_select == 0 && dp.num_sink_rates == 2);
@@ -204,6 +206,20 @@ def main() -> None:
     revised = TOOL["transform"](netbsd)
     linux = committed_source(args.linux_tree, LINUX_PIN, LINUX_DP)
     drm = committed_source(args.netbsd_tree, TOOL["NETBSD_PIN"], NETBSD_DRM_DP)
+    header = committed_source(args.netbsd_tree, TOOL["NETBSD_PIN"],
+                              NETBSD_DP_HEADER)
+    constants = {
+        "DP_EDP_13": "0x02",
+        "DP_EDP_14": "0x03",
+        "DP_SUPPORTED_LINK_RATES": "0x010",
+        "DP_MAX_SUPPORTED_RATES": "8",
+    }
+    for constant, value in constants.items():
+        pattern = (r"(?m)^[ \t]*#[ \t]*define[ \t]+" +
+                   re.escape(constant) + r"[ \t]+" + re.escape(value) +
+                   r"(?=[ \t]|$)")
+        if re.search(pattern, header) is None:
+            raise AssertionError("pinned NetBSD DP macro changed: " + constant)
     assert "ret = drm_dp_dpcd_read_data(&intel_dp->aux," in linux
     assert "memset(sink_rates, 0, sizeof(sink_rates));" in linux
     assert "ssize_t drm_dp_dpcd_read(struct drm_dp_aux *aux," in drm
