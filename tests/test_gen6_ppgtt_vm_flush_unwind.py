@@ -34,7 +34,11 @@ PRELUDE = r"""
 #include <stdio.h>
 
 struct i915_address_space { int top; };
-struct i915_ppgtt { struct i915_address_space vm; void *pd; };
+struct i915_page_directory { int lock; };
+struct i915_ppgtt {
+    struct i915_address_space vm;
+    struct i915_page_directory *pd;
+};
 struct gen6_ppgtt { struct i915_ppgtt base; int flush, pin_mutex; };
 static struct gen6_ppgtt *current_ppgtt;
 static int events[9], count;
@@ -52,7 +56,7 @@ static void free_scratch(struct i915_address_space *vm)
 }
 static void spin_lock_destroy(void *lock)
 {
-    assert(lock == current_ppgtt->base.pd && pd_alive);
+    assert(lock == &current_ppgtt->base.pd->lock && pd_alive);
     event(2);
 }
 static void kfree(void *pointer)
@@ -110,9 +114,9 @@ static void check(const int *expected, size_t size)
 } while (0)
 int main(void)
 {
+    struct i915_page_directory directory = {0};
     struct gen6_ppgtt ppgtt = {
-        .base = {.vm = {.top = 1},
-                 .pd = (void *)(uintptr_t)0x5000}
+        .base = {.vm = {.top = 1}, .pd = &directory}
     };
     current_ppgtt = &ppgtt;
 
