@@ -56,6 +56,7 @@ def main() -> None:
     p8 = (ROOT / "candidates/0008-i915-drm-registration-unwind-netbsd11.patch").resolve(strict=True)
     p9 = (ROOT / "candidates/0009-netbsd-opregion-optional-asle-cleanup.patch").resolve(strict=True)
     p10 = (ROOT / "candidates/0010-netbsd-opregion-rvda-map-failure-unwind.patch").resolve(strict=True)
+    p11 = (ROOT / "candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_early_probe_unwind.py",
@@ -72,12 +73,15 @@ def main() -> None:
            "--opregion-patch", str(p9), *overlay_args)
     invoke("test_drm_registration_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
+    invoke("test_edp_fixed_mode.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           "--patch", str(p11), *overlay_args)
 
     # Standalone patch checks are intentionally on the unchanged frozen
     # worktree, never on a scratch tree already containing prior patches.
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
-        for patch in (p7, p8, p9, p10):
+        for patch in (p7, p8, p9, p10, p11):
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
 
