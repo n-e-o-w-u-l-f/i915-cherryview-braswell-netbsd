@@ -8,7 +8,7 @@
 -				sink_rates, sizeof(sink_rates));
 +		if (drm_dp_dpcd_read(&intel_dp->aux, DP_SUPPORTED_LINK_RATES,
 +				     sink_rates, sizeof(sink_rates)) !=
-+		    sizeof(sink_rates)) {
++		    (ssize_t)sizeof(sink_rates)) {
 +			DRM_DEBUG_KMS("Unable to read eDP supported link rates, "
 +				      "using default rates\n");
 +			memset(sink_rates, 0, sizeof(sink_rates));
