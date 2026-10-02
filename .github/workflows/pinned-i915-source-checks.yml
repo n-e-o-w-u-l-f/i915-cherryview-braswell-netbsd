@@ -1,20 +1,12 @@
 name: Pinned i915 source regressions
 
 on:
-  push:
-    paths:
-      - ".github/workflows/pinned-i915-source-checks.yml"
-      - "tools/**"
-      - "tests/**"
-      - "patches/**"
-      - "candidates/**"
-  pull_request:
-    paths:
-      - ".github/workflows/pinned-i915-source-checks.yml"
-      - "tools/**"
-      - "tests/**"
-      - "patches/**"
-      - "candidates/**"
+  # TEMPORARY INFRASTRUCTURE QUARANTINE (2026-10-02): full and minimal
+  # hosted jobs fail before recording a first step; diagnostic logs return
+  # 404 BlobNotFound. This is not an accepted test pass. Do not repeatedly
+  # enqueue unchanged failing automatic runs. Re-enable push/PR triggers
+  # only after actual runner/billing/settings diagnostics and a verified
+  # manual workflow_dispatch run with job steps and logs.
   workflow_dispatch:
 
 permissions:
