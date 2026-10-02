@@ -62,6 +62,7 @@ def main() -> None:
     p11 = (ROOT / "candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch").resolve(strict=True)
     p12 = (ROOT / "candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch").resolve(strict=True)
     p13 = (ROOT / "candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch").resolve(strict=True)
+    p14 = (ROOT / "candidates/0014-i915-chv-aux-precharge-linux-parity-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_early_probe_unwind.py",
@@ -89,10 +90,13 @@ def main() -> None:
     invoke("test_edp_dpcd_rates.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p12), *overlay_args)
+    invoke("test_chv_aux_precharge_reference.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           "--patch", str(p14), *overlay_args)
 
-    # Apply all three independent eDP patches in every possible order to
-    # intel_dp.c file in both orders. The original frozen checkout and the
-    # unpublished six-edit overlay must remain untouched.
+    # Four disjoint eDP changes may compose in any order on the frozen
+    # NetBSD source. The real unpublished Legion overlay *already has*
+    # precharge 0014: apply only 0011/0012/0013 to its disposable copy.
     dp_rel = Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c")
     dp_original = (netbsd / dp_rel).read_bytes()
     combined = []
@@ -100,27 +104,50 @@ def main() -> None:
         scratch = Path(name)
         target = scratch / dp_rel
         target.parent.mkdir(parents=True)
-        for pair in itertools.permutations((p11, p12, p13)):
+        for pair in itertools.permutations((p11, p12, p13, p14)):
             target.write_bytes(dp_original)
             for patch in pair:
                 subprocess.run(["git", "-C", str(scratch),
                                 "apply", str(patch)], check=True)
             combined.append(target.read_bytes())
     if len(set(combined)) != 1 or combined[0] == dp_original:
-        raise AssertionError("0011/0012/0013 combined patch orders diverged")
-    print("I915_0011_0012_0013_COMBINED_REAL_GIT_APPLY_6_ORDERS_OK",
+        raise AssertionError("0011/0012/0013/0014 full permutation drift")
+    print("I915_0011_TO_0014_COMBINED_REAL_GIT_APPLY_24_ORDERS_OK",
           flush=True)
 
-    # Standalone patch checks are intentionally on the unchanged frozen
-    # worktree, never on a scratch tree already containing prior patches.
+    if overlay is not None:
+        original_overlay_dp = (overlay / dp_rel).read_bytes()
+        with tempfile.TemporaryDirectory() as name:
+            scratch = Path(name)
+            target = scratch / dp_rel
+            target.parent.mkdir(parents=True)
+            for pair in itertools.permutations((p11, p12, p13)):
+                target.write_bytes(original_overlay_dp)
+                for patch in pair:
+                    subprocess.run(["git", "-C", str(scratch),
+                                    "apply", str(patch)], check=True)
+                if target.read_bytes() != combined[0]:
+                    raise AssertionError(
+                        "genuine six-edit overlay's eDP result diverges "
+                        "from frozen NetBSD + 0011/0012/0013/0014"
+                    )
+        print("I915_EXISTING_0014_OVERLAY_0011_TO_0013_6_ORDERS_OK",
+              flush=True)
+
+    # Individual new changes must apply to untouched frozen input. The
+    # overlay must apply 0007-0013 only; precharge 0014 is already present
+    # and its reverse-apply is separately verified by its own regression.
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
-        for patch in (p7, p8, p9, p10, p11, p12, p13):
+        changes = (p7, p8, p9, p10, p11, p12, p13)
+        if tree == netbsd:
+            changes += (p14,)
+        for patch in changes:
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
 
-    # Integration gate, not merely six independent git apply --checks:
-    # apply the complete seven-patch stack to the three actual source files
+    # Integration gate: apply all eight patches to frozen files; apply
+    # 0007-0013 on real overlay because its 0014 is already present.
     # in a disposable tree. Include the *real* overlay files only if the
     # caller supplied a distinct checkout. Never mutate the reference,
     # published patch artifacts, or the user's unpublished overlay.
@@ -129,7 +156,7 @@ def main() -> None:
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c"),
     )
-    patch_stack = (p7, p8, p9, p10, p11, p12, p13)
+    new_stack = (p7, p8, p9, p10, p11, p12, p13)
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
         originals = {relative: (tree / relative).read_bytes()
@@ -140,7 +167,8 @@ def main() -> None:
                 dest = scratch / relative
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(content)
-            for patch in patch_stack:
+            patches = new_stack + ((p14,) if tree == netbsd else ())
+            for patch in patches:
                 subprocess.run(
                     ["git", "-C", str(scratch), "apply", str(patch)],
                     check=True,
@@ -164,6 +192,7 @@ def main() -> None:
                 (dp, 'DRM_INFO("failed to find fixed mode for eDP,'),
                 (dp, "(ssize_t)sizeof(sink_rates)) {"),
                 (dp, "if (!cold && i915->drm.irq_enabled &&"),
+                (dp, "(3 << DP_AUX_CH_CTL_PRECHARGE_2US_SHIFT) |"),
             )
             for content, anchor in required:
                 if anchor not in content:
@@ -174,7 +203,7 @@ def main() -> None:
                 b"".join(changed[relative] for relative in sources)
             ).hexdigest()
         scope = "OVERLAY" if overlay is not None and tree == overlay else "FROZEN"
-        print("I915_0007_TO_0013_COMBINED_REAL_GIT_APPLY_" +
+        print("I915_0007_TO_0014_PARITY_COMBINED_REAL_GIT_APPLY_" +
               scope + "_OK sha256=" + fingerprint, flush=True)
 
     print("I915_PINNED_SOURCE_CHECKS_PASS_" +
