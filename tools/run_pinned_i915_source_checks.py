@@ -63,6 +63,7 @@ def main() -> None:
     p12 = (ROOT / "candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch").resolve(strict=True)
     p13 = (ROOT / "candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch").resolve(strict=True)
     p14 = (ROOT / "candidates/0014-i915-chv-aux-precharge-linux-parity-netbsd11.patch").resolve(strict=True)
+    p15 = (ROOT / "candidates/0015-i915-chv-phy-control-powerwell-sync-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_early_probe_unwind.py",
@@ -93,6 +94,9 @@ def main() -> None:
     invoke("test_chv_aux_precharge_reference.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p14), *overlay_args)
+    invoke("test_chv_phy_powerwell_sync_reference.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           "--patch", str(p15), *overlay_args)
 
     # Four disjoint eDP changes may compose in any order on the frozen
     # NetBSD source. The real unpublished Legion overlay *already has*
@@ -135,28 +139,30 @@ def main() -> None:
               flush=True)
 
     # Individual new changes must apply to untouched frozen input. The
-    # overlay must apply 0007-0013 only; precharge 0014 is already present
-    # and its reverse-apply is separately verified by its own regression.
+    # real Legion overlay already has both 0014 AUX precharge and 0015
+    # PHY power-well sync; verify their reverse applicability separately.
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
         changes = (p7, p8, p9, p10, p11, p12, p13)
         if tree == netbsd:
-            changes += (p14,)
+            changes += (p14, p15)
         for patch in changes:
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
 
-    # Integration gate: apply all eight patches to frozen files; apply
-    # 0007-0013 on real overlay because its 0014 is already present.
-    # in a disposable tree. Include the *real* overlay files only if the
+    # Integration gate: apply all nine patches to frozen files; apply
+    # 0007-0013 on genuine overlay (it already contains 0014 and 0015).
+    # Include the *real* overlay files only if the
     # caller supplied a distinct checkout. Never mutate the reference,
     # published patch artifacts, or the user's unpublished overlay.
     sources = (
         Path("sys/external/bsd/drm2/dist/drm/i915/i915_drv.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c"),
+        Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c"),
     )
     new_stack = (p7, p8, p9, p10, p11, p12, p13)
+    fingerprints = {}
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
         originals = {relative: (tree / relative).read_bytes()
@@ -167,7 +173,7 @@ def main() -> None:
                 dest = scratch / relative
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(content)
-            patches = new_stack + ((p14,) if tree == netbsd else ())
+            patches = new_stack + ((p14, p15) if tree == netbsd else ())
             for patch in patches:
                 subprocess.run(
                     ["git", "-C", str(scratch), "apply", str(patch)],
@@ -175,14 +181,21 @@ def main() -> None:
                 )
             changed = {relative: (scratch / relative).read_bytes()
                        for relative in sources}
-            if any(changed[relative] == original
-                   for relative, original in originals.items()):
+            # The overlay already has 0015 in intel_display_power.c:
+            # its power file must remain unchanged after the seven NEW
+            # patches. Frozen NetBSD must instead receive 0015 here.
+            expected_mutated = sources if tree == netbsd else sources[:3]
+            if any(changed[relative] == originals[relative]
+                   for relative in expected_mutated):
                 raise AssertionError(
                     "complete patch stack left a target source unchanged"
                 )
+            if tree == overlay and changed[sources[3]] != originals[sources[3]]:
+                raise AssertionError("existing staged power-well source changed")
             driver = changed[sources[0]].decode("utf-8")
             opregion = changed[sources[1]].decode("utf-8")
             dp = changed[sources[2]].decode("utf-8")
+            power = changed[sources[3]].decode("utf-8")
             required = (
                 (driver, "out_cleanup_registration:"),
                 (driver, "err_early:"),
@@ -193,6 +206,8 @@ def main() -> None:
                 (dp, "(ssize_t)sizeof(sink_rates)) {"),
                 (dp, "if (!cold && i915->drm.irq_enabled &&"),
                 (dp, "(3 << DP_AUX_CH_CTL_PRECHARGE_2US_SHIFT) |"),
+                (power, ".sync_hw = chv_pipe_power_well_sync_hw,"),
+                (power, "Defer application of initial phy_control to enabling the powerwell"),
             )
             for content, anchor in required:
                 if anchor not in content:
@@ -203,8 +218,16 @@ def main() -> None:
                 b"".join(changed[relative] for relative in sources)
             ).hexdigest()
         scope = "OVERLAY" if overlay is not None and tree == overlay else "FROZEN"
-        print("I915_0007_TO_0014_PARITY_COMBINED_REAL_GIT_APPLY_" +
+        fingerprints[scope] = fingerprint
+        print("I915_0007_TO_0015_PARITY_COMBINED_REAL_GIT_APPLY_" +
               scope + "_OK sha256=" + fingerprint, flush=True)
+
+    if overlay is not None:
+        if fingerprints["FROZEN"] != fingerprints["OVERLAY"]:
+            raise AssertionError("real overlay + new patches differs from "
+                                 "frozen NetBSD + all nine patches")
+        print("I915_FROZEN_9_PATCH_VS_EXISTING_0014_0015_OVERLAY_PARITY_OK",
+              flush=True)
 
     print("I915_PINNED_SOURCE_CHECKS_PASS_" +
           ("FROZEN_AND_OVERLAY" if overlay else "FROZEN_ONLY"),
