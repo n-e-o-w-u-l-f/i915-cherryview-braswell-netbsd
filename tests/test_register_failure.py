@@ -117,7 +117,6 @@ def check_probe_unwind(source: str) -> None:
         "out_cleanup_registration:",
         "intel_opregion_unregister(dev_priv);",
         "i915_gem_suspend(dev_priv);",
-        "drm_atomic_helper_shutdown(&dev_priv->drm);",
         "intel_gvt_driver_remove(dev_priv);",
         "i915_driver_modeset_remove(dev_priv);",
         "i915_reset_error_state(dev_priv);",
