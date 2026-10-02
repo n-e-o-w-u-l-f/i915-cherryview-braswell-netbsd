@@ -18,6 +18,7 @@ PRELUDE = r"""
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 
 struct drm_i915_private {
     int mmio_debug, uncore, irq_lock;
@@ -85,7 +86,7 @@ int main(void) {
     assert(counts.qos == 1 && counts.mutex == 6 && counts.spin == 2);
     assert(counts.uncore == 1 && counts.debug == 1);
 
-    counts = (typeof(counts)){0};
+    memset(&counts, 0, sizeof(counts));
     failure = 2;
     ret = i915_driver_early_probe(&priv);
     assert(ret == -ENOMEM);
@@ -94,7 +95,7 @@ int main(void) {
     assert(counts.qos == 1 && counts.mutex == 6 && counts.spin == 2);
     assert(counts.uncore == 1 && counts.debug == 1);
 
-    counts = (typeof(counts)){0};
+    memset(&counts, 0, sizeof(counts));
     failure = 3;
     ret = i915_driver_early_probe(&priv);
     assert(ret == -EIO);
@@ -103,7 +104,7 @@ int main(void) {
     assert(counts.mutex == 6 && counts.spin == 2);
     assert(counts.uncore == 1 && counts.debug == 1);
 
-    counts = (typeof(counts)){0};
+    memset(&counts, 0, sizeof(counts));
     failure = 0;
     ret = i915_driver_early_probe(&priv);
     assert(ret == 0);
@@ -137,7 +138,7 @@ def main() -> None:
         c = Path(directory) / "test.c"
         exe = Path(directory) / "test"
         c.write_text(source)
-        subprocess.run(["cc", "-std=gnu11", "-Wall", "-Wextra",
+        subprocess.run(["cc", "-std=c11", "-Wall", "-Wextra",
                         "-Werror", "-pedantic", str(c), "-o", str(exe)],
                        check=True)
         subprocess.run([str(exe)], check=True)
