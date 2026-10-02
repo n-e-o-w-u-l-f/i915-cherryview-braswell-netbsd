@@ -13,6 +13,7 @@ import argparse
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
@@ -80,6 +81,27 @@ def main() -> None:
     invoke("test_edp_dpcd_rates.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p12), *overlay_args)
+
+    # Apply both eDP patches in a disposable copy of the actual pinned
+    # intel_dp.c file in both orders. The original frozen checkout and the
+    # unpublished six-edit overlay must remain untouched.
+    dp_rel = Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c")
+    dp_original = (netbsd / dp_rel).read_bytes()
+    combined = []
+    with tempfile.TemporaryDirectory() as name:
+        scratch = Path(name)
+        target = scratch / dp_rel
+        target.parent.mkdir(parents=True)
+        for pair in ((p11, p12), (p12, p11)):
+            target.write_bytes(dp_original)
+            for patch in pair:
+                subprocess.run(["git", "-C", str(scratch),
+                                "apply", str(patch)], check=True)
+            combined.append(target.read_bytes())
+    if combined[0] != combined[1] or combined[0] == dp_original:
+        raise AssertionError("0011/0012 combined patch order or changes diverged")
+    print("I915_0011_0012_COMBINED_REAL_GIT_APPLY_BOTH_ORDERS_OK",
+          flush=True)
 
     # Standalone patch checks are intentionally on the unchanged frozen
     # worktree, never on a scratch tree already containing prior patches.
