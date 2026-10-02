@@ -51,6 +51,7 @@ jobs:
             sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c
+            sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_panel.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_connector.c
             sys/external/bsd/drm2/dist/drm/drm_drv.c
@@ -75,6 +76,8 @@ jobs:
             drivers/gpu/drm/i915/display/intel_dp.c
             drivers/gpu/drm/i915/display/intel_dp_aux.c
             drivers/gpu/drm/i915/display/intel_display_power.c
+            drivers/gpu/drm/i915/display/intel_display.c
+            drivers/gpu/drm/i915/display/intel_display_regs.h
             drivers/gpu/drm/i915/display/intel_display_power_well.c
             drivers/gpu/drm/i915/display/intel_dpio_phy.c
 
