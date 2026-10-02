@@ -98,17 +98,25 @@ def probe_changes(body: str) -> str:
         "\tenable_rpm_wakeref_asserts(&dev_priv->runtime_pm);\n",
         "probe registration propagation")
     body = exactly(body,
-        "out_cleanup_hw:\n\ti915_driver_hw_remove(dev_priv);\n",
+        "out_cleanup_hw:\n\ti915_driver_hw_remove(dev_priv);\n"
+        "\tintel_memory_regions_driver_release(dev_priv);\n",
         "out_cleanup_registration:\n"
         "\tintel_opregion_unregister(dev_priv);\n"
         "\ti915_gem_suspend(dev_priv);\n"
-        "\ti915_gem_driver_remove(dev_priv);\n"
-        "\ti915_gem_driver_release(dev_priv);\n"
+        "\tdrm_atomic_helper_shutdown(&dev_priv->drm);\n"
         "\tintel_gvt_driver_remove(dev_priv);\n"
         "\ti915_driver_modeset_remove(dev_priv);\n"
+        "\ti915_reset_error_state(dev_priv);\n"
+        "\ti915_gem_driver_remove(dev_priv);\n"
         "\tintel_power_domains_driver_remove(dev_priv);\n"
-        "out_cleanup_hw:\n\ti915_driver_hw_remove(dev_priv);\n",
-        "post-modeset rollback")
+        "\ti915_driver_hw_remove(dev_priv);\n"
+        "\ti915_gem_driver_release(dev_priv);\n"
+        "\tgoto out_cleanup_memory;\n"
+        "out_cleanup_hw:\n"
+        "\ti915_driver_hw_remove(dev_priv);\n"
+        "out_cleanup_memory:\n"
+        "\tintel_memory_regions_driver_release(dev_priv);\n",
+        "post-modeset rollback with separate GEM release ownership")
     return body
 
 
