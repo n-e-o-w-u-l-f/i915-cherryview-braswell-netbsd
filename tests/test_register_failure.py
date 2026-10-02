@@ -117,13 +117,17 @@ def check_probe_unwind(source: str) -> None:
         "out_cleanup_registration:",
         "intel_opregion_unregister(dev_priv);",
         "i915_gem_suspend(dev_priv);",
-        "i915_gem_driver_remove(dev_priv);",
-        "i915_gem_driver_release(dev_priv);",
+        "drm_atomic_helper_shutdown(&dev_priv->drm);",
         "intel_gvt_driver_remove(dev_priv);",
         "i915_driver_modeset_remove(dev_priv);",
+        "i915_reset_error_state(dev_priv);",
+        "i915_gem_driver_remove(dev_priv);",
         "intel_power_domains_driver_remove(dev_priv);",
-        "out_cleanup_hw:",
         "i915_driver_hw_remove(dev_priv);",
+        "i915_gem_driver_release(dev_priv);",
+        "goto out_cleanup_memory;",
+        "out_cleanup_hw:\n\ti915_driver_hw_remove(dev_priv);",
+        "out_cleanup_memory:",
         "intel_memory_regions_driver_release(dev_priv);",
         "i915_ggtt_driver_release(dev_priv);",
         "out_cleanup_mmio:",
@@ -136,6 +140,11 @@ def check_probe_unwind(source: str) -> None:
     assert positions == sorted(positions), "probe rollback ordering changed"
     assert probe.count("out_cleanup_registration:") == 1
     assert probe.count("i915_driver_register(dev_priv);") == 1
+    assert probe.count("i915_gem_driver_release(dev_priv);") == 1
+    assert probe.count("out_cleanup_memory:") == 1
+    # Modeset failure must skip registration-only GEM release and enter
+    # the existing hardware cleanup path instead.
+    assert "if (ret < 0)\n\t\tgoto out_cleanup_hw;" in probe
     print("I915_PROBE_UNWIND_ORDER_OK")
 
 
