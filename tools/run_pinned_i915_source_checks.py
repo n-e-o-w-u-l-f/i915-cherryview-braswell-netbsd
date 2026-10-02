@@ -76,6 +76,8 @@ def main() -> None:
            "--opregion-patch", str(p9), *overlay_args)
     invoke("test_drm_registration_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
+    invoke("test_chv_dpio_routing_source_contract.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux))
     invoke("test_edp_fixed_mode.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p11), *overlay_args)
