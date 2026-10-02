@@ -1,0 +1,12 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/gt/gen6_ppgtt.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gt/gen6_ppgtt.c
+@@ -542,7 +542,9 @@
+ 	spin_lock_destroy(&ppgtt->base.pd->lock);
+ 	kfree(ppgtt->base.pd);
+ err_free:
++	mutex_destroy(&ppgtt->flush);
+ 	mutex_destroy(&ppgtt->pin_mutex);
++	i915_address_space_fini(&ppgtt->base.vm);
+ 	kfree(ppgtt);
+ 	return ERR_PTR(err);
+ }
