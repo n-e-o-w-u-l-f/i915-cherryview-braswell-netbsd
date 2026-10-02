@@ -36,7 +36,7 @@ PRELUDE = r"""
 #define DP_EDP_14 0x14
 #define DP_MAX_SUPPORTED_RATES 8
 #define DP_SUPPORTED_LINK_RATES 0x10
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+#define ARRAY_SIZE(a) ((int)(sizeof(a) / sizeof((a)[0])))
 #define DRM_DEBUG_KMS(...) ((void)0)
 typedef uint16_t __le16;
 typedef uint8_t u8;
