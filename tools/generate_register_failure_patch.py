@@ -5,6 +5,8 @@ Pinned Linux i915_driver_register returns the DRM registration error, calls
 drm_dev_unregister, and reverses PMU/GEM registration. NetBSD's imported
 version logs the failure and continues. This translates the known error
 path while preserving the NetBSD split between modeset, GEM and HW phases.
+Candidate 0009 (optional-ASLE RVDA cleanup) is a prerequisite: this failure
+path must release the OpRegion mapping set up during i915_driver_hw_probe.
 Generic probe/display parity and native object verification remain open.
 """
 from __future__ import annotations
@@ -98,6 +100,7 @@ def probe_changes(body: str) -> str:
     body = exactly(body,
         "out_cleanup_hw:\n\ti915_driver_hw_remove(dev_priv);\n",
         "out_cleanup_registration:\n"
+        "\tintel_opregion_unregister(dev_priv);\n"
         "\ti915_gem_suspend(dev_priv);\n"
         "\ti915_gem_driver_remove(dev_priv);\n"
         "\ti915_gem_driver_release(dev_priv);\n"
