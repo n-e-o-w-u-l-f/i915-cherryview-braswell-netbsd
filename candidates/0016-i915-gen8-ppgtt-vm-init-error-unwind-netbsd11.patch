@@ -1,0 +1,10 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c
+@@ -818,6 +818,7 @@
+ err_free_scratch:
+ 	free_scratch(&ppgtt->vm);
+ err_free:
++	i915_address_space_fini(&ppgtt->vm);
+ 	kfree(ppgtt);
+ 	return ERR_PTR(err);
+ }
