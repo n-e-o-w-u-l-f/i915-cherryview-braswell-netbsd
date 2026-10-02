@@ -5,9 +5,9 @@
  			DRM_DEBUG_KMS("Invalid VBT in ACPI OpRegion (RVDA)\n");
  #ifdef __NetBSD__
 -			AcpiOsUnmapMemory(opregion->rvda,
+-			    opregion->asle->rvds);
 +			if (opregion->rvda)
 +				AcpiOsUnmapMemory(opregion->rvda,
--			    opregion->asle->rvds);
 +				    opregion->asle->rvds);
  #else
  			memunmap(opregion->rvda);
