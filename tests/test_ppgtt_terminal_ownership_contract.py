@@ -44,9 +44,13 @@ def pinned(tree: Path, relative: str) -> str:
 
 
 def unique_function(source: str, start: str, stop: str) -> str:
-    if source.count(start) != 1 or source.count(stop) != 1:
-        raise AssertionError("missing/ambiguous function anchor: " + start)
-    return source[source.index(start):source.index(stop, source.index(start))]
+    if source.count(start) != 1:
+        raise AssertionError("missing/ambiguous function start: " + start)
+    begin = source.index(start)
+    end = source.find(stop, begin + len(start))
+    if end < 0:
+        raise AssertionError("missing function end after: " + start)
+    return source[begin:end]
 
 
 def ordered(src: str, *markers: str) -> None:
@@ -102,8 +106,7 @@ def main() -> None:
     assert vm_release.count("i915_address_space_fini(vm);") == 1
     assert ref_release.count("queue_rcu_work(vm->i915->wq, &vm->rcu);") == 1
 
-    init_ppgtt = unique_function(init, "void ppgtt_init(",
-                                 "static struct i915_ppgtt *")
+    init_ppgtt = unique_function(init, "void ppgtt_init(", "\n}\n")
     assert "i915_address_space_init(&ppgtt->vm, VM_CLASS_PPGTT);" in init_ppgtt
 
     original_8 = unique_function(gen8, "struct i915_ppgtt *gen8_ppgtt_create(",
