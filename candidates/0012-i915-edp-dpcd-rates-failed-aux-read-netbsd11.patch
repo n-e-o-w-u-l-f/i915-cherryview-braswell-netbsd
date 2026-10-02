@@ -1,0 +1,18 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -4431,8 +4431,13 @@
+ 		__le16 sink_rates[DP_MAX_SUPPORTED_RATES];
+ 		int i;
+ 
+-		drm_dp_dpcd_read(&intel_dp->aux, DP_SUPPORTED_LINK_RATES,
+-				sink_rates, sizeof(sink_rates));
++		if (drm_dp_dpcd_read(&intel_dp->aux, DP_SUPPORTED_LINK_RATES,
++				     sink_rates, sizeof(sink_rates)) !=
++		    sizeof(sink_rates)) {
++			DRM_DEBUG_KMS("Unable to read eDP supported link rates, "
++				      "using default rates\n");
++			memset(sink_rates, 0, sizeof(sink_rates));
++		}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(sink_rates); i++) {
+ 			int val = le16_to_cpu(sink_rates[i]);
