@@ -148,6 +148,7 @@ int main(void)
     struct intel_connector connector = {0};
     /* Original fragment has no DRM_INFO, retain the strict warning gate. */
     (void)messages;
+    (void)kfree;
     /* With no EDID mode and no VBT, the original source returns true. */
     assert(!run_edp(&connector, false, false));
     return 0;
