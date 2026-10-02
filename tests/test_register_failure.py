@@ -115,6 +115,7 @@ def check_probe_unwind(source: str) -> None:
         "ret = i915_driver_register(dev_priv);",
         "if (ret)\n\t\tgoto out_cleanup_registration;",
         "out_cleanup_registration:",
+        "intel_opregion_unregister(dev_priv);",
         "i915_gem_suspend(dev_priv);",
         "i915_gem_driver_remove(dev_priv);",
         "i915_gem_driver_release(dev_priv);",
@@ -144,6 +145,7 @@ def main() -> None:
     parser.add_argument("--overlay-tree", type=Path, required=True)
     parser.add_argument("--patch", type=Path, required=True)
     parser.add_argument("--previous-patch", type=Path, required=True)
+    parser.add_argument("--opregion-patch", type=Path, required=True)
     args = parser.parse_args()
 
     original = TOOL["pinned_source"](args.netbsd_tree)
@@ -171,8 +173,25 @@ def main() -> None:
         target = tmp / rel
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(original)
+        opregion_rel = Path(
+            "sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"
+        )
+        opregion_target = tmp / opregion_rel
+        opregion_target.parent.mkdir(parents=True, exist_ok=True)
+        opregion_original = subprocess.check_output(
+            ["git", "-C", str(args.netbsd_tree), "show",
+             "HEAD:" + str(opregion_rel)],
+            text=True,
+        )
+        if (args.netbsd_tree / opregion_rel).read_text() != opregion_original:
+            raise RuntimeError("dirty frozen OpRegion source")
+        opregion_target.write_text(opregion_original)
         subprocess.run(
             ["git", "-C", str(tmp), "apply", str(args.previous_patch)],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "-C", str(tmp), "apply", str(args.opregion_patch)],
             check=True,
         )
         subprocess.run(
@@ -182,13 +201,16 @@ def main() -> None:
         combined = target.read_text()
         assert "err_early:\n" in combined
         assert "out_cleanup_registration:\n" in combined
-        print("I915_0007_0008_COMBINED_APPLY_OK")
+        assert "intel_opregion_unregister(dev_priv);" in combined
+        assert "opregion->rvda ? opregion->asle->rvds : 0;" in opregion_target.read_text()
+        print("I915_0007_0009_0008_COMBINED_APPLY_OK")
 
     for tree in (args.netbsd_tree, args.overlay_tree):
-        subprocess.run(
-            ["git", "-C", str(tree), "apply", "--check", str(args.patch)],
-            check=True,
-        )
+        for patch in (args.opregion_patch, args.patch):
+            subprocess.run(
+                ["git", "-C", str(tree), "apply", "--check", str(patch)],
+                check=True,
+            )
     print("I915_REGISTER_APPLY_CHECKS_OK")
 
 
