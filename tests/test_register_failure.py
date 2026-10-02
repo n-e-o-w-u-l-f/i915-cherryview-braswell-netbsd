@@ -167,6 +167,14 @@ def main() -> None:
     function = adapted[start:stop]
     with tempfile.TemporaryDirectory() as directory:
         tmp = Path(directory)
+        # Reject manually authored artifacts that drift from the canonical
+        # pinned-source Python generator.
+        generated = tmp / "regenerated-0008.patch"
+        TOOL["generate"](args.netbsd_tree, generated)
+        if generated.read_bytes() != args.patch.read_bytes():
+            raise AssertionError("0008 generated artifact differs from candidate")
+        print("I915_0008_GENERATOR_BYTE_MATCH_OK")
+
         c = tmp / "test.c"
         exe = tmp / "test"
         c.write_text(PRELUDE + "\n" + function + "\n" + MAIN)
