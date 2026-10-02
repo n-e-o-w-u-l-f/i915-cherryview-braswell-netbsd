@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import resource
 import runpy
 import subprocess
 import tempfile
@@ -157,6 +158,35 @@ def main() -> None:
             check=True,
         )
         subprocess.run([str(exe)], check=True)
+
+        # Negative control: the unpatched *same* pinned RVDA source
+        # must attempt to unmap NULL on the map-failure branch.
+        original_start = original.index(start_anchor)
+        original_end = original.index(end_anchor, original_start)
+        before = original[original_start:original_end]
+        if before.count("if (opregion->rvda)") != 0 or wrapper.count(branch) != 1:
+            raise RuntimeError("negative control no longer models the unpatched branch")
+        unpatched = tmp / "negative_control.c"
+        unpatched_exe = tmp / "negative_control"
+        unpatched.write_text(PRELUDE + "\n" + wrapper.replace(branch, before, 1)
+                             + "\n" + MAIN)
+        subprocess.run(
+            ["cc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-pedantic",
+             "-fsanitize=undefined", "-fno-omit-frame-pointer",
+             str(unpatched), "-o", str(unpatched_exe)],
+            check=True,
+        )
+
+        def no_core_dump() -> None:
+            resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+
+        failed = subprocess.run(
+            [str(unpatched_exe)], check=False, capture_output=True, text=True,
+            preexec_fn=no_core_dump,
+        )
+        if failed.returncode == 0 or "address != NULL" not in failed.stderr:
+            raise AssertionError("unpatched branch did not fail on NULL unmap")
+        print("I915_RVDA_0010_UNPATCHED_NEGATIVE_CONTROL_OK")
 
         relative = Path(TOOL["REL"])
         target = tmp / relative
