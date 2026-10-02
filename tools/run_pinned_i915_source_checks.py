@@ -65,6 +65,7 @@ def main() -> None:
     p13 = (ROOT / "candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch").resolve(strict=True)
     p14 = (ROOT / "candidates/0014-i915-chv-aux-precharge-linux-parity-netbsd11.patch").resolve(strict=True)
     p15 = (ROOT / "candidates/0015-i915-chv-phy-control-powerwell-sync-netbsd11.patch").resolve(strict=True)
+    p16 = (ROOT / "candidates/0016-i915-gen8-ppgtt-vm-init-error-unwind-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_early_probe_unwind.py",
@@ -89,6 +90,9 @@ def main() -> None:
     invoke("test_chv_full_ppgtt_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            *overlay_args)
+    invoke("test_gen8_ppgtt_vm_init_unwind.py",
+           "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
+           "--patch", str(p16), *overlay_args)
     invoke("test_edp_aux_irq_fallback.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p13), *overlay_args)
@@ -150,15 +154,16 @@ def main() -> None:
     # PHY power-well sync; verify their reverse applicability separately.
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
-        changes = (p7, p8, p9, p10, p11, p12, p13)
+        changes = (p7, p8, p9, p10, p11, p12, p13, p16)
         if tree == netbsd:
             changes += (p14, p15)
         for patch in changes:
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
 
-    # Integration gate: apply all nine patches to frozen files; apply
-    # 0007-0013 on genuine overlay (it already contains 0014 and 0015).
+    # Integration gate: apply 0007-0013 + 0014/0015 + 0016 to frozen
+    # files; apply 0007-0013 + 0016 to genuine overlay (which already
+    # contains 0014 and 0015).
     # Include the *real* overlay files only if the
     # caller supplied a distinct checkout. Never mutate the reference,
     # published patch artifacts, or the user's unpublished overlay.
@@ -167,8 +172,9 @@ def main() -> None:
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c"),
         Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c"),
+        Path("sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c"),
     )
-    new_stack = (p7, p8, p9, p10, p11, p12, p13)
+    new_stack = (p7, p8, p9, p10, p11, p12, p13, p16)
     fingerprints = {}
     for tree in ([netbsd, overlay] if overlay else [netbsd]):
         assert tree is not None
@@ -191,7 +197,9 @@ def main() -> None:
             # The overlay already has 0015 in intel_display_power.c:
             # its power file must remain unchanged after the seven NEW
             # patches. Frozen NetBSD must instead receive 0015 here.
-            expected_mutated = sources if tree == netbsd else sources[:3]
+            expected_mutated = sources if tree == netbsd else (
+                sources[0], sources[1], sources[2], sources[4]
+            )
             if any(changed[relative] == originals[relative]
                    for relative in expected_mutated):
                 raise AssertionError(
@@ -203,6 +211,7 @@ def main() -> None:
             opregion = changed[sources[1]].decode("utf-8")
             dp = changed[sources[2]].decode("utf-8")
             power = changed[sources[3]].decode("utf-8")
+            ppgtt = changed[sources[4]].decode("utf-8")
             required = (
                 (driver, "out_cleanup_registration:"),
                 (driver, "err_early:"),
@@ -215,6 +224,7 @@ def main() -> None:
                 (dp, "(3 << DP_AUX_CH_CTL_PRECHARGE_2US_SHIFT) |"),
                 (power, ".sync_hw = chv_pipe_power_well_sync_hw,"),
                 (power, "Defer application of initial phy_control to enabling the powerwell"),
+                (ppgtt, "i915_address_space_fini(&ppgtt->vm);"),
             )
             for content, anchor in required:
                 if anchor not in content:
@@ -226,7 +236,7 @@ def main() -> None:
             ).hexdigest()
         scope = "OVERLAY" if overlay is not None and tree == overlay else "FROZEN"
         fingerprints[scope] = fingerprint
-        print("I915_0007_TO_0015_PARITY_COMBINED_REAL_GIT_APPLY_" +
+        print("I915_0007_TO_0016_PARITY_COMBINED_REAL_GIT_APPLY_" +
               scope + "_OK sha256=" + fingerprint, flush=True)
 
     if overlay is not None:
