@@ -252,6 +252,10 @@ def main() -> None:
         "register_reboot_notifier(&intel_dp->edp_notifier);"
     )
     assert revised_fn.count("intel_connector->edid = NULL;") == 1
+    assert revised_fn.index("edp_panel_vdd_off_sync(intel_dp);") < \
+        revised_fn.index("if (!IS_ERR_OR_NULL(intel_connector->edid))") < \
+        revised_fn.rindex("return false;")
+    assert original_fn.count("intel_connector->edid = NULL;") == 0
 
     with tempfile.TemporaryDirectory() as directory:
         tmp = Path(directory)
