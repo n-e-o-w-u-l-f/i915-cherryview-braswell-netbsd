@@ -10,6 +10,7 @@ this is not a native NetBSD kernel build or hardware verification.
 from __future__ import annotations
 
 import argparse
+import hashlib
 from pathlib import Path
 import subprocess
 import sys
@@ -110,6 +111,63 @@ def main() -> None:
         for patch in (p7, p8, p9, p10, p11, p12):
             subprocess.run(["git", "-C", str(tree), "apply",
                             "--check", str(patch)], check=True)
+
+    # Integration gate, not merely six independent git apply --checks:
+    # apply the complete candidate stack to the three actual source files
+    # in a disposable tree. Include the *real* overlay files only if the
+    # caller supplied a distinct checkout. Never mutate the reference,
+    # published patch artifacts, or the user's unpublished overlay.
+    sources = (
+        Path("sys/external/bsd/drm2/dist/drm/i915/i915_drv.c"),
+        Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"),
+        Path("sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c"),
+    )
+    patch_stack = (p7, p8, p9, p10, p11, p12)
+    for tree in ([netbsd, overlay] if overlay else [netbsd]):
+        assert tree is not None
+        originals = {relative: (tree / relative).read_bytes()
+                     for relative in sources}
+        with tempfile.TemporaryDirectory() as name:
+            scratch = Path(name)
+            for relative, content in originals.items():
+                dest = scratch / relative
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(content)
+            for patch in patch_stack:
+                subprocess.run(
+                    ["git", "-C", str(scratch), "apply", str(patch)],
+                    check=True,
+                )
+            changed = {relative: (scratch / relative).read_bytes()
+                       for relative in sources}
+            if any(changed[relative] == original
+                   for relative, original in originals.items()):
+                raise AssertionError(
+                    "complete patch stack left a target source unchanged"
+                )
+            driver = changed[sources[0]].decode("utf-8")
+            opregion = changed[sources[1]].decode("utf-8")
+            dp = changed[sources[2]].decode("utf-8")
+            required = (
+                (driver, "out_cleanup_registration:"),
+                (driver, "err_early:"),
+                (opregion, "opregion->rvda ? opregion->asle->rvds : 0;"),
+                (opregion, "if (opregion->rvda)\n"
+                 "\t\t\t\tAcpiOsUnmapMemory(opregion->rvda,"),
+                (dp, 'DRM_INFO("failed to find fixed mode for eDP,'),
+                (dp, "(ssize_t)sizeof(sink_rates)) {"),
+            )
+            for content, anchor in required:
+                if anchor not in content:
+                    raise AssertionError(
+                        "complete stack lost required change: " + anchor
+                    )
+            fingerprint = hashlib.sha256(
+                b"".join(changed[relative] for relative in sources)
+            ).hexdigest()
+        scope = "OVERLAY" if overlay is not None and tree == overlay else "FROZEN"
+        print("I915_0007_TO_0012_COMBINED_REAL_GIT_APPLY_" +
+              scope + "_OK sha256=" + fingerprint, flush=True)
 
     print("I915_PINNED_SOURCE_CHECKS_PASS_" +
           ("FROZEN_AND_OVERLAY" if overlay else "FROZEN_ONLY"),
