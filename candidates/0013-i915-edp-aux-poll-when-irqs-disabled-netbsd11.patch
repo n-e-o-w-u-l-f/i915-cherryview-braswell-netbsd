@@ -1,0 +1,12 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -1190,7 +1190,8 @@
+ 
+ #define C (((status = intel_uncore_read_notrace(&i915->uncore, ch_ctl)) & DP_AUX_CH_CTL_SEND_BUSY) == 0)
+ #ifdef __NetBSD__
+-	if (!cold) {
++	if (!cold && i915->drm.irq_enabled &&
++	    i915->runtime_pm.irqs_enabled) {
+ 		int ret;
+ 		spin_lock(&i915->gmbus_wait_lock);
+ 		DRM_SPIN_TIMED_WAIT_NOINTR_UNTIL(ret,
