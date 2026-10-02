@@ -33,7 +33,7 @@ static struct {
 static int failure;
 #define PM_QOS_CPU_DMA_LATENCY 1
 #define PM_QOS_DEFAULT_VALUE 0
-#define i915_inject_probe_failure(...) 0
+#define i915_inject_probe_failure(p) ((void)(p), 0)
 #define intel_device_info_subplatform_init(...) ((void)0)
 #define intel_uncore_mmio_debug_init_early(...) ((void)0)
 #define intel_uncore_init_early(...) ((void)0)
