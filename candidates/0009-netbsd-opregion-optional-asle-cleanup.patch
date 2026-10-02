@@ -1,0 +1,12 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c
+@@ -1229,8 +1229,8 @@ void intel_opregion_unregister(struct drm_i915_private *i915)
+ 
+ 	/* just clear all opregion memory pointers now */
+ #ifdef __NetBSD__
+-	size_t rvds = opregion->asle->rvds;
++	size_t rvds = opregion->rvda ? opregion->asle->rvds : 0;
+ 	AcpiOsUnmapMemory(opregion->header, OPREGION_SIZE);
+ #else
+ 	memunmap(opregion->header);
+ #endif
