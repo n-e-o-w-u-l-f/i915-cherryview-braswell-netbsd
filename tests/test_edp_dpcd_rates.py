@@ -36,6 +36,7 @@ PRELUDE = r"""
 #include <sys/types.h>
 
 #define DP_EDP_14 0x03
+#define DP_EDP_14a 0x04
 #define DP_MAX_SUPPORTED_RATES 8
 #define DP_SUPPORTED_LINK_RATES 0x10
 #define ARRAY_SIZE(a) ((int)(sizeof(a) / sizeof((a)[0])))
@@ -106,6 +107,12 @@ int main(void)
     assert(dp.use_rate_select == 0 && dp.num_sink_rates == 2);
 
     reset(&dp, DP_EDP_14, 3);
+    run_rates(&dp);
+    assert(read_calls == 1 && fallback_calls == 0 && common_calls == 1);
+    assert(dp.use_rate_select == 1 && dp.num_sink_rates == 2);
+    assert(dp.sink_rates[0] == 162000 && dp.sink_rates[1] == 270000);
+
+    reset(&dp, DP_EDP_14a, 3);
     run_rates(&dp);
     assert(read_calls == 1 && fallback_calls == 0 && common_calls == 1);
     assert(dp.use_rate_select == 1 && dp.num_sink_rates == 2);
@@ -211,6 +218,7 @@ def main() -> None:
     constants = {
         "DP_EDP_13": "0x02",
         "DP_EDP_14": "0x03",
+        "DP_EDP_14a": "0x04",
         "DP_SUPPORTED_LINK_RATES": "0x010",
         "DP_MAX_SUPPORTED_RATES": "8",
     }
