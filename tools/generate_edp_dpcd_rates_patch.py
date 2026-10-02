@@ -24,7 +24,7 @@ OLD = (
 NEW = (
     "\t\tif (drm_dp_dpcd_read(&intel_dp->aux, DP_SUPPORTED_LINK_RATES,\n"
     "\t\t\t\t     sink_rates, sizeof(sink_rates)) !=\n"
-    "\t\t    sizeof(sink_rates)) {\n"
+    "\t\t    (ssize_t)sizeof(sink_rates)) {\n"
     "\t\t\tDRM_DEBUG_KMS(\"Unable to read eDP supported link rates, \"\n"
     "\t\t\t\t      \"using default rates\\n\");\n"
     "\t\t\tmemset(sink_rates, 0, sizeof(sink_rates));\n"
