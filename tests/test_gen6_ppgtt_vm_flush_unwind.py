@@ -219,6 +219,23 @@ def main() -> None:
     vm = pinned_file(args.netbsd_tree, TOOL["NETBSD_PIN"], NETBSD_VM)
     linux = pinned_file(args.linux_tree, LINUX_PIN, LINUX_GEN6)
     assert "i915_address_space_init(&ppgtt->vm, VM_CLASS_PPGTT);" in ppgtt
+    # Failed scratch setup already tears down its own partial resources;
+    # jumping to err_scratch would release the same scratch storage twice.
+    scratch_start = original.index("static int gen6_ppgtt_init_scratch(")
+    scratch_end = original.index("static void gen6_ppgtt_free_pd(", scratch_start)
+    scratch = original[scratch_start:scratch_end]
+    assert ("ret = setup_scratch_page(vm, __GFP_HIGHMEM);\n"
+            "\tif (ret)\n\t\treturn ret;") in scratch
+    assert ("if (unlikely(setup_page_dma(vm, px_base(&vm->scratch[1])))) {\n"
+            "\t\tcleanup_scratch_page(vm);\n"
+            "\t\treturn -ENOMEM;\n\t}") in scratch
+    create = original[original.index("struct i915_ppgtt *gen6_ppgtt_create("):]
+    assert ("err = gen6_ppgtt_init_scratch(ppgtt);\n"
+            "\tif (err)\n\t\tgoto err_pd;") in create
+    assert ("err = PTR_ERR(ppgtt->vma);\n"
+            "\t\tgoto err_scratch;") in create
+    assert ("err_scratch:\n\tfree_scratch(&ppgtt->base.vm);\n"
+            "err_pd:") in create
     assert "drm_mm_init(&vm->mm, 0, vm->total);" in vm
     assert "mutex_init(&vm->mutex);" in vm
     fini = vm[vm.index("void i915_address_space_fini("):
