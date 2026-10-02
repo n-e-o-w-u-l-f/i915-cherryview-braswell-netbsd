@@ -1,0 +1,25 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -7411,6 +7411,11 @@
+ 		fixed_mode = intel_panel_vbt_fixed_mode(intel_connector);
+ 	mutex_unlock(&dev->mode_config.mutex);
+ 
++	if (!fixed_mode) {
++		DRM_INFO("failed to find fixed mode for eDP, disabling eDP\n");
++		goto out_vdd_off;
++	}
++
+ 	if (IS_VALLEYVIEW(dev_priv) || IS_CHERRYVIEW(dev_priv)) {
+ 		intel_dp->edp_notifier.notifier_call = edp_notify_handler;
+ 		register_reboot_notifier(&intel_dp->edp_notifier);
+@@ -7451,6 +7456,10 @@
+ 	with_pps_lock(intel_dp, wakeref)
+ 		edp_panel_vdd_off_sync(intel_dp);
+ 
++	if (!IS_ERR_OR_NULL(intel_connector->edid))
++		kfree(intel_connector->edid);
++	intel_connector->edid = NULL;
++
+ 	return false;
+ }
+ 
