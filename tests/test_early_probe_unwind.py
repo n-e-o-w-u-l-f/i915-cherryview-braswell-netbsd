@@ -119,7 +119,8 @@ int main(void) {
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--netbsd-tree", type=Path, required=True)
-    parser.add_argument("--overlay-tree", type=Path, required=True)
+    parser.add_argument("--overlay-tree", type=Path,
+                        help="optional real unpublished six-edit overlay")
     parser.add_argument("--patch", type=Path, required=True)
     args = parser.parse_args()
 
@@ -142,10 +143,16 @@ def main() -> None:
                         "-Werror", "-pedantic", str(c), "-o", str(exe)],
                        check=True)
         subprocess.run([str(exe)], check=True)
-    for tree in (args.netbsd_tree, args.overlay_tree):
+    targets = [args.netbsd_tree]
+    if args.overlay_tree is not None:
+        if args.overlay_tree.resolve() == args.netbsd_tree.resolve():
+            raise RuntimeError("overlay-tree must be distinct from frozen reference")
+        targets.append(args.overlay_tree)
+    for tree in targets:
         subprocess.run(["git", "-C", str(tree), "apply", "--check",
                         str(args.patch)], check=True)
-    print("EARLY_PROBE_APPLY_CHECKS_OK")
+    print("EARLY_PROBE_APPLY_CHECKS_OK_" +
+          ("FROZEN_AND_OVERLAY" if args.overlay_tree else "FROZEN_ONLY"))
 
 
 if __name__ == "__main__":
