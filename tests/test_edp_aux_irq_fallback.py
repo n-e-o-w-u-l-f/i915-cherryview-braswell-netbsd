@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from sanitizer_support import run_sanitized
 import resource
+import signal
 import runpy
 import subprocess
 import tempfile
@@ -138,12 +140,12 @@ def compile_run(directory: Path, label: str, fragment: str,
     if negative:
         def suppress_core() -> None:
             resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-        return subprocess.run(
-            [str(binary)], check=False, capture_output=True, text=True,
+        return run_sanitized(
+            binary, check=False, capture_output=True, text=True,
             preexec_fn=suppress_core,
         )
-    return subprocess.run(
-        [str(binary)], check=True, capture_output=True, text=True,
+    return run_sanitized(
+        binary, check=True, capture_output=True, text=True,
     )
 
 
@@ -190,7 +192,8 @@ def main() -> None:
         print(passed.stdout.strip(), flush=True)
         failed = compile_run(scratch, "negative", irq_wait_fragment(original),
                              "undefined", True)
-        if failed.returncode == 0 or "poll_calls == expect_poll" not in failed.stderr:
+        if (failed.returncode != -signal.SIGABRT or
+                "poll_calls == expect_poll" not in failed.stderr):
             raise AssertionError("original IRQ-missing negative control did not fail")
         print("I915_0013_UNPATCHED_NEGATIVE_CONTROL_OK", flush=True)
 

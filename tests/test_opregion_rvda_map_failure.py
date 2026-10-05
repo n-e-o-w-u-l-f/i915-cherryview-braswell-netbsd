@@ -14,6 +14,7 @@ import resource
 import runpy
 import subprocess
 import tempfile
+from sanitizer_support import run_sanitized
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = runpy.run_path(str(
@@ -158,7 +159,7 @@ def main() -> None:
              str(c), "-o", str(exe)],
             check=True,
         )
-        subprocess.run([str(exe)], check=True)
+        run_sanitized(exe)
 
         # Negative control: the unpatched *same* pinned RVDA source
         # must attempt to unmap NULL on the map-failure branch.

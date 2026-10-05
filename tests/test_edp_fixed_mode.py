@@ -15,7 +15,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from sanitizer_support import run_sanitized
 import resource
+import signal
 import runpy
 import subprocess
 import tempfile
@@ -215,12 +217,12 @@ def build_run(source: str, tmp: Path, name: str, main: str,
     if name == "negative":
         def no_core_dump() -> None:
             resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-        return subprocess.run(
-            [str(exe)], capture_output=True, text=True, check=False,
+        return run_sanitized(
+            exe, capture_output=True, text=True, check=False,
             preexec_fn=no_core_dump,
         )
-    return subprocess.run(
-        [str(exe)], capture_output=True, text=True, check=True,
+    return run_sanitized(
+        exe, capture_output=True, text=True, check=True,
     )
 
 
@@ -274,7 +276,8 @@ def main() -> None:
             extracted_wrapper(original_fn), tmp, "negative", NEGATIVE_MAIN,
             "undefined",
         )
-        if failed.returncode == 0 or "Assertion" not in failed.stderr:
+        if (failed.returncode != -signal.SIGABRT or
+                "!run_edp(&connector, false, false)" not in failed.stderr):
             raise AssertionError("original eDP no-fixed-mode path did not fail")
         print("I915_0011_UNPATCHED_NEGATIVE_CONTROL_OK", flush=True)
 

@@ -12,7 +12,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from sanitizer_support import run_sanitized
 import resource
+import signal
 import runpy
 import subprocess
 import tempfile
@@ -195,12 +197,12 @@ def compile_and_run(tmp: Path, label: str, source: str, main: str,
     if negative:
         def no_core() -> None:
             resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-        return subprocess.run(
-            [str(exe)], check=False, capture_output=True, text=True,
+        return run_sanitized(
+            exe, check=False, capture_output=True, text=True,
             preexec_fn=no_core,
         )
-    return subprocess.run(
-        [str(exe)], check=True, capture_output=True, text=True,
+    return run_sanitized(
+        exe, check=True, capture_output=True, text=True,
     )
 
 
@@ -267,7 +269,9 @@ def main() -> None:
             tmp, "negative", error_wrapper(original),
             NEGATIVE_MAIN, "undefined", True,
         )
-        if negative.returncode == 0 or "Assertion" not in negative.stderr:
+        if (negative.returncode != -signal.SIGABRT or
+                "assertion" not in negative.stderr.lower() or
+                "pointer == current_ppgtt && !vm_alive" not in negative.stderr):
             raise AssertionError("unpatched Gen6 VM/flush leak not detected")
         print("I915_0017_UNPATCHED_NEGATIVE_CONTROL_OK", flush=True)
 

@@ -135,8 +135,15 @@ def check_probe_unwind(source: str) -> None:
         "enable_rpm_wakeref_asserts(&dev_priv->runtime_pm);",
         "i915_driver_late_release(dev_priv);",
     )
-    positions = [probe.index(s) for s in sequence]
-    assert positions == sorted(positions), "probe rollback ordering changed"
+    # Success and error branches both enable RPM assertions; resolve each
+    # anchor after its predecessor, within the probe body, rather than
+    # accidentally comparing the success-path call with rollback calls.
+    cursor = 0
+    for anchor in sequence:
+        try:
+            cursor = probe.index(anchor, cursor) + len(anchor)
+        except ValueError as exc:
+            raise AssertionError("probe rollback ordering changed: " + anchor) from exc
     assert probe.count("out_cleanup_registration:") == 1
     assert probe.count("i915_driver_register(dev_priv);") == 1
     assert probe.count("i915_gem_driver_release(dev_priv);") == 1
@@ -160,6 +167,19 @@ def main() -> None:
     original = TOOL["pinned_source"](args.netbsd_tree)
     adapted = TOOL["transform"](original)
     check_probe_unwind(adapted)
+    # The ordering check must still reject an actual cleanup inversion.
+    broken = adapted.replace(
+        "intel_opregion_unregister(dev_priv);\n\ti915_gem_suspend(dev_priv);",
+        "i915_gem_suspend(dev_priv);\n\tintel_opregion_unregister(dev_priv);",
+        1,
+    )
+    assert broken != adapted, "negative-control cleanup anchor missing"
+    try:
+        check_probe_unwind(broken)
+    except AssertionError:
+        print("I915_PROBE_UNWIND_INVERSION_REJECTED")
+    else:
+        raise AssertionError("invalid probe rollback ordering was accepted")
     start = adapted.index(
         "static int i915_driver_register(struct drm_i915_private *dev_priv)"
     )

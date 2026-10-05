@@ -1,0 +1,296 @@
+{
+  "state": "PASSED",
+  "host": "hp-tpnw121.fritz.box",
+  "started": "2026-10-05T20:34:35.511332+00:00",
+  "reference": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "overlay_sha256": "2623b640b713b01b1aa83383f9bf4a318abdd8d76963a3478f39dcc0cadca5bb",
+  "commands": [
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/patches/0005-vlv-chv-dp-hdmi-audio-phase-linux-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/patches/0005-vlv-chv-dp-hdmi-audio-phase-linux-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/patches/0006-vlv-chv-display-error-irq-linux-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/patches/0006-vlv-chv-display-error-irq-linux-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/patches/0007-i915-early-probe-resource-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/patches/0007-i915-early-probe-resource-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0008-i915-drm-registration-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0008-i915-drm-registration-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0009-netbsd-opregion-optional-asle-cleanup.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0009-netbsd-opregion-optional-asle-cleanup.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0010-netbsd-opregion-rvda-map-failure-unwind.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0010-netbsd-opregion-rvda-map-failure-unwind.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0016-i915-gen8-ppgtt-vm-init-error-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0016-i915-gen8-ppgtt-vm-init-error-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "--check",
+      "/root/hp-driver-port-20261005/i915/candidates/0017-i915-gen6-ppgtt-vm-flush-error-unwind-netbsd11.patch"
+    ],
+    [
+      "git",
+      "-C",
+      "/tmp/tmppl8u6bpo",
+      "apply",
+      "/root/hp-driver-port-20261005/i915/candidates/0017-i915-gen6-ppgtt-vm-flush-error-unwind-netbsd11.patch"
+    ],
+    [
+      "/root/hp-driver-port-20261005/native-tools/bin/nbmake-amd64",
+      "-C",
+      "/root/hp-driver-port-20261005/native-obj",
+      "-j2",
+      "intel_display.d",
+      "intel_display_power.d",
+      "intel_dp.d",
+      "intel_hdmi.d",
+      "intel_opregion.d",
+      "gen6_ppgtt.d",
+      "gen8_ppgtt.d",
+      "intel_lrc.d",
+      "i915_drv.d",
+      "i915_irq.d",
+      "i915_pci.d"
+    ],
+    [
+      "/root/hp-driver-port-20261005/native-tools/bin/nbmake-amd64",
+      "-C",
+      "/root/hp-driver-port-20261005/native-obj",
+      "-j2",
+      "intel_display.o",
+      "intel_display_power.o",
+      "intel_dp.o",
+      "intel_hdmi.o",
+      "intel_opregion.o",
+      "gen6_ppgtt.o",
+      "gen8_ppgtt.o",
+      "intel_lrc.o",
+      "i915_drv.o",
+      "i915_irq.o",
+      "i915_pci.o"
+    ]
+  ],
+  "patch_sha256": {
+    "patches/0005-vlv-chv-dp-hdmi-audio-phase-linux-netbsd11.patch": "016ae6c786c0716cd9032020a9a6bc240f685bc37204d3dc3e9f5aae50dd70c2",
+    "patches/0006-vlv-chv-display-error-irq-linux-netbsd11.patch": "1563f67495238da59c85c87148bfbec340e875238d3913fd11287c14f272811c",
+    "patches/0007-i915-early-probe-resource-unwind-netbsd11.patch": "aca802d2cb035f037da1522d418c75cefc4bb6e2473b5bc4051d510129e1f475",
+    "candidates/0008-i915-drm-registration-unwind-netbsd11.patch": "cd304e26eeb9e94a6c8f8780e505c44f36324a16d486b00aebf1a35fdfe1cbfe",
+    "candidates/0009-netbsd-opregion-optional-asle-cleanup.patch": "f920895df032fde8bc32643dd5e28aaad859b1bef632f0f3013599c33890fa95",
+    "candidates/0010-netbsd-opregion-rvda-map-failure-unwind.patch": "28beb04a8de439cf3491a23db98589a43944f9ef28016b4acb61df485fe6ef5d",
+    "candidates/0011-i915-edp-reject-missing-fixed-mode-netbsd11.patch": "dd74025325cedf1193201e43df4508f8fdd07e0366fd82f5b7d522d59b1ed510",
+    "candidates/0012-i915-edp-dpcd-rates-failed-aux-read-netbsd11.patch": "a50717c043eff10e31c5dd8d9582632d71197203c5a13738e12e7e520817a5fa",
+    "candidates/0013-i915-edp-aux-poll-when-irqs-disabled-netbsd11.patch": "3806db3f9ef738d1d1d79b3adc96237ea9e3cdf1f43fc4ec4c9ddeb0f591f997",
+    "candidates/0016-i915-gen8-ppgtt-vm-init-error-unwind-netbsd11.patch": "73b47353be6f787c4af43e91e8ae35e8385c6d9a6b34a784168dd871f3068569",
+    "candidates/0017-i915-gen6-ppgtt-vm-flush-error-unwind-netbsd11.patch": "126077818acdb707a1123c07da646bf2b0eaaffb1085916ace367fa9e0c48694"
+  },
+  "source_sha256": {
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c": "66f90412b74c282641ae11a1619306452347baba9e02d7f95992d37a2a0292d7",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c": "329a0db68ed36f8392413c1d43569da444225c8191c4037cd3fff36b59cd7322",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c": "9be80ccf2ad2c2a5f4adaa46cc9d475b228683cdea2b1b3168b20f88ff43fb93",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c": "03faf3263861a105255cdd589170383b10ffbe4de661dba913351095ea11c35b",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c": "6d8fdf99cd4f07a855b8c31c9a7301ffc3b118c44b362e8f54e7a2a0acd6b060",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/gen6_ppgtt.c": "3cca2c33492df33f4fc61bccd564c08b89ecb2fe6133fb50e2f017d5c9e56f15",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c": "8d4f4b6354b710e6ed7daf93985936ea6172d21a7241a451e2421ecfaffb0a18",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c": "c0908e3bce660d17dc8f934189d001203ca169333271142af1f929d69f717756",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_drv.c": "080f78ae0b11f57d98a0d6f577453c360ed621094b760426da42530c10f28b0e",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_irq.c": "10a80b97c17f856170a99c63af35cdb2df7d08537e74d40c0645fb74efd30d10",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_pci.c": "325dd78f47e2054f19ffb4c7229e362770e75757f8e0b5e607fa979510f8475c",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_reg.h": "5917e7744b1602d05e4945e41752d3a010174a11e9d7dc490d37c8591b4c3ce6"
+  },
+  "updated": "2026-10-05T20:35:27.605694+00:00",
+  "units": [
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c",
+    "sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/gen6_ppgtt.c",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c",
+    "sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_drv.c",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_irq.c",
+    "sys/external/bsd/drm2/dist/drm/i915/i915_pci.c"
+  ],
+  "artifacts": {
+    "intel_display.o": {
+      "bytes": 2560600,
+      "sha256": "f5b3f1ba0f3934b0b81ca87a6eb5e92473f3995b8fd4abb8d787b87129efb93e"
+    },
+    "intel_display_power.o": {
+      "bytes": 984304,
+      "sha256": "7c3ec818f2603e3235877c942db29bf1913c1274f2addbef727d19dd185732c7"
+    },
+    "intel_dp.o": {
+      "bytes": 1710728,
+      "sha256": "53e3edf0d0fe5531359645d6e2fce5a889cdddbf73aa8f87e8ba7a8c37c9b020"
+    },
+    "intel_hdmi.o": {
+      "bytes": 869920,
+      "sha256": "f9a737b683167a9e4cb9c816afc8caafe150c865d1cbdd30eaf63f36de528f99"
+    },
+    "intel_opregion.o": {
+      "bytes": 576968,
+      "sha256": "d6117af168e240b7083f1140c2cf44aacc84ac75f7d63e52e590eabb8723ef06"
+    },
+    "gen6_ppgtt.o": {
+      "bytes": 604824,
+      "sha256": "b0f1ba04a1ae772f1eee8df399fa43dd5dbd6f6d49866f6e8c32715ce44e6120"
+    },
+    "gen8_ppgtt.o": {
+      "bytes": 619320,
+      "sha256": "338f78da6341f604331620af16d286967b9ba8d339d31ae2572c0db4a72d6512"
+    },
+    "intel_lrc.o": {
+      "bytes": 1102448,
+      "sha256": "0e0df61ee052886f1fe540424798dc5d51aa614faa2500b1b4e21c6976cf8409"
+    },
+    "i915_drv.o": {
+      "bytes": 702936,
+      "sha256": "2e3f29c4444a1601571033928025b125af911e503f3bf66fe5d918d76c66e6bd"
+    },
+    "i915_irq.o": {
+      "bytes": 1004584,
+      "sha256": "44c1f4755aed69cad51bdb033d998729c520b49d7776903e6c05c6cd325c547a"
+    },
+    "i915_pci.o": {
+      "bytes": 53856,
+      "sha256": "88fc91081184d8a7edc6c4fb0b34a5270ec8f634fffce1f2c3634a02db259b25"
+    }
+  },
+  "limitation": "bounded NetBSD backport objects; full Linux i915/DRM/TTM and hardware acceptance remain open"
+}

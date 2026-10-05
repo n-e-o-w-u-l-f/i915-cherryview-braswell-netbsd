@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run pinned, host-isolated i915 error-path regressions without touching HP.
+"""Run pinned, isolated i915 error-path regressions on the permitted build host.
 
 Accept a clean frozen NetBSD git checkout and a clean pinned Linux checkout.
 Optionally check a separate *real* six-edit NetBSD port overlay. Never pass
@@ -69,6 +69,7 @@ def main() -> None:
     p17 = (ROOT / "candidates/0017-i915-gen6-ppgtt-vm-flush-error-unwind-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
+    invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),
            *overlay_args)
@@ -97,6 +98,8 @@ def main() -> None:
     invoke("test_gen6_ppgtt_vm_flush_unwind.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p17), *overlay_args)
+    invoke("test_ppgtt_terminal_ownership_contract.py",
+           "--netbsd-tree", str(netbsd), *overlay_args)
     invoke("test_edp_aux_irq_fallback.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p13), *overlay_args)

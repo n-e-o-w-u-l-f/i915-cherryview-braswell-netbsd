@@ -12,7 +12,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from sanitizer_support import run_sanitized
 import resource
+import signal
 import runpy
 import subprocess
 import tempfile
@@ -179,12 +181,12 @@ def compile_and_run(tmp: Path, name: str, fragment: str, main: str,
     if negative:
         def disable_core() -> None:
             resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-        return subprocess.run(
-            [str(exe)], capture_output=True, text=True, check=False,
+        return run_sanitized(
+            exe, capture_output=True, text=True, check=False,
             preexec_fn=disable_core,
         )
-    return subprocess.run(
-        [str(exe)], capture_output=True, text=True, check=True,
+    return run_sanitized(
+        exe, capture_output=True, text=True, check=True,
     )
 
 
@@ -253,7 +255,9 @@ def main() -> None:
         print(positive.stdout.strip(), flush=True)
         negative = compile_and_run(tmp, "negative", wrapper(original),
                                    NEGATIVE_MAIN, "undefined", True)
-        if negative.returncode == 0 or "Assertion" not in negative.stderr:
+        if (negative.returncode != -signal.SIGABRT or
+                "assertion" not in negative.stderr.lower() or
+                "p == current_ppgtt && !vm_active" not in negative.stderr):
             raise AssertionError(
                 "original Gen8 error path did not fail VM finalization gate"
             )

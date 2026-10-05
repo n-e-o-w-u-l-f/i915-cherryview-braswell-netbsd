@@ -47,7 +47,7 @@ def transform(original: str) -> str:
     start = original.index(start_anchor)
     end = original.index(end_anchor, start)
     function = original[start:end]
-    if (function.count(OLD) != 1 or function.count(NEW) != 0:
+    if function.count(OLD) != 1 or function.count(NEW) != 0:
         raise RuntimeError("unexpected AUX wait/IRQ branch")
     if ("#ifdef __NetBSD__\n" + OLD) not in function:
         raise RuntimeError("candidate must affect only NetBSD IRQ branch")

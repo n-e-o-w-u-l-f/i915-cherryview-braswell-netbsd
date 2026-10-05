@@ -18,6 +18,7 @@ import argparse
 from pathlib import Path
 import subprocess
 import tempfile
+from sanitizer_support import run_sanitized
 
 NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 LINUX_PIN = "fd179f8a05be3ccae366b9b96e176b51fbe54aab"
@@ -193,7 +194,7 @@ def main() -> None:
             "-Wno-unused-parameter", "-pedantic", "-fsanitize=address,undefined",
             "-fno-omit-frame-pointer", str(source), "-o", str(binary),
         ], check=True)
-        subprocess.run([str(binary)], check=True)
+        run_sanitized(binary)
 
     if args.overlay_tree is not None:
         overlay = args.overlay_tree.resolve(strict=True)

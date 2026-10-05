@@ -11,6 +11,7 @@ import argparse
 from pathlib import Path
 import subprocess
 import tempfile
+from sanitizer_support import run_sanitized
 
 NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 REL = "sys/external/bsd/drm2/dist/drm/i915/display/intel_opregion.c"
@@ -143,7 +144,7 @@ def main() -> None:
              str(c), "-o", str(exe)],
             check=True,
         )
-        subprocess.run([str(exe)], check=True)
+        run_sanitized(exe)
     subprocess.run(
         ["git", "-C", str(tree), "apply", "--check", str(args.patch)],
         check=True,

@@ -33,7 +33,7 @@ REG_ADDITION = (
     "\n#define _VLV_PIPE_MSA_MISC_A\t\t0x70048\n"
     "#define VLV_PIPE_MSA_MISC(pipe)\t\t_MMIO_PIPE2(pipe, _VLV_PIPE_MSA_MISC_A)\n"
     "#define   VLV_MSA_MISC1_HW_ENABLE\t\tREG_BIT(31)\n"
-    "#define   VLV_MSA_MISC1_SW_S3D_MASK\t\tREG_GENMASK(2, 0)\n"
+    "#define   VLV_MSA_MISC1_SW_S3D_MASK\t\tREG_GENMASK(2, 0)\n\n"
 )
 
 

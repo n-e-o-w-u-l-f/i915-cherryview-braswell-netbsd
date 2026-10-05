@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from sanitizer_support import run_sanitized
 import resource
+import signal
 import re
 import runpy
 import subprocess
@@ -29,6 +31,7 @@ NETBSD_DP_HEADER = "sys/external/bsd/drm2/dist/include/drm/drm_dp_helper.h"
 
 PRELUDE = r"""
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -185,12 +188,12 @@ def compile_run(tmp: Path, filename: str, block: str, main: str,
     if is_negative:
         def disable_core() -> None:
             resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-        return subprocess.run(
-            [str(exe)], check=False, text=True, capture_output=True,
+        return run_sanitized(
+            exe, check=False, text=True, capture_output=True,
             preexec_fn=disable_core,
         )
-    return subprocess.run(
-        [str(exe)], check=True, text=True, capture_output=True,
+    return run_sanitized(
+        exe, check=True, text=True, capture_output=True,
     )
 
 
@@ -243,7 +246,8 @@ def main() -> None:
             tmp, "negative", rates_wrapper(netbsd),
             NEGATIVE_MAIN, "undefined", True,
         )
-        if result.returncode == 0 or "Assertion" not in result.stderr:
+        if (result.returncode != -signal.SIGABRT or
+                "fallback_calls == 1 && dp.use_rate_select == 0" not in result.stderr):
             raise AssertionError(
                 "original unguarded AUX rate read did not fail negative control"
             )

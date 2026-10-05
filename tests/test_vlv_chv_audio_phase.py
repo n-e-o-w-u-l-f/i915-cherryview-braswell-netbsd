@@ -6,23 +6,28 @@ hardware/KMS validation.
 """
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 import runpy
 import subprocess
+import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NETBSD = Path("/opt/ChatGPT/hp-driver-port/netbsd")
+NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 REL = "sys/external/bsd/drm2/dist/drm/i915/display/"
 GEN = ROOT / "tools/generate_vlv_chv_audio_phase_patch.py"
 PATCH = ROOT / "patches/0005-vlv-chv-dp-hdmi-audio-phase-linux-netbsd11.patch"
 
 
-def original(name: str) -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(NETBSD), "show", "HEAD:" + REL + name],
+def original(tree: Path, name: str) -> str:
+    source = subprocess.check_output(
+        ["git", "-C", str(tree), "show", "HEAD:" + REL + name],
         text=True,
     )
+    if (tree / REL / name).read_text() != source:
+        raise RuntimeError("dirty frozen source: " + name)
+    return source
 
 
 def extract(source: str, name: str) -> str:
@@ -127,17 +132,24 @@ int main(void)
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--netbsd-tree", type=Path, required=True)
+    args = parser.parse_args()
+    tree = args.netbsd_tree.resolve(strict=True)
+    head = subprocess.check_output(["git", "-C", str(tree), "rev-parse", "HEAD"], text=True).strip()
+    if head != NETBSD_PIN:
+        raise RuntimeError("wrong frozen NetBSD revision: " + head)
     generate = runpy.run_path(str(GEN))
     with tempfile.TemporaryDirectory() as d:
         tmp = Path(d)
         output = tmp / "generated.patch"
-        subprocess.run(["python3", str(GEN), "--netbsd-tree", str(NETBSD),
+        subprocess.run([sys.executable, str(GEN), "--netbsd-tree", str(tree),
                         "--out", str(output)], check=True)
         if output.read_bytes() != PATCH.read_bytes():
             raise AssertionError("canonical patch differs from frozen generator")
         print("I915_AUDIO_PATCH_BYTE_MATCH_OK")
-        dp = generate["dp"](original("intel_dp.c"))
-        hdmi = generate["hdmi"](original("intel_hdmi.c"))
+        dp = generate["dp"](original(tree, "intel_dp.c"))
+        hdmi = generate["hdmi"](original(tree, "intel_hdmi.c"))
         # Check the pre-enable path cannot trigger VLV/CHV audio.
         assert "if (old_crtc_state->has_audio &&\n\t    !IS_VALLEYVIEW" in dp
         assert "if (pipe_config->has_audio &&\n\t    !IS_VALLEYVIEW" in dp

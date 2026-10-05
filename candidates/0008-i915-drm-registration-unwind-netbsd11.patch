@@ -12,7 +12,7 @@
  
  	i915_gem_driver_register(dev_priv);
  	i915_pmu_register(dev_priv);
-@@ -1370,15 +1371,21 @@
+@@ -1370,14 +1371,20 @@
  		I915_WRITE(vgtif_reg(display_ready), VGT_DRV_DISPLAY_READY);
  
  	/* Reveal our presence to userspace */
@@ -31,16 +31,15 @@
 +		i915_gem_driver_unregister(dev_priv);
 +		return ret;
 +	}
- 
++
 +	i915_debugfs_register(dev_priv);
 +	i915_setup_sysfs(dev_priv);
 +
 +	/* Depends on sysfs having been initialized */
 +	i915_perf_register(dev_priv);
-+
+ 
  	if (HAS_DISPLAY(dev_priv) && INTEL_DISPLAY_ENABLED(dev_priv)) {
  		/* Must be done after probing outputs */
- 		intel_opregion_register(dev_priv);
 @@ -1407,6 +1414,8 @@
  
  	intel_power_domains_enable(dev_priv);
