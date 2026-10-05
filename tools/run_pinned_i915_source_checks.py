@@ -70,6 +70,10 @@ def main() -> None:
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_materialize_linux_i915.py")
+    invoke("test_linux_memory_ordering.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
+    invoke("test_linux_kconfig.py", "--netbsd-tree", str(netbsd))
+    invoke("test_linux_posix_types.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
+    invoke("test_linux_rbtree.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
     invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),

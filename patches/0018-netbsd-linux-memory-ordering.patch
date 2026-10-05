@@ -1,0 +1,38 @@
+--- a/sys/external/bsd/common/include/linux/compiler.h
++++ b/sys/external/bsd/common/include/linux/compiler.h
+@@ -84,7 +84,14 @@
+ #define	smp_store_release(X, V)	do {					      \
+ 	typeof(X) __smp_store_release_tmp = (V);			      \
+ 	membar_release();						      \
+-	(X) = __write_once_tmp;						      \
++	(X) = __smp_store_release_tmp;						      \
+ } while (0)
+ 
++/* Linux acquire-load: read once before the native acquire barrier. */
++#define	smp_load_acquire(X)	({					      \
++	typeof(X) __smp_load_acquire_tmp = READ_ONCE(X);		      \
++	membar_acquire();						      \
++	__smp_load_acquire_tmp;					      \
++})
++
+ #endif	/* _LINUX_COMPILER_H_ */
+--- a/sys/external/bsd/drm2/include/linux/ktime.h
++++ b/sys/external/bsd/drm2/include/linux/ktime.h
+@@ -211,6 +211,17 @@
+ 	return ((a <= x) && (x <= b));
+ }
+ 
++/* Compare without subtracting: preserve signed extrema without overflow. */
++static inline int
++ktime_compare(ktime_t a, ktime_t b)
++{
++	if (a < b)
++		return -1;
++	if (a > b)
++		return 1;
++	return 0;
++}
++
+ static inline bool
+ ktime_after(ktime_t a, ktime_t b)
+ {

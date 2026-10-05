@@ -1,0 +1,13 @@
+--- a/sys/external/bsd/common/include/linux/kernel.h
++++ b/sys/external/bsd/common/include/linux/kernel.h
+@@ -61,9 +61,7 @@
+ 
+ #define	oops_in_progress	(panicstr != NULL)
+ 
+-#define	IS_BUILTIN(option)	(1) /* Probably... */
+-#define	IS_ENABLED(option)	(option)
+-#define	IS_REACHABLE(option)	(option)
++#include <linux/kconfig.h>
+ 
+ #define	might_sleep	ASSERT_SLEEPABLE
+ #define	might_sleep_if(C) do						      \

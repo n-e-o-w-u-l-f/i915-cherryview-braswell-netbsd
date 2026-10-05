@@ -1,0 +1,121 @@
+--- a/sys/external/bsd/drm2/dist/drm/drm_mm.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_mm.c
+@@ -935,7 +935,7 @@
+ 	INIT_LIST_HEAD(&mm->hole_stack);
+ 	mm->interval_tree = RB_ROOT_CACHED;
+ 	mm->holes_size = RB_ROOT_CACHED;
+-	mm->holes_addr = RB_ROOT;
++	mm->holes_addr = LINUX_RB_ROOT;
+ 
+ 	/* Clever trick to avoid a special case in the free hole tracking. */
+ 	INIT_LIST_HEAD(&mm->head_node.node_list);
+--- a/sys/external/bsd/drm2/dist/drm/drm_prime.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_prime.c
+@@ -214,8 +214,8 @@
+ void drm_prime_init_file_private(struct drm_prime_file_private *prime_fpriv)
+ {
+ 	mutex_init(&prime_fpriv->lock);
+-	prime_fpriv->dmabufs = RB_ROOT;
+-	prime_fpriv->handles = RB_ROOT;
++	prime_fpriv->dmabufs = LINUX_RB_ROOT;
++	prime_fpriv->handles = LINUX_RB_ROOT;
+ }
+ 
+ void drm_prime_destroy_file_private(struct drm_prime_file_private *prime_fpriv)
+--- a/sys/external/bsd/drm2/dist/drm/i915/gem/i915_gem_object.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gem/i915_gem_object.c
+@@ -117,7 +117,7 @@
+ 	spin_lock_init(&obj->lut_lock);
+ 
+ 	spin_lock_init(&obj->mmo.lock);
+-	obj->mmo.offsets = RB_ROOT;
++	obj->mmo.offsets = LINUX_RB_ROOT;
+ 
+ 	init_rcu_head(&obj->rcu);
+ 
+@@ -328,7 +328,7 @@
+ 					      &mmo->vma_node);
+ 			kfree(mmo);
+ 		}
+-		obj->mmo.offsets = RB_ROOT;
++		obj->mmo.offsets = LINUX_RB_ROOT;
+ 	}
+ }
+ 
+--- a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_engine_user.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gt/intel_engine_user.c
+@@ -308,7 +308,7 @@
+ 
+ 		if (drm_WARN(&i915->drm, errors,
+ 			     "Invalid UABI engine mapping found"))
+-			i915->uabi_engines = RB_ROOT;
++			i915->uabi_engines = LINUX_RB_ROOT;
+ 	}
+ 
+ 	set_scheduler_caps(i915);
+--- a/sys/external/bsd/drm2/dist/drm/i915/gvt/kvmgt.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gvt/kvmgt.c
+@@ -323,8 +323,8 @@
+ 
+ static void gvt_cache_init(struct intel_vgpu *vgpu)
+ {
+-	vgpu->gfn_cache = RB_ROOT;
+-	vgpu->dma_addr_cache = RB_ROOT;
++	vgpu->gfn_cache = LINUX_RB_ROOT;
++	vgpu->dma_addr_cache = LINUX_RB_ROOT;
+ 	vgpu->nr_cache_entries = 0;
+ 	mutex_init(&vgpu->cache_lock);
+ }
+@@ -716,8 +716,8 @@
+ 
+ 	WARN_ON(vgpu->nr_cache_entries);
+ 
+-	vgpu->gfn_cache = RB_ROOT;
+-	vgpu->dma_addr_cache = RB_ROOT;
++	vgpu->gfn_cache = LINUX_RB_ROOT;
++	vgpu->dma_addr_cache = LINUX_RB_ROOT;
+ 
+ 	intel_vgpu_release_msi_eventfd_ctx(vgpu);
+ }
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_active.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_active.c
+@@ -125,7 +125,7 @@
+ static void
+ __active_retire(struct i915_active *ref)
+ {
+-	struct rb_root root = RB_ROOT;
++	struct rb_root root = LINUX_RB_ROOT;
+ 	struct active_node *it, *n;
+ 	unsigned long flags;
+ 
+@@ -353,7 +353,7 @@
+ 	ref->retire = retire;
+ 
+ 	spin_lock_init(&ref->tree_lock);
+-	ref->tree = RB_ROOT;
++	ref->tree = LINUX_RB_ROOT;
+ 	ref->cache = NULL;
+ 
+ 	init_llist_head(&ref->preallocated_barriers);
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_gem.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_gem.c
+@@ -1261,7 +1261,7 @@
+ 	i915_gem_suspend_late(dev_priv);
+ 	for_each_gt(gt, dev_priv, i)
+ 		intel_gt_driver_remove(gt);
+-	dev_priv->uabi_engines = RB_ROOT;
++	dev_priv->uabi_engines = LINUX_RB_ROOT;
+ 
+ 	/* Flush any outstanding unpin_work. */
+ 	i915_gem_drain_workqueue(dev_priv);
+--- a/sys/external/bsd/drm2/dist/include/drm/drm_vma_manager.h
++++ b/sys/external/bsd/drm2/dist/include/drm/drm_vma_manager.h
+@@ -148,7 +148,7 @@
+ static inline void drm_vma_node_reset(struct drm_vma_offset_node *node)
+ {
+ 	memset(node, 0, sizeof(*node));
+-	node->vm_files = RB_ROOT;
++	node->vm_files = LINUX_RB_ROOT;
+ 	rwlock_init(&node->vm_lock);
+ }
+ 

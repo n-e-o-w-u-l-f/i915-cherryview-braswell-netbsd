@@ -1,5 +1,62 @@
 # HP i915 checkpoint, 2026-10-05
 
+STATE: IN_PROGRESS. Full port acceptance is OPEN. Build and installation: HP only.
+
+## Current native graph and adapter work
+
+The actual configured NetBSD graph selects all 323 pinned i915 C units,
+66 selected DRM units, eight display helper units and 13 TTM units: 410 Linux
+units. The previous 11 backport objects remain separate evidence; they do
+not cover the full modern Linux driver. Native module and PCI additions use
+distinct names so config(5) cannot silently replace selected Linux units.
+
+The source-owned full graph factory, include importer and native probe tool
+preserve old references, worktrees and outputs. Exact pinned missing headers
+are imported transitively; existing native headers remain explicitly
+UNREVIEWED. The input snapshot contains 550 imported headers, 359 existing
+adapter rows and 13 unresolved inputs. These are source inputs, not closure.
+
+Owned native patches 0018..0022 provide:
+- Correct release-store temporary, real acquire-load ordering and overflow-free ktime_compare.
+- Frozen Linux tristate predicates using native build flags, with native endian ownership.
+- Linux POSIX UAPI types and exact long-long fixed64 type/format contracts.
+- Pinned Linux balancing and interval augmentation over native rb_node storage,
+  independent Linux roots, cached nodes, RCU publication and overlap/span iteration.
+- Namespaced Linux color/root constants, preserving native sys/tree.h and rb_tree.
+
+All 22 source/C regression scripts passed on HP, including the genuine
+six-edit overlay and exact combined-source equivalence. After the last
+qualifier and fixed64 changes, the two changed production fixtures passed
+again. Nineteen scalar type/format checks and the amd64 drm_version layout
+passed in the actual Linux kernel header context. Tree tests validate 127
+overlapping/extreme intervals, balancing, augmentation, deletion, cached/RCU
+replacement, postorder and spans; the native OS tree is exercised separately.
+
+Both new tree implementation objects compile with real NetBSD kernel headers,
+-nostdinc and -Werror on HP. The tree algorithm is not replaced by native
+callbacks that cannot maintain Linux augmentation. Nodes must belong to
+one backend at a time; native and Linux color encodings differ.
+
+The first complete 410-unit probe failed all units at shared input gaps.
+A later redundant probe was stopped after 147 failures sharing vdso/const.h;
+the source importer then resolved that input. Later real C compilation
+reached additional OS/API incompatibilities. Representative DRM/i915 objects
+still fail: word-size macro ownership, raw locks, lockdep, compiler attributes,
+and Linux VM/folio page layout are open. No fabricated generated/bounds.h or
+single-page folio alias is used. Required Kconfig/dependency and DRM header
+ABI reconciliation remain open as well.
+
+See [current evidence](evidence/HP_FULL_GRAPH_API_20261005.json). Original
+failure logs and the earlier backport evidence remain preserved. No full
+kernel link, installation, reboot or physical KMS acceptance occurred.
+F77 and recovery hashes were rechecked unchanged. This checkpoint is a
+source delivery in the ongoing full port, not completion or installation
+eligibility.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-05
+
 STATE: IN_PROGRESS. Build and installation host: HP only.
 The full 323 active Linux units plus DRM/TTM/OS-adapter contract is unchanged.
 
