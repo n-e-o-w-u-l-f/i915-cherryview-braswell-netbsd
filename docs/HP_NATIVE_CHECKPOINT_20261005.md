@@ -1,4 +1,38 @@
-# HP i915 checkpoint, 2026-10-05
+# HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
+## Word size, raw locks and shared configuration
+
+Owned patches 0023..0025 establish the native physical word width, real
+NetBSD non-sleeping raw locks with saved interrupt priority, and the pinned
+x86 instruction-location implementation. Failed raw try-lock attempts restore
+the caller's priority; lock/flag expressions are evaluated once. Kernel panic
+concurrency, lock destruction and caller lifetime still need full integration.
+
+The graph factory now shares the complete selected Kconfig profile across
+DRM, display, TTM and native Linux helpers. Disabled Linux boolean symbols are
+absent rather than defined as zero, preserving actual #ifdef semantics.
+
+All 26 source/C regression scripts passed on HP. The raw-lock header also
+compiled with actual NetBSD kernel headers, -nostdinc and -Werror. Both native
+tree implementation objects passed again with the updated shared flags.
+The unchanged pinned modern Linux drm_buddy.c is the first of the 410 selected
+modern Linux units to compile as a native NetBSD kernel object.
+
+This is bounded compiler evidence. Representative dvo_ch7017 still fails at
+Linux/native compiler-attribute and math collisions. i915_driver and ttm_device
+still reach Linux page-layout/folio dependencies requiring real UVM adaptation.
+These failures are retained. No fabricated generated/bounds.h, full kernel
+link, installation, reboot or physical KMS acceptance occurred. The complete
+323-unit i915 scope, remaining DRM/TTM interfaces and every platform/runtime
+gate remain OPEN. F77 and recovery hashes were rechecked unchanged.
+
+See [native evidence](evidence/HP_NATIVE_WORDSIZE_RAW_LOCKS_20261006.json).
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-05
 
 STATE: IN_PROGRESS. Full port acceptance is OPEN. Build and installation: HP only.
 

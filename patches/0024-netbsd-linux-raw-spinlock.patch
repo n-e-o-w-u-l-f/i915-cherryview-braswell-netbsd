@@ -1,0 +1,95 @@
+--- a/sys/external/bsd/drm2/include/linux/spinlock.h
++++ b/sys/external/bsd/drm2/include/linux/spinlock.h
+@@ -35,6 +35,8 @@
+ #include <sys/cdefs.h>
+ #include <sys/mutex.h>
+ 
++#include <linux/raw_spinlock.h>
++
+ #include <machine/limits.h>
+ 
+ #include <linux/atomic.h>
+--- /dev/null
++++ b/sys/external/bsd/drm2/include/linux/raw_spinlock.h
+@@ -0,0 +1,81 @@
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Native non-sleeping locks for Linux raw-spin users. */
++#ifndef _NETBSD_LINUX_RAW_SPINLOCK_H_
++#define _NETBSD_LINUX_RAW_SPINLOCK_H_
++
++#include <sys/intr.h>
++#include <sys/mutex.h>
++#include <sys/systm.h>
++
++typedef struct raw_spinlock {
++    kmutex_t rsl_lock;
++} raw_spinlock_t;
++
++static inline void
++raw_spin_lock_init(raw_spinlock_t *lock)
++{
++    /* All raw-lock callers must stay non-sleeping, including panic/IRQ use. */
++    mutex_init(&lock->rsl_lock, MUTEX_DEFAULT, IPL_HIGH);
++}
++
++static inline void
++raw_spin_lock(raw_spinlock_t *lock)
++{
++    mutex_spin_enter(&lock->rsl_lock);
++}
++
++static inline void
++raw_spin_unlock(raw_spinlock_t *lock)
++{
++    mutex_spin_exit(&lock->rsl_lock);
++}
++
++static inline int
++raw_spin_trylock(raw_spinlock_t *lock)
++{
++    return mutex_tryenter(&lock->rsl_lock);
++}
++
++static inline unsigned long
++netbsd_raw_spin_lock_irqsave(raw_spinlock_t *lock)
++{
++    unsigned long flags = (unsigned long)splhigh();
++    mutex_spin_enter(&lock->rsl_lock);
++    return flags;
++}
++
++#define raw_spin_lock_irqsave(LOCK, FLAGS) \
++    ((FLAGS) = netbsd_raw_spin_lock_irqsave((LOCK)))
++
++static inline int
++netbsd_raw_spin_trylock_irqsave(raw_spinlock_t *lock, unsigned long *flagsp)
++{
++    *flagsp = (unsigned long)splhigh();
++    if (mutex_tryenter(&lock->rsl_lock))
++        return 1;
++    /* A failed try operation must not leave interrupts masked. */
++    splx((int)*flagsp);
++    return 0;
++}
++
++#define raw_spin_trylock_irqsave(LOCK, FLAGS) \
++    netbsd_raw_spin_trylock_irqsave((LOCK), &(FLAGS))
++
++static inline void
++raw_spin_unlock_irqrestore(raw_spinlock_t *lock, unsigned long flags)
++{
++    mutex_spin_exit(&lock->rsl_lock);
++    splx((int)flags);
++}
++
++/* NetBSD's mutexes require explicit lifetime termination. This extension
++ * must be called after all users, including panic registration, are drained.
++ */
++static inline void
++raw_spin_lock_destroy(raw_spinlock_t *lock)
++{
++    KASSERT(!mutex_owned(&lock->rsl_lock));
++    mutex_destroy(&lock->rsl_lock);
++}
++
++#endif

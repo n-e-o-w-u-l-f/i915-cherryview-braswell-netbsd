@@ -23,7 +23,7 @@ import tempfile
 from generate_netbsd_i915_filelist import CONFIG, LINUX_PIN
 from materialize_linux_i915 import NETBSD_PIN
 
-PROFILE = dict(CONFIG, CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
+PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
     CONFIG_DRM_CLIENT="y", CONFIG_DRM_CLIENT_SELECTION="y",
     CONFIG_DRM_KMS_HELPER="y", CONFIG_DRM_DISPLAY_HELPER="y",
     CONFIG_DRM_DISPLAY_DP_HELPER="y", CONFIG_DRM_DISPLAY_DSC_HELPER="y",
@@ -144,7 +144,10 @@ def main():
         run(["git", "-C", str(tree), "apply",
              str(owner / "patches/0018-netbsd-linux-memory-ordering.patch")])
         for patch in ("0020-netbsd-linux-posix-types.patch",
-                      "0021-netbsd-linux-augmented-rbtree.patch"):
+                      "0021-netbsd-linux-augmented-rbtree.patch",
+                      "0023-netbsd-linux-native-word-size.patch",
+                      "0024-netbsd-linux-raw-spinlock.patch",
+                      "0025-netbsd-linux-instruction-pointer.patch"):
             run(["git", "-C", str(tree), "apply", "--check", str(owner / "patches" / patch)])
             run(["git", "-C", str(tree), "apply", str(owner / "patches" / patch)])
         # Source paths are translated explicitly, preserving the reference tree
@@ -188,7 +191,18 @@ def main():
         replace_units(drm_manifest,
             [prefix + "dist/drm/" + name for name in groups["drm"]] +
             [prefix + "dist/drm/display/" + name for name in groups["display"]], "drmkms", additions)
+        # Linux Kconfig's disabled booleans are absent. A =0 definition
+        # incorrectly enables #ifdef branches such as GPU buddy lockdep.
+        shared = re.sub(r"-D(CONFIG_[A-Z0-9_]+)=0(?=[\"\s])", r"-U\1", drm_manifest.read_text())
+        for key, value in sorted(PROFILE.items()):
+            value = "1" if value == "y" else value
+            shared += f'makeoptions\tdrmkms\t"CPPFLAGS.drmkms"+="-D{key}={value}"\n'
+        drm_manifest.write_text(shared)
+        native_manifest = drm / "linux/files.drmkms_linux"
+        native_manifest.write_text(native_manifest.read_text() +
+            'makeoptions\tdrmkms_linux\t"CPPFLAGS.drmkms_linux"+="${CPPFLAGS.drmkms}"\n')
         drm_manifest.write_text(drm_manifest.read_text() +
+            'makeoptions\tdrmkms\t"CPPFLAGS.drmkms"+="-DCONFIG_64BIT=1"\n' +
             'makeoptions\tdrmkms\t"CPPFLAGS.drmkms"+="-include $S/external/bsd/common/include/linux/kconfig.h"\n')
         replace_units(drm / "ttm/files.ttm",
             [prefix + "dist/drm/ttm/" + name for name in groups["ttm"]], "drmkms_ttm",
