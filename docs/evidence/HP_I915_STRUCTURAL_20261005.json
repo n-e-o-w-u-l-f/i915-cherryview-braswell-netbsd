@@ -1,0 +1,2733 @@
+{
+  "schema": "neowulf-i915-structural-coverage/v1",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "linux_active_count": 323,
+  "summary": {
+    "ACTIVE_OVERRIDE_OR_MOVED": 13,
+    "EXACT_ACTIVE_DIST": 136,
+    "PRESENT_NOT_BUILT": 7,
+    "UNRESOLVED_NO_BASENAME": 167
+  },
+  "rows": [
+    {
+      "linux_source": "display/dvo_ch7017.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_ch7017.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/dvo_ch7xxx.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_ch7xxx.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/dvo_ivch.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_ivch.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/dvo_ns2501.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_ns2501.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/dvo_sil164.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_sil164.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/dvo_tfp410.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/dvo_tfp410.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/g4x_dp.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/g4x_hdmi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/hsw_ips.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/i9xx_display_sr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/i9xx_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/i9xx_wm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/icl_dsi.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "icl_dsi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_acpi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_acpi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_alpm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_atomic.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_atomic.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_audio.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_audio.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_backlight.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_bios.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_bios.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_bo.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_bw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_bw.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_casf.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_cdclk.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_cdclk.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_cmtg.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_color.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_color.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_color_pipeline.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_colorop.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_combo_phy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_combo_phy.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_connector.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_connector.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_crt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_crt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_crtc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_crtc_state_dump.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_cursor.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_cx0_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dbuf_bw.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_ddi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_ddi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_ddi_buf_trans.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_de.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_display.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_clock_gating.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_conversion.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_device.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_driver.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_irq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_params.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_power.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_display_power.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_power_map.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_power_well.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_reset.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_rpm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_rps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_snapshot.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_trace.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_display_wa.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dkl_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dmc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dmc_wl.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dp.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_aux.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_aux_backlight.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dp_aux_backlight.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_hdcp.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_link_caps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_link_training.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dp_link_training.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_mst.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dp_mst.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dp_test.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dpio_phy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dpio_phy.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dpll.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dpll_mgr.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dpll_mgr.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dpt.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dram.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_drrs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dsb.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dsb.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dsi.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dsi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dsi_dcs_backlight.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "intel_dsi_dcs_backlight.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dsi_vbt.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dsi_vbt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_dvo.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_dvo.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_encoder.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_fb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_fbc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_fbc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_fbdev.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_fbdev.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_fdi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_fifo_underrun.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_fifo_underrun.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_flipq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_frontbuffer.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_frontbuffer.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_global_state.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_gmbus.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_gmbus.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hdcp.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_hdcp.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hdcp_gsc_message.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hdmi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_hdmi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hotplug.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_hotplug.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hotplug_irq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_hti.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_initial_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_link_bw.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_load_detect.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_lpe_audio.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "intel_lpe_audio.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_lspcon.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_lspcon.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_lt_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_lvds.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_lvds.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_mchbar.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_modeset_lock.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_modeset_setup.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_modeset_verify.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_opregion.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_opregion.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_overlay.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_overlay.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_panel.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_panel.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_parent.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pch.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_pch.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pch_display.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pch_refclk.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pfit.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pmdemand.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_pps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_psr.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_psr.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_qp_tables.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_quirks.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_quirks.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_rom.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_sbi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_sdvo.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_sdvo.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_snps_hdmi_pll.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_snps_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_sprite.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_sprite.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_sprite_uapi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_tc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_tc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_tv.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_tv.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_vblank.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_vdsc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_vdsc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_vga.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/intel_vga.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_vrr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/intel_wm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/skl_prefill.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/skl_scaler.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/skl_universal_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/skl_watermark.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/vlv_clock.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/vlv_dsi.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "vlv_dsi.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/vlv_dsi_pll.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "display/vlv_dsi_pll.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/vlv_sideband.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_busy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_busy.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_clflush.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_clflush.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_context.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_context.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_create.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_dmabuf.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_dmabuf.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_domain.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_domain.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_execbuffer.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_execbuffer.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_internal.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_internal.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_lmem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_lmem.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_mman.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_mman.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_object.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_object.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_object_frontbuffer.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_pages.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_pages.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_panic.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_phys.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_phys.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_pm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_region.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_region.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_shmem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_shmem.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_shrinker.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_shrinker.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_stolen.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_stolen.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_throttle.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_throttle.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_tiling.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_tiling.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm_move.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm_pm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_userptr.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "i915_gem_userptr.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_wait.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gem/i915_gem_wait.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen2_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen6_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen6_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen6_ppgtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen6_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen6_renderstate.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen7_renderclear.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen7_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen7_renderstate.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen8_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen8_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen8_ppgtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen8_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen8_renderstate.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/gen9_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/gen9_renderstate.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_breadcrumbs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_breadcrumbs.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_context.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_context.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_context_sseu.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_engine_cs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_engine_cs.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_engine_heartbeat.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_engine_heartbeat.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_engine_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_engine_pm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_engine_user.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_engine_user.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_execlists_submission.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_ggtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt_fencing.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt_gmch.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gsc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_buffer_pool.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_ccs_mode.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_clock_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_engines_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gt_irq.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_mcr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gt_pm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gt_pm_irq.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_requests.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gt_requests.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_sysfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gt_sysfs_pm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_gtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_gtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_llc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_llc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_lrc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_lrc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_migrate.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_mocs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_mocs.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_ppgtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_rc6.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_rc6.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_region_lmem.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "intel_region_lmem.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_renderstate.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_reset.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_reset.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ring.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_ring.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_ring_submission.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_ring_submission.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_rps.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_rps.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_sa_media.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_sseu.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_sseu.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_sseu_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_timeline.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_timeline.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_tlb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_wopcm.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_wopcm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_workarounds.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/intel_workarounds.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/shmem_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/sysfs_engines.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_gsc_fw.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_gsc_proxy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_gsc_uc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_gsc_uc_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_gsc_uc_heci_cmd_submit.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_guc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_ads.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_guc_ads.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_capture.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_ct.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_guc_ct.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_guc_fw.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_hwconfig.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_log.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "intel_guc_log.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_log_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_rc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_slpc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_submission.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_guc_submission.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_huc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_huc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_huc_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_huc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_huc_fw.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_uc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_uc.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_uc_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/uc/intel_uc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "gt/uc/intel_uc_fw.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_active.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_active.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_bo.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_cmd_parser.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_cmd_parser.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_config.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_deps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_display_pc8.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_dpt.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_driver.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_drm_client.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_dsb_buffer.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_edram.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_fb_pin.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_freq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_gem.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gem_evict.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_gem_evict.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gem_gtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_gem_gtt.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gem_ww.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_getparam.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_getparam.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gmch.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_gpu_error.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_gpu_error.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_hdcp_gsc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_hwmon.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_initial_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_ioc32.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_ioc32.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_ioctl.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_irq.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_memcpy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_memcpy.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_mitigations.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_mm.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_mm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_mmio_range.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_module.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "i915_module.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_overlay.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_params.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_params.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_pci.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_pci.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_perf.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_perf.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_pmu.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_pmu.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_query.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_query.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_request.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_request.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_scatterlist.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_scatterlist.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_scheduler.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_scheduler.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_sw_fence.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_sw_fence.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_sw_fence_work.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_sw_fence_work.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_switcheroo.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "i915_switcheroo.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_syncmap.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_syncmap.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_sysfs.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "i915_sysfs.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_timer_util.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_trace_points.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": [
+        {
+          "kind": "glue",
+          "path": "i915_trace_points.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_ttm_buddy_manager.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_user_extensions.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_user_extensions.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_utils.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_utils.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_vgpu.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_vgpu.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_vma.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "i915_vma.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_vma_resource.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_clock_gating.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_cpu_info.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_device_info.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_device_info.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_memory_region.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_memory_region.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_pcode.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_region_ttm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_runtime_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_runtime_pm.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_step.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_uncore.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_uncore.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_uncore_trace.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "intel_wakeref.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": [
+        {
+          "kind": "dist",
+          "path": "intel_wakeref.c"
+        }
+      ],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_cmd.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_gsccs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_huc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_irq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_pm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_session.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "pxp/intel_pxp_tee.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "vlv_iosf_sb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "vlv_suspend.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": [],
+      "semantic_state": "UNREVIEWED"
+    }
+  ],
+  "warning": "Structural presence is not parity. Each row still requires semantic/lifecycle/API review before PORTED/ADAPTED/REFERENCE-INAPPLICABLE classification."
+}

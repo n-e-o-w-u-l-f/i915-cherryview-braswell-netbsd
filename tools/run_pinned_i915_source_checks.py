@@ -69,6 +69,7 @@ def main() -> None:
     p17 = (ROOT / "candidates/0017-i915-gen6-ppgtt-vm-flush-error-unwind-netbsd11.patch").resolve(strict=True)
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
+    invoke("test_materialize_linux_i915.py")
     invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),

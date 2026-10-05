@@ -8,7 +8,7 @@ References: Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab and NetBSD
 03d918f6d0e81fa05b8f1160eca0628ad39988a6. Current source/tests were materialized
 on HP separately from `/usr/src` and existing import worktrees.
 
-All 17 project Python/C regression scripts passed on HP NetBSD 11 against
+All 18 project Python/C regression scripts passed on HP NetBSD 11 against
 both the frozen reference and the genuine six-edit overlay. The runner
 verified all 24 eDP patch orders on frozen source, six orders on the overlay,
 and exact combined complete-file equivalence. The six concatenated combined
@@ -33,13 +33,17 @@ Same-step repairs preserve the acceptance gates:
 - The DPCD C11 test includes stdbool.h explicitly for `true`.
 - Audio tests accept an explicit, clean pinned NetBSD reference instead of
   a Legion-only path. Audio and terminal PPGTT ownership tests are included
-  in the shared runner; all 17 scripts now execute there.
+  in the shared runner; all 18 scripts now execute there.
+- Source staging rejects existing outputs, unknown Git identity, incomplete
+  sparse paths, dirty Git blobs and copied-byte mismatches before claiming
+  a complete manifest. Six disposable Git-fixture tests pass; five failed
+  with the original tool, including its deletion of an existing output.
 
 The initial frozen-and-overlay job stopped at the missing stdbool.h include.
 The connection outage prevented its result being read. After the user's
 continuation, the live HP SSH route recovered, that durable failure was read,
 the evidenced test defect was repaired, and the complete final suite passed.
-Read `i915-all17.status` (EXIT 0) and `i915-all17.log` in the task workspace.
+Read `i915-all18.status` (EXIT 0) and `i915-all18.log` in the task workspace.
 No infrastructure failure was counted as a pass.
 
 All eleven affected native NetBSD C objects subsequently compiled with the
@@ -77,6 +81,24 @@ succeeded. Do not repeat that failed partial-clone command.
 Source publication uses verified HP commits and BMAX's ordinary Git route;
 HP's HTTPS push has no credentials. Commit messages skip hosted CI to honor
 HP-only builds. This checkpoint does not reactivate the quarantined workflow.
+
+The frozen Linux sparse checkout was expanded for DRM/display/TTM and all
+selected headers/top-level DRM files. The existing pin and clean tracked
+state were retained. The first import had stopped after a missing sparse
+directory; its partial output was preserved. After complete preflight, a
+new output at `full-scope-audit/linux-stage-verified` contains 1,266 files,
+including 915 i915 files. Every selected input and copied output was checked
+against the exact Git blob before the manifest was written. See
+[the complete source manifest](evidence/HP_I915_REFERENCE_MANIFEST_20261005.json)
+and [the active build profile](evidence/HP_I915_ACTIVE_PROFILE_20261005.json).
+
+The actual pinned Linux Makefile again selects 323 active C units. Against
+the isolated NetBSD backport stage, [the structural matrix](evidence/HP_I915_STRUCTURAL_20261005.json)
+finds 136 exact active paths, 13 overrides/moved units, seven present but
+unbuilt units and 167 without a basename counterpart. **All semantic rows
+remain UNREVIEWED**: even identical names do not establish matching Linux
+semantics. External kernel APIs, reachable/generated dependencies and full
+native integration are not closed by this lexical/build-file inventory.
 
 No kernel link, installation, reboot or physical KMS acceptance is claimed.
 The F77 boot selection, `/boot.cfg`, `/netbsd` and F77 kernel hashes were

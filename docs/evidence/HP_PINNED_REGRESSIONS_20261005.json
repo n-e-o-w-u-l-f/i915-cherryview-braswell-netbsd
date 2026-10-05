@@ -1,14 +1,15 @@
 {
   "state": "PASSED",
   "host": "hp-tpnw121.fritz.box",
-  "observed_at": "2026-10-05T20:39:43.210578+00:00",
+  "observed_at": "2026-10-05T21:01:50.111506+00:00",
   "suite_exit": 0,
-  "tests": 17,
+  "tests": 18,
   "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
   "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
-  "log_sha256": "ae366142a18ff5a1c9ec00d735634ac07d9a9723cb08e2540adfc97e570ec252",
+  "log_sha256": "77116f7241824afb72132cbbd01cd317238e0703b3009c8daa863b9089179fe4",
   "combined_sources_sha256": "13cb25441ce3768181bc33983c38752bbbc5100510dbd3b32f5a7299b56b7c53",
   "markers": [
+    "RUN test_materialize_linux_i915.py",
     "RUN test_vlv_chv_audio_phase.py",
     "I915_AUDIO_PATCH_OK files=2 NetBSD=03d918f6d0e81fa05b8f1160eca0628ad39988a6",
     "I915_AUDIO_PHASE_OK: DP/HDMI audio after port setup; no-audio safe",
@@ -105,9 +106,18 @@
     "tests/test_register_failure.py": "9878fafe4e6f5819a55f7a6335a1b314e4ae88375a71b5d8489c9dcd33bfa718",
     "tests/test_vlv_chv_audio_phase.py": "9060620aa4d6d60f917900a94ad9173414fe52c6c206e3f850e38954e4e8552b",
     "tools/generate_edp_aux_irq_fallback_patch.py": "defdff9cb8c97cc257fa9484ab4027974da4016931adfd71f45bf9ce61790068",
-    "tools/run_pinned_i915_source_checks.py": "3b3ff3e43b0e61a70e400ce9bcbb0785436f5dfa22e4bce0488c165568da179e",
+    "tools/run_pinned_i915_source_checks.py": "26040cd34c552982ae3ff3f46c6b2b44a1c66dde6a0b7d631e09a952b49ba0af",
     "tests/sanitizer_support.py": "0bc0d9738adeae6a1c60d92daddcfdcca2fd0e907c14f0593bdc63b674336ede",
-    "tools/build_hp_backport_objects.py": "38c05454af507fe42262295a7eb8bcedcba5b1048818d9e7db9d97f159bb5fb8"
+    "tools/build_hp_backport_objects.py": "38c05454af507fe42262295a7eb8bcedcba5b1048818d9e7db9d97f159bb5fb8",
+    "tools/materialize_linux_i915.py": "55abd47e8cae0ce6cb730d8df6dc12e13333d6cd707dfd2148b732e64c37f0ad",
+    "tests/test_materialize_linux_i915.py": "f0ae0f739c393fdc01656d089f9c770acbb57a52aacbc6bfe91d2ec88a2b6a06"
   },
-  "scope": "source/host-C regression; native object build separate; full port and hardware remain open"
+  "scope": "source/host-C regression; native object build separate; full port and hardware remain open",
+  "materializer_regressions": {
+    "cases": 6,
+    "state": "PASSED",
+    "baseline_failures": 5,
+    "red_log_sha256": "b7d375cf315fc953a095bfe181e974c4add8ac8a7d4a59bc6a92a1d642881b9f",
+    "acceptance": "preserve existing output; reject incomplete/dirty/unknown input before output; copy exact complete verified source set"
+  }
 }

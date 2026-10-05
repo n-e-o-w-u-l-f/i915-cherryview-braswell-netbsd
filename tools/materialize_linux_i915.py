@@ -9,6 +9,7 @@ DRM import tooling.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import hashlib
 import json
 import shutil
@@ -80,6 +81,49 @@ def verify_netbsd_tools(netbsd: Path) -> dict[str, bool]:
     return {name: path.is_file() for name, path in paths.items()}
 
 
+def verify_sources(linux: Path, head: str | None) -> dict[str, str] | None:
+    """Verify the whole selected input before creating any output."""
+    for rel in COPY_PATHS:
+        if not (linux / rel).is_dir():
+            raise SystemExit(f"missing reference directory {rel}; expand sparse checkout first")
+    if head is None:
+        return None  # Only the explicit unverified-input option can reach here.
+    entries = subprocess.check_output(
+        ["git", "-C", str(linux), "ls-tree", "-rz", "HEAD", "--", *COPY_PATHS]
+    ).split(b"\0")
+    top = subprocess.check_output(
+        ["git", "-C", str(linux), "ls-tree", "-z", "HEAD:drivers/gpu/drm"]
+    ).split(b"\0")
+    for entry in top:
+        if not entry:
+            continue
+        metadata, name = entry.split(b"\t", 1)
+        if metadata.split()[1] == b"blob" and any(
+                fnmatch.fnmatch(name.decode(), pattern) for pattern in TOP_LEVEL_DRM_PATTERNS):
+            entries.append(metadata + b"\tdrivers/gpu/drm/" + name)
+    expected_files = {}
+    for entry in entries:
+        if not entry:
+            continue
+        metadata, relative = entry.split(b"\t", 1)
+        mode, kind, expected = metadata.split()
+        name = relative.decode()
+        source = linux / name
+        if kind != b"blob" or mode not in (b"100644", b"100755") or not source.is_file():
+            raise SystemExit(f"missing or unsupported reference file {name}")
+        data = source.read_bytes()
+        actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        if actual != expected.decode():
+            raise SystemExit(f"dirty reference file {name}")
+        expected_files[name] = expected.decode()
+    dirty = subprocess.check_output(
+        ["git", "-C", str(linux), "status", "--porcelain=v1", "--untracked-files=all", "--", *COPY_PATHS]
+    )
+    if dirty.strip():
+        raise SystemExit("uncommitted files in selected reference paths")
+    return expected_files
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--linux-tree", type=Path, required=True)
@@ -92,17 +136,19 @@ def main() -> int:
     out = args.out.resolve()
 
     head = git_head(linux)
-    if head and head != LINUX_PIN and not args.allow_unverified_linux_head:
+    if head != LINUX_PIN and not args.allow_unverified_linux_head:
         raise SystemExit(
             f"refusing Linux HEAD {head}; expected pinned {LINUX_PIN}"
         )
 
-    required = linux / "drivers/gpu/drm/i915"
-    if not required.is_dir():
-        raise SystemExit(f"missing {required}")
-
     if out.exists():
-        shutil.rmtree(out)
+        raise SystemExit(f"output already exists; preserve/reconcile it and choose a new path: {out}")
+    references = [linux]
+    if args.netbsd_tree:
+        references.append(args.netbsd_tree.resolve())
+    if any(out == tree or tree in out.parents or out in tree.parents for tree in references):
+        raise SystemExit("output overlaps a reference tree")
+    expected_files = verify_sources(linux, head)
     out.mkdir(parents=True)
 
     for rel in COPY_PATHS:
@@ -111,15 +157,24 @@ def main() -> int:
 
     files = []
     for path in sorted(p for p in out.rglob("*") if p.is_file()):
+        data = path.read_bytes()
+        name = str(path.relative_to(out))
+        if expected_files is not None:
+            actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+            if expected_files.get(name) != actual:
+                raise SystemExit(f"copied source differs from verified Git input: {name}")
         files.append({
-            "path": str(path.relative_to(out)),
+            "path": name,
             "size": path.stat().st_size,
             "sha256": sha256(path),
         })
+    if expected_files is not None and {entry["path"] for entry in files} != set(expected_files):
+        raise SystemExit("copied source set differs from verified Git input")
 
     manifest = {
         "linux_pin": LINUX_PIN,
         "linux_head_observed": head,
+        "linux_head_verified": head == LINUX_PIN,
         "netbsd_pin": NETBSD_PIN,
         "i915_file_count": sum(
             1 for p in (out / "drivers/gpu/drm/i915").rglob("*")

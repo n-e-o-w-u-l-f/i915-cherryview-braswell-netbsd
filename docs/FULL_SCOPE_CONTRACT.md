@@ -2,11 +2,14 @@
 
 Status: IN_PROGRESS
 
-2026-10-05 verified partial checkpoint: all 17 pinned source/C regressions
+2026-10-05 verified partial checkpoint: all 18 pinned source/C regressions
 passed on HP, including frozen/real-overlay composition, and eleven affected
 NetBSD backport objects compiled with actual kernel headers and -Werror.
 See [HP checkpoint and evidence](HP_NATIVE_CHECKPOINT_20261005.md). This does
 not close the 323-unit Linux/DRM/TTM dependency or hardware acceptance gate.
+The complete selected reference source set (1,266 files) now has Git-blob
+verification and the 323-row native structural matrix is recorded in that
+checkpoint. There are 167 unmatched units; all semantic rows remain open.
 
 ## OBJECTIVE
 Port the complete pinned Linux i915 driver subtree and its required DRM/TTM/kernel dependency closure to NetBSD 11, preserving all upstream active build units, platform-specific hardware state machines, ordering, errors, recovery and NetBSD OS-adapter semantics. The HP 17-x037ng Intel 8086:22b1 Cherryview is the FIRST hardware acceptance target, not a reduction of the generic whole-driver port.
