@@ -3,7 +3,7 @@
 
 The ledger distinguishes imported source from existing native adapters and
 unresolved generated/external inputs. Importing a header does not close its ABI
-or implementation contract. Every imported byte is verified against the pin.
+or implementation contract. Every frozen input byte is verified against the pin before owned identifier translation.
 """
 import argparse
 import hashlib
@@ -16,6 +16,7 @@ import subprocess
 from collections import deque
 
 from materialize_linux_i915 import LINUX_PIN
+from namespace_linux_compiler_math import bindings, translate
 
 INCLUDE = re.compile(r'^\s*#\s*include\s*[<"]([^>"\n]+)[>"]', re.M)
 
@@ -41,8 +42,9 @@ def populate(linux, tree, ledger, prior=None):
             for name in value.split():
                 source = ("include/uapi/asm-generic/" if "/uapi/" in path else "include/asm-generic/") + name
                 if source in blobs: generic["asm/" + name] = (source, path + ":" + keyword)
+    mapping = bindings(linux)
     previous = {row["path"]: row for row in prior["rows"]
-        if row["state"] == "IMPORTED_API_UNREVIEWED"} if prior else {}
+        if row["state"] in {"IMPORTED_API_UNREVIEWED", "IMPORTED_API_TRANSLATED_UNREVIEWED"}} if prior else {}
     roots = [tree / "sys/external/bsd/common/include", tree / "sys/external/bsd/drm2/include",
              tree / "sys/external/bsd/drm2/dist/include"]
     reference = tree.parent / "full-scope-audit/linux-stage-verified/PORT-MANIFEST.json"
@@ -102,10 +104,15 @@ def populate(linux, tree, ledger, prior=None):
                 raise RuntimeError("include output escapes isolated stage: " + name)
             target.parent.mkdir(parents=True, exist_ok=True)
             if target.exists(): raise RuntimeError("source changed during import: " + name)
+            frozen_hash = hashlib.sha256(data).hexdigest()
+            transformed = translate(data.decode(), mapping).encode()
+            changed = transformed != data
+            data = transformed
             target.write_bytes(data)
-            row = {"include": name, "state": "IMPORTED_API_UNREVIEWED", "linux_path": upstream,
+            row = {"include": name, "state": "IMPORTED_API_TRANSLATED_UNREVIEWED" if changed else "IMPORTED_API_UNREVIEWED", "linux_path": upstream,
                 "linux_blob": actual, "sha256": hashlib.sha256(data).hexdigest(),
                 "path": str(target.relative_to(tree))}
+            if changed: row["frozen_sha256"] = frozen_hash
             if name in generic and upstream == generic[name][0]: row["selected_by"] = generic[name][1]
             rows.append(row)
             queue.append(target)

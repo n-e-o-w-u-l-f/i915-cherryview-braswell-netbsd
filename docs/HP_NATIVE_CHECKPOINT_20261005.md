@@ -2,6 +2,39 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Compiler attributes and integer math
+
+Patch 0026 binds the pinned Linux compiler attributes and math macros to
+private names, leaving native compiler/OS macro semantics intact. The source
+integration verifies every selected Linux seed and imported API input before
+translation. Comments, strings and compiler attribute properties remain intact.
+There are 63 private bindings: 258 selected inputs and 126 API headers changed.
+The importer and fresh-stage factory now reproduce these bindings.
+
+The real frozen native do_div helper truncated a 64-bit quotient to 32 bits.
+A 2^48 / 3 baseline executable failed. The corrected helper retains the full
+quotient, remainder and single evaluation for both native uint64_t and Linux
+long-long u64, and compiles in the actual kernel context. Attribute format and
+unused-result negative controls and more than 64K arithmetic cases passed.
+
+All 27 source/C scripts passed on HP. Both native tree objects and the modern
+DRM buddy unit were freshly compiled with the changed headers. The old attribute
+and rounding redefinition failures disappeared. Representative DVO compilation
+now exposes the next typecheck/wordpart, wait-queue/completion, GUID and math64
+ABI gaps. i915/TTM VM/folio dependencies remain unresolved. Earlier fixture and
+command-extraction failures remain preserved; they are not successful tests.
+
+See [native evidence](evidence/HP_NATIVE_COMPILER_MATH_20261006.json).
+All 323 i915 and 410 selected modern Linux units remain in scope. No full kernel
+link, installation, reboot or physical KMS acceptance occurred. F77 and recovery
+hashes were rechecked unchanged. One modern object is not whole-driver parity.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Word size, raw locks and shared configuration
 
 Owned patches 0023..0025 establish the native physical word width, real

@@ -77,6 +77,7 @@ def replace_units(path, units, attribute, additions):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--workspace", type=Path, required=True)
+    p.add_argument("--linux-tree", type=Path, default=Path("/root/linux-rtl8723be-ref-fresh"))
     a = p.parse_args()
     if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
         p.error("native staging/build probes are authorized only on HP/NetBSD")
@@ -147,7 +148,8 @@ def main():
                       "0021-netbsd-linux-augmented-rbtree.patch",
                       "0023-netbsd-linux-native-word-size.patch",
                       "0024-netbsd-linux-raw-spinlock.patch",
-                      "0025-netbsd-linux-instruction-pointer.patch"):
+                      "0025-netbsd-linux-instruction-pointer.patch",
+                      "0026-netbsd-linux-compiler-math.patch"):
             run(["git", "-C", str(tree), "apply", "--check", str(owner / "patches" / patch)])
             run(["git", "-C", str(tree), "apply", str(owner / "patches" / patch)])
         # Source paths are translated explicitly, preserving the reference tree
@@ -160,6 +162,10 @@ def main():
         root_callsites = owner / "patches/0022-netbsd-linux-rbtree-call-sites.patch"
         run(["git", "-C", str(tree), "apply", "--check", str(root_callsites)])
         run(["git", "-C", str(tree), "apply", str(root_callsites)])
+        run(["python3", str(owner / "tools/namespace_linux_compiler_math.py"),
+             "--linux-tree", str(a.linux_tree), "--netbsd-tree", str(tree),
+             "--manifest", str(source / "PORT-MANIFEST.json"),
+             "--out-ledger", str(work / "full-linux-compiler-math-seeds.json")])
         # Distinguish NetBSD's module entry from Linux's selected i915_module.c.
         shutil.copyfile(drm / "i915drm/i915_module.c", drm / "i915drm/netbsd_i915_module.c")
         # config(5) otherwise silently selects the old same-basename PCI
