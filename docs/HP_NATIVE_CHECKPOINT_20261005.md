@@ -2,6 +2,39 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Completion counting and wide timeout budgets
+
+Patch 0028 keeps NetBSD's real mutex and condition-variable backend while
+correcting completion counter saturation, unsigned/long timeout ABI, remaining
+timeout budgets across bounded native CV slices, clock wrap and completion
+races against a signal or deadline. It adds the serialized completion_done API.
+
+The complete production header passes the instrumented CV/mutex model on HP.
+The unchanged native adapter fails the negative control. A separate fresh
+object with actual NetBSD kernel headers and kernel -Werror options passes,
+including timeout/counter type assertions. This proves native header and ABI
+integration; actual scheduler concurrency, fatal-only signals, FIFO ordering,
+IO accounting, static initializers and destruction/lifetime acceptance remain
+open. Untimed interruptible races and the modern DRM transitive include remain
+separate integration work.
+
+All 29 source/C regression scripts pass. The factory applies the new patch and
+the normal runner includes its regression. Prior native arithmetic/tree and
+the single modern DRM buddy object proofs remain recorded in the earlier
+checkpoint; this change does not establish whole-driver compilation.
+
+See [native completion evidence](evidence/HP_NATIVE_COMPLETION_20261006.json).
+The full 323 i915 and 410 selected modern-driver graph remains in scope.
+Wait queues, remaining native types/headers/GUID and actual VM/folio/UVM
+adaptation, kernel link and physical KMS acceptance are open. No installation
+or reboot occurred. Boot, running-kernel and F77 recovery hashes are unchanged.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Full-width arithmetic implementations
 
 Patch 0027 replaces the incorrect native math64 signatures and truncating

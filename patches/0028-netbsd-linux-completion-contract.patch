@@ -1,0 +1,238 @@
+--- a/sys/external/bsd/common/include/linux/completion.h
++++ b/sys/external/bsd/common/include/linux/completion.h
+@@ -60,20 +60,10 @@
+ 	kmutex_t	c_lock;
+ 	kcondvar_t	c_cv;
+ 
+-	/*
+-	 * c_done is either
+-	 *
+-	 *   . -1, meaning it's open season and we're done for good and
+-	 *     nobody need wait any more;
+-	 *
+-	 *   . 0, meaning nothing is done, so waiters must block; or
+-	 *
+-	 *   . a positive integer, meaning that many waiters can
+-	 *     proceed before further waiters must block.
+-	 *
+-	 * Negative values other than -1 are not allowed.
++	/* Zero blocks; UINT_MAX permanently completes until reinitialization.
++	 * Other values count successful claims, matching Linux saturation.
+ 	 */
+-	int		c_done;
++	unsigned int	c_done;
+ };
+ 
+ /*
+@@ -115,19 +105,11 @@
+ static inline void
+ complete(struct completion *completion)
+ {
+-
+-	mutex_enter(&completion->c_lock);
+-
+-	/* If it's not open season, wake one waiter.  */
+-	if (completion->c_done >= 0) {
+-		KASSERT(completion->c_done < INT_MAX); /* XXX check */
+-		completion->c_done++;
+-		cv_signal(&completion->c_cv);
+-	} else {
+-		KASSERT(completion->c_done == -1);
+-	}
+-
+-	mutex_exit(&completion->c_lock);
++    mutex_enter(&completion->c_lock);
++    if (completion->c_done != UINT_MAX)
++        completion->c_done++;
++    cv_signal(&completion->c_cv);
++    mutex_exit(&completion->c_lock);
+ }
+ 
+ /*
+@@ -137,18 +119,10 @@
+ static inline void
+ complete_all(struct completion *completion)
+ {
+-
+-	mutex_enter(&completion->c_lock);
+-
+-	/* If it's not open season, make it open season and wake everyone.  */
+-	if (completion->c_done >= 0) {
+-		completion->c_done = -1;
+-		cv_broadcast(&completion->c_cv);
+-	} else {
+-		KASSERT(completion->c_done == -1);
+-	}
+-
+-	mutex_exit(&completion->c_lock);
++    mutex_enter(&completion->c_lock);
++    completion->c_done = UINT_MAX;
++    cv_broadcast(&completion->c_cv);
++    mutex_exit(&completion->c_lock);
+ }
+ 
+ /*
+@@ -175,94 +149,70 @@
+ static inline void
+ _completion_claim(struct completion *completion)
+ {
+-
+-	KASSERT(mutex_owned(&completion->c_lock));
+-	KASSERT(completion->c_done != 0);
+-	if (completion->c_done > 0)
+-		completion->c_done--;
+-	else
+-		KASSERT(completion->c_done == -1);
++    KASSERT(mutex_owned(&completion->c_lock));
++    KASSERT(completion->c_done != 0);
++    if (completion->c_done != UINT_MAX)
++        completion->c_done--;
+ }
+ 
+ /*
+  * Wait interruptibly with a timeout for someone to call complete or
+  * complete_all.
+  */
+-static inline int
++/* Native CV slices retain the complete Linux timeout budget. */
++static inline unsigned long
++_linux_wait_completion_timeout(struct completion *completion,
++    unsigned long ticks, bool interruptible, int *error)
++{
++    unsigned long result = 0;
++    *error = 0;
++    mutex_enter(&completion->c_lock);
++    while (completion->c_done == 0 && ticks != 0) {
++        unsigned long slice = MIN(ticks, (unsigned long)INT_MAX/2);
++        unsigned int start = getticks();
++        int cv_error = interruptible ?
++            cv_timedwait_sig(&completion->c_cv, &completion->c_lock, slice) :
++            cv_timedwait(&completion->c_cv, &completion->c_lock, slice);
++        unsigned int elapsed = (unsigned int)getticks() - start;
++        if (cv_error == EWOULDBLOCK && elapsed < slice)
++            elapsed = slice;
++        ticks -= MIN(ticks, (unsigned long)elapsed);
++        /* Linux claims a completion that wins the timeout/signal race. */
++        if (completion->c_done != 0)
++            break;
++        if (interruptible && (cv_error == EINTR || cv_error == ERESTART)) {
++            *error = -ERESTARTSYS;
++            goto out;
++        }
++        KASSERT(cv_error == 0 || cv_error == EWOULDBLOCK);
++    }
++    if (completion->c_done != 0) {
++        _completion_claim(completion);
++        result = ticks != 0 ? ticks : 1;
++    }
++out:
++    mutex_exit(&completion->c_lock);
++    return result;
++}
++
++static inline long
+ wait_for_completion_interruptible_timeout(struct completion *completion,
+     unsigned long ticks)
+ {
+-	/* XXX Arithmetic overflow...?  */
+-	unsigned int start = getticks(), now;
+-	int error;
+-
+-	mutex_enter(&completion->c_lock);
+-
+-	/* Wait until c_done is nonzero, timeout, or signal.  */
+-	while (completion->c_done == 0) {
+-		if (ticks == 0) {
+-			error = EWOULDBLOCK;
+-			goto out;
+-		}
+-		error = cv_timedwait_sig(&completion->c_cv,
+-		    &completion->c_lock, MIN(ticks, INT_MAX/2));
+-		now = getticks();
+-		if (error)
+-			goto out;
+-		ticks -= MIN(ticks, (now - start));
+-		start = now;
+-	}
+-
+-	/* Success!  */
+-	_completion_claim(completion);
+-	error = 0;
+-
+-out:	mutex_exit(&completion->c_lock);
+-	if (error == EWOULDBLOCK) {
+-		return 0;
+-	} else if ((error == EINTR) || (error == ERESTART)) {
+-		return -ERESTARTSYS;
+-	} else {
+-		KASSERTMSG((error == 0), "error = %d", error);
+-		return MAX(1, MIN(ticks, INT_MAX/2));
+-	}
+-}
+-
+-static inline int
++    int error;
++    unsigned long remaining = _linux_wait_completion_timeout(completion,
++        ticks, true, &error);
++    return error != 0 ? error : (long)remaining;
++}
++
++static inline unsigned long
+ wait_for_completion_timeout(struct completion *completion, unsigned long ticks)
+ {
+-	/* XXX Arithmetic overflow...?  */
+-	unsigned int start = getticks(), now;
+-	int error;
+-
+-	mutex_enter(&completion->c_lock);
+-
+-	/* Wait until c_done is nonzero or timeout.  */
+-	while (completion->c_done == 0) {
+-		if (ticks == 0) {
+-			error = EWOULDBLOCK;
+-			goto out;
+-		}
+-		error = cv_timedwait(&completion->c_cv, &completion->c_lock,
+-		    MIN(ticks, INT_MAX/2));
+-		now = getticks();
+-		if (error)
+-			goto out;
+-		ticks -= MIN(ticks, (now - start));
+-		start = now;
+-	}
+-
+-	/* Success!  */
+-	_completion_claim(completion);
+-	error = 0;
+-
+-out:	mutex_exit(&completion->c_lock);
+-	if (error == EWOULDBLOCK) {
+-		return 0;
+-	} else {
+-		KASSERTMSG((error == 0), "error = %d", error);
+-		return MAX(1, MIN(ticks, INT_MAX/2));
+-	}
++    int error;
++    unsigned long remaining = _linux_wait_completion_timeout(completion,
++        ticks, false, &error);
++    KASSERT(error == 0);
++    return remaining;
+ }
+ 
+ /*
+@@ -340,5 +290,15 @@
+ 
+ 	return ok;
+ }
++/* Lock acquisition also drains an in-flight complete() before returning. */
++static inline bool
++completion_done(struct completion *completion)
++{
++    bool done;
++    mutex_enter(&completion->c_lock);
++    done = completion->c_done != 0;
++    mutex_exit(&completion->c_lock);
++    return done;
++}
+ 
+ #endif	/* _LINUX_COMPLETION_H_ */
