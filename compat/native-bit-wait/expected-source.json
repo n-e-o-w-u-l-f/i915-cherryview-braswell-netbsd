@@ -1,0 +1,18 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "source_path": "sys/external/bsd/drm2/linux/linux_wait_bit.c",
+  "before_sha256": "a896ef37c752e683f38a4b4add2420bee51a7d5d99497220ece918fb8d37640c",
+  "after_sha256": "23eaf5b75218b301acb1bf0a56c8ab057072ad5320c07559ed9d6bd07a6c474a",
+  "patch_sha256": "05eda865e2e7d4439f7222344aa8175ef17a806100577f04ac6c2b378eb52797",
+  "linux_input_sha256": {
+    "kernel/sched/wait_bit.c": "93ea13b71f64b52a60f99471f3def21450362b90a3fadcc1bd3721ccca61d2af",
+    "include/linux/wait_bit.h": "d750239c117df0dcb0066ff79f5581df6a9b2f2b00265ebcc608161c0966bb5a",
+    "include/linux/sched.h": "c1bcebb17c4383bbce843251d6b5ceffd7d0032034ccc7b0d228c79fcd983e7f"
+  },
+  "scope": "Existing native clear/wait/timed-wait ABI only. Keyed bit callback/lock/action/IO APIs, code-owner teardown and native kernel execution remain OPEN.",
+  "model_sha256": {
+    "test_model.h": "09bab76891a1b87989b05c498e7d0056c1d53e847516b5623cccb5782730c9ba",
+    "test_wait_bit.c": "aad992dec6e28ab18aa7ca3ff2e4bcedae320765a35c814938ad3717d0f35379"
+  }
+}

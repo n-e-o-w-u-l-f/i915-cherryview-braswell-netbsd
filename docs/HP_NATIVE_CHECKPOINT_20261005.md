@@ -2,6 +2,46 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
 
+## Actual native bit wait policy
+
+Patch0036 corrects the actual shared NetBSD linux_wait_bit.c provider.
+TASK_KILLABLE selects the real fatal-only CV backend from patch0035; ordinary
+signals stay pending. Successful wait_on_bit_timeout returns zero, matching
+frozen Linux, and a bounded native CV timeout does not expire a larger Linux
+timeout budget. Native unsigned tick wrap is debited per bounded slice.
+Clear/wake uses real release atomic clear plus ordering before broadcast;
+successful clear-bit observation has acquire ordering. A new owner's bit
+acquisition after success is valid, so racy post-success assertions are removed.
+
+All37 regression scripts pass on HP. The complete staged native bit C is a
+verified compiler dependency in normal and UBSan 91-case explicit models.
+They cover 64 real pthread mutex/CV wait/clear/broadcast publication handshakes,
+fatal versus ordinary signal policy, zero result, wide timeout/tick wrap and
+spurious wakes. Signals and elapsed ticks are injected model inputs; these are
+not native kernel scheduler execution. Four immutable original source controls
+compile and fail the intended semantic assertions. Earlier fixture builds
+caught host macro redefinitions and a missing model panic declaration; the
+production source did not need a compile workaround.
+
+Ten actual native core/runtime/provider objects compile with real shared
+headers, no candidate header override, and link ld-r. The changed bit provider
+is now checked against its new explicit source contract; historical patch0035
+evidence still describes the immutable provider used at that earlier checkpoint.
+No new owned shared symbol remains unresolved in the bounded relocatable link.
+
+See [HP bit wait evidence](evidence/HP_NATIVE_BIT_WAIT_POLICY_20261006.json).
+Linux keyed bit callbacks/lock/custom actions/IO APIs, native IO accounting,
+table admission and code-owner drain, native CV/sleepq/signal/timing execution,
+MM/folio/UVM, full selected410/kernel and physical KMS remain OPEN. Modified
+core kernel support is required; running F77 is not a provider. No install or
+reboot; boot/running/F77 recovery hashes remain unchanged.
+
+## Earlier checkpoints
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
+
 ## Actual native fatal wait backend
 
 Patch0035 adds real NetBSD fatal-only CV entry points, a native SOBJ_SIGKILL

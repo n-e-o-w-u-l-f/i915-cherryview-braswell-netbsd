@@ -1,0 +1,201 @@
+--- a/sys/external/bsd/drm2/linux/linux_wait_bit.c
++++ b/sys/external/bsd/drm2/linux/linux_wait_bit.c
+@@ -105,11 +105,38 @@
+ }
+ 
+ /*
+- * clear_and_wake_up_bit(bit, bitmap)
+- *
+- *	Clear the specified bit in the bitmap and wake any waiters in
+- *	wait_on_bit or wait_on_bit_timeout that were waiting for it to
+- *	clear.
++ * Native CV delegation for the frozen Linux ordinary/fatal task-state policy.
++ * Zero ticks denotes the unbounded API, never an expired timed wait.
++ */
++static int
++wait_bit_sleep(struct waitbitentry *wbe, int flags, int ticks)
++{
++	if (flags & TASK_INTERRUPTIBLE)
++		return ticks ? cv_timedwait_sig(&wbe->cv, &wbe->lock, ticks) :
++		    cv_wait_sig(&wbe->cv, &wbe->lock);
++	if (flags & TASK_WAKEKILL)
++		return ticks ? cv_timedwait_sig_fatal(&wbe->cv, &wbe->lock,
++		    ticks) : cv_wait_sig_fatal(&wbe->cv, &wbe->lock);
++	if (ticks)
++		return cv_timedwait(&wbe->cv, &wbe->lock, ticks);
++	cv_wait(&wbe->cv, &wbe->lock);
++	return 0;
++}
++
++/* A successful clear-bit observation has the Linux ACQUIRE contract. */
++static bool
++wait_bit_test_acquire(const volatile unsigned long *bitmap, unsigned bit)
++{
++	bool set = test_bit(bit, bitmap) != 0;
++
++	if (!set)
++		membar_acquire();
++	return set;
++}
++
++/*
++ * Publish preceding writes before clearing the flag, and order the clear
++ * before waking waiters. The shared bucket lock prevents a missed CV wake.
+  */
+ void
+ clear_and_wake_up_bit(int bit, volatile unsigned long *bitmap)
+@@ -117,116 +144,78 @@
+ 	struct waitbitentry *wbe;
+ 
+ 	wbe = wait_bit_enter(bitmap, bit);
+-	clear_bit(bit, bitmap);
++	clear_bit_unlock(bit, bitmap);
++	smp_mb__after_atomic();
+ 	cv_broadcast(&wbe->cv);
+ 	wait_bit_exit(wbe);
+ }
+ 
+ /*
+- * wait_on_bit(bitmap, bit, flags)
+- *
+- *	Wait for the specified bit in bitmap to be cleared.  Returns 0
+- *	on success, -EINTR on signal, unless flags has
+- *	TASK_UNINTERRUPTIBLE set.
++ * Linux return contract: zero on clear, -EINTR for a mode-permitted signal.
++ * TASK_KILLABLE must choose the real fatal-only backend despite containing
++ * TASK_UNINTERRUPTIBLE. Ordinary signals remain pending and do not end it.
+  */
+ int
+ wait_on_bit(const volatile unsigned long *bitmap, unsigned bit, int flags)
+ {
+ 	struct waitbitentry *wbe;
+-	int error, ret;
+-
+-	if (test_bit(bit, bitmap) == 0)
++	int error, ret = 0;
++
++	if (!wait_bit_test_acquire(bitmap, bit))
+ 		return 0;
+-
+ 	wbe = wait_bit_enter(bitmap, bit);
+-
+-	while (test_bit(bit, bitmap)) {
+-		if (flags & TASK_UNINTERRUPTIBLE) {
+-			cv_wait(&wbe->cv, &wbe->lock);
+-		} else {
+-			error = cv_wait_sig(&wbe->cv, &wbe->lock);
+-			if (error) {
+-				/* cv_wait_sig can only fail on signal.  */
+-				KASSERTMSG(error == EINTR || error == ERESTART,
+-				    "error=%d", error);
+-				ret = -EINTR;
+-				goto out;
+-			}
++	while (wait_bit_test_acquire(bitmap, bit)) {
++		error = wait_bit_sleep(wbe, flags, 0);
++		if (error) {
++			KASSERTMSG(error == EINTR || error == ERESTART,
++			    "error=%d", error);
++			ret = -EINTR;
++			break;
+ 		}
+ 	}
+-
+-	/* Bit is clear.  Return zero on success.   */
+-	KASSERT(test_bit(bit, bitmap) == 0);
+-	ret = 0;
+-
+-out:	KASSERT(test_bit(bit, bitmap) == 0 || ret != 0);
++	/* A new owner may set the bit again after our successful observation. */
+ 	wait_bit_exit(wbe);
+ 	return ret;
+ }
+ 
+ /*
+- * wait_on_bit_timeout(bitmap, bit, flags, timeout)
+- *
+- *	Wait for the specified bit in bitmap to be cleared.  Returns 0
+- *	on success, -EINTR on signal unless flags has
+- *	TASK_UNINTERRUPTIBLE set, or -EAGAIN on timeout.
++ * Zero on clear, -EINTR on a mode-permitted signal, -EAGAIN on expiry.
++ * A native CV slice expiry is not expiry of a wider Linux timeout budget.
++ * Each native slice fits within the signed tick counter's half range, so
++ * unsigned end-start subtraction remains correct across native tick wrap.
+  */
+ int
+ wait_on_bit_timeout(const volatile unsigned long *bitmap, unsigned bit,
+     int flags, unsigned long timeout)
+ {
+ 	struct waitbitentry *wbe;
+-	int error, ret;
+-
+-	if (test_bit(bit, bitmap) == 0)
++	int error, ret = 0;
++
++	if (!wait_bit_test_acquire(bitmap, bit))
+ 		return 0;
+-
+ 	wbe = wait_bit_enter(bitmap, bit);
+-
+-	while (test_bit(bit, bitmap)) {
++	while (wait_bit_test_acquire(bitmap, bit)) {
+ 		unsigned starttime, endtime;
++		int slice;
+ 
+ 		if (timeout == 0) {
+ 			ret = -EAGAIN;
+-			goto out;
++			break;
+ 		}
+-
++		slice = MIN(timeout, INT_MAX/2);
+ 		starttime = getticks();
+-		if (flags & TASK_UNINTERRUPTIBLE) {
+-			error = cv_timedwait(&wbe->cv, &wbe->lock,
+-			    MIN(timeout, INT_MAX/2));
+-		} else {
+-			error = cv_timedwait_sig(&wbe->cv, &wbe->lock,
+-			    MIN(timeout, INT_MAX/2));
++		error = wait_bit_sleep(wbe, flags, slice);
++		endtime = getticks();
++		timeout -= MIN(timeout, (endtime - starttime));
++
++		if (error == EINTR || error == ERESTART) {
++			ret = -EINTR;
++			break;
+ 		}
+-		endtime = getticks();
+-
+-		/*
+-		 * If we were interrupted or timed out, massage the
+-		 * error return and stop here.
+-		 */
+-		if (error) {
+-			KASSERTMSG((error == EINTR || error == ERESTART ||
+-				error == EWOULDBLOCK), "error=%d", error);
+-			if (error == EINTR || error == ERESTART) {
+-				ret = -EINTR;
+-			} else if (error == EWOULDBLOCK) {
+-				ret = -EAGAIN;
+-			} else {
+-				panic("invalid error=%d", error);
+-			}
+-			goto out;
+-		}
+-
+-		/* Otherwise, debit the time spent.  */
+-		timeout -= MIN(timeout, (endtime - starttime));
+-	}
+-
+-	/* Bit is clear.  Return zero on success.  */
+-	KASSERT(test_bit(bit, bitmap) == 0);
+-	ret = timeout;
+-
+-out:	KASSERT(test_bit(bit, bitmap) == 0 || ret != 0);
++		KASSERTMSG(error == 0 || error == EWOULDBLOCK,
++		    "error=%d", error);
++		/* Recheck the bit and full remaining budget after every CV wake. */
++	}
+ 	wait_bit_exit(wbe);
+ 	return ret;
+ }

@@ -22,17 +22,23 @@ def run(name,command):
  if p.returncode:print(p.stdout,flush=True);state['state']='FAILED';save();raise SystemExit(p.returncode)
 sources={name:tree/('sys/kern/'+name+'.c') for name in ['kern_condvar','kern_sleepq','kern_sig']}
 sources.update({name:runtime/'linux'/(name+'.c') for name in ['linux_task','linux_wait','linux_wait_var','linux_kthread','linux_module']})
-# These immutable native sources define four existing module imports.
-# Compile them rather than misclassifying them as newly missing fatal APIs.
+# These actual native sources define four existing module imports.
+# Compile and source-validate both providers; no unresolved-symbol stubs.
 legacy={'linux_tasklet':tree/'sys/external/bsd/common/linux/linux_tasklet.c',
         'linux_wait_bit':runtime/'linux/linux_wait_bit.c'}
 state['coexisting_legacy_native_sources']={}
 for name,src in legacy.items():
  original=subprocess.check_output(['git','-C','/root/netbsd-src-ref','show',
       '03d918f6d0e81fa05b8f1160eca0628ad39988a6:'+str(src.relative_to(tree))])
- assert original==src.read_bytes(),name
- state['coexisting_legacy_native_sources'][name]={'sha256':sha(src),
-       'scope':'native object/link coexistence only; full legacy bit/lock/IO/timeout and tasklet execution remain OPEN'}
+ if name=='linux_wait_bit':
+  bit_contract=json.loads((WORK/'i915/compat/native-bit-wait/expected-source.json').read_text())
+  assert hashlib.sha256(original).hexdigest()==bit_contract['before_sha256']
+  assert sha(src)==bit_contract['after_sha256']
+  scope='actual changed native clear/wait/timed-wait provider; keyed bit/lock/action/IO and kernel execution remain OPEN'
+ else:
+  assert original==src.read_bytes(),name
+  scope='immutable native tasklet object/link coexistence only; full tasklet execution remains OPEN'
+ state['coexisting_legacy_native_sources'][name]={'sha256':sha(src),'scope':scope}
 sources.update(legacy)
 objects=[]
 for name,src in sources.items():
