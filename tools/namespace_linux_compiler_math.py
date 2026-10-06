@@ -14,6 +14,8 @@ import subprocess
 
 PIN='fd179f8a05be3ccae366b9b96e176b51fbe54aab'
 TOKEN=re.compile(r'/\*[\s\S]*?\*/|//(?:\\\r?\n|[^\n])*|"(?:\\[\s\S]|[^"\\])*"|\'(?:\\[\s\S]|[^\'\\])*\'|[A-Za-z_][A-Za-z_0-9]*')
+LEGACY_TOKEN=TOKEN
+TOKEN=re.compile(r'^[ \t]*#[ \t]*(?:include|include_next|import)[ \t]+(?:\\\r?\n[ \t]*)?<[^>\r\n]+>|'+LEGACY_TOKEN.pattern,re.M)
 
 def frozen(linux,path):
     return subprocess.check_output(['git','-C',str(linux),'show',PIN+':'+path],text=True)
@@ -22,7 +24,8 @@ def bindings(linux):
     head=subprocess.check_output(['git','-C',str(linux),'rev-parse','HEAD'],text=True).strip()
     if head!=PIN:raise RuntimeError('wrong frozen Linux reference')
     names=set()
-    for path,guard in [('include/linux/compiler_attributes.h','__LINUX_COMPILER_ATTRIBUTES_H'),('include/linux/math.h','_LINUX_MATH_H')]:
+    for path,guard in [('include/linux/compiler_attributes.h','__LINUX_COMPILER_ATTRIBUTES_H'),('include/linux/math.h','_LINUX_MATH_H'),
+                       ('include/linux/typecheck.h','TYPECHECK_H_INCLUDED'),('include/linux/wordpart.h','_LINUX_WORDPART_H')]:
         names.update(re.findall(r'^\s*#\s*define\s+([A-Za-z_][A-Za-z_0-9]*)',frozen(linux,path),re.M))
         names.discard(guard)
     # This spelling is also a GCC attribute property inside its own definition.
@@ -35,12 +38,21 @@ def bindings(linux):
 def translate(text,mapping):
     return TOKEN.sub(lambda m:mapping.get(m[0],m[0]),text)
 
+def legacy_translate(text,mapping):
+    """Verify exact bytes from the retained version-1 translation ledger."""
+    return LEGACY_TOKEN.sub(lambda m:mapping.get(m[0],m[0]),text)
+
 def sha(data):return hashlib.sha256(data).hexdigest()
 
 def integrate(linux,tree,manifest,api,out):
     mapping=bindings(linux)
     report=json.loads(api.read_text()) if api else {'linux_pin':PIN,'rows':[]}
     if report['linux_pin']!=PIN:raise RuntimeError('wrong API source pin')
+    prior=report.get('compiler_math_namespace',{}).get('mapping',{})
+    if any(mapping.get(k)!=v for k,v in prior.items()):raise RuntimeError('changed prior private binding')
+    version=report.get('compiler_math_namespace',{}).get('tokenizer_version',1)
+    if version not in (1,2):raise RuntimeError('unknown prior source tokenizer')
+    previous_translate=legacy_translate if version==1 else translate
     selected=json.loads(manifest.read_text())
     if selected['linux_pin']!=PIN or not selected['linux_head_verified']:raise RuntimeError('unverified full source manifest')
     plans=[];seeds=[]
@@ -56,21 +68,23 @@ def integrate(linux,tree,manifest,api,out):
         # Existing source-owned patch 0022 only changes this Linux initializer.
         baseline=translate(old,{'RB_ROOT':'LINUX_RB_ROOT'})
         target=tree/'sys/external/bsd/drm2/dist'/(rel.removeprefix('drivers/gpu/') if rel.startswith('drivers/gpu/') else rel)
-        proof=plan(target,baseline,translate(baseline,mapping),rel,'LINUX_SEED_TRANSLATED_UNREVIEWED')
+        proof=plan(target,previous_translate(baseline,prior),translate(baseline,mapping),rel,'LINUX_SEED_TRANSLATED_UNREVIEWED')
         proof['frozen_sha256']=sha(old.encode());seeds.append(proof)
     for row in report['rows']:
-        if row['state']!='IMPORTED_API_UNREVIEWED':continue
+        if row['state'] not in ('IMPORTED_API_UNREVIEWED','IMPORTED_API_TRANSLATED_UNREVIEWED'):continue
         target=tree/row['path'];old=frozen(linux,row['linux_path']);new=translate(old,mapping)
-        proof=plan(target,old,new,row['linux_path'],'IMPORTED_API_TRANSLATED_UNREVIEWED')
+        if sha(target.read_bytes())!=row['sha256']:raise RuntimeError('changed prior API input: '+row['path'])
+        previous=previous_translate(old,prior) if row['state']=='IMPORTED_API_TRANSLATED_UNREVIEWED' else old
+        proof=plan(target,previous,new,row['linux_path'],'IMPORTED_API_TRANSLATED_UNREVIEWED')
         if proof['changed']:
-            row['frozen_sha256']=row['sha256'];row['sha256']=proof['sha256'];row['state']=proof['state']
+            row['frozen_sha256']=sha(old.encode());row['sha256']=proof['sha256'];row['state']=proof['state']
     if out.exists():raise RuntimeError('preserve existing translation evidence')
     # Validate every input before any mutation; replace each file atomically.
     for path,data in plans:
         temp=path.with_name(path.name+'.compiler-math.tmp')
         if temp.exists():raise RuntimeError('preserve interrupted source write '+str(temp))
         temp.write_bytes(data);temp.replace(path)
-    report['compiler_math_namespace']={'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
+    report['compiler_math_namespace']={'tokenizer_version':2,'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
         'acceptance':'OPEN; token bindings preserve algorithms but do not prove all OS/ABI/runtime semantics'}
     out.write_text(json.dumps(report,indent=2)+'\n')
     return len(plans),sum(row['changed'] for row in seeds)
