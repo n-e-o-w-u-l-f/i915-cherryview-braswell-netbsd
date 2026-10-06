@@ -156,7 +156,8 @@ def main():
                       "0029-netbsd-linux-typecheck-wordpart.patch",
                       "0030-netbsd-linux-container-type-contract.patch",
                       "0031-netbsd-linux-typed-object-allocation.patch",
-                      "0032-netbsd-linux-task-wait-worker.patch"):
+                      "0032-netbsd-linux-task-wait-worker.patch",
+                      "0033-netbsd-linux-uuid-guid.patch"):
             run(["git", "-C", str(tree), "apply", "--check", str(owner / "patches" / patch)])
             run(["git", "-C", str(tree), "apply", str(owner / "patches" / patch)])
         # Source paths are translated explicitly, preserving the reference tree

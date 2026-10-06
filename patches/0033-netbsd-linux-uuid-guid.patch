@@ -1,0 +1,295 @@
+--- a/sys/external/bsd/drm2/include/linux/uuid.h
++++ b/sys/external/bsd/drm2/include/linux/uuid.h
+@@ -1,3 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * UUID/GUID definition
++ *
++ * Copyright (C) 2010, 2016 Intel Corp.
++ *	Huang Ying <ying.huang@intel.com>
++ */
+ /*	$NetBSD: uuid.h,v 1.4 2021/12/19 11:38:04 riastradh Exp $	*/
+ 
+ /*-
+@@ -32,9 +39,22 @@
+ #ifndef _LINUX_UUID_H_
+ #define _LINUX_UUID_H_
+ 
++#include <sys/types.h>
++#include <sys/systm.h>
++
++/* Frozen Linux byte-array ABI; native guid_bytes remains an alias. */
++#define UUID_SIZE 16
++
+ typedef struct {
+-	unsigned char guid_bytes[16];
++	union {
++		unsigned char b[UUID_SIZE];
++		unsigned char guid_bytes[UUID_SIZE];
++	};
+ } guid_t;
++
++typedef struct {
++	unsigned char b[UUID_SIZE];
++} netbsd_linux_uuid_t;
+ 
+ #define	GUID_INIT(x, y, z, v0, v1, v2, v3, v4, v5, v6, v7) ((guid_t)	      \
+ {									      \
+@@ -58,10 +78,17 @@
+ 	}								      \
+ })
+ 
++#define UUID_INIT(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)			\
++((netbsd_linux_uuid_t)								\
++{{ ((a) >> 24) & 0xff, ((a) >> 16) & 0xff, ((a) >> 8) & 0xff, (a) & 0xff, \
++   ((b) >> 8) & 0xff, (b) & 0xff,					\
++   ((c) >> 8) & 0xff, (c) & 0xff,					\
++   (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }})
++
+ #define	UUID_STRING_LEN		36
+ 
+-static inline int
+-uuid_is_valid(const char uuid[static 36])
++static inline bool __attribute__((__warn_unused_result__))
++uuid_is_valid(const char *uuid)
+ {
+ 	unsigned i;
+ 
+@@ -88,4 +115,72 @@
+ 	return 1;
+ }
+ 
++extern const guid_t guid_null;
++extern const netbsd_linux_uuid_t netbsd_linux_uuid_null;
++
++static inline bool guid_equal(const guid_t *u1, const guid_t *u2)
++{
++	return memcmp(u1, u2, sizeof(guid_t)) == 0;
++}
++
++static inline void guid_copy(guid_t *dst, const guid_t *src)
++{
++	memcpy(dst, src, sizeof(guid_t));
++}
++
++static inline void import_guid(guid_t *dst, const unsigned char *src)
++{
++	memcpy(dst, src, sizeof(guid_t));
++}
++
++static inline void export_guid(unsigned char *dst, const guid_t *src)
++{
++	memcpy(dst, src, sizeof(guid_t));
++}
++
++static inline bool guid_is_null(const guid_t *guid)
++{
++	return guid_equal(guid, &guid_null);
++}
++
++static inline bool netbsd_linux_uuid_equal(const netbsd_linux_uuid_t *u1, const netbsd_linux_uuid_t *u2)
++{
++	return memcmp(u1, u2, sizeof(netbsd_linux_uuid_t)) == 0;
++}
++
++static inline void netbsd_linux_uuid_copy(netbsd_linux_uuid_t *dst, const netbsd_linux_uuid_t *src)
++{
++	memcpy(dst, src, sizeof(netbsd_linux_uuid_t));
++}
++
++static inline void netbsd_linux_import_uuid(netbsd_linux_uuid_t *dst, const unsigned char *src)
++{
++	memcpy(dst, src, sizeof(netbsd_linux_uuid_t));
++}
++
++static inline void netbsd_linux_export_uuid(unsigned char *dst, const netbsd_linux_uuid_t *src)
++{
++	memcpy(dst, src, sizeof(netbsd_linux_uuid_t));
++}
++
++static inline bool netbsd_linux_uuid_is_null(const netbsd_linux_uuid_t *uuid)
++{
++	return netbsd_linux_uuid_equal(uuid, &netbsd_linux_uuid_null);
++}
++
++/* Generation requires thread/softint context; hard-IRQ parity is OPEN. */
++void netbsd_linux_generate_random_uuid(unsigned char uuid[16]);
++void generate_random_guid(unsigned char guid[16]);
++
++extern void guid_gen(guid_t *u);
++extern void netbsd_linux_uuid_gen(netbsd_linux_uuid_t *u);
++
++
++extern const unsigned char guid_index[16];
++extern const unsigned char netbsd_linux_uuid_index[16];
++
++int guid_parse(const char *uuid, guid_t *u);
++int netbsd_linux_uuid_parse(const char *uuid, netbsd_linux_uuid_t *u);
++
++
+ #endif  /* _LINUX_UUID_H_ */
+--- /dev/null
++++ b/sys/external/bsd/drm2/linux/linux_uuid.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Unified UUID/GUID definition
++ *
++ * Copyright (C) 2009, 2016 Intel Corp.
++ *	Huang Ying <ying.huang@intel.com>
++ */
++
++/* Native CPRNG supplies all 16 bytes; no synthetic seed or fallback. */
++#include <sys/cdefs.h>
++__KERNEL_RCSID(0, "$NetBSD$");
++#include <sys/types.h>
++#include <sys/cprng.h>
++#include <sys/errno.h>
++#include <sys/systm.h>
++#include <linux/uuid.h>
++
++static void
++linux_uuid_random_bytes(unsigned char *buf, size_t len)
++{
++
++	/* Pinned cprng_strong always fills len; thread/softint contexts only. */
++	(void)cprng_strong(kern_cprng, buf, len, 0);
++}
++
++static int
++linux_uuid_hex_to_bin(unsigned char ch)
++{
++
++	if (ch >= '0' && ch <= '9')
++		return ch - '0';
++	if (ch >= 'a' && ch <= 'f')
++		return ch - 'a' + 10;
++	if (ch >= 'A' && ch <= 'F')
++		return ch - 'A' + 10;
++	return -1;
++}
++
++const guid_t guid_null;
++const netbsd_linux_uuid_t netbsd_linux_uuid_null;
++
++const unsigned char guid_index[16] = {3,2,1,0,5,4,7,6,8,9,10,11,12,13,14,15};
++const unsigned char netbsd_linux_uuid_index[16] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
++
++/**
++ * generate_random_uuid - generate a random UUID
++ * @uuid: where to put the generated UUID
++ *
++ * Random UUID interface
++ *
++ * Used to create a Boot ID or a filesystem UUID/GUID, but can be
++ * useful for other kernel drivers.
++ */
++void netbsd_linux_generate_random_uuid(unsigned char uuid[16])
++{
++	linux_uuid_random_bytes(uuid, 16);
++	/* Set UUID version to 4 --- truly random generation */
++	uuid[6] = (uuid[6] & 0x0F) | 0x40;
++	/* Set the UUID variant to DCE */
++	uuid[8] = (uuid[8] & 0x3F) | 0x80;
++}
++
++void generate_random_guid(unsigned char guid[16])
++{
++	linux_uuid_random_bytes(guid, 16);
++	/* Set GUID version to 4 --- truly random generation */
++	guid[7] = (guid[7] & 0x0F) | 0x40;
++	/* Set the GUID variant to DCE */
++	guid[8] = (guid[8] & 0x3F) | 0x80;
++}
++
++static void __uuid_gen_common(unsigned char b[16])
++{
++	linux_uuid_random_bytes(b, 16);
++	/* revision 0b10 */
++	b[8] = (b[8] & 0x3F) | 0x80;
++}
++
++void guid_gen(guid_t *lu)
++{
++	__uuid_gen_common(lu->b);
++	/* version 4 : random generation */
++	lu->b[7] = (lu->b[7] & 0x0F) | 0x40;
++}
++
++void netbsd_linux_uuid_gen(netbsd_linux_uuid_t *bu)
++{
++	__uuid_gen_common(bu->b);
++	/* version 4 : random generation */
++	bu->b[6] = (bu->b[6] & 0x0F) | 0x40;
++}
++
++static int __uuid_parse(const char *uuid, unsigned char b[16], const unsigned char ei[16])
++{
++	static const unsigned char si[16] = {0,2,4,6,9,11,14,16,19,21,24,26,28,30,32,34};
++	unsigned int i;
++
++	if (!uuid_is_valid(uuid))
++		return -EINVAL;
++
++	for (i = 0; i < 16; i++) {
++		int hi = linux_uuid_hex_to_bin(uuid[si[i] + 0]);
++		int lo = linux_uuid_hex_to_bin(uuid[si[i] + 1]);
++
++		b[ei[i]] = (hi << 4) | lo;
++	}
++
++	return 0;
++}
++
++int guid_parse(const char *uuid, guid_t *u)
++{
++	return __uuid_parse(uuid, u->b, guid_index);
++}
++
++int netbsd_linux_uuid_parse(const char *uuid, netbsd_linux_uuid_t *u)
++{
++	return __uuid_parse(uuid, u->b, netbsd_linux_uuid_index);
++}
+--- a/sys/external/bsd/drm2/linux/linux_acpi.c
++++ b/sys/external/bsd/drm2/linux/linux_acpi.c
+@@ -37,7 +37,7 @@
+ ACPI_MODULE_NAME("linux_acpi")
+ 
+ union acpi_object *
+-acpi_evaluate_dsm(acpi_handle handle, const guid_t *uuid, u64 rev, u64 func,
++acpi_evaluate_dsm(acpi_handle handle, const guid_t *uuid, uint64_t rev, uint64_t func,
+     union acpi_object *argv4)
+ {
+ 	ACPI_OBJECT_LIST arg;
+@@ -75,8 +75,8 @@
+ }
+ 
+ union acpi_object *
+-acpi_evaluate_dsm_typed(acpi_handle handle, const guid_t *uuid, u64 rev,
+-    u64 func, union acpi_object *argv4, acpi_object_type type)
++acpi_evaluate_dsm_typed(acpi_handle handle, const guid_t *uuid, uint64_t rev,
++    uint64_t func, union acpi_object *argv4, acpi_object_type type)
+ {
+ 	union acpi_object *obj;
+ 
+@@ -96,7 +96,7 @@
+ }
+ 
+ bool
+-acpi_check_dsm(acpi_handle handle, const guid_t *uuid, u64 rev, u64 funcs)
++acpi_check_dsm(acpi_handle handle, const guid_t *uuid, uint64_t rev, uint64_t funcs)
+ {
+ 	ACPI_OBJECT *obj;
+ 	uint64_t mask = 0;
+--- a/sys/external/bsd/drm2/linux/files.drmkms_linux
++++ b/sys/external/bsd/drm2/linux/files.drmkms_linux
+@@ -30,2 +30,3 @@
+ file	external/bsd/drm2/linux/linux_module.c		drmkms_linux
++file	external/bsd/drm2/linux/linux_uuid.c		drmkms_linux
+ file	external/bsd/drm2/linux/linux_notifier.c	drmkms_linux
+--- a/sys/modules/drmkms_linux/Makefile
++++ b/sys/modules/drmkms_linux/Makefile
+@@ -44,2 +44,3 @@
+ SRCS+=	linux_module.c
++SRCS+=	linux_uuid.c
+ SRCS+=	linux_kthread.c

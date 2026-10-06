@@ -1,0 +1,101 @@
+Native UUID/GUID port candidate (isolated; no installation or shared-stage writes)
+
+Pins:
+Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab
+NetBSD 03d918f6d0e81fa05b8f1160eca0628ad39988a6
+All compiler/test execution was on hp-tpnw121 NetBSD, under agent-native-uuid.
+
+Review/apply files:
+- native-uuid.patch: native Linux UUID header, new real linux_uuid.c, and six
+  scalar spellings in native linux_acpi.c to match its retained uint64_t API.
+- uuid-include-hygiene.patch: explicit linux/uuid.h dependencies in frozen
+  drm_dp_mst_helper.h and vfio.h. The first header declares six guid_t fields;
+  incidental Linux include chains disappear through native OS adapters.
+- uuid-namespace.json: 11 private UUID bindings, with no global token macros.
+- generate.py: reproducible generation guarded by exact frozen input hashes.
+- build_hp.py: strict native/userland builds, real ACPI-body compile and ld -r.
+- proofs/: copied final HP proof, audit, context, command/log/object hashes.
+
+Root integration order:
+1. Apply the native patch to sys/external/bsd/drm2. Add linux/linux_uuid.c to
+   the native build graph; the real kernel already owns cprng_strong/kern_cprng.
+   Do not add a substitute RNG or use native uuidgen (its format differs).
+2. Add uuid-namespace.json's mapping to the existing private Linux namespace
+   translator, for frozen Linux-owned selected C/H and imported API headers.
+   Never rename uuid_t globally in native files or define a uuid_t macro.
+   Keep guid_t shared with native ACPI and preserve GUID_INIT/uuid_is_valid.
+3. For the two include-hygiene paths, adapt the frozen source BEFORE applying
+   private token translation and before the translator's baseline validation.
+   generate.py exposes adapt_includes(text, linux_path); its insertions are
+   idempotent and guarded by a unique include anchor. The separate diff uses
+   unchanged include contexts, so it can also be reviewed/applied directly.
+   Update source/API ledgers around this explicit adaptation, not silently.
+4. Preserve source/proof provenance. A full selected graph/kernel link and real
+   kernel execution are still required; the isolated ld -r is an interface check.
+
+Contracts:
+- guid_t is exactly 16 bytes with alignment 1. Anonymous byte-array aliases b
+  and guid_bytes both start at offset 0. Existing native GUID_INIT and ACPI
+  raw 16-byte buffer users retain the same ABI. Linux callers have their real
+  byte-array member, not a declaration-only or native struct-uuid replacement.
+- netbsd_linux_uuid_t is a separate 16-byte/alignment-1 type. Native libuuid's
+  uuid_t and uuid_equal declarations remain intact; tested in the same TU.
+- GUID_INIT emits little-endian first three numeric fields; UUID_INIT emits
+  big-endian. Copy/import/export transfer exactly 16 bytes without conversion.
+- Full-byte equality, zero/null constants and endian index arrays are real.
+- Parsing follows the frozen order and returns -EINVAL without touching output
+  on invalid syntax. Validation preserves native and frozen first-36-byte
+  semantics, including uppercase, fixed 36-byte input and accepted suffixes.
+- Generation fills all 16 bytes from real native cprng_strong(kern_cprng,...,0)
+  and applies version-4 bits at GUID byte 7 / UUID byte 6 and variant at byte 8.
+  No time/PID/counter seed, fabricated bytes, no-op or fallback RNG is used.
+- Exact native subr_cprng.c guarantees a full-length fill, permits thread/soft
+  interrupt contexts and rejects hard interrupts. Required selected MST calls
+  run after a reply wait or under the resume mutex; their source is recorded in
+  generation-selected-context.json. Full Linux hard-IRQ generation parity OPEN.
+- Native ACPI definitions originally used u64, while their native prototypes
+  use uint64_t. Imported Linux u64 is unsigned long long and native uint64_t is
+  unsigned long on HP, exposing a genuine C type mismatch. The six parameter
+  spellings now match the native API; values, layout and ACPI algorithm unchanged.
+
+HP results (final RDC PID 671032):
+- linux_uuid.c, ABI/native-ACPI declaration probe, translated Linux UUID API
+  probe and real native ACPI implementation all compiled with -Werror.
+- Strict userland compilation and all 5 functional test groups passed: ABI and
+  aliases, endian init, all-byte compare/copy/null/import/export, valid/invalid
+  parse/output preservation/prefix behavior, 1024 real OS-entropy adapter fills
+  with exact bit checks and 512 random parse roundtrips.
+- Userland adapters remove only native include dependencies from the generated
+  production header/C. Native CPRNG is adapted to actual HP arc4random_buf for
+  these algorithm tests; they are not execution of kernel cprng_strong.
+- Native ld -r of the four objects passed. nm proves real cprng_strong/kern_cprng
+  references, no unresolved UUID/GUID APIs, and a real linux_acpi_evaluate_dsm
+  body (not an empty CONFIG-disabled object).
+- Read-only full selected audit: 323 i915 + 66 DRM + 8 display + 13 TTM = 410.
+  Calls require native GUID_INIT/uuid validation plus real DP MST GUID import,
+  export, copy, compare, null check and generation. Imported mdev has guid_t;
+  vfio has uuid_t and gets the private binding plus explicit UUID include.
+
+Final SHA-256:
+include/linux/uuid.h
+  64cbc11719cde7d633071581f7f7be058637b3ba93c7f12b6417e557739786ee
+linux_uuid.c
+  681c9a1e52d699354dc1c77a14919f1cf802c5bac18da4423f93ec57d490a096
+native_acpi.c
+  7b5d9e5a675e9e34fb253500865f34412effd7339932ab59dd4c0ce55904f052
+native-uuid.patch
+  1adb7c56f823f08dfa42073175d1d74fdf9f50c10590997f3dd50b727f836c66
+uuid-include-hygiene.patch
+  ad8988734dec069703542ac5b4ba9af09dcfd019102a116322d93b75498ce941
+proof.json
+  53aa5e96523f97cc0d9eb14a92996eeae96cda25764100ea7f460dd13401a6d7
+uuid-call-audit.json
+  c5bc2434fb550929283a4350268f33e124e6b1c88f6aed013b9dd6cfd448024b
+linux_uuid.o (HP-only)
+  cad76d5576cd7857bbf16b2fca5739ac836877dea5a7193a51f630542b3f1320
+uuid-and-probes.o (HP-only)
+  d782d5a1ac893788a007395c079da321f29923592c45f2d47510ba597ed84d85
+
+Acceptance OPEN: actual native kernel CPRNG/runtime execution, complete selected
+graph/kernel linking, hardware behavior and hard-IRQ generation parity. No
+installation, reboot, boot/recovery changes, commits, pushes or hosted CI.

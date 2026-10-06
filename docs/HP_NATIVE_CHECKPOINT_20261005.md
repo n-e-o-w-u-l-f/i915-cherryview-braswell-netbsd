@@ -1,5 +1,38 @@
 # HP i915 checkpoint, 2026-10-06
 
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
+
+## Native UUID/GUID and explicit type dependencies
+
+Patch0033 implements the frozen 16-byte UUID/GUID APIs, endian initializers,
+full-byte copy/compare/null/import/export, parse and version4 generation with
+real NetBSD cprng_strong. The GUID byte-array alias preserves native ACPI layout.
+Six ACPI scalar parameter spellings now match their retained uint64_t prototypes.
+Native libuuid types and declarations coexist with eleven private Linux UUID
+bindings. Explicit UUID includes repair the real DP-MST and vfio dependencies.
+
+All 34 source/C scripts pass on HP. Four fresh real Native objects, including
+the actual ACPI body, compile with -Werror and link with no unresolved UUID/GUID
+API. Five actual-code algorithm groups cover 1024 OS-entropy adapter fills and
+512 parse roundtrips; they do not execute kernel cprng_strong or prove hard-IRQ
+generation. The native object has the real cprng_strong/kern_cprng references.
+
+The owned namespace ledger now has 89 bindings and versioned include contracts.
+Reproduction applies the prior task-runtime build graph before adding UUID.
+The retained first suite failed only its missing audit metadata source; all
+native compilation and algorithm tests had passed before the complete rerun.
+
+See [HP UUID/GUID evidence](evidence/HP_NATIVE_UUID_GUID_20261006.json).
+Fresh modern buddy compilation passes. DVO compilation no longer reports GUID,
+wait-queue or kthread-work types; completion/device_node/PWM remain real errors.
+Full410 compilation/link, native MM/folio/UVM and task entry/fatal/lifetime
+integration, and physical KMS remain required. No installation or reboot;
+boot/running/F77 recovery hashes are unchanged.
+
+## Earlier checkpoints
+
+### HP i915 checkpoint, 2026-10-06
+
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
 ## Common task, callback waits and immediate workers

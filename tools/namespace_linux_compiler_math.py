@@ -13,12 +13,29 @@ import re
 import subprocess
 
 PIN='fd179f8a05be3ccae366b9b96e176b51fbe54aab'
+INCLUDE_CONTRACT_VERSION=1
+UUID_NAMES=('uuid_t','uuid_null','uuid_equal','uuid_copy','import_uuid',
+            'export_uuid','uuid_is_null','generate_random_uuid','uuid_gen',
+            'uuid_index','uuid_parse')
+UUID_INCLUDE_CONTRACTS={
+    'include/drm/display/drm_dp_mst_helper.h':'#include <linux/types.h>\n',
+    'include/linux/vfio.h':'#include <linux/iommu.h>\n',
+}
 TOKEN=re.compile(r'/\*[\s\S]*?\*/|//(?:\\\r?\n|[^\n])*|"(?:\\[\s\S]|[^"\\])*"|\'(?:\\[\s\S]|[^\'\\])*\'|[A-Za-z_][A-Za-z_0-9]*')
 LEGACY_TOKEN=TOKEN
 TOKEN=re.compile(r'^[ \t]*#[ \t]*(?:include|include_next|import)[ \t]+(?:\\\r?\n[ \t]*)?<[^>\r\n]+>|'+LEGACY_TOKEN.pattern,re.M)
 
 def frozen(linux,path):
     return subprocess.check_output(['git','-C',str(linux),'show',PIN+':'+path],text=True)
+
+def adapt_includes(text,linux_path,version=INCLUDE_CONTRACT_VERSION):
+    if version not in (0,1):raise RuntimeError('unknown include-contract version')
+    if version==0 or linux_path not in UUID_INCLUDE_CONTRACTS:return text
+    anchor=UUID_INCLUDE_CONTRACTS[linux_path]
+    addition=anchor+'#include <linux/uuid.h>\n'
+    if addition in text:return text
+    if text.count(anchor)!=1:raise RuntimeError('changed frozen UUID include anchor: '+linux_path)
+    return text.replace(anchor,addition)
 
 def bindings(linux):
     head=subprocess.check_output(['git','-C',str(linux),'rev-parse','HEAD'],text=True).strip()
@@ -35,6 +52,10 @@ def bindings(linux):
     if set(assertion_names)!={'static_assert','__static_assert'}:
         raise RuntimeError('changed pinned static assertion declarations')
     names.update(assertion_names)
+    uuid_header=frozen(linux,'include/linux/uuid.h')
+    if any(not re.search(r'\b'+name+r'\b',uuid_header) for name in UUID_NAMES):
+        raise RuntimeError('changed pinned UUID interfaces')
+    names.update(UUID_NAMES)
     # This spelling is also a GCC attribute property inside its own definition.
     # It is not a native collision and must retain its compiler spelling.
     names.discard('__alloc_size__')
@@ -62,6 +83,7 @@ def integrate(linux,tree,manifest,api,out):
     version=report.get('compiler_math_namespace',{}).get('tokenizer_version',1)
     if version not in (1,2):raise RuntimeError('unknown prior source tokenizer')
     previous_translate=legacy_translate if version==1 else translate
+    prior_includes=report.get('compiler_math_namespace',{}).get('include_contract_version',0)
     selected=json.loads(manifest.read_text())
     if selected['linux_pin']!=PIN or not selected['linux_head_verified']:raise RuntimeError('unverified full source manifest')
     plans=[];seeds=[]
@@ -77,13 +99,15 @@ def integrate(linux,tree,manifest,api,out):
         # Existing source-owned patch 0022 only changes this Linux initializer.
         baseline=translate(old,{'RB_ROOT':'LINUX_RB_ROOT'})
         target=tree/'sys/external/bsd/drm2/dist'/(rel.removeprefix('drivers/gpu/') if rel.startswith('drivers/gpu/') else rel)
-        proof=plan(target,previous_translate(baseline,prior),translate(baseline,mapping),rel,'LINUX_SEED_TRANSLATED_UNREVIEWED')
+        proof=plan(target,previous_translate(adapt_includes(baseline,rel,prior_includes),prior),
+                   translate(adapt_includes(baseline,rel),mapping),rel,'LINUX_SEED_TRANSLATED_UNREVIEWED')
         proof['frozen_sha256']=sha(old.encode());seeds.append(proof)
     for row in report['rows']:
         if row['state'] not in ('IMPORTED_API_UNREVIEWED','IMPORTED_API_TRANSLATED_UNREVIEWED'):continue
-        target=tree/row['path'];old=frozen(linux,row['linux_path']);new=translate(old,mapping)
+        target=tree/row['path'];old=frozen(linux,row['linux_path'])
+        new=translate(adapt_includes(old,row['linux_path']),mapping)
         if sha(target.read_bytes())!=row['sha256']:raise RuntimeError('changed prior API input: '+row['path'])
-        previous=previous_translate(old,prior) if row['state']=='IMPORTED_API_TRANSLATED_UNREVIEWED' else old
+        previous=previous_translate(adapt_includes(old,row['linux_path'],prior_includes),prior) if row['state']=='IMPORTED_API_TRANSLATED_UNREVIEWED' else old
         proof=plan(target,previous,new,row['linux_path'],'IMPORTED_API_TRANSLATED_UNREVIEWED')
         if proof['changed']:
             row['frozen_sha256']=sha(old.encode());row['sha256']=proof['sha256'];row['state']=proof['state']
@@ -93,7 +117,8 @@ def integrate(linux,tree,manifest,api,out):
         temp=path.with_name(path.name+'.compiler-math.tmp')
         if temp.exists():raise RuntimeError('preserve interrupted source write '+str(temp))
         temp.write_bytes(data);temp.replace(path)
-    report['compiler_math_namespace']={'tokenizer_version':2,'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
+    report['compiler_math_namespace']={'tokenizer_version':2,'include_contract_version':INCLUDE_CONTRACT_VERSION,
+        'include_contracts':UUID_INCLUDE_CONTRACTS,'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
         'acceptance':'OPEN; token bindings preserve algorithms but do not prove all OS/ABI/runtime semantics'}
     out.write_text(json.dumps(report,indent=2)+'\n')
     return len(plans),sum(row['changed'] for row in seeds)
