@@ -2,6 +2,17 @@
 
 Status: IN_PROGRESS
 
+Latest HP checkpoint (2026-10-06): patch0037 adds explicit sleepable native
+DRM ioctl entry references while preserving per-LWP identity until actual
+exit. All38 pinned source/C scripts pass on HP with exact0037/0035/0032
+source-chain verification. Complete actual task/native-shim normal+UBSan models pass13 scenarios/
+383 checks and two compiled semantic controls. Task/module compile; all10
+actual native kernel/runtime/provider objects compile and link together.
+The entire modern-header DRM file adapter fails with42 compiler errors
+(29 distinct diagnostics). File/inode/ioctl, poll/event and UVM/mmap bridges,
+other workqueue/DRM entries and code-owner rundown remain OPEN. No full
+kernel/KMS/WLAN acceptance. See [the exact checkpoint](DRM_TASK_ENTRY_NETBSD_20261006.md).
+
 2026-10-05 verified partial checkpoint: all 18 pinned source/C regressions
 passed on HP, including frozen/real-overlay composition, and eleven affected
 NetBSD backport objects compiled with actual kernel headers and -Werror.

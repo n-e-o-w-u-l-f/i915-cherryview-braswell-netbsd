@@ -3,16 +3,18 @@
 from pathlib import Path
 import hashlib,json,os,platform,resource,shutil,socket,subprocess,sys,tempfile,time
 ROOT=Path(__file__).resolve().parents[1];WORK=Path('/root/hp-driver-port-20261005')
+sys.path.insert(0, str(ROOT/'tools'))
+from verify_linux_task_entry_chain import verify_stage
 assert platform.system()=='NetBSD' and socket.gethostname().startswith('hp-tpnw121')
 resource.setrlimit(resource.RLIMIT_CORE,(0,0))
 assets=ROOT/'compat/native-fatal';tree=WORK/'netbsd-full-linux';runtime=tree/'sys/external/bsd/drm2'
 contract=json.loads((assets/'expected-source.json').read_text())
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 out=WORK/('i915-fatal-proof-'+str(time.time_ns()));out.mkdir()
-for rel,row in contract['files'].items():assert sha(tree/rel)==row['after'],rel
 for name,digest in contract['model_sha256'].items():assert sha(assets/name)==digest,name
 with tempfile.TemporaryDirectory(prefix='hp-native-fatal-model-',dir=WORK) as name:
  temp=Path(name);patch=temp/'fatal.patch'
+ baseline,source_chain=verify_stage(tree,'/root/netbsd-src-ref',temp)
  subprocess.run([sys.executable,str(ROOT/'tools/generate_linux_fatal_wait_patch.py'),'--netbsd-tree','/root/netbsd-src-ref','--out',str(patch)],check=True)
  assert patch.read_bytes()==(ROOT/'patches/0035-netbsd-linux-fatal-wait.patch').read_bytes()
  task=temp/'task';(task/'include/linux').mkdir(parents=True)
@@ -36,6 +38,6 @@ with tempfile.TemporaryDirectory(prefix='hp-native-fatal-model-',dir=WORK) as na
 build=WORK/('i915-fatal-native-build-'+str(time.time_ns()))
 subprocess.run([sys.executable,str(ROOT/'tools/build_hp_fatal_wait.py'),'--output',str(build)],check=True)
 native=json.loads((build/'status.json').read_text());assert native['state']=='PASSED'
-proof={'state':'PASSED','actual_source_contract':contract,'model':model,'native':native,'native_build_directory':str(build),'acceptance':'OPEN: actual native CV/sleepq/signal-post/group-exit/ptrace execution, cold/panic contexts, full selected410/kernel/lifecycle/KMS; new core kernel is a prerequisite, not supported by running F77'}
+proof={'state':'PASSED','actual_source_contract':source_chain,'model':model,'native':native,'native_build_directory':str(build),'acceptance':'OPEN: actual native CV/sleepq/signal-post/group-exit/ptrace execution, cold/panic contexts, full selected410/kernel/lifecycle/KMS; new core kernel is a prerequisite, not supported by running F77'}
 (out/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
 print('ACTUAL_SHARED_FATAL_WAIT_SOURCE_MODEL_AND_NATIVE_BUILD_PASS',out)

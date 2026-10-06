@@ -1,0 +1,23 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "required_prior_patches": [
+    "0032",
+    "0035"
+  ],
+  "files": {
+    "sys/external/bsd/drm2/linux/linux_task.c": {
+      "before_sha256": "caf0a9dc0c236006a85fc5e4390dd0a496a1f0fc9349ea15195e45a02c047f56",
+      "after_sha256": "375113319b162867a34263bb8fa642f5e4e1d09a71d9329e9d82e6ed5a9b8a1c"
+    },
+    "sys/external/bsd/drm2/include/linux/task_netbsd.h": {
+      "before_sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+      "after_sha256": "e6aca23639d618eb2f49b808c856ac55b0b0d9954406964b18e63f5d4cd5df0b"
+    },
+    "sys/external/bsd/drm2/drm/drm_cdevsw.c": {
+      "before_sha256": "b8e5b835571bc6e9b31a347674c9eae37e26e76afa9966a046cba537660decd7",
+      "after_sha256": "518ca53be07cad7fdecda50b1733e0bd2606b8973ef32fa9d08b71c2700dfc3b"
+    }
+  },
+  "patch_sha256": "611798f2b368d6ab4abe5e4d7fd397b894108557a8876a8df9885a404b450937",
+  "scope": "Native DRM ioctl override/fallback entry and reference balance; stable per-LWP identity. Other file/workqueue/code-owner entries and MM/PID/kernel runtime remain OPEN."
+}

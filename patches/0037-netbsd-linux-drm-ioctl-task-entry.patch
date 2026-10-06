@@ -1,0 +1,99 @@
+--- a/sys/external/bsd/drm2/linux/linux_task.c
++++ b/sys/external/bsd/drm2/linux/linux_task.c
+@@ -246,6 +246,54 @@
+     KASSERTMSG(task != NULL,
+         "Linux task was not attached at the sleepable native entry boundary");
+     return task;
++}
++
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Sleepable native driver entry; one caller reference per accepted call.
++ * LWP identity remains stable until its actual native exit. No per-call
++ * synthetic TASK_DEAD or TLS removal may replace that lifetime.
++ */
++int
++linux_task_entry_enter(struct task_struct **handle)
++{
++    struct task_struct *task;
++
++    ASSERT_SLEEPABLE();
++    if (handle == NULL || *handle != NULL)
++        return EINVAL;
++    if (!linux_task_reserve())
++        return EBUSY;
++    KASSERT(task_key != (specificdata_key_t)-1);
++    task = lwp_getspecific(task_key);
++    if (task != NULL) {
++        /* Reservation keeps the key alive through lookup and reference. */
++        get_task_struct(task);
++        linux_task_unreserve();
++    } else {
++        task = linux_task_alloc_reserved();
++        if (task == NULL)
++            return ENOMEM;
++        linux_task_attach_current(task);
++        /* Keep allocation's initial reference as this entry's handle;
++         * the separately added LWP reference outlives the driver call.
++         */
++    }
++    *handle = task;
++    return 0;
++}
++
++void
++linux_task_entry_leave(struct task_struct **handle)
++{
++    struct task_struct *task;
++
++    ASSERT_SLEEPABLE();
++    KASSERT(handle != NULL && *handle != NULL);
++    task = *handle;
++    KASSERT(task == lwp_getspecific(task_key));
++    KASSERT(task->lt_lwp == curlwp && !task->lt_exited);
++    *handle = NULL;
++    put_task_struct(task);
+ }
+ 
+ void
+--- a/sys/external/bsd/drm2/include/linux/task_netbsd.h
++++ b/sys/external/bsd/drm2/include/linux/task_netbsd.h
+@@ -35,6 +35,8 @@
+ void linux_task_attach_current(struct task_struct *);
+ struct task_struct *linux_task_enter_current(void);
+ struct task_struct *linux_current_task(void);
++int linux_task_entry_enter(struct task_struct **);
++void linux_task_entry_leave(struct task_struct **);
+ void linux_get_task_struct(struct task_struct *);
+ void linux_put_task_struct(struct task_struct *);
+ struct lwp *linux_task_lwp(struct task_struct *);
+--- a/sys/external/bsd/drm2/drm/drm_cdevsw.c
++++ b/sys/external/bsd/drm2/drm/drm_cdevsw.c
+@@ -54,6 +54,7 @@
+ #include <uvm/uvm_extern.h>
+ 
+ #include <linux/err.h>
++#include <linux/sched.h>
+ 
+ #include <linux/pm.h>
+ 
+@@ -385,12 +386,20 @@
+ {
+ 	struct drm_file *file = fp->f_data;
+ 	struct drm_driver *driver = file->minor->dev->driver;
++	struct task_struct *task = NULL;
+ 	int error;
+ 
++	/* This native file boundary is sleepable, before driver queue locks.
++	 * Allocation/admission failure must not call either driver path.
++	 */
++	error = linux_task_entry_enter(&task);
++	if (error != 0)
++		return error;
+ 	if (driver->ioctl_override)
+ 		error = driver->ioctl_override(fp, cmd, data);
+ 	else
+ 		error = drm_ioctl(fp, cmd, data);
++	linux_task_entry_leave(&task);
+ 	if (error == ERESTARTSYS)
+ 		error = ERESTART;
+ 
