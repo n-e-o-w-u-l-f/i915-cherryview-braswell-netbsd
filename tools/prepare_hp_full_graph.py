@@ -23,7 +23,8 @@ import tempfile
 from generate_netbsd_i915_filelist import CONFIG, LINUX_PIN
 from materialize_linux_i915 import NETBSD_PIN
 
-PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
+PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_CC_HAS_INT128="y",
+    CONFIG_ARCH_SUPPORTS_INT128="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
     CONFIG_DRM_CLIENT="y", CONFIG_DRM_CLIENT_SELECTION="y",
     CONFIG_DRM_KMS_HELPER="y", CONFIG_DRM_DISPLAY_HELPER="y",
     CONFIG_DRM_DISPLAY_DP_HELPER="y", CONFIG_DRM_DISPLAY_DSC_HELPER="y",
@@ -149,7 +150,8 @@ def main():
                       "0023-netbsd-linux-native-word-size.patch",
                       "0024-netbsd-linux-raw-spinlock.patch",
                       "0025-netbsd-linux-instruction-pointer.patch",
-                      "0026-netbsd-linux-compiler-math.patch"):
+                      "0026-netbsd-linux-compiler-math.patch",
+                      "0027-netbsd-linux-math64.patch"):
             run(["git", "-C", str(tree), "apply", "--check", str(owner / "patches" / patch)])
             run(["git", "-C", str(tree), "apply", str(owner / "patches" / patch)])
         # Source paths are translated explicitly, preserving the reference tree

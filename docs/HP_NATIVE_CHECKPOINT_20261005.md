@@ -2,6 +2,41 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Full-width arithmetic implementations
+
+Patch 0027 replaces the incorrect native math64 signatures and truncating
+remainders/quotients with the complete pinned math64 interface. The actual HP
+compiler supplies 128-bit scalars; their pinned UAPI alignment and Kconfig
+prerequisites are explicit. The native most-significant-bit adapter preserves
+Linux's zero-based nonzero-word contract through NetBSD fls64.
+
+Pinned generic division/multiply-add/divide, integer-square-root and integer
+power implementation units are selected in the real native graph. All three
+compile with actual NetBSD kernel headers and -Werror, and the header ABI probe
+passes. They introduce no compiler 128-bit division-runtime dependencies.
+Native tree and modern DRM buddy objects also pass. These are five added
+native algorithm units plus one of the 410 selected modern driver units.
+
+All 28 source/C regression scripts passed after the final changes. Arithmetic
+oracles cover large 128-bit intermediate products, all valid shifts, signed and
+unsigned quotient/remainder types, saturation, more than 20K random wide cases,
+square roots and powers. A separate native executable produces SIGFPE for the
+pinned zero-divisor contract. Scalar/model tests remain distinct from actual
+kernel objects and physical driver acceptance. Earlier header and missing-bit
+primitive failures are preserved alongside the final native proofs.
+
+See [native evidence](evidence/HP_NATIVE_MATH64_20261006.json). Every selected
+i915/DRM/display/TTM unit and full OS/API/lifecycle/runtime requirement remains
+in scope. Completion/wait-queue, remaining native header/type/GUID and actual
+VM/folio/UVM adaptation are still open. No full kernel link, installation,
+reboot or physical KMS acceptance occurred; F77 and recovery hashes are unchanged.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Compiler attributes and integer math
 
 Patch 0026 binds the pinned Linux compiler attributes and math macros to
