@@ -1,0 +1,43 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "files": {
+    "sys/kern/kern_condvar.c": {
+      "before": "3a3d0a71cae312ce7edb0505887c1eb006ad43720ef19af972d69cebf35639ff",
+      "after": "bc5ef1d62b2f05aecf7f0f7108bc4fb9c1c0ef409d648999de9fdc301f457508"
+    },
+    "sys/kern/kern_sleepq.c": {
+      "before": "e1626bcb86c97b32928efcfd3e99ca99fa5a2378b185fd59aaf8e17bca6e1205",
+      "after": "ebb8a4b1c8fb9787eb410d16caea266aab1cfc09b50615ed28471a6e87b97c87"
+    },
+    "sys/kern/kern_sig.c": {
+      "before": "6691593c38b7529f60177e0ffa53ff078dc810c292016d649b92a65f249a0883",
+      "after": "2d4273a1a777f3b92c5474522f99fd48b7e2f844a55ca22ae5283b30d5abc443"
+    },
+    "sys/sys/condvar.h": {
+      "before": "1add5c0edb7b54c7a2fa1ada5581653ee5c356f687fa08450483a7ac67bc19f5",
+      "after": "22e8d40856af3528e9de65542ad36ad1b4f82f320de093fe40a8c3bd0584f8d4"
+    },
+    "sys/sys/sleepq.h": {
+      "before": "1f32e550aa093dee53f86afacaa2ea49345ead3f94a1c3d2873f1d93e6bae669",
+      "after": "10055f811b0f3e256dc86ab62f92f8e3f373efc0b8c538ab7f9e64228e9ec817"
+    },
+    "sys/sys/syncobj.h": {
+      "before": "4b6566cc27b09919c9abb9c12b0fa282c8ac8051d5cc6118f875c49f8bd5ba2c",
+      "after": "aa644a99c9aaa0066ac9bddd6a6d6d7b16f1e5dfda2171d06f72f2cd00b7160c"
+    },
+    "sys/external/bsd/drm2/linux/linux_task.c": {
+      "before": "d434fcaa9dea2e01d52b44605c3b2eedf9045550b1ff9c572c19e85eb0600ee4",
+      "after": "caf0a9dc0c236006a85fc5e4390dd0a496a1f0fc9349ea15195e45a02c047f56"
+    }
+  },
+  "patch_sha256": "46e9ff27adac78a1a4ef395c51fd85ada3daab184f005d5fdb0ef84ef81d1a7f",
+  "asset_patch_sha256": {
+    "native-backend.patch": "b0589cf3d28783ac68f0563c5a66b4511f588a7aa9c446554d47f3ce79ca8efa",
+    "task-runtime.patch": "68998c99f903ab025e6db46b88d433548a1f90f724d9042dabd6e2f0910b493a"
+  },
+  "model_sha256": {
+    "test_wait.c": "8ca5cb4e0cbc426c44cadefa9f65fa21680a5724b40c297f5d42079081a322ca",
+    "test_model.h": "2464c85c900c8e252351cbbbb6e1f0f6ac8c25c0bb5ad2ece8803b600f3b0a8f",
+    "run_model.py": "ba6a2e21404e23e1fa9aee05e40bb9cf09040277bb5b5fc8e3c65addd42a06fb"
+  }
+}

@@ -2,6 +2,45 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
 
+## Actual native fatal wait backend
+
+Patch0035 adds real NetBSD fatal-only CV entry points, a native SOBJ_SIGKILL
+sleepq policy, and four actual signal-post/stop wake filters. Ordinary signals
+remain pending; native SIGKILL and exit/core predicates feed TASK_WAKEKILL.
+The shared Linux scheduler chooses the actual fatal CV functions and preserves
+the existing full-width timeout budget. No fake fatal CV or signal-mask shim is
+used in production. Native LWP/task layouts retain their existing ownership.
+
+All 36 source/C scripts pass on HP. Ten actual shared native C objects compile
+with -Werror and link ld-r: three kernel bodies, five runtime/module bodies and
+two immutable native legacy bodies that provide four existing module imports.
+The first eight-source proof had compiled and linked but its broad new-symbol
+classifier also rejected those existing imports. Compiling their real provider
+objects repairs the evidence without inventing stubs or accepting unresolved
+new shared APIs. Full legacy bit/lock/IO/timeout/tasklet semantics remain OPEN.
+
+The current-source model executes real Linux runtime and native policy bodies
+through explicit pthread/CV primitives, checks compiler source dependencies,
+and covers ordinary/STOP/CONT filtering, SIGKILL/exit/core, selected variable
+killable cleanup, wide timeouts, condition/fatal races and existing lifetime
+races. It does not execute the actual native CV/sleepq/signal-post machinery.
+The previous0032 model is explicitly reconstructed by reversing the actual
+0035 source chain and checking every original hash; its prior claims remain
+bounded to that baseline. New0035 tests execute the actual current source.
+
+See [HP fatal wait evidence](evidence/HP_NATIVE_FATAL_WAIT_20261006.json).
+A module using these new APIs requires the modified NetBSD core kernel, which
+the running F77 recovery kernel does not supply. Full selected410/kernel link,
+native group/ptrace/scheduler execution, entry and code-owner rundown, MM/folio/
+UVM, enabled providers and physical KMS remain OPEN. No installation/reboot;
+boot/running/F77 recovery hashes remain unchanged.
+
+## Earlier checkpoints
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
+
 ## PWM consumer and direct header dependencies
 
 Patch0034 implements the true frozen CONFIG_PWM-disabled consumer types, state

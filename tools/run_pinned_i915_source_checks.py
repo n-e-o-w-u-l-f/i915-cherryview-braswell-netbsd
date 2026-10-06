@@ -87,6 +87,7 @@ def main() -> None:
     invoke("test_linux_task_wait_worker.py")
     invoke("test_linux_uuid.py")
     invoke("test_linux_pwm.py")
+    invoke("test_linux_fatal_wait.py")
     invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),

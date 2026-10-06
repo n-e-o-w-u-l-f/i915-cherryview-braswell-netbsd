@@ -1,0 +1,263 @@
+--- a/sys/kern/kern_condvar.c
++++ b/sys/kern/kern_condvar.c
+@@ -82,6 +82,16 @@
+ 	.sobj_owner	= syncobj_noowner,
+ };
+ 
++static syncobj_t cv_sigkill_syncobj = {
++	.sobj_name	= "cv_sigkill",
++	.sobj_flag	= SOBJ_SLEEPQ_SORTED | SOBJ_SIGKILL,
++	.sobj_boostpri  = PRI_KERNEL,
++	.sobj_unsleep	= cv_unsleep,
++	.sobj_changepri	= sleepq_changepri,
++	.sobj_lendpri	= sleepq_lendpri,
++	.sobj_owner	= syncobj_noowner,
++};
++
+ static const char deadcv[] = "deadcv";
+ 
+ /*
+@@ -122,7 +132,8 @@
+  *	condition variable, and increment the number of waiters.
+  */
+ static inline int
+-cv_enter(kcondvar_t *cv, kmutex_t *mtx, lwp_t *l, bool catch_p)
++cv_enter(kcondvar_t *cv, kmutex_t *mtx, lwp_t *l, bool catch_p,
++    syncobj_t *sobj)
+ {
+ 	sleepq_t *sq;
+ 	kmutex_t *mp;
+@@ -135,7 +146,7 @@
+ 	mp = sleepq_hashlock(cv);
+ 	sq = CV_SLEEPQ(cv);
+ 	nlocks = sleepq_enter(sq, l, mp);
+-	sleepq_enqueue(sq, cv, CV_WMESG(cv), &cv_syncobj, catch_p);
++	sleepq_enqueue(sq, cv, CV_WMESG(cv), sobj, catch_p);
+ 	mutex_exit(mtx);
+ 	KASSERT(cv_has_waiters(cv));
+ 	return nlocks;
+@@ -177,7 +188,7 @@
+ 
+ 	KASSERT(mutex_owned(mtx));
+ 
+-	nlocks = cv_enter(cv, mtx, l, false);
++	nlocks = cv_enter(cv, mtx, l, false, &cv_syncobj);
+ 	(void)sleepq_block(0, false, &cv_syncobj, nlocks);
+ 	mutex_enter(mtx);
+ }
+@@ -198,13 +209,44 @@
+ 
+ 	KASSERT(mutex_owned(mtx));
+ 
+-	nlocks = cv_enter(cv, mtx, l, true);
++	nlocks = cv_enter(cv, mtx, l, true, &cv_syncobj);
+ 	error = sleepq_block(0, true, &cv_syncobj, nlocks);
+ 	mutex_enter(mtx);
+ 	return error;
+ }
+ 
+ /*
++ * Native fatal-only CV waits. The signal policy is in the real sync object
++ * published under the sleepq/LWP lock before releasing the caller interlock.
++ * Ordinary signals stay pending. Native process exit/core still aborts.
++ */
++int
++cv_wait_sig_fatal(kcondvar_t *cv, kmutex_t *mtx)
++{
++    lwp_t *l = curlwp;
++    int error, nlocks;
++
++    KASSERT(mutex_owned(mtx));
++    nlocks = cv_enter(cv, mtx, l, true, &cv_sigkill_syncobj);
++    error = sleepq_block(0, true, &cv_sigkill_syncobj, nlocks);
++    mutex_enter(mtx);
++    return error;
++}
++
++int
++cv_timedwait_sig_fatal(kcondvar_t *cv, kmutex_t *mtx, int timo)
++{
++    lwp_t *l = curlwp;
++    int error, nlocks;
++
++    KASSERT(mutex_owned(mtx));
++    nlocks = cv_enter(cv, mtx, l, true, &cv_sigkill_syncobj);
++    error = sleepq_block(timo, true, &cv_sigkill_syncobj, nlocks);
++    mutex_enter(mtx);
++    return error;
++}
++
++/*
+  * cv_timedwait:
+  *
+  *	Wait on a condition variable until awoken or the specified timeout
+@@ -221,7 +263,7 @@
+ 
+ 	KASSERT(mutex_owned(mtx));
+ 
+-	nlocks = cv_enter(cv, mtx, l, false);
++	nlocks = cv_enter(cv, mtx, l, false, &cv_syncobj);
+ 	error = sleepq_block(timo, false, &cv_syncobj, nlocks);
+ 	mutex_enter(mtx);
+ 	return error;
+@@ -246,7 +288,7 @@
+ 
+ 	KASSERT(mutex_owned(mtx));
+ 
+-	nlocks = cv_enter(cv, mtx, l, true);
++	nlocks = cv_enter(cv, mtx, l, true, &cv_syncobj);
+ 	error = sleepq_block(timo, true, &cv_syncobj, nlocks);
+ 	mutex_enter(mtx);
+ 	return error;
+--- a/sys/kern/kern_sleepq.c
++++ b/sys/kern/kern_sleepq.c
+@@ -332,6 +332,36 @@
+ }
+ 
+ /*
++ * Native signal-post eligibility, with the LWP/queue locked. A fatal CV
++ * stays catchable for native exit/core handling, but ordinary posted signals
++ * neither dequeue it nor choose it as a signal recipient.
++ */
++bool
++sleepq_sigwake_allowed(lwp_t *l, int sig)
++{
++    KASSERT(lwp_locked(l, NULL));
++    if ((l->l_flag & LW_SINTR) == 0)
++        return false;
++    return (l->l_syncobj->sobj_flag & SOBJ_SIGKILL) == 0 || sig == SIGKILL;
++}
++
++/* Current-LWP query usable before native enqueue, including under a Linux
++ * queue interlock. sigispending's current+LW_PENDSIG contract permits this
++ * lockless query; native group exit/core flags are explicit fatal events.
++ */
++bool
++sleepq_fatal_pending(lwp_t *l)
++{
++    unsigned int flag;
++
++    KASSERT(l == curlwp);
++    flag = atomic_load_relaxed(&l->l_flag);
++    if ((flag & (LW_WEXIT | LW_WCORE)) != 0)
++        return true;
++    return (flag & LW_PENDSIG) != 0 && sigispending(l, SIGKILL) != 0;
++}
++
++/*
+  * sleepq_block:
+  *
+  *	After any intermediate step such as releasing an interlock, switch.
+@@ -348,6 +378,7 @@
+ 	struct proc *p;
+ 	lwp_t *l = curlwp;
+ 	bool early = false;
++	const bool fatal_p = (syncobj->sobj_flag & SOBJ_SIGKILL) != 0;
+ 
+ 	ktrcsw(1, 0, syncobj);
+ 
+@@ -365,7 +396,8 @@
+ 			l->l_flag &= ~LW_CANCELLED;
+ 			error = EINTR;
+ 			early = true;
+-		} else if ((l->l_flag & LW_PENDSIG) != 0 && sigispending(l, 0))
++		} else if ((l->l_flag & LW_PENDSIG) != 0 &&
++		    sigispending(l, fatal_p ? SIGKILL : 0))
+ 			early = true;
+ 		l->l_flag |= LW_CATCHINTR;
+ 	} else
+@@ -432,7 +464,12 @@
+ 			 */
+ 			p = l->l_proc;
+ 			mutex_enter(p->p_lock);
+-			if (((sig = sigispending(l, 0)) != 0 &&
++			if (fatal_p) {
++				/* Do not consume, stop for, or dispatch nonfatal signals. */
++				sig = sigispending(l, SIGKILL);
++				if (sig != 0)
++					error = sleepq_sigtoerror(l, sig);
++			} else if (((sig = sigispending(l, 0)) != 0 &&
+ 			    (sigprop[sig] & SA_STOP) == 0) ||
+ 			    (sig = issignal(l)) != 0)
+ 				error = sleepq_sigtoerror(l, sig);
+--- a/sys/kern/kern_sig.c
++++ b/sys/kern/kern_sig.c
+@@ -85,6 +85,7 @@
+ #include <sys/signalvar.h>
+ #include <sys/proc.h>
+ #include <sys/ptrace.h>
++#include <sys/sleepq.h>
+ #include <sys/systm.h>
+ #include <sys/wait.h>
+ #include <sys/ktrace.h>
+@@ -1155,7 +1156,7 @@
+ 		break;
+ 
+ 	case LSSLEEP:
+-		if ((l->l_flag & LW_SINTR) != 0) {
++		if (sleepq_sigwake_allowed(l, sig)) {
+ 			/* setrunnable() will release the lock. */
+ 			setrunnable(l);
+ 			return 1;
+@@ -1188,7 +1189,7 @@
+ 			/* setrunnable() will release the lock. */
+ 			setrunnable(l);
+ 			return 1;
+-		} else if (l->l_wchan == NULL || (l->l_flag & LW_SINTR) != 0) {
++		} else if (l->l_wchan == NULL || sleepq_sigwake_allowed(l, sig)) {
+ 			/* setrunnable() will release the lock. */
+ 			setrunnable(l);
+ 			return 1;
+@@ -1526,7 +1527,7 @@
+ 
+ 	LIST_FOREACH(l, &p->p_lwps, l_sibling) {
+ 		lwp_lock(l);
+-		if (l->l_stat == LSSLEEP && (l->l_flag & LW_SINTR) != 0) {
++		if (l->l_stat == LSSLEEP && sleepq_sigwake_allowed(l, SIGSTOP)) {
+ 			l->l_stat = LSSTOP;
+ 			p->p_nrlwps--;
+ 		}
+@@ -2516,7 +2517,7 @@
+ 			setrunnable(l);
+ 			continue;
+ 		}
+-		if (sig && (l->l_flag & LW_SINTR) != 0) {
++		if (sig && sleepq_sigwake_allowed(l, sig)) {
+ 			setrunnable(l);
+ 			sig = 0;
+ 		} else {
+--- a/sys/sys/condvar.h
++++ b/sys/sys/condvar.h
+@@ -47,8 +47,10 @@
+ 
+ void	cv_wait(kcondvar_t *, struct kmutex *);
+ int	cv_wait_sig(kcondvar_t *, struct kmutex *);
++int	cv_wait_sig_fatal(kcondvar_t *, struct kmutex *);
+ int	cv_timedwait(kcondvar_t *, struct kmutex *, int);
+ int	cv_timedwait_sig(kcondvar_t *, struct kmutex *, int);
++int	cv_timedwait_sig_fatal(kcondvar_t *, struct kmutex *, int);
+ int	cv_timedwaitbt(kcondvar_t *, struct kmutex *, struct bintime *,
+ 	    const struct bintime *);
+ int	cv_timedwaitbt_sig(kcondvar_t *, struct kmutex *, struct bintime *,
+--- a/sys/sys/sleepq.h
++++ b/sys/sys/sleepq.h
+@@ -65,6 +65,8 @@
+ void	sleepq_changepri(lwp_t *, pri_t);
+ void	sleepq_lendpri(lwp_t *, pri_t);
+ int	sleepq_block(int, bool, const struct syncobj *, int);
++bool	sleepq_sigwake_allowed(lwp_t *, int);
++bool	sleepq_fatal_pending(lwp_t *);
+ 
+ #ifdef _KERNEL
+ 
+--- a/sys/sys/syncobj.h
++++ b/sys/sys/syncobj.h
+@@ -56,6 +56,8 @@
+ #define	SOBJ_SLEEPQ_SORTED	0x01
+ #define	SOBJ_SLEEPQ_LIFO	0x04
+ #define	SOBJ_SLEEPQ_NULL	0x08
++/* Catch SIGKILL only; native process exit/core aborts still apply. */
++#define	SOBJ_SIGKILL		0x10
+ 
+ extern syncobj_t	callout_syncobj;
+ extern syncobj_t	cv_syncobj;

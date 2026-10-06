@@ -1,0 +1,79 @@
+--- a/sys/external/bsd/drm2/linux/linux_task.c
++++ b/sys/external/bsd/drm2/linux/linux_task.c
+@@ -366,29 +366,26 @@
+ linux_signal_pending(struct task_struct *task)
+ {
+     KASSERT(task == current);
+-    return (atomic_load_relaxed(&curlwp->l_flag) & LW_PENDSIG) != 0 &&
+-        sigispending(curlwp, 0) != 0;
++    unsigned int flag = atomic_load_relaxed(&curlwp->l_flag);
++    return (flag & (LW_WEXIT | LW_WCORE)) != 0 ||
++        ((flag & LW_PENDSIG) != 0 && sigispending(curlwp, 0) != 0);
+ }
+ 
+ bool
+ linux_fatal_signal_pending(struct task_struct *task)
+ {
+     KASSERT(task == current);
+-    /* Mirrors Linux's SIGKILL test, but native process-exit/group-fatal
+-     * translation has not yet been proved. Killable sleep is rejected.
+-     */
+-    return (atomic_load_relaxed(&curlwp->l_flag) & LW_PENDSIG) != 0 &&
+-        sigispending(curlwp, SIGKILL) != 0;
++    return sleepq_fatal_pending(curlwp);
+ }
+ 
+ bool
+ linux_signal_pending_state(unsigned int state, struct task_struct *task)
+ {
+-    if ((state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)) == 0)
+-        return false;
+-    if (!signal_pending(task))
+-        return false;
+-    return (state & TASK_INTERRUPTIBLE) != 0 || fatal_signal_pending(task);
++    if ((state & TASK_INTERRUPTIBLE) != 0)
++        return signal_pending(task);
++    if ((state & TASK_WAKEKILL) != 0)
++        return fatal_signal_pending(task);
++    return false;
+ }
+ 
+ static unsigned int
+@@ -423,8 +420,6 @@
+         return timeout - MIN(timeout,
+             (long)((unsigned int)getticks() - start));
+     }
+-    KASSERTMSG((state & TASK_WAKEKILL) == 0,
+-        "fatal-only native Linux task sleep backend remains unimplemented");
+     KASSERTMSG(!sleepq_dontsleep(curlwp),
+         "native Linux task cold/panic sleep is not accepted");
+ 
+@@ -440,6 +435,9 @@
+         if (timeout == MAX_SCHEDULE_TIMEOUT) {
+             if ((state & TASK_INTERRUPTIBLE) != 0)
+                 error = cv_wait_sig(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock);
++            else if ((state & TASK_WAKEKILL) != 0)
++                error = cv_wait_sig_fatal(&task->lt_sleep_cv,
+                     &task->lt_sleep_lock.sl_lock);
+             else {
+                 cv_wait(&task->lt_sleep_cv,
+@@ -450,10 +448,14 @@
+             /* Native CV timer is signed int; keep the full long budget. */
+             slice = MIN(remaining, (long)INT_MAX / 2);
+             start = getticks();
+-            error = (state & TASK_INTERRUPTIBLE) != 0 ?
+-                cv_timedwait_sig(&task->lt_sleep_cv,
+-                    &task->lt_sleep_lock.sl_lock, (int)slice) :
+-                cv_timedwait(&task->lt_sleep_cv,
++            if ((state & TASK_INTERRUPTIBLE) != 0)
++                error = cv_timedwait_sig(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock, (int)slice);
++            else if ((state & TASK_WAKEKILL) != 0)
++                error = cv_timedwait_sig_fatal(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock, (int)slice);
++            else
++                error = cv_timedwait(&task->lt_sleep_cv,
+                     &task->lt_sleep_lock.sl_lock, (int)slice);
+             elapsed = (unsigned int)getticks() - start;
+             if (error == EWOULDBLOCK && elapsed < (unsigned long)slice)

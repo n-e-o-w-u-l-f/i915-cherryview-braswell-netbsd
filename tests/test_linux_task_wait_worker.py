@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HP-only execution of staged native C through explicit primitive models.
+"""HP-only runtime snapshot checks through explicit primitive models.
 
 The pthread adapters exercise production functions, not native NetBSD kernel
 execution. A separate native object/link proof is necessary for integration.
@@ -40,7 +40,26 @@ with tempfile.TemporaryDirectory(prefix='hp-native-runtime-', dir=WORK) as name:
         include.mkdir(parents=True, exist_ok=True)
         for source in names:
             shutil.copyfile(STAGE / 'include/linux' / source, include / source)
-    # Check actual staged input bytes, not a second implementation in fixtures.
+    # Verify the immutable0032 baseline against the actual source chain.
+    # The separate fatal test executes the current0035 source and kernel policy.
+    task_path=temp/'task/linux_task.c'
+    import hashlib,json
+    expected0032='d434fcaa9dea2e01d52b44605c3b2eedf9045550b1ff9c572c19e85eb0600ee4'
+    if hashlib.sha256(task_path.read_bytes()).hexdigest()!=expected0032:
+        contract=json.loads((ROOT/'compat/native-fatal/expected-source.json').read_text())
+        reverse=temp/'actual-source-chain'
+        reverse.mkdir()
+        for rel,row in contract['files'].items():
+            actual=WORK/'netbsd-full-linux'/rel
+            assert hashlib.sha256(actual.read_bytes()).hexdigest()==row['after'],rel
+            target=reverse/rel;target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(actual,target)
+        subprocess.run(['git','-C',str(reverse),'apply','--reverse',
+                        str(ROOT/'patches/0035-netbsd-linux-fatal-wait.patch')],check=True)
+        for rel,row in contract['files'].items():
+            assert hashlib.sha256((reverse/rel).read_bytes()).hexdigest()==row['before'],rel
+        shutil.copyfile(reverse/'sys/external/bsd/drm2/linux/linux_task.c',task_path)
+        print('IMMUTABLE0032_MODEL_SOURCE_VERIFIED_BY_REVERSING_ACTUAL0035_SOURCE_CHAIN')
     import importlib.util
     spec = importlib.util.spec_from_file_location('runtime_generator', ROOT / 'tools/generate_linux_task_wait_worker_patch.py')
     generator = importlib.util.module_from_spec(spec)
