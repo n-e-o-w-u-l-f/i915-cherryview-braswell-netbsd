@@ -1,0 +1,107 @@
+--- /dev/null
++++ b/sys/external/bsd/common/include/linux/size_arithmetic.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++/* Complete size arithmetic bodies from the frozen Linux overflow.h. */
++#ifndef _NETBSD_LINUX_SIZE_ARITHMETIC_H_
++#define _NETBSD_LINUX_SIZE_ARITHMETIC_H_
++#include <linux/compiler.h>
++
++static netbsd_linux_always_inline size_t netbsd_linux_must_check size_mul(size_t factor1, size_t factor2)
++{
++	size_t bytes;
++
++	if (check_mul_overflow(factor1, factor2, &bytes))
++		return SIZE_MAX;
++
++	return bytes;
++}
++
++static netbsd_linux_always_inline size_t netbsd_linux_must_check size_add(size_t addend1, size_t addend2)
++{
++	size_t bytes;
++
++	if (check_add_overflow(addend1, addend2, &bytes))
++		return SIZE_MAX;
++
++	return bytes;
++}
++
++static netbsd_linux_always_inline size_t netbsd_linux_must_check size_sub(size_t minuend, size_t subtrahend)
++{
++	size_t bytes;
++
++	if (minuend == SIZE_MAX || subtrahend == SIZE_MAX ||
++	    check_sub_overflow(minuend, subtrahend, &bytes))
++		return SIZE_MAX;
++
++	return bytes;
++}
++
++#endif
+--- a/sys/external/bsd/common/include/linux/overflow.h
++++ b/sys/external/bsd/common/include/linux/overflow.h
+@@ -40,2 +40,5 @@
+ #define	check_add_overflow(a, b, res)	__builtin_add_overflow(a, b, res)
++#define	check_sub_overflow(a, b, res)	__builtin_sub_overflow(a, b, res)
++
++#include <linux/size_arithmetic.h>
+ 
+--- /dev/null
++++ b/sys/external/bsd/common/include/linux/typed_alloc.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Pinned Linux optional-GFP and typed object allocation macro bodies. */
++#ifndef _NETBSD_LINUX_TYPED_ALLOC_H_
++#define _NETBSD_LINUX_TYPED_ALLOC_H_
++#include <linux/gfp.h>
++#include <linux/overflow.h>
++
++#define __default_gfp(a,b,...) b
++#define default_gfp(...) __default_gfp(,##__VA_ARGS__,GFP_KERNEL)
++
++#define __alloc_objs(KMALLOC, GFP, TYPE, COUNT)				\
++({									\
++	const size_t __obj_size = size_mul(sizeof(TYPE), COUNT);	\
++	(TYPE *)KMALLOC(__obj_size, GFP);				\
++})
++
++#define kmalloc_obj(VAR_OR_TYPE, ...) \
++	__alloc_objs(kmalloc, default_gfp(__VA_ARGS__), typeof(VAR_OR_TYPE), 1)
++
++#define kmalloc_objs(VAR_OR_TYPE, COUNT, ...) \
++	__alloc_objs(kmalloc, default_gfp(__VA_ARGS__), typeof(VAR_OR_TYPE), COUNT)
++
++#define kzalloc_obj(P, ...) \
++	__alloc_objs(kzalloc, default_gfp(__VA_ARGS__), typeof(P), 1)
++
++#define kzalloc_objs(P, COUNT, ...) \
++	__alloc_objs(kzalloc, default_gfp(__VA_ARGS__), typeof(P), COUNT)
++
++#endif
+--- a/sys/external/bsd/common/include/linux/slab.h
++++ b/sys/external/bsd/common/include/linux/slab.h
+@@ -43,2 +43,3 @@
+ #include <linux/rcupdate.h>
++#include <linux/typed_alloc.h>
+ 
+@@ -96,5 +97,7 @@
+ 	struct linux_malloc *lm;
+-	int kmflags = linux_gfp_to_kmem(gfp);
+-
+-	KASSERTMSG(size < SIZE_MAX - sizeof(*lm), "size=%zu", size);
++	int kmflags;
++
++	if (size >= SIZE_MAX - sizeof(*lm))
++		return NULL;
++	kmflags = linux_gfp_to_kmem(gfp);
+ 
+@@ -135,3 +138,7 @@
+ 	struct linux_malloc *olm, *nlm;
+-	int kmflags = linux_gfp_to_kmem(gfp);
++	int kmflags;
++
++	if (size >= SIZE_MAX - sizeof(*nlm))
++		return NULL;
++	kmflags = linux_gfp_to_kmem(gfp);
+ 

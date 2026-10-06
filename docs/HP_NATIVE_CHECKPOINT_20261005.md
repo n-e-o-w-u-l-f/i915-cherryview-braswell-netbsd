@@ -2,6 +2,42 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Typed objects and saturated allocation sizes
+
+Patch 0031 supplies the exact pinned optional-GFP and four kmalloc/kzalloc
+object/array macro bodies above the native allocation backend. Three complete
+pinned size_mul/size_add/size_sub bodies preserve saturation at SIZE_MAX,
+including the sentinel rules for subtraction. Existing native allocator and
+pool/cache ownership remain explicit; this is not full slab/VM/GFP closure.
+
+Native kmalloc and krealloc reject private-allocation-header overflow with
+NULL before any backend allocation or old-memory free. The old kmalloc
+assertion no longer panics on a saturated typed allocation size, and krealloc
+cannot wrap the size and overwrite a tiny new allocation with old bytes.
+An overflow or allocation failure preserves the old allocation and its data.
+
+All 32 source/C scripts pass. The whole production slab and overflow headers
+execute under an explicit allocation/free ledger, covering 20,000 independent
+wide size oracles, return types, optional GFP, one evaluation, zero fill,
+multiplication/header overflow and failed realloc ownership. Pool/RCU/VM
+parsing models are not executed or claimed as OS implementations. An initial
+missing kernel bit-mask macro in the model was recorded and corrected there.
+
+The real native kernel header object and freshly compiled modern buddy object
+pass. Fresh DVO compilation no longer reports the typed kzalloc_obj dependency;
+actual wait/task, completion/GUID include and PWM failures remain OPEN.
+
+See [native typed allocation evidence](evidence/HP_NATIVE_TYPED_ALLOC_20261006.json).
+The full 323 i915/410 modern C graph, native OS/ABI/lifecycle/kernel link and
+physical KMS acceptance remain required. No installation or reboot occurred;
+boot/running/recovery hashes remain unchanged.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Pinned container and assertion contracts
 
 Patch 0030 binds the complete pinned container/type-check and optional-message

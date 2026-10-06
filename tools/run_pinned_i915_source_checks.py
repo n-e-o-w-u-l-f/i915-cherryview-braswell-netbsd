@@ -83,6 +83,7 @@ def main() -> None:
     invoke("test_linux_completion.py")
     invoke("test_linux_typecheck_wordpart.py")
     invoke("test_linux_container.py")
+    invoke("test_linux_typed_alloc.py")
     invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),
