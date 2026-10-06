@@ -1,0 +1,107 @@
+Native kthread worker candidate
+
+Scope: immediate worker APIs used by the actual 410-unit frozen modern graph.
+Linux pin fd179f8a05be3ccae366b9b96e176b51fbe54aab.
+NetBSD pin 03d918f6d0e81fa05b8f1160eca0628ad39988a6.
+All source writes, builds and tests remain isolated; no installation or reboot.
+
+Files to review:
+- linux_kthread.c and include/linux/kthread.h: complete generated native candidates.
+- native-kthread-worker.patch: two-file unified patch against exact native baseline.
+- base/: frozen native inputs, with SHA-256 guards in generate.py.
+- worker.inc / worker_header.inc: immediate-worker implementation/public API source.
+- tests/: production function adapters; prepare.py removes only include dependencies.
+- build_hp.py: HP-only native/userland builds and combined task/wait relocatable link.
+- audit_hp.py: read-only audit of the actual configured 410 modern C units.
+
+Integration sequence, performed only by the root agent:
+1. Review/apply together with the scheduler agent's common task_netbsd.h,
+   linux_task.c, Linux sched header and callback waitqueue backend.
+2. Apply the two-file patch to native sys/external/bsd/drm2 paths. No other
+   existing native kthread file/header users are replaced by placeholders.
+3. Add linux_task.c and linux_wait.c to the native build graph; existing
+   linux_kthread_init/fini now delegate to the one common task runtime.
+4. Attach common task identity at explicit sleepable native Linux entry
+   boundaries and implement module unload rejection/draining based on
+   linux_task_system_busy(). These integration gates remain OPEN.
+5. Preserve source/object/hash provenance and run HP-only checks via build_hp.py.
+   An ld -r partial link is only an interface check; full kernel link remains OPEN.
+
+Lifetime and synchronization:
+- Raw queue lock is IPL_HIGH; native CV interlock is separate IPL_VM.
+- Only worker consumer takes sleep interlock then raw queue lock. IRQ producers
+   schedule an MPSAFE CLOCK softint under raw lock. Notifier only takes sleep
+   interlock; it cannot run through the condition-to-cv_wait handoff unnoticed.
+- Generic task lt_lock protects private lt_kthread backend publication/lifetime.
+   Shared wake only takes raw task -> raw worker and schedules notifiers.
+- Stop/park first publish flags and wake native private/worker CVs, then release
+   native interlock and invoke real linux_wake_up_process for common task CV.
+  Private kt_lock is still held; wake has no reverse kt_lock/sleep acquisition.
+- The worker publishes TASK_INTERRUPTIBLE before checking the native queue
+  predicate, TASK_RUNNING after dequeue/exit, and TASK_PARKED during parkme.
+  State setters run without the worker raw lock, avoiding worker -> task raw
+  inversion. Generic idle-worker wake now reports the sleeping state correctly.
+- Work callbacks execute outside worker locks. Worker never dereferences a work
+   item after invoking it; callbacks may free their own unqueued work.
+- Marker insertion gives snapshot flush ordering. Cancellation count blocks
+   self-requeue until every concurrent canceler completes.
+- Destroy closes queue, unparks, drains accepted immediate work, stops/joins native
+   MUSTJOIN LWP, disestablishes notifier, and frees native CV/locks/worker.
+- Queue/cancel/flush callers retain worker and work lifetime; they must quiesce
+   new calls before freeing the worker, as required by Linux's contract.
+
+Known limits, not stubbed support:
+- Worker creation flags other than 0 return EOPNOTSUPP.
+- Delayed workers, CPU/NUMA affinity and freezer support remain OPEN.
+- Generic modern three-argument kthread_run and other task/PID/mm/IO APIs are
+   outside this worker patch. Legacy five-argument native run remains available.
+- Fatal-only task sleeps, complete task boundary attachment, arbitrary-context
+   last task-reference release and module unload drain remain scheduler gates.
+- Native kernel scheduler execution and HP GPU/KMS/RTL hardware acceptance OPEN.
+
+Proof names on HP:
+proof.json; candidate-sha256.json; worker-call-audit.json;
+native-compile.log; userland-compile.log; userland-test.log;
+common-runtime-relocatable-link.log; worker-task-wait-nm.log;
+linux_kthread.o; worker-task-wait.o;
+drm_vblank_work-native.log; drm_vblank_work-native-command.json.
+
+Final HP candidate native compilation passed with the real kernel compiler's
+-Werror flags. Strict pthread-adapter compilation and all 13 actual-code tests
+passed, including common-CV stop wake, idle wake/state, parked state, callbacks
+running without locks, snapshot flushes, concurrent cancel, self-unmapping and
+60 x 64 queue/cancel stress. The combined native worker/task/wait ld -r link
+passed with no unresolved shared linux_* symbols. This checks interfaces and
+native object production, not execution under the real kernel scheduler.
+RDC PID 656104 contains this final run, superseding the earlier PID 650657.
+The real drm_vblank_work.c probe previously failed on separate mm/device/poll/
+wait-header dependencies, with no missing worker API diagnostics. Refresh that
+probe after their fixes. No installation, reboot or shared-stage edits occurred.
+
+Final source hashes (all local candidates match the HP compiled inputs):
+linux_kthread.c
+  263e1396ba692df5759e624daa1a3f0ada056f877c179954637c3bc57b69d340
+include/linux/kthread.h
+  97c094ab5fbc3688334875500c23d5053186d35e6342d2668ce63659335b8814
+native-kthread-worker.patch
+  105dea1e87fc5b0a1ad84b0624bd5db18385c60d757d629dd8ffb6fbd9e65cbf
+
+Final proof hashes:
+proof.json
+  f46b679980ed87c91803c1cf7594bce5105abf71dfaa615b8fa8906dcdf977db
+worker-call-audit.json
+  02ae2d795daf5e32c422dc58e5929594833af21c58472447355019891f1dc94f
+linux_kthread.o (HP-only native relocatable object)
+  f140083633930fe9d0428b06b17db6b7e134ee16d2e5a813e832fd6ddacbed14
+worker-task-wait.o (HP-only combined relocatable object)
+  ef24ebe56c7b6223d950f8f0839d302d8a9ca73e5038b4ee678293d978aed555
+
+Read-only git show of the explicit NetBSD pin on HP confirmed both base files
+byte-identical to that commit. The local proofs/ directory contains the copied
+final HP proof, audit and logs plus proof-sha256.json and baseline-pin-proof.json.
+Integrated patch0032 note: linux_kthread_fini checks the int-returning common
+task finalizer. The native module first closes admission atomically, rejecting
+teardown with EBUSY while task owners remain. Final generated source is
+31d75082ff20da8d6cb5664c60dda8733555a572aafd40e8a82ed4f1774d2274;
+the isolated handoff hashes below preserve earlier candidate provenance.
+Native kernel execution and external callback/code-owner rundown remain OPEN.

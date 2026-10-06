@@ -2,6 +2,39 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Common task, callback waits and immediate workers
+
+Patch0032 integrates one native task identity and real generic wait callback
+queues, keyed variable waits, wide timeout scheduling and selected immediate
+kthread workers. Callback traversal preserves priority/exclusive/key semantics,
+self-removal/free and lifetime synchronization. Native raw callbacks notify
+sleepable CV owners through MPSAFE softints without a raw-to-sleep lock edge.
+
+Task allocation reserves admission before memory/TLS access. Module finalization
+atomically closes admission only with zero task owners and returns EBUSY before
+any destructive teardown when busy. Generic driver/workqueue entry attachment,
+external callback/code-owner rundown and actual unload execution remain OPEN.
+
+All 33 source/C scripts pass on HP, including actual integrated source bodies,
+10000 modeled wake/schedule races, 500 allocation/quiesce races and 13 worker
+tests. Fresh real native task/wait/variable/worker/module objects compile with
+-Werror; the four runtime objects link with no unresolved shared Linux symbols.
+These checks do not execute the NetBSD scheduler or establish full kernel links.
+
+Native completion explicitly includes its real wait dependency. Linux arithmetic
+includes its required const.h directly; the unused UAPI sysinfo umbrella caused
+a retained earlier module failure. Full sysinfo/UVM porting remains OPEN.
+
+See [integrated runtime evidence](evidence/HP_NATIVE_TASK_WAIT_WORKER_20261006.json).
+Fatal-only waits, UUID/GUID, PWM, full OS/ABI/lifecycle and physical KMS remain
+required. No installation or reboot; boot/running/recovery hashes are unchanged.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Typed objects and saturated allocation sizes
 
 Patch 0031 supplies the exact pinned optional-GFP and four kmalloc/kzalloc

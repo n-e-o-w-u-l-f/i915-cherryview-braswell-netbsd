@@ -66,6 +66,9 @@ def main():
   native_errno=subprocess.check_output(['git','-C','/root/netbsd-src-ref','show','HEAD:sys/sys/errno.h'],text=True)
   restart=next(l for l in native_errno.splitlines() if l.startswith('#define') and 'ERESTART' in l)
   (t/'linux/errno.h').write_text('#include <errno.h>\n'+restart+'\n#ifndef ERESTARTSYS\n#define ERESTARTSYS 512\n#endif\n')
+  # Queue types are unused by this completion primitive model. Real native
+  # include-order/type integration is checked by the runtime kernel objects.
+  (t/'linux/wait.h').write_text('/* Completion-only primitive model. */\n')
   (t/'sys/model.h').write_text('''#ifndef MODEL_H
 #define MODEL_H
 #include <assert.h>

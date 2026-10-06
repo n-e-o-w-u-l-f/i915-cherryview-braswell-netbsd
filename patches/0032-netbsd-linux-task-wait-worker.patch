@@ -1,0 +1,3808 @@
+--- a/sys/external/bsd/drm2/linux/linux_task.c
++++ b/sys/external/bsd/drm2/linux/linux_task.c
+@@ -0,0 +1,499 @@
++/* SPDX-License-Identifier: BSD-2-Clause */
++/*
++ * Isolated candidate, not installed. Explicit per-LWP task identity and
++ * TASK_INTERRUPTIBLE/TASK_UNINTERRUPTIBLE scheduling for Linux callbacks.
++ * Atomic task admission; fatal-only sleeps remain a separate backend gate.
++ * Native kernel execution, cold/VM/IO and entry/code-owner drain remain OPEN.
++ */
++#include <sys/param.h>
++#include <sys/atomic.h>
++#include <sys/condvar.h>
++#include <sys/intr.h>
++#include <sys/kmem.h>
++#include <sys/lwp.h>
++#include <sys/proc.h>
++#include <sys/signalvar.h>
++#include <sys/sleepq.h>
++#include <sys/specificdata.h>
++#include <sys/systm.h>
++
++#include <linux/kthread.h>
++#include <linux/sched.h>
++
++static specificdata_key_t task_key = (specificdata_key_t)-1;
++static volatile unsigned int task_count;
++static raw_spinlock_t task_system_lock;
++enum task_system_state { TASK_SYSTEM_OPEN, TASK_SYSTEM_QUIESCED };
++static enum task_system_state task_system_state;
++
++/* Reserve before native specificdata/KM_SLEEP. Count covers construction,
++ * entry lookup and all resource lifetime until notifier teardown finishes.
++ */
++static bool
++linux_task_reserve(void)
++{
++    unsigned long flags;
++    bool admitted = false;
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    if (task_system_state == TASK_SYSTEM_OPEN && task_count != UINT_MAX) {
++        atomic_inc_uint(&task_count);
++        admitted = true;
++    }
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++    return admitted;
++}
++
++static void
++linux_task_unreserve(void)
++{
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    KASSERT(task_count != 0);
++    atomic_dec_uint(&task_count);
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++}
++
++
++/* Per-task notifier: state is published before it is scheduled. The sleep
++ * mutex covers the waiter's condition check and native CV enqueue/release.
++ * A hardware/queue callback only takes lt_lock and schedules this softint.
++ */
++static void
++linux_task_notify(void *cookie)
++{
++    struct task_struct *task = cookie;
++
++    spin_lock(&task->lt_sleep_lock);
++    cv_signal(&task->lt_sleep_cv);
++    spin_unlock(&task->lt_sleep_lock);
++}
++
++static void
++linux_task_owner_exit(void *cookie)
++{
++    struct task_struct *task = cookie;
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_lwp == curlwp);
++    task->lt_lwp = NULL;
++    task->lt_exited = true;
++    task->__state = TASK_DEAD;
++    membar_sync();
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    /* Do not dereference the independently owned kthread backend. */
++    put_task_struct(task);
++}
++
++int
++linux_task_system_init(void)
++{
++    int error;
++
++    KASSERT(task_key == (specificdata_key_t)-1);
++    KASSERT(task_count == 0);
++    raw_spin_lock_init(&task_system_lock);
++    task_system_state = TASK_SYSTEM_QUIESCED;
++    error = lwp_specific_key_create(&task_key, linux_task_owner_exit);
++    if (error != 0) {
++        raw_spin_lock_destroy(&task_system_lock);
++        return error;
++    }
++    linux_task_system_resume();
++    return 0;
++}
++
++bool
++linux_task_system_busy(void)
++{
++    /* Observation only. Quiesce performs the atomic admission transaction. */
++    return atomic_load_acquire(&task_count) != 0;
++}
++
++int
++linux_task_system_quiesce(void)
++{
++    unsigned long flags;
++    int error = 0;
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    if (task_count != 0)
++        error = EBUSY;
++    else
++        task_system_state = TASK_SYSTEM_QUIESCED;
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++    return error;
++}
++
++void
++linux_task_system_resume(void)
++{
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    KASSERT(task_system_state == TASK_SYSTEM_QUIESCED && task_count == 0);
++    KASSERT(task_key != (specificdata_key_t)-1);
++    task_system_state = TASK_SYSTEM_OPEN;
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++}
++
++int
++linux_task_system_fini(void)
++{
++    int error;
++
++    error = linux_task_system_quiesce();
++    if (error != 0)
++        return error;
++    /* Native module/entry owners must separately prevent calls into unmapped
++     * code. Closed admission and zero reservations protect key/task resources.
++     */
++    lwp_specific_key_delete(task_key);
++    task_key = (specificdata_key_t)-1;
++    raw_spin_lock_destroy(&task_system_lock);
++    return 0;
++}
++
++static struct task_struct *
++linux_task_alloc_reserved(void)
++{
++    struct task_struct *task;
++
++    ASSERT_SLEEPABLE();
++    KASSERT(task_key != (specificdata_key_t)-1);
++    task = kmem_zalloc(sizeof(*task), KM_SLEEP);
++    raw_spin_lock_init(&task->lt_lock);
++    spin_lock_init(&task->lt_sleep_lock);
++    cv_init(&task->lt_sleep_cv, "lnxtask");
++    task->__state = TASK_RUNNING;
++    task->lt_refs = 1;
++    task->lt_softint = softint_establish(SOFTINT_CLOCK | SOFTINT_MPSAFE,
++        linux_task_notify, task);
++    if (task->lt_softint == NULL) {
++        cv_destroy(&task->lt_sleep_cv);
++        spin_lock_destroy(&task->lt_sleep_lock);
++        raw_spin_lock_destroy(&task->lt_lock);
++        kmem_free(task, sizeof(*task));
++        linux_task_unreserve();
++        return NULL;
++    }
++    return task;
++}
++
++struct task_struct *
++linux_task_alloc(void)
++{
++    ASSERT_SLEEPABLE();
++    if (!linux_task_reserve())
++        return NULL;
++    return linux_task_alloc_reserved();
++}
++
++void
++linux_task_attach_current(struct task_struct *task)
++{
++    unsigned long flags;
++
++    /* Native lwp_setspecific can allocate with KM_SLEEP. It must never be
++     * hidden in current, prepare_to_wait, or a callback/queue critical area.
++     */
++    ASSERT_SLEEPABLE();
++    KASSERT(task_key != (specificdata_key_t)-1);
++    KASSERT(lwp_getspecific(task_key) == NULL);
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_lwp == NULL && !task->lt_exited);
++    KASSERT(task->lt_refs != 0 && task->lt_refs != UINT_MAX);
++    task->lt_refs++;
++    task->lt_lwp = curlwp;
++    task->pid = curproc->p_pid;
++    task->tgid = curproc->p_pid;
++    strlcpy(task->comm, curproc->p_comm, sizeof(task->comm));
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    lwp_setspecific(task_key, task);
++}
++
++struct task_struct *
++linux_task_enter_current(void)
++{
++    struct task_struct *task;
++
++    ASSERT_SLEEPABLE();
++    if (!linux_task_reserve())
++        return NULL;
++    KASSERT(task_key != (specificdata_key_t)-1);
++    task = lwp_getspecific(task_key);
++    if (task != NULL) {
++        linux_task_unreserve();
++        return task;
++    }
++    task = linux_task_alloc_reserved();
++    if (task == NULL)
++        return NULL;
++    linux_task_attach_current(task);
++    put_task_struct(task); /* LWP owner now retains the task. */
++    return task;
++}
++
++struct task_struct *
++linux_current_task(void)
++{
++    struct task_struct *task;
++
++    KASSERT(task_key != (specificdata_key_t)-1);
++    task = lwp_getspecific(task_key);
++    KASSERTMSG(task != NULL,
++        "Linux task was not attached at the sleepable native entry boundary");
++    return task;
++}
++
++void
++linux_get_task_struct(struct task_struct *task)
++{
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_refs != 0 && task->lt_refs != UINT_MAX);
++    task->lt_refs++;
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++}
++
++void
++linux_put_task_struct(struct task_struct *task)
++{
++    unsigned long flags;
++    bool last;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_refs != 0);
++    last = --task->lt_refs == 0;
++    if (last) {
++        KASSERT(task->lt_lwp == NULL);
++        KASSERT(task->lt_kthread == NULL);
++    }
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    if (!last)
++        return;
++    /* Last release is sleepable: native disestablish drains all CPUs.
++     * Callback users must release their last external reference later in
++     * thread context. Broader arbitrary-context task-ref parity is OPEN.
++     */
++    ASSERT_SLEEPABLE();
++    softint_disestablish(task->lt_softint);
++    KASSERT(!cv_has_waiters(&task->lt_sleep_cv));
++    cv_destroy(&task->lt_sleep_cv);
++    spin_lock_destroy(&task->lt_sleep_lock);
++    raw_spin_lock_destroy(&task->lt_lock);
++    kmem_free(task, sizeof(*task));
++    linux_task_unreserve();
++}
++
++struct lwp *
++linux_task_lwp(struct task_struct *task)
++{
++    struct lwp *lwp;
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    lwp = task->lt_lwp;
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    /* Borrowed pointer: caller must hold a MUSTJOIN/native lifetime guard. */
++    return lwp;
++}
++
++void
++linux_set_current_state(unsigned int state)
++{
++    struct task_struct *task = current;
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_lwp == curlwp && !task->lt_exited);
++    task->__state = state;
++    /* Full store/load barrier required by lockless waitqueue_active and
++     * GuC must_wait_woken, not merely the lock's release barrier.
++     */
++    membar_sync();
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++}
++
++int
++linux_task_wake_state(struct task_struct *task, unsigned int mode)
++{
++    unsigned long flags;
++    int woke = 0;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    membar_sync();
++    KASSERT(task->lt_refs != 0);
++    if (!task->lt_exited && (task->__state & mode) != 0) {
++        task->__state = TASK_RUNNING;
++        membar_sync();
++        /* Holding the raw native lock satisfies kpreempt_disabled(). */
++        softint_schedule(task->lt_softint);
++        woke = 1;
++    }
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    return woke;
++}
++
++int
++linux_wake_up_process(struct task_struct *task)
++{
++    unsigned long flags;
++    int woke = 0;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    membar_sync();
++    KASSERT(task->lt_refs != 0);
++    if (!task->lt_exited && (task->__state & TASK_NORMAL) != 0) {
++        task->__state = TASK_RUNNING;
++        membar_sync();
++        softint_schedule(task->lt_softint);
++        woke = 1;
++    }
++    /* Private backend binding and its teardown share this lifetime lock.
++     * This opens worker deferred start independently of task wait state.
++     */
++    if (task->lt_kthread != NULL)
++        woke |= linux_kthread_wake_locked(task);
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    return woke;
++}
++
++bool
++linux_signal_pending(struct task_struct *task)
++{
++    KASSERT(task == current);
++    return (atomic_load_relaxed(&curlwp->l_flag) & LW_PENDSIG) != 0 &&
++        sigispending(curlwp, 0) != 0;
++}
++
++bool
++linux_fatal_signal_pending(struct task_struct *task)
++{
++    KASSERT(task == current);
++    /* Mirrors Linux's SIGKILL test, but native process-exit/group-fatal
++     * translation has not yet been proved. Killable sleep is rejected.
++     */
++    return (atomic_load_relaxed(&curlwp->l_flag) & LW_PENDSIG) != 0 &&
++        sigispending(curlwp, SIGKILL) != 0;
++}
++
++bool
++linux_signal_pending_state(unsigned int state, struct task_struct *task)
++{
++    if ((state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)) == 0)
++        return false;
++    if (!signal_pending(task))
++        return false;
++    return (state & TASK_INTERRUPTIBLE) != 0 || fatal_signal_pending(task);
++}
++
++static unsigned int
++linux_task_state(struct task_struct *task)
++{
++    unsigned long flags;
++    unsigned int state;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    state = task->__state;
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    return state;
++}
++
++long
++linux_schedule_timeout(long timeout)
++{
++    struct task_struct *task = current;
++    unsigned int state;
++    long remaining = timeout;
++
++    if (timeout <= 0) {
++        __set_current_state(TASK_RUNNING);
++        return 0;
++    }
++    state = linux_task_state(task);
++    if (state == TASK_RUNNING) {
++        unsigned int start = getticks();
++        yield();
++        if (timeout == MAX_SCHEDULE_TIMEOUT)
++            return timeout;
++        return timeout - MIN(timeout,
++            (long)((unsigned int)getticks() - start));
++    }
++    KASSERTMSG((state & TASK_WAKEKILL) == 0,
++        "fatal-only native Linux task sleep backend remains unimplemented");
++    KASSERTMSG(!sleepq_dontsleep(curlwp),
++        "native Linux task cold/panic sleep is not accepted");
++
++    spin_lock(&task->lt_sleep_lock);
++    while (remaining != 0) {
++        unsigned int start, elapsed;
++        long slice;
++        int error;
++
++        state = linux_task_state(task);
++        if (state == TASK_RUNNING || signal_pending_state(state, task))
++            break;
++        if (timeout == MAX_SCHEDULE_TIMEOUT) {
++            if ((state & TASK_INTERRUPTIBLE) != 0)
++                error = cv_wait_sig(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock);
++            else {
++                cv_wait(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock);
++                error = 0;
++            }
++        } else {
++            /* Native CV timer is signed int; keep the full long budget. */
++            slice = MIN(remaining, (long)INT_MAX / 2);
++            start = getticks();
++            error = (state & TASK_INTERRUPTIBLE) != 0 ?
++                cv_timedwait_sig(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock, (int)slice) :
++                cv_timedwait(&task->lt_sleep_cv,
++                    &task->lt_sleep_lock.sl_lock, (int)slice);
++            elapsed = (unsigned int)getticks() - start;
++            if (error == EWOULDBLOCK && elapsed < (unsigned long)slice)
++                elapsed = (unsigned int)slice;
++            remaining -= MIN(remaining, (long)elapsed);
++        }
++        /* A real task wake wins the signal/timeout race in the caller's
++         * condition recheck; prepare_to_wait_event orders exclusive removal.
++         */
++        if (linux_task_state(task) == TASK_RUNNING)
++            break;
++        if (error == EINTR || error == ERESTART)
++            break;
++        KASSERT(error == 0 || error == EWOULDBLOCK);
++    }
++    __set_current_state(TASK_RUNNING);
++    spin_unlock(&task->lt_sleep_lock);
++    return remaining;
++}
++
++void
++linux_schedule(void)
++{
++    (void)schedule_timeout(MAX_SCHEDULE_TIMEOUT);
++}
++
++void
++linux_sched_set_fifo(struct task_struct *task)
++{
++    struct lwp *lwp;
++    unsigned long flags;
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    lwp = task->lt_lwp;
++    KASSERTMSG(lwp != NULL && !task->lt_exited,
++        "Linux FIFO task must be attached and alive");
++    /* Keep task owner exit from retiring the LWP while we lock/update it. */
++    lwp_lock(lwp);
++    lwp->l_class = SCHED_FIFO;
++    lwp_changepri(lwp, PRI_KERNEL_RT);
++    lwp_unlock(lwp);
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++}
+--- a/sys/external/bsd/drm2/linux/linux_wait.c
++++ b/sys/external/bsd/drm2/linux/linux_wait.c
+@@ -0,0 +1,464 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Generic waiting primitives.
++ *
++ * (C) 2004 Nadia Yvette Chambers, Oracle
++ */
++#include <sys/param.h>
++#include <sys/atomic.h>
++#include <sys/systm.h>
++#include <linux/kthread.h>
++#include <linux/sched.h>
++#include <linux/wait.h>
++
++/* Callback hints retain pinned Linux values. Native migration/locality
++ * behavior for these hints is a separate scheduler acceptance gate. */
++#define WF_SYNC 0x10
++#define WF_CURRENT_CPU 0x40
++
++static bool
++linux_wait_kthread_stop_or_park(void)
++{
++    struct task_struct *task = current;
++    unsigned long flags;
++    bool kthread;
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    kthread = task->lt_kthread != NULL;
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    return kthread && (kthread_should_stop() || kthread_should_park());
++}
++
++void __init_waitqueue_head(struct wait_queue_head *wq_head, const char *name, struct lock_class_key *key)
++{
++	spin_lock_init(&wq_head->lock);
++	(void)name;
++	(void)key;
++	INIT_LIST_HEAD(&wq_head->head);
++}
++
++
++void add_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	unsigned long flags;
++
++	wq_entry->flags &= ~WQ_FLAG_EXCLUSIVE;
++	spin_lock_irqsave(&wq_head->lock, flags);
++	__add_wait_queue(wq_head, wq_entry);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++void add_wait_queue_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	unsigned long flags;
++
++	wq_entry->flags |= WQ_FLAG_EXCLUSIVE;
++	spin_lock_irqsave(&wq_head->lock, flags);
++	__add_wait_queue_entry_tail(wq_head, wq_entry);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++void add_wait_queue_priority(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	unsigned long flags;
++
++	wq_entry->flags |= WQ_FLAG_PRIORITY;
++	spin_lock_irqsave(&wq_head->lock, flags);
++	__add_wait_queue(wq_head, wq_entry);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++int add_wait_queue_priority_exclusive(struct wait_queue_head *wq_head,
++				      struct wait_queue_entry *wq_entry)
++{
++	struct list_head *head = &wq_head->head;
++
++	wq_entry->flags |= WQ_FLAG_EXCLUSIVE | WQ_FLAG_PRIORITY;
++
++	unsigned long flags;
++	spin_lock_irqsave(&wq_head->lock, flags);
++
++	if (!list_empty(head) &&
++	    (list_first_entry(head, typeof(*wq_entry), entry)->flags & WQ_FLAG_PRIORITY)) {
++		spin_unlock_irqrestore(&wq_head->lock, flags);
++		return -EBUSY;
++	}
++
++	list_add(&wq_entry->entry, head);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++	return 0;
++}
++
++void remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&wq_head->lock, flags);
++	__remove_wait_queue(wq_head, wq_entry);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++/*
++ * The core wakeup function. Non-exclusive wakeups (nr_exclusive == 0) just
++ * wake everything up. If it's an exclusive wakeup (nr_exclusive == small +ve
++ * number) then we wake that number of exclusive tasks, and potentially all
++ * the non-exclusive tasks. Normally, exclusive tasks will be at the end of
++ * the list and any non-exclusive tasks will be woken first. A priority task
++ * may be at the head of the list, and can consume the event without any other
++ * tasks being woken if it's also an exclusive task.
++ *
++ * There are circumstances in which we can try to wake a task which has already
++ * started to run but is not in state TASK_RUNNING. try_to_wake_up() returns
++ * zero in this (rare) case, and we handle it by continuing to scan the queue.
++ */
++static int __wake_up_common(struct wait_queue_head *wq_head, unsigned int mode,
++			int nr_exclusive, int wake_flags, void *key)
++{
++	wait_queue_entry_t *curr, *next;
++
++	assert_spin_locked(&wq_head->lock);
++
++	curr = list_first_entry(&wq_head->head, wait_queue_entry_t, entry);
++
++	if (&curr->entry == &wq_head->head)
++		return nr_exclusive;
++
++	list_for_each_entry_safe_from(curr, next, &wq_head->head, entry) {
++		unsigned flags = curr->flags;
++		int ret;
++
++		ret = curr->func(curr, mode, wake_flags, key);
++		if (ret < 0)
++			break;
++		if (ret && (flags & WQ_FLAG_EXCLUSIVE) && !--nr_exclusive)
++			break;
++	}
++
++	return nr_exclusive;
++}
++
++static int __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int mode,
++			int nr_exclusive, int wake_flags, void *key)
++{
++	unsigned long flags;
++	int remaining;
++
++	spin_lock_irqsave(&wq_head->lock, flags);
++	remaining = __wake_up_common(wq_head, mode, nr_exclusive, wake_flags,
++			key);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++
++	return nr_exclusive - remaining;
++}
++
++/**
++ * __wake_up - wake up threads blocked on a waitqueue.
++ * @wq_head: the waitqueue
++ * @mode: which threads
++ * @nr_exclusive: how many wake-one or wake-many threads to wake up
++ * @key: is directly passed to the wakeup function
++ *
++ * If this function wakes up a task, it executes a full memory barrier
++ * before accessing the task state.  Returns the number of exclusive
++ * tasks that were awaken.
++ */
++int __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
++	      int nr_exclusive, void *key)
++{
++	return __wake_up_common_lock(wq_head, mode, nr_exclusive, 0, key);
++}
++
++void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key)
++{
++	__wake_up_common_lock(wq_head, mode, 1, WF_CURRENT_CPU, key);
++}
++
++/*
++ * Same as __wake_up but called with the spinlock in wait_queue_head_t held.
++ */
++void __wake_up_locked(struct wait_queue_head *wq_head, unsigned int mode, int nr)
++{
++	__wake_up_common(wq_head, mode, nr, 0, NULL);
++}
++
++void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key)
++{
++	__wake_up_common(wq_head, mode, 1, 0, key);
++}
++
++/**
++ * __wake_up_sync_key - wake up threads blocked on a waitqueue.
++ * @wq_head: the waitqueue
++ * @mode: which threads
++ * @key: opaque value to be passed to wakeup targets
++ *
++ * The sync wakeup differs that the waker knows that it will schedule
++ * away soon, so while the target thread will be woken up, it will not
++ * be migrated to another CPU - ie. the two threads are 'synchronized'
++ * with each other. This can prevent needless bouncing between CPUs.
++ *
++ * On UP it can prevent extra preemption.
++ *
++ * If this function wakes up a task, it executes a full memory barrier before
++ * accessing the task state.
++ */
++void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode,
++			void *key)
++{
++	if (unlikely(!wq_head))
++		return;
++
++	__wake_up_common_lock(wq_head, mode, 1, WF_SYNC, key);
++}
++
++/**
++ * __wake_up_locked_sync_key - wake up a thread blocked on a locked waitqueue.
++ * @wq_head: the waitqueue
++ * @mode: which threads
++ * @key: opaque value to be passed to wakeup targets
++ *
++ * The sync wakeup differs in that the waker knows that it will schedule
++ * away soon, so while the target thread will be woken up, it will not
++ * be migrated to another CPU - ie. the two threads are 'synchronized'
++ * with each other. This can prevent needless bouncing between CPUs.
++ *
++ * On UP it can prevent extra preemption.
++ *
++ * If this function wakes up a task, it executes a full memory barrier before
++ * accessing the task state.
++ */
++void __wake_up_locked_sync_key(struct wait_queue_head *wq_head,
++			       unsigned int mode, void *key)
++{
++        __wake_up_common(wq_head, mode, 1, WF_SYNC, key);
++}
++
++/*
++ * __wake_up_sync - see __wake_up_sync_key()
++ */
++void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode)
++{
++	__wake_up_sync_key(wq_head, mode, NULL);
++}
++
++void __wake_up_pollfree(struct wait_queue_head *wq_head)
++{
++	__wake_up(wq_head, TASK_NORMAL, 0, poll_to_key(0x0010U | 0x4000U));
++	/* POLLFREE must have cleared the queue. */
++	KASSERT(!waitqueue_active(wq_head));
++}
++
++/*
++ * Note: we use "set_current_state()" _after_ the wait-queue add,
++ * because we need a memory barrier there on SMP, so that any
++ * wake-function that tests for the wait-queue being active
++ * will be guaranteed to see waitqueue addition _or_ subsequent
++ * tests in this thread will see the wakeup having taken place.
++ *
++ * The spin_unlock() itself is semi-permeable and only protects
++ * one way (it only protects stuff inside the critical region and
++ * stops them from bleeding out - it would still allow subsequent
++ * loads to move into the critical region).
++ */
++void
++prepare_to_wait(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state)
++{
++	unsigned long flags;
++
++	wq_entry->flags &= ~WQ_FLAG_EXCLUSIVE;
++	spin_lock_irqsave(&wq_head->lock, flags);
++	if (list_empty(&wq_entry->entry))
++		__add_wait_queue(wq_head, wq_entry);
++	set_current_state(state);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++/* Returns true if we are the first waiter in the queue, false otherwise. */
++bool
++prepare_to_wait_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state)
++{
++	unsigned long flags;
++	bool was_empty = false;
++
++	wq_entry->flags |= WQ_FLAG_EXCLUSIVE;
++	spin_lock_irqsave(&wq_head->lock, flags);
++	if (list_empty(&wq_entry->entry)) {
++		was_empty = list_empty(&wq_head->head);
++		__add_wait_queue_entry_tail(wq_head, wq_entry);
++	}
++	set_current_state(state);
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++	return was_empty;
++}
++
++void init_wait_entry(struct wait_queue_entry *wq_entry, int flags)
++{
++	wq_entry->flags = flags;
++	wq_entry->private = current;
++	wq_entry->func = autoremove_wake_function;
++	INIT_LIST_HEAD(&wq_entry->entry);
++}
++
++long prepare_to_wait_event(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state)
++{
++	unsigned long flags;
++	long ret = 0;
++
++	spin_lock_irqsave(&wq_head->lock, flags);
++	if (signal_pending_state(state, current)) {
++		/*
++		 * Exclusive waiter must not fail if it was selected by wakeup,
++		 * it should "consume" the condition we were waiting for.
++		 *
++		 * The caller will recheck the condition and return success if
++		 * we were already woken up, we can not miss the event because
++		 * wakeup locks/unlocks the same wq_head->lock.
++		 *
++		 * But we need to ensure that set-condition + wakeup after that
++		 * can't see us, it should wake up another exclusive waiter if
++		 * we fail.
++		 */
++		list_del_init(&wq_entry->entry);
++		ret = -ERESTARTSYS;
++	} else {
++		if (list_empty(&wq_entry->entry)) {
++			if (wq_entry->flags & WQ_FLAG_EXCLUSIVE)
++				__add_wait_queue_entry_tail(wq_head, wq_entry);
++			else
++				__add_wait_queue(wq_head, wq_entry);
++		}
++		set_current_state(state);
++	}
++	spin_unlock_irqrestore(&wq_head->lock, flags);
++
++	return ret;
++}
++
++/*
++ * Note! These two wait functions are entered with the
++ * wait-queue lock held (and interrupts off in the _irq
++ * case), so there is no race with testing the wakeup
++ * condition in the caller before they add the wait
++ * entry to the wake queue.
++ */
++int do_wait_intr(wait_queue_head_t *wq, wait_queue_entry_t *wait)
++{
++	if (likely(list_empty(&wait->entry)))
++		__add_wait_queue_entry_tail(wq, wait);
++
++	set_current_state(TASK_INTERRUPTIBLE);
++	if (signal_pending(current))
++		return -ERESTARTSYS;
++
++	spin_unlock(&wq->lock);
++	schedule();
++	spin_lock(&wq->lock);
++
++	return 0;
++}
++
++int do_wait_intr_irq(wait_queue_head_t *wq, wait_queue_entry_t *wait)
++{
++	if (likely(list_empty(&wait->entry)))
++		__add_wait_queue_entry_tail(wq, wait);
++
++	set_current_state(TASK_INTERRUPTIBLE);
++	if (signal_pending(current))
++		return -ERESTARTSYS;
++
++	spin_unlock_irq(&wq->lock);
++	schedule();
++	spin_lock_irq(&wq->lock);
++
++	return 0;
++}
++
++/**
++ * finish_wait - clean up after waiting in a queue
++ * @wq_head: waitqueue waited on
++ * @wq_entry: wait descriptor
++ *
++ * Sets current thread back to running state and removes
++ * the wait descriptor from the given waitqueue if still
++ * queued.
++ */
++void finish_wait(struct wait_queue_head *wq_head,
++    struct wait_queue_entry *wq_entry)
++{
++    unsigned long flags;
++    __set_current_state(TASK_RUNNING);
++    spin_lock_irqsave(&wq_head->lock, flags);
++    if (!list_empty(&wq_entry->entry))
++        list_del_init(&wq_entry->entry);
++    spin_unlock_irqrestore(&wq_head->lock, flags);
++}
++
++int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key)
++{
++	int ret = default_wake_function(wq_entry, mode, sync, key);
++
++	if (ret)
++		list_del_init(&wq_entry->entry);
++
++	return ret;
++}
++
++/*
++ * DEFINE_WAIT_FUNC(wait, woken_wake_func);
++ *
++ * add_wait_queue(&wq_head, &wait);
++ * for (;;) {
++ *     if (condition)
++ *         break;
++ *
++ *     // in wait_woken()			// in woken_wake_function()
++ *
++ *     p->state = mode;				wq_entry->flags |= WQ_FLAG_WOKEN;
++ *     smp_mb(); // A				try_to_wake_up():
++ *     if (!(wq_entry->flags & WQ_FLAG_WOKEN))	   <full barrier>
++ *         schedule()				   if (p->state & mode)
++ *     p->state = TASK_RUNNING;			      p->state = TASK_RUNNING;
++ *     wq_entry->flags &= ~WQ_FLAG_WOKEN;	~~~~~~~~~~~~~~~~~~
++ *     smp_mb(); // B				condition = true;
++ * }						smp_mb(); // C
++ * remove_wait_queue(&wq_head, &wait);		wq_entry->flags |= WQ_FLAG_WOKEN;
++ */
++long wait_woken(struct wait_queue_entry *wq_entry, unsigned mode, long timeout)
++{
++	/*
++	 * The below executes an smp_mb(), which matches with the full barrier
++	 * executed by the try_to_wake_up() in woken_wake_function() such that
++	 * either we see the store to wq_entry->flags in woken_wake_function()
++	 * or woken_wake_function() sees our store to current->state.
++	 */
++	set_current_state(mode); /* A */
++	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !linux_wait_kthread_stop_or_park())
++		timeout = schedule_timeout(timeout);
++	__set_current_state(TASK_RUNNING);
++
++	/*
++	 * The below executes an smp_mb(), which matches with the smp_mb() (C)
++	 * in woken_wake_function() such that either we see the wait condition
++	 * being true or the store to wq_entry->flags in woken_wake_function()
++	 * follows ours in the coherence order.
++	 */
++	smp_store_mb(wq_entry->flags, wq_entry->flags & ~WQ_FLAG_WOKEN); /* B */
++
++	return timeout;
++}
++
++int woken_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key)
++{
++	/* Pairs with the smp_store_mb() in wait_woken(). */
++	smp_mb(); /* C */
++	wq_entry->flags |= WQ_FLAG_WOKEN;
++
++	return default_wake_function(wq_entry, mode, sync, key);
++}
++
++int default_wake_function(struct wait_queue_entry *entry,
++    unsigned int mode, int flags, void *key)
++{
++    (void)flags;
++    (void)key;
++    return linux_task_wake_state(entry->private, mode);
++}
+--- a/sys/external/bsd/drm2/linux/linux_wait_var.c
++++ b/sys/external/bsd/drm2/linux/linux_wait_var.c
+@@ -0,0 +1,107 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Isolated native hashed variable callback queues, based on pinned Linux
++ * kernel/sched/wait_bit.c. These are real generic callback queue heads and
++ * exact-address keys, independent of the older native bit-wait CV table.
++ * Selected variable-wait callback scope only; bit locking/IO/timeouts OPEN.
++ */
++#include <sys/param.h>
++#include <sys/systm.h>
++#include <linux/wait_bit.h>
++
++#define VAR_WAIT_TABLE_BITS 8
++static wait_queue_head_t var_wait_table[1U << VAR_WAIT_TABLE_BITS];
++static bool var_wait_initialized;
++
++/* Frozen Linux hash_ptr/hash_long distribution at the real native width. */
++static unsigned int
++var_wait_bucket(void *p)
++{
++    uintptr_t value = (uintptr_t)p;
++    if (sizeof(value) == sizeof(uint64_t))
++        return (unsigned int)(((uint64_t)value * 0x61C8864680B583EBULL) >>
++            (64 - VAR_WAIT_TABLE_BITS));
++    KASSERT(sizeof(value) == sizeof(uint32_t));
++    return ((uint32_t)value * 0x61C88647U) >> (32 - VAR_WAIT_TABLE_BITS);
++}
++
++int
++linux_wait_var_init(void)
++{
++    KASSERT(!var_wait_initialized);
++    for (unsigned int i = 0; i < __arraycount(var_wait_table); i++)
++        init_waitqueue_head(&var_wait_table[i]);
++    var_wait_initialized = true;
++    return 0;
++}
++
++void
++linux_wait_var_fini(void)
++{
++    KASSERT(var_wait_initialized);
++    /* Caller first rejects new owners and drains all variable callbacks. */
++    for (unsigned int i = 0; i < __arraycount(var_wait_table); i++)
++        destroy_waitqueue_head(&var_wait_table[i]);
++    var_wait_initialized = false;
++}
++
++wait_queue_head_t *
++__var_waitqueue(void *p)
++{
++    KASSERT(var_wait_initialized);
++    return &var_wait_table[var_wait_bucket(p)];
++}
++
++struct wait_bit_key *
++__var_wake_key(struct wait_queue_entry *entry, void *arg)
++{
++    struct wait_bit_queue_entry *wait;
++    struct wait_bit_key *key = arg;
++
++    wait = container_of(entry, struct wait_bit_queue_entry, wq_entry);
++    if (wait->key.flags != key->flags || wait->key.bit_nr != key->bit_nr)
++        return NULL;
++    return key;
++}
++
++int
++var_wake_function(struct wait_queue_entry *entry, unsigned int mode,
++    int flags, void *key)
++{
++    if (!__var_wake_key(entry, key))
++        return 0;
++    return autoremove_wake_function(entry, mode, flags, key);
++}
++
++void
++init_wait_var_entry(struct wait_bit_queue_entry *wait, void *var, int flags)
++{
++    *wait = (struct wait_bit_queue_entry) {
++        .key = { .flags = var, .bit_nr = -1 },
++        .wq_entry = {
++            .flags = flags,
++            .private = current,
++            .func = var_wake_function,
++            .entry = LIST_HEAD_INIT(wait->wq_entry.entry),
++        },
++    };
++}
++
++void
++wake_up_var(void *var)
++{
++    struct wait_bit_key key = { .flags = var, .bit_nr = -1 };
++    __wake_up(__var_waitqueue(var), TASK_NORMAL, 1, &key);
++}
++
++int
++woken_wake_bit_function(struct wait_queue_entry *entry, unsigned int mode,
++    int flags, void *arg)
++{
++    struct wait_bit_key *key = __var_wake_key(entry, arg);
++    if (!key)
++        return 0;
++    smp_mb();
++    entry->flags |= WQ_FLAG_WOKEN;
++    return default_wake_function(entry, mode, flags, key);
++}
+--- a/sys/external/bsd/drm2/linux/linux_kthread.c
++++ b/sys/external/bsd/drm2/linux/linux_kthread.c
+@@ -36,3 +36,7 @@
+ 
++#include <sys/param.h>
+ #include <sys/condvar.h>
++#include <sys/errno.h>
++#include <sys/intr.h>
++#include <sys/systm.h>
+ #include <sys/kmem.h>
+@@ -45,2 +49,3 @@
+ #include <linux/kthread.h>
++#include <linux/sched.h>
+ #include <linux/spinlock.h>
+@@ -49,3 +54,6 @@
+ 
+-struct task_struct {
++struct linux_kthread {
++	struct task_struct *kt_task;
++	struct kthread_worker *kt_worker;
++	bool kt_attached;
+ 	kmutex_t	kt_lock;
+@@ -65,4 +73,2 @@
+ 
+-static specificdata_key_t linux_kthread_key __read_mostly = -1;
+-
+ int
+@@ -70,14 +76,4 @@
+ {
+-	int error;
+-
+-	error = lwp_specific_key_create(&linux_kthread_key, NULL);
+-	if (error)
+-		goto out;
+-
+-	/* Success!  */
+-	error = 0;
+-
+-out:	if (error)
+-		linux_kthread_fini();
+-	return error;
++
++	return linux_task_system_init();
+ }
+@@ -87,19 +83,19 @@
+ {
+-
+-	if (linux_kthread_key != -1) {
+-		lwp_specific_key_delete(linux_kthread_key);
+-		linux_kthread_key = -1;
+-	}
+-}
+-
+-#define	linux_kthread()	_linux_kthread(__func__)
+-static struct task_struct *
++	int error;
++
++	error = linux_task_system_fini();
++	KASSERT(error == 0);
++}
++
++#define linux_kthread() _linux_kthread(__func__)
++static struct linux_kthread *
+ _linux_kthread(const char *caller)
+ {
+-	struct task_struct *T;
+-
+-	T = lwp_getspecific(linux_kthread_key);
+-	KASSERTMSG(T != NULL, "%s must be called from Linux kthread", caller);
+-
+-	return T;
++	struct task_struct *task = linux_current_task();
++	struct linux_kthread *K;
++
++	KASSERTMSG(task != NULL && task->lt_kthread != NULL,
++	    "%s must be called from Linux kthread", caller);
++	K = task->lt_kthread;
++	return K;
+ }
+@@ -109,6 +105,10 @@
+ {
+-	struct task_struct *T = cookie;
++	struct linux_kthread *T = cookie;
+ 	int ret;
+ 
+-	lwp_setspecific(linux_kthread_key, T);
++	linux_task_attach_current(T->kt_task);
++	mutex_enter(&T->kt_lock);
++	T->kt_attached = true;
++	cv_broadcast(&T->kt_cv);
++	mutex_exit(&T->kt_lock);
+ 
+@@ -130,3 +130,3 @@
+ 
+-static struct task_struct *
++static struct linux_kthread *
+ kthread_alloc(int (*func)(void *), void *cookie, spinlock_t *interlock,
+@@ -134,5 +134,11 @@
+ {
+-	struct task_struct *T;
++	struct linux_kthread *T;
+ 
+ 	T = kmem_zalloc(sizeof(*T), KM_SLEEP);
++	T->kt_task = linux_task_alloc();
++	if (T->kt_task == NULL) {
++		kmem_free(T, sizeof(*T));
++		return NULL;
++	}
++	T->kt_task->lt_kthread = T; /* Not yet published. */
+ 
+@@ -156,6 +162,14 @@
+ static void
+-kthread_free(struct task_struct *T)
+-{
+-
+-	KASSERT(T->kt_exited);
++kthread_free(struct linux_kthread *T)
++{
++
++	unsigned long flags;
++	struct task_struct *task = T->kt_task;
++
++	/* Native create failure does not create a runnable LWP. */
++	KASSERT(T->kt_exited || T->kt_lwp == NULL);
++	raw_spin_lock_irqsave(&task->lt_lock, flags);
++	KASSERT(task->lt_kthread == T);
++	task->lt_kthread = NULL;
++	raw_spin_unlock_irqrestore(&task->lt_lock, flags);
+ 
+@@ -164,2 +178,35 @@
+ 	kmem_free(T, sizeof(*T));
++	put_task_struct(task);
++}
++
++static struct task_struct *
++linux_kthread_spawn(int (*func)(void *), void *cookie, const char *name,
++    spinlock_t *interlock, drm_waitqueue_t *wq,
++    struct kthread_worker *worker, int native_flags)
++{
++	struct linux_kthread *T;
++	int error;
++
++	T = kthread_alloc(func, cookie, interlock, wq);
++	if (T == NULL)
++		return ERR_PTR(-ENOMEM);
++	T->kt_worker = worker;
++	if (worker != NULL)
++		worker->task = T->kt_task;
++	error = kthread_create(PRI_NONE,
++	    KTHREAD_MPSAFE|KTHREAD_MUSTJOIN|native_flags, NULL,
++	    linux_kthread_start, T, &T->kt_lwp, "%s", name);
++	if (error) {
++		if (worker != NULL)
++			worker->task = NULL;
++		kthread_free(T);
++		return ERR_PTR(-error); /* XXX errno NetBSD->Linux */
++	}
++
++	/* Publish a common task with TLS/LWP identity already attached. */
++	mutex_enter(&T->kt_lock);
++	while (!T->kt_attached)
++		cv_wait(&T->kt_cv, &T->kt_lock);
++	mutex_exit(&T->kt_lock);
++	return T->kt_task;
+ }
+@@ -170,14 +217,5 @@
+ {
+-	struct task_struct *T;
+-	int error;
+-
+-	T = kthread_alloc(func, cookie, interlock, wq);
+-	error = kthread_create(PRI_NONE, KTHREAD_MPSAFE, NULL,
+-	    linux_kthread_start, T, &T->kt_lwp, "%s", name);
+-	if (error) {
+-		kthread_free(T);
+-		return ERR_PTR(-error); /* XXX errno NetBSD->Linux */
+-	}
+-
+-	return T;
++
++	return linux_kthread_spawn(func, cookie, name, interlock, wq,
++	    NULL, 0);
+ }
+@@ -185,5 +223,8 @@
+ int
+-kthread_stop(struct task_struct *T)
+-{
++kthread_stop(struct task_struct *task)
++{
++	struct linux_kthread *T = task->lt_kthread;
+ 	int ret;
++
++	KASSERT(T != NULL);
+ 
+@@ -205,2 +246,5 @@
+ 
++	/* Also wake callbacks sleeping on the common Linux task CV. */
++	(void)linux_wake_up_process(task);
++
+ 	/* Wait for the thread to finish.  */
+@@ -213,2 +257,5 @@
+ 
++	/* Drain the native MUSTJOIN LWP before reclaiming its backend. */
++	(void)kthread_join(T->kt_lwp);
++
+ 	/* Free the (Linux) kthread.  */
+@@ -223,3 +270,3 @@
+ {
+-	struct task_struct *T = linux_kthread();
++	struct linux_kthread *T = linux_kthread();
+ 	bool shouldstop;
+@@ -234,4 +281,5 @@
+ void
+-kthread_park(struct task_struct *T)
+-{
++kthread_park(struct task_struct *task)
++{
++	struct linux_kthread *T = task->lt_kthread;
+ 
+@@ -254,2 +302,3 @@
+ 	spin_unlock(T->kt_interlock);
++	(void)linux_wake_up_process(task);
+ 
+@@ -270,4 +319,5 @@
+ void
+-kthread_unpark(struct task_struct *T)
+-{
++kthread_unpark(struct task_struct *task)
++{
++	struct linux_kthread *T = task->lt_kthread;
+ 
+@@ -280,4 +330,5 @@
+ int
+-__kthread_should_park(struct task_struct *T)
+-{
++__kthread_should_park(struct task_struct *task)
++{
++	struct linux_kthread *T = task->lt_kthread;
+ 	bool shouldpark;
+@@ -294,5 +345,5 @@
+ {
+-	struct task_struct *T = linux_kthread();
+-
+-	return __kthread_should_park(T);
++	struct linux_kthread *T = linux_kthread();
++
++	return __kthread_should_park(T->kt_task);
+ }
+@@ -302,3 +353,3 @@
+ {
+-	struct task_struct *T = linux_kthread();
++	struct linux_kthread *T = linux_kthread();
+ 
+@@ -309,2 +360,3 @@
+ 	while (T->kt_shouldpark) {
++		linux_set_current_state(TASK_PARKED);
+ 		T->kt_parked = true;
+@@ -314,2 +366,3 @@
+ 	}
++	linux_set_current_state(TASK_RUNNING);
+ 	mutex_exit(&T->kt_lock);
+@@ -317 +370,370 @@
+ }
++
++/*
++ * Native immediate-work kthread worker implementation.
++ *
++ * Queue state is protected by an IPL_HIGH raw lock.  Native CV waiting
++ * uses kw_sleep_lock, a separate IPL_VM interlock.  Only the consumer
++ * takes sleep_lock -> queue_lock.  IRQ producers never take sleep_lock:
++ * they schedule a CLOCK softint under queue_lock, while preemption is
++ * disabled, and that notifier takes sleep_lock and broadcasts kw_wq.
++ *
++ * The consumer checks the predicate while holding sleep_lock.  A notifier
++ * scheduled before that check either has already signalled (the consumer
++ * sees the queued work), or waits for sleep_lock.  A notifier scheduled
++ * after the check cannot acquire sleep_lock until cv_wait has enqueued
++ * the consumer and released it.  Thus notification coalescing is safe
++ * and the check-to-sleep interval cannot lose a wakeup.
++ *
++ * Worker and work lifetime follows Linux: queue/cancel/flush users retain
++ * the worker until their call returns; work ownership must prevent freeing
++ * work during cancellation/flush.  The worker itself does not dereference
++ * a work item after invoking its callback, so callbacks may free their
++ * own unqueued work.
++ */
++
++static void
++linux_kthread_worker_notify(void *cookie)
++{
++	struct kthread_worker *worker = cookie;
++
++	spin_lock(&worker->kw_sleep_lock);
++	cv_broadcast(&worker->kw_wq);
++	spin_unlock(&worker->kw_sleep_lock);
++}
++
++static void
++linux_kthread_worker_signal(struct kthread_worker *worker)
++{
++
++	KASSERT(mutex_owned(&worker->lock.rsl_lock));
++	softint_schedule(worker->kw_softint);
++}
++
++/* Caller holds task->lt_lock, which protects the backend's lifetime. */
++int
++linux_kthread_wake_locked(struct task_struct *task)
++{
++	struct linux_kthread *K = task->lt_kthread;
++	struct kthread_worker *worker;
++	unsigned long flags;
++	int changed;
++
++	KASSERT(mutex_owned(&task->lt_lock.rsl_lock));
++	if (K == NULL || (worker = K->kt_worker) == NULL)
++		return 0;
++
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	changed = !worker->kw_started;
++	worker->kw_started = true;
++	linux_kthread_worker_signal(worker);
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++	return changed;
++}
++
++int
++linux_kthread_wake(struct task_struct *task)
++{
++	unsigned long flags;
++	int changed;
++
++	raw_spin_lock_irqsave(&task->lt_lock, flags);
++	changed = linux_kthread_wake_locked(task);
++	raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++	return changed;
++}
++
++static int
++linux_kthread_worker_fn(void *cookie)
++{
++	struct kthread_worker *worker = cookie;
++	struct kthread_work *work;
++	kthread_work_func_t func;
++	unsigned long flags;
++
++	spin_lock(&worker->kw_sleep_lock);
++	for (;;) {
++		/* Existing kthread stop/park use this same sleep interlock. */
++		if (kthread_should_park())
++			kthread_parkme();
++		if (kthread_should_stop()) {
++			raw_spin_lock_irqsave(&worker->lock, flags);
++			worker->current_work = NULL;
++			worker->task = NULL;
++			raw_spin_unlock_irqrestore(&worker->lock, flags);
++			linux_set_current_state(TASK_RUNNING);
++			spin_unlock(&worker->kw_sleep_lock);
++			return 0;
++		}
++
++		/* Publish sleep state before the predicate; no worker raw lock held. */
++		linux_set_current_state(TASK_INTERRUPTIBLE);
++		raw_spin_lock_irqsave(&worker->lock, flags);
++		if (!worker->kw_started || list_empty(&worker->work_list)) {
++			worker->current_work = NULL;
++			raw_spin_unlock_irqrestore(&worker->lock, flags);
++			cv_wait(&worker->kw_wq, &worker->kw_sleep_lock.sl_lock);
++			continue;
++		}
++
++		work = list_first_entry(&worker->work_list,
++		    struct kthread_work, node);
++		list_del_init(&work->node);
++		worker->current_work = work;
++		func = work->func;
++		raw_spin_unlock_irqrestore(&worker->lock, flags);
++		linux_set_current_state(TASK_RUNNING);
++		spin_unlock(&worker->kw_sleep_lock);
++
++		func(work);
++		/* Never dereference work after its callback. */
++		preempt_point();
++
++		spin_lock(&worker->kw_sleep_lock);
++		raw_spin_lock_irqsave(&worker->lock, flags);
++		worker->current_work = NULL;
++		raw_spin_unlock_irqrestore(&worker->lock, flags);
++	}
++}
++
++/* Insert before pos.  Flusher markers deliberately bypass queue blocking. */
++static void
++linux_kthread_insert_work(struct kthread_worker *worker,
++    struct kthread_work *work, struct list_head *pos)
++{
++
++	KASSERT(mutex_owned(&worker->lock.rsl_lock));
++	KASSERT(list_empty(&work->node));
++	KASSERTMSG(work->worker == NULL || work->worker == worker,
++	    "work must be reinitialized before changing workers");
++	list_add_tail(&work->node, pos);
++	work->worker = worker;
++	/* Linux queueing also wakes a created, not-yet-started worker. */
++	worker->kw_started = true;
++	linux_kthread_worker_signal(worker);
++}
++
++static struct kthread_worker *
++linux_kthread_create_worker_va(unsigned int flags, const char *namefmt,
++    va_list ap, bool run)
++{
++	struct kthread_worker *worker;
++	struct task_struct *task;
++	char name[MAXCOMLEN];
++
++	/* Freezer and affinity semantics are outside this implementation. */
++	if (flags != 0)
++		return ERR_PTR(-EOPNOTSUPP);
++
++	vsnprintf(name, sizeof(name), namefmt, ap);
++	worker = kmem_zalloc(sizeof(*worker), KM_SLEEP);
++	raw_spin_lock_init(&worker->lock);
++	INIT_LIST_HEAD(&worker->work_list);
++	spin_lock_init(&worker->kw_sleep_lock);
++	cv_init(&worker->kw_wq, "lnxworker");
++	worker->kw_softint = softint_establish(SOFTINT_CLOCK|SOFTINT_MPSAFE,
++	    linux_kthread_worker_notify, worker);
++	if (worker->kw_softint == NULL) {
++		task = ERR_PTR(-ENOMEM);
++		goto fail;
++	}
++
++	task = linux_kthread_spawn(linux_kthread_worker_fn, worker, name,
++	    &worker->kw_sleep_lock, &worker->kw_wq, worker, KTHREAD_TS);
++	if (IS_ERR(task))
++		goto fail;
++
++	if (run)
++		linux_kthread_wake(task);
++	return worker;
++
++fail:
++	if (worker->kw_softint != NULL)
++		softint_disestablish(worker->kw_softint);
++	cv_destroy(&worker->kw_wq);
++	spin_lock_destroy(&worker->kw_sleep_lock);
++	raw_spin_lock_destroy(&worker->lock);
++	kmem_free(worker, sizeof(*worker));
++	return ERR_CAST(task);
++}
++
++struct kthread_worker *
++kthread_create_worker(unsigned int flags, const char *namefmt, ...)
++{
++	struct kthread_worker *worker;
++	va_list ap;
++
++	va_start(ap, namefmt);
++	worker = linux_kthread_create_worker_va(flags, namefmt, ap, false);
++	va_end(ap);
++	return worker;
++}
++
++struct kthread_worker *
++kthread_run_worker(unsigned int flags, const char *namefmt, ...)
++{
++	struct kthread_worker *worker;
++	va_list ap;
++
++	va_start(ap, namefmt);
++	worker = linux_kthread_create_worker_va(flags, namefmt, ap, true);
++	va_end(ap);
++	return worker;
++}
++
++bool
++kthread_queue_work(struct kthread_worker *worker, struct kthread_work *work)
++{
++	unsigned long flags;
++	bool queued = false;
++
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	if (!worker->kw_destroying && work->canceling == 0 &&
++	    list_empty(&work->node)) {
++		linux_kthread_insert_work(worker, work, &worker->work_list);
++		queued = true;
++	}
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++	return queued;
++}
++
++struct linux_kthread_flusher {
++	struct kthread_work work;
++	kmutex_t lock;
++	kcondvar_t cv;
++	bool done;
++};
++
++static void
++linux_kthread_flusher_fn(struct kthread_work *work)
++{
++	struct linux_kthread_flusher *flusher =
++	    container_of(work, struct linux_kthread_flusher, work);
++
++	mutex_enter(&flusher->lock);
++	flusher->done = true;
++	cv_broadcast(&flusher->cv);
++	mutex_exit(&flusher->lock);
++	/* The waiting caller may destroy flusher as soon as lock is released. */
++}
++
++static void
++linux_kthread_flusher_init(struct linux_kthread_flusher *flusher)
++{
++
++	kthread_init_work(&flusher->work, linux_kthread_flusher_fn);
++	mutex_init(&flusher->lock, MUTEX_DEFAULT, IPL_VM);
++	cv_init(&flusher->cv, "lnxflush");
++	flusher->done = false;
++}
++
++static void
++linux_kthread_flusher_fini(struct linux_kthread_flusher *flusher, bool wait)
++{
++
++	if (wait) {
++		mutex_enter(&flusher->lock);
++		while (!flusher->done)
++			cv_wait(&flusher->cv, &flusher->lock);
++		mutex_exit(&flusher->lock);
++	}
++	cv_destroy(&flusher->cv);
++	mutex_destroy(&flusher->lock);
++}
++
++void
++kthread_flush_work(struct kthread_work *work)
++{
++	struct kthread_worker *worker = work->worker;
++	struct linux_kthread_flusher flusher;
++	unsigned long flags;
++	bool wait = true;
++
++	if (worker == NULL)
++		return;
++
++	linux_kthread_flusher_init(&flusher);
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	KASSERT(work->worker == worker);
++	if (!list_empty(&work->node))
++		linux_kthread_insert_work(worker, &flusher.work, work->node.next);
++	else if (worker->current_work == work)
++		linux_kthread_insert_work(worker, &flusher.work,
++		    worker->work_list.next);
++	else
++		wait = false;
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++	linux_kthread_flusher_fini(&flusher, wait);
++}
++
++bool
++kthread_cancel_work_sync(struct kthread_work *work)
++{
++	struct kthread_worker *worker = work->worker;
++	unsigned long flags;
++	bool canceled = false;
++
++	if (worker == NULL)
++		return false;
++
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	KASSERT(work->worker == worker);
++	if (!list_empty(&work->node)) {
++		list_del_init(&work->node);
++		canceled = true;
++	}
++	if (worker->current_work == work) {
++		/* Count every concurrent canceler; none may enable requeue early. */
++		KASSERT(work->canceling != UINT_MAX);
++		work->canceling++;
++		raw_spin_unlock_irqrestore(&worker->lock, flags);
++		kthread_flush_work(work);
++		raw_spin_lock_irqsave(&worker->lock, flags);
++		KASSERT(work->canceling != 0);
++		work->canceling--;
++	}
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++	return canceled;
++}
++
++void
++kthread_flush_worker(struct kthread_worker *worker)
++{
++	struct linux_kthread_flusher flusher;
++	unsigned long flags;
++
++	linux_kthread_flusher_init(&flusher);
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	KASSERT(worker->task != NULL);
++	/* Tail marker waits for the snapshot; later requeue stays after it. */
++	linux_kthread_insert_work(worker, &flusher.work, &worker->work_list);
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++	linux_kthread_flusher_fini(&flusher, true);
++}
++
++void
++kthread_destroy_worker(struct kthread_worker *worker)
++{
++	struct task_struct *task;
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&worker->lock, flags);
++	KASSERT(!worker->kw_destroying);
++	worker->kw_destroying = true;
++	task = worker->task;
++	KASSERT(task != NULL);
++	raw_spin_unlock_irqrestore(&worker->lock, flags);
++
++	/* Reject new work and self-requeue; drain every accepted work first. */
++	kthread_unpark(task);
++	kthread_flush_worker(worker);
++	kthread_stop(task);
++	/* No raw/sleep locks held: disestablish drains pending/running notifiers. */
++	softint_disestablish(worker->kw_softint);
++	KASSERT(list_empty(&worker->work_list));
++	KASSERT(worker->current_work == NULL);
++	cv_destroy(&worker->kw_wq);
++	spin_lock_destroy(&worker->kw_sleep_lock);
++	raw_spin_lock_destroy(&worker->lock);
++	kmem_free(worker, sizeof(*worker));
++}
+--- a/sys/external/bsd/drm2/include/linux/task_netbsd.h
++++ b/sys/external/bsd/drm2/include/linux/task_netbsd.h
+@@ -0,0 +1,54 @@
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Candidate common per-LWP Linux task identity; not installed. */
++#ifndef _LINUX_TASK_NETBSD_H_
++#define _LINUX_TASK_NETBSD_H_
++
++#include <sys/param.h>
++#include <sys/condvar.h>
++#include <sys/lwp.h>
++#include <linux/raw_spinlock.h>
++#include <linux/spinlock.h>
++
++struct task_struct {
++    raw_spinlock_t lt_lock;
++    spinlock_t lt_sleep_lock;
++    kcondvar_t lt_sleep_cv;
++    void *lt_softint;
++    struct lwp *lt_lwp;
++    volatile unsigned int __state;
++    volatile unsigned int lt_refs;
++    bool lt_exited;
++    /* Worker owner sets/clears this only under lt_lock. */
++    void *lt_kthread;
++    /* Native identity metadata; Linux PID namespace parity is OPEN. */
++    pid_t pid;
++    pid_t tgid;
++    char comm[16];
++};
++
++int linux_task_system_init(void);
++bool linux_task_system_busy(void);
++int linux_task_system_quiesce(void);
++void linux_task_system_resume(void);
++int linux_task_system_fini(void);
++struct task_struct *linux_task_alloc(void);
++void linux_task_attach_current(struct task_struct *);
++struct task_struct *linux_task_enter_current(void);
++struct task_struct *linux_current_task(void);
++void linux_get_task_struct(struct task_struct *);
++void linux_put_task_struct(struct task_struct *);
++struct lwp *linux_task_lwp(struct task_struct *);
++void linux_set_current_state(unsigned int);
++int linux_task_wake_state(struct task_struct *, unsigned int);
++int linux_wake_up_process(struct task_struct *);
++long linux_schedule_timeout(long);
++void linux_schedule(void);
++void linux_sched_set_fifo(struct task_struct *);
++bool linux_signal_pending(struct task_struct *);
++bool linux_fatal_signal_pending(struct task_struct *);
++bool linux_signal_pending_state(unsigned int, struct task_struct *);
++
++#define get_task_struct linux_get_task_struct
++#define put_task_struct linux_put_task_struct
++
++#endif
+--- a/sys/external/bsd/drm2/include/linux/sched.h
++++ b/sys/external/bsd/drm2/include/linux/sched.h
+@@ -1,32 +1,3 @@
+-/*	$NetBSD: sched.h,v 1.23 2021/12/27 13:28:41 riastradh Exp $	*/
+-
+-/*-
+- * Copyright (c) 2013 The NetBSD Foundation, Inc.
+- * All rights reserved.
+- *
+- * This code is derived from software contributed to The NetBSD Foundation
+- * by Taylor R. Campbell.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+- * POSSIBILITY OF SUCH DAMAGE.
+- */
+-
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Candidate Linux task-state scheduler over real NetBSD LWP sleep queues. */
+ #ifndef _LINUX_SCHED_H_
+@@ -35,9 +6,7 @@
+ #include <sys/param.h>
+-
+-#include <sys/cdefs.h>
+ #include <sys/kernel.h>
+-#include <sys/lwp.h>
+ #include <sys/proc.h>
+ #include <sys/sched.h>
+-
++#include <sys/systm.h>
++#include <machine/limits.h>
+ #include <asm/barrier.h>
+@@ -45,21 +14,37 @@
+ #include <asm/processor.h>
++#include <linux/errno.h>
++#include <linux/task_netbsd.h>
+ 
+-#include <linux/device.h>
+-#include <linux/errno.h>
++/* Values and wake masks from the frozen Linux include/linux/sched.h. */
++#define TASK_RUNNING         0x00000000
++#define TASK_INTERRUPTIBLE   0x00000001
++#define TASK_UNINTERRUPTIBLE  0x00000002
++#define TASK_PARKED          0x00000040
++#define TASK_DEAD            0x00000080
++#define TASK_WAKEKILL        0x00000100
++#define TASK_WAKING          0x00000200
++#define TASK_NOLOAD          0x00000400
++#define TASK_NEW             0x00000800
++#define TASK_KILLABLE        (TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
++#define TASK_IDLE            (TASK_UNINTERRUPTIBLE | TASK_NOLOAD)
++#define TASK_NORMAL          (TASK_INTERRUPTIBLE | TASK_UNINTERRUPTIBLE)
++#define TASK_COMM_LEN        16
++#define MAX_SCHEDULE_TIMEOUT LONG_MAX
+ 
+-struct seq_file;
++#define current linux_current_task()
++#define set_current_state linux_set_current_state
++#define __set_current_state linux_set_current_state
++#define schedule linux_schedule
++#define schedule_timeout linux_schedule_timeout
++#define wake_up_process linux_wake_up_process
++#define signal_pending linux_signal_pending
++#define fatal_signal_pending linux_fatal_signal_pending
++#define signal_pending_state linux_signal_pending_state
++#define sched_set_fifo linux_sched_set_fifo
+ 
+-#define	TASK_COMM_LEN	MAXCOMLEN
+-
+-#define	MAX_SCHEDULE_TIMEOUT	(INT_MAX/2)	/* paranoia */
+-
+-#define	TASK_UNINTERRUPTIBLE	__BIT(0)
+-#define	TASK_INTERRUPTIBLE	__BIT(1)
+-
+-#define	current	curproc
+-
+-static inline pid_t
+-task_pid_nr(struct proc *p)
++static inline long
++schedule_timeout_interruptible(long timeout)
+ {
+-	return p->p_pid;
++    set_current_state(TASK_INTERRUPTIBLE);
++    return schedule_timeout(timeout);
+ }
+@@ -69,28 +54,17 @@
+ {
+-	unsigned start, end;
++    set_current_state(TASK_UNINTERRUPTIBLE);
++    return schedule_timeout(timeout);
++}
+ 
+-	KASSERT(timeout >= 0);
+-	KASSERT(timeout < MAX_SCHEDULE_TIMEOUT);
++/* IO scheduling uses the real task wait. Native IO accounting is OPEN. */
++static inline long
++io_schedule_timeout(long timeout)
++{
++    return schedule_timeout(timeout);
++}
+ 
+-	if (cold) {
+-		unsigned us;
+-		if (hz <= 1000) {
+-			unsigned ms = hztoms(MIN((unsigned long)timeout,
+-			    mstohz(INT_MAX/2)));
+-			us = MIN(ms, INT_MAX/1000)*1000;
+-		} else if (hz <= 1000000) {
+-			us = MIN(timeout, (INT_MAX/1000000)/hz)*hz*1000000;
+-		} else {
+-			us = timeout/(1000000/hz);
+-		}
+-		DELAY(us);
+-		return 0;
+-	}
+-
+-	start = getticks();
+-	/* Caller is expected to loop anyway, so no harm in truncating.  */
+-	(void)kpause("loonix", /*intr*/false, MIN(timeout, INT_MAX/2), NULL);
+-	end = getticks();
+-
+-	return timeout - MIN(timeout, (end - start));
++static inline void
++io_schedule(void)
++{
++    schedule();
+ }
+@@ -100,4 +74,3 @@
+ {
+-
+-	return preempt_needed();
++    return preempt_needed();
+ }
+@@ -107,31 +80,18 @@
+ {
+-
+-	preempt_point();
++    preempt_point();
+ }
+ 
+-static inline bool
+-signal_pending_state(int state, struct proc *p)
++/* Retains native process IDs; Linux thread/PID namespace parity is OPEN. */
++static inline pid_t
++task_pid_nr(struct task_struct *task)
+ {
+-
+-	KASSERT(p == current);
+-	KASSERT(state & (TASK_INTERRUPTIBLE|TASK_UNINTERRUPTIBLE));
+-	if (state & TASK_UNINTERRUPTIBLE)
+-		return false;
+-	return sigispending(curlwp, 0);
++    return task->pid;
+ }
+ 
+-static inline void
+-sched_setscheduler(struct proc *p, int class, struct sched_param *param)
++static inline pid_t
++task_pid_vnr(struct task_struct *task)
+ {
+-
+-	KASSERT(p == curproc);
+-	KASSERT(class == SCHED_FIFO);
+-	KASSERT(param->sched_priority == 1);
+-
+-	lwp_lock(curlwp);
+-	curlwp->l_class = class;
+-	lwp_changepri(curlwp, PRI_KERNEL_RT);
+-	lwp_unlock(curlwp);
++    return task_pid_nr(task);
+ }
+ 
+-#endif  /* _LINUX_SCHED_H_ */
++#endif
+--- a/sys/external/bsd/drm2/include/linux/wait.h
++++ b/sys/external/bsd/drm2/include/linux/wait.h
+@@ -1,35 +1,1288 @@
+-/*	$NetBSD: wait.h,v 1.2 2014/03/18 18:20:43 riastradh Exp $	*/
+-
+-/*-
+- * Copyright (c) 2013 The NetBSD Foundation, Inc.
+- * All rights reserved.
+- *
+- * This code is derived from software contributed to The NetBSD Foundation
+- * by Taylor R. Campbell.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+- * POSSIBILITY OF SUCH DAMAGE.
+- */
+-
+-#ifndef _LINUX_WAIT_H_
+-#define _LINUX_WAIT_H_
+-
+-#endif  /* _LINUX_WAIT_H_ */
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_WAIT_H
++#define _LINUX_WAIT_H
++/*
++ * Linux wait queue related types and methods
++ */
++#include <linux/list.h>
++#include <linux/stddef.h>
++#include <linux/spinlock.h>
++
++#include <linux/sched.h>
++
++#define default_wake_function linux_default_wake_function
++#define __init_waitqueue_head linux___init_waitqueue_head
++#define add_wait_queue linux_add_wait_queue
++#define add_wait_queue_exclusive linux_add_wait_queue_exclusive
++#define add_wait_queue_priority linux_add_wait_queue_priority
++#define add_wait_queue_priority_exclusive linux_add_wait_queue_priority_exclusive
++#define remove_wait_queue linux_remove_wait_queue
++#define __wake_up linux___wake_up
++#define __wake_up_on_current_cpu linux___wake_up_on_current_cpu
++#define __wake_up_locked_key linux___wake_up_locked_key
++#define __wake_up_sync_key linux___wake_up_sync_key
++#define __wake_up_locked_sync_key linux___wake_up_locked_sync_key
++#define __wake_up_locked linux___wake_up_locked
++#define __wake_up_sync linux___wake_up_sync
++#define __wake_up_pollfree linux___wake_up_pollfree
++#define prepare_to_wait linux_prepare_to_wait
++#define prepare_to_wait_exclusive linux_prepare_to_wait_exclusive
++#define prepare_to_wait_event linux_prepare_to_wait_event
++#define init_wait_entry linux_init_wait_entry
++#define do_wait_intr linux_do_wait_intr
++#define do_wait_intr_irq linux_do_wait_intr_irq
++#define finish_wait linux_finish_wait
++#define autoremove_wake_function linux_autoremove_wake_function
++#define wait_woken linux_wait_woken
++#define woken_wake_function linux_woken_wake_function
++#define woken_wake_bit_function linux_woken_wake_bit_function
++
++
++typedef struct wait_queue_entry wait_queue_entry_t;
++
++typedef int (*wait_queue_func_t)(struct wait_queue_entry *wq_entry, unsigned mode, int flags, void *key);
++int default_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int flags, void *key);
++
++/* wait_queue_entry::flags */
++#define WQ_FLAG_EXCLUSIVE	0x01
++#define WQ_FLAG_WOKEN		0x02
++#define WQ_FLAG_CUSTOM		0x04
++#define WQ_FLAG_DONE		0x08
++#define WQ_FLAG_PRIORITY	0x10
++
++/*
++ * A single wait-queue entry structure:
++ */
++struct wait_queue_entry {
++	unsigned int		flags;
++	void			*private;
++	wait_queue_func_t	func;
++	struct list_head	entry;
++};
++
++struct wait_queue_head {
++	spinlock_t		lock;
++	struct list_head	head;
++};
++typedef struct wait_queue_head wait_queue_head_t;
++
++struct task_struct;
++
++/*
++ * Macros for declaration and initialisaton of the datatypes
++ */
++
++#define __WAITQUEUE_INITIALIZER(name, tsk) {					\
++	.private	= tsk,							\
++	.func		= default_wake_function,				\
++	.entry		= { NULL, NULL } }
++
++#define DECLARE_WAITQUEUE(name, tsk)						\
++	struct wait_queue_entry name = __WAITQUEUE_INITIALIZER(name, tsk)
++
++#define __WAIT_QUEUE_HEAD_INITIALIZER(name) {					\
++	.lock		= NETBSD_STATIC_WAITQUEUE_NEEDS_EXPLICIT_NATIVE_INITIALIZATION,			\
++	.head		= LIST_HEAD_INIT(name.head) }
++
++#define DECLARE_WAIT_QUEUE_HEAD(name) \
++	struct wait_queue_head name = __WAIT_QUEUE_HEAD_INITIALIZER(name)
++
++extern void __init_waitqueue_head(struct wait_queue_head *wq_head, const char *name, struct lock_class_key *);
++
++#define init_waitqueue_head(wq_head) \
++    __init_waitqueue_head((wq_head), #wq_head, NULL)
++
++/* Explicit native lifetime termination after callbacks/owners are drained. */
++static inline void destroy_waitqueue_head(struct wait_queue_head *head)
++{
++    KASSERT(list_empty(&head->head));
++    spin_lock_destroy(&head->lock);
++}
++
++#ifdef CONFIG_LOCKDEP
++# define __WAIT_QUEUE_HEAD_INIT_ONSTACK(name) \
++	({ init_waitqueue_head(&name); name; })
++# define DECLARE_WAIT_QUEUE_HEAD_ONSTACK(name) \
++	struct wait_queue_head name = __WAIT_QUEUE_HEAD_INIT_ONSTACK(name)
++#else
++# define DECLARE_WAIT_QUEUE_HEAD_ONSTACK(name) \
++    struct wait_queue_head name; init_waitqueue_head(&(name))
++#endif
++
++static inline void init_waitqueue_entry(struct wait_queue_entry *wq_entry, struct task_struct *p)
++{
++	wq_entry->flags		= 0;
++	wq_entry->private	= p;
++	wq_entry->func		= default_wake_function;
++}
++
++static inline void
++init_waitqueue_func_entry(struct wait_queue_entry *wq_entry, wait_queue_func_t func)
++{
++	wq_entry->flags		= 0;
++	wq_entry->private	= NULL;
++	wq_entry->func		= func;
++}
++
++/**
++ * waitqueue_active -- locklessly test for waiters on the queue
++ * @wq_head: the waitqueue to test for waiters
++ *
++ * returns true if the wait list is not empty
++ *
++ * NOTE: this function is lockless and requires care, incorrect usage _will_
++ * lead to sporadic and non-obvious failure.
++ *
++ * Use either while holding wait_queue_head::lock or when used for wakeups
++ * with an extra smp_mb() like::
++ *
++ *      CPU0 - waker                    CPU1 - waiter
++ *
++ *                                      for (;;) {
++ *      @cond = true;                     prepare_to_wait(&wq_head, &wait, state);
++ *      smp_mb();                         // smp_mb() from set_current_state()
++ *      if (waitqueue_active(wq_head))         if (@cond)
++ *        wake_up(wq_head);                      break;
++ *                                        schedule();
++ *                                      }
++ *                                      finish_wait(&wq_head, &wait);
++ *
++ * Because without the explicit smp_mb() it's possible for the
++ * waitqueue_active() load to get hoisted over the @cond store such that we'll
++ * observe an empty wait list while the waiter might not observe @cond.
++ *
++ * Also note that this 'optimization' trades a spin_lock() for an smp_mb(),
++ * which (when the lock is uncontended) are of roughly equal cost.
++ */
++static inline int waitqueue_active(struct wait_queue_head *wq_head)
++{
++	return !list_empty(&wq_head->head);
++}
++
++/**
++ * wq_has_single_sleeper - check if there is only one sleeper
++ * @wq_head: wait queue head
++ *
++ * Returns true of wq_head has only one sleeper on the list.
++ *
++ * Please refer to the comment for waitqueue_active.
++ */
++static inline bool wq_has_single_sleeper(struct wait_queue_head *wq_head)
++{
++	return list_is_singular(&wq_head->head);
++}
++
++/**
++ * wq_has_sleeper - check if there are any waiting processes
++ * @wq_head: wait queue head
++ *
++ * Returns true if wq_head has waiting processes
++ *
++ * Please refer to the comment for waitqueue_active.
++ */
++static inline bool wq_has_sleeper(struct wait_queue_head *wq_head)
++{
++	/*
++	 * We need to be sure we are in sync with the
++	 * add_wait_queue modifications to the wait queue.
++	 *
++	 * This memory barrier should be paired with one on the
++	 * waiting side.
++	 */
++	smp_mb();
++	return waitqueue_active(wq_head);
++}
++
++extern void add_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry);
++extern void add_wait_queue_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry);
++extern void add_wait_queue_priority(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry);
++extern int add_wait_queue_priority_exclusive(struct wait_queue_head *wq_head,
++					     struct wait_queue_entry *wq_entry);
++extern void remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry);
++
++static inline void __add_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	struct list_head *head = &wq_head->head;
++	struct wait_queue_entry *wq;
++
++	list_for_each_entry(wq, &wq_head->head, entry) {
++		if (!(wq->flags & WQ_FLAG_PRIORITY))
++			break;
++		head = &wq->entry;
++	}
++	list_add(&wq_entry->entry, head);
++}
++
++/*
++ * Used for wake-one threads:
++ */
++static inline void
++__add_wait_queue_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	wq_entry->flags |= WQ_FLAG_EXCLUSIVE;
++	__add_wait_queue(wq_head, wq_entry);
++}
++
++static inline void __add_wait_queue_entry_tail(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	list_add_tail(&wq_entry->entry, &wq_head->head);
++}
++
++static inline void
++__add_wait_queue_entry_tail_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	wq_entry->flags |= WQ_FLAG_EXCLUSIVE;
++	__add_wait_queue_entry_tail(wq_head, wq_entry);
++}
++
++static inline void
++__remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry)
++{
++	list_del(&wq_entry->entry);
++}
++
++int __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
++void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key);
++void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
++void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
++void __wake_up_locked_sync_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
++void __wake_up_locked(struct wait_queue_head *wq_head, unsigned int mode, int nr);
++void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode);
++void __wake_up_pollfree(struct wait_queue_head *wq_head);
++
++#define wake_up(x)			__wake_up(x, TASK_NORMAL, 1, NULL)
++#define wake_up_nr(x, nr)		__wake_up(x, TASK_NORMAL, nr, NULL)
++#define wake_up_all(x)			__wake_up(x, TASK_NORMAL, 0, NULL)
++#define wake_up_locked(x)		__wake_up_locked((x), TASK_NORMAL, 1)
++#define wake_up_all_locked(x)		__wake_up_locked((x), TASK_NORMAL, 0)
++#define wake_up_sync(x)			__wake_up_sync(x, TASK_NORMAL)
++
++#define wake_up_interruptible(x)	__wake_up(x, TASK_INTERRUPTIBLE, 1, NULL)
++#define wake_up_interruptible_nr(x, nr)	__wake_up(x, TASK_INTERRUPTIBLE, nr, NULL)
++#define wake_up_interruptible_all(x)	__wake_up(x, TASK_INTERRUPTIBLE, 0, NULL)
++#define wake_up_interruptible_sync(x)	__wake_up_sync((x), TASK_INTERRUPTIBLE)
++
++/*
++ * Wakeup macros to be used to report events to the targets.
++ */
++#define poll_to_key(m) ((void *)(uintptr_t)(unsigned int)(m))
++#define key_to_poll(m) ((unsigned int)(uintptr_t)(void *)(m))
++#define wake_up_poll(x, m)							\
++	__wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
++#define wake_up_poll_on_current_cpu(x, m)					\
++	__wake_up_on_current_cpu(x, TASK_NORMAL, poll_to_key(m))
++#define wake_up_locked_poll(x, m)						\
++	__wake_up_locked_key((x), TASK_NORMAL, poll_to_key(m))
++#define wake_up_interruptible_poll(x, m)					\
++	__wake_up(x, TASK_INTERRUPTIBLE, 1, poll_to_key(m))
++#define wake_up_interruptible_sync_poll(x, m)					\
++	__wake_up_sync_key((x), TASK_INTERRUPTIBLE, poll_to_key(m))
++#define wake_up_interruptible_sync_poll_locked(x, m)				\
++	__wake_up_locked_sync_key((x), TASK_INTERRUPTIBLE, poll_to_key(m))
++
++/**
++ * wake_up_pollfree - signal that a polled waitqueue is going away
++ * @wq_head: the wait queue head
++ *
++ * In the very rare cases where a ->poll() implementation uses a waitqueue whose
++ * lifetime is tied to a task rather than to the 'struct file' being polled,
++ * this function must be called before the waitqueue is freed so that
++ * non-blocking polls (e.g. epoll) are notified that the queue is going away.
++ *
++ * The caller must also RCU-delay the freeing of the wait_queue_head, e.g. via
++ * an explicit synchronize_rcu() or call_rcu(), or via SLAB_TYPESAFE_BY_RCU.
++ */
++static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
++{
++	/*
++	 * For performance reasons, we don't always take the queue lock here.
++	 * Therefore, we might race with someone removing the last entry from
++	 * the queue, and proceed while they still hold the queue lock.
++	 * However, rcu_read_lock() is required to be held in such cases, so we
++	 * can safely proceed with an RCU-delayed free.
++	 */
++	if (waitqueue_active(wq_head))
++		__wake_up_pollfree(wq_head);
++}
++
++#define ___wait_cond_timeout(condition, budget)						\
++({										\
++	bool __cond = (condition);						\
++	if (__cond && !budget)							\
++		budget = 1;							\
++	__cond || !budget;							\
++})
++
++#define ___wait_is_interruptible(state)						\
++	(!__builtin_constant_p(state) ||					\
++	 (state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
++
++extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
++
++/*
++ * The below macro ___wait_event() has an explicit shadow of the __ret
++ * variable when used from the wait_event_*() macros.
++ *
++ * This is so that both can use the ___wait_cond_timeout() construct
++ * to wrap the condition.
++ *
++ * The type inconsistency of the wait_event_*() __ret variable is also
++ * on purpose; we use long where we can return timeout values and int
++ * otherwise.
++ */
++
++#define ___wait_event(wq_head, condition, state, exclusive, ret, cmd)		\
++({										\
++	__label__ __out;							\
++	struct wait_queue_entry __wq_entry;					\
++	long __ret = ret;	/* explicit shadow */				\
++										\
++	init_wait_entry(&__wq_entry, exclusive ? WQ_FLAG_EXCLUSIVE : 0);	\
++	for (;;) {								\
++		long __int = prepare_to_wait_event(&wq_head, &__wq_entry, state);\
++										\
++		if (condition)							\
++			break;							\
++										\
++		if (___wait_is_interruptible(state) && __int) {			\
++			__ret = __int;						\
++			goto __out;						\
++		}								\
++										\
++		cmd;								\
++										\
++		if (condition)							\
++			break;							\
++	}									\
++	finish_wait(&wq_head, &__wq_entry);					\
++__out:	__ret;									\
++})
++
++#define __wait_event(wq_head, condition)					\
++	(void)___wait_event(wq_head, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			    schedule())
++
++/**
++ * wait_event - sleep until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ */
++#define wait_event(wq_head, condition)						\
++do {										\
++	might_sleep();								\
++	if (condition)								\
++		break;								\
++	__wait_event(wq_head, condition);					\
++} while (0)
++
++#define __io_wait_event(wq_head, condition)					\
++	(void)___wait_event(wq_head, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			    io_schedule())
++
++/*
++ * io_wait_event() -- like wait_event() but with io_schedule()
++ */
++#define io_wait_event(wq_head, condition)					\
++do {										\
++	might_sleep();								\
++	if (condition)								\
++		break;								\
++	__io_wait_event(wq_head, condition);					\
++} while (0)
++
++#define __wait_event_freezable(wq_head, condition)				\
++	___wait_event(wq_head, condition, (TASK_INTERRUPTIBLE|TASK_FREEZABLE),	\
++			0, 0, schedule())
++
++/**
++ * wait_event_freezable - sleep (or freeze) until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE -- so as not to contribute
++ * to system load) until the @condition evaluates to true. The
++ * @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ */
++#define wait_event_freezable(wq_head, condition)				\
++({										\
++	int __linux_wait_event_freezable_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_freezable_ret = __wait_event_freezable(wq_head, condition);		\
++	__linux_wait_event_freezable_ret;									\
++})
++
++#define __wait_event_timeout(wq_head, condition, timeout)			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      TASK_UNINTERRUPTIBLE, 0, timeout,				\
++		      __ret = schedule_timeout(__ret))
++
++/**
++ * wait_event_timeout - sleep until a condition gets true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * Returns:
++ * 0 if the @condition evaluated to %false after the @timeout elapsed,
++ * 1 if the @condition evaluated to %true after the @timeout elapsed,
++ * or the remaining jiffies (at least 1) if the @condition evaluated
++ * to %true before the @timeout elapsed.
++ */
++#define wait_event_timeout(wq_head, condition, timeout)				\
++({										\
++	long __linux_wait_event_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_timeout_ret))					\
++		__linux_wait_event_timeout_ret = __wait_event_timeout(wq_head, condition, timeout);	\
++	__linux_wait_event_timeout_ret;									\
++})
++
++#define __wait_event_freezable_timeout(wq_head, condition, timeout)		\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      (TASK_INTERRUPTIBLE|TASK_FREEZABLE), 0, timeout,		\
++		      __ret = schedule_timeout(__ret))
++
++/*
++ * like wait_event_timeout() -- except it uses TASK_INTERRUPTIBLE to avoid
++ * increasing load and is freezable.
++ */
++#define wait_event_freezable_timeout(wq_head, condition, timeout)		\
++({										\
++	long __linux_wait_event_freezable_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_freezable_timeout_ret))					\
++		__linux_wait_event_freezable_timeout_ret = __wait_event_freezable_timeout(wq_head, condition, timeout); \
++	__linux_wait_event_freezable_timeout_ret;									\
++})
++
++#define __wait_event_exclusive_cmd(wq_head, condition, cmd1, cmd2)		\
++	(void)___wait_event(wq_head, condition, TASK_UNINTERRUPTIBLE, 1, 0,	\
++			    cmd1; schedule(); cmd2)
++/*
++ * Just like wait_event_cmd(), except it sets exclusive flag
++ */
++#define wait_event_exclusive_cmd(wq_head, condition, cmd1, cmd2)		\
++do {										\
++	if (condition)								\
++		break;								\
++	__wait_event_exclusive_cmd(wq_head, condition, cmd1, cmd2);		\
++} while (0)
++
++#define __wait_event_cmd(wq_head, condition, cmd1, cmd2)			\
++	(void)___wait_event(wq_head, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			    cmd1; schedule(); cmd2)
++
++/**
++ * wait_event_cmd - sleep until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @cmd1: the command will be executed before sleep
++ * @cmd2: the command will be executed after sleep
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ */
++#define wait_event_cmd(wq_head, condition, cmd1, cmd2)				\
++do {										\
++	if (condition)								\
++		break;								\
++	__wait_event_cmd(wq_head, condition, cmd1, cmd2);			\
++} while (0)
++
++#define __wait_event_interruptible(wq_head, condition)				\
++	___wait_event(wq_head, condition, TASK_INTERRUPTIBLE, 0, 0,		\
++		      schedule())
++
++/**
++ * wait_event_interruptible - sleep until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible(wq_head, condition)				\
++({										\
++	int __linux_wait_event_interruptible_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_interruptible_ret = __wait_event_interruptible(wq_head, condition);		\
++	__linux_wait_event_interruptible_ret;									\
++})
++
++#define __wait_event_interruptible_timeout(wq_head, condition, timeout)		\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      TASK_INTERRUPTIBLE, 0, timeout,				\
++		      __ret = schedule_timeout(__ret))
++
++/**
++ * wait_event_interruptible_timeout - sleep until a condition gets true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * Returns:
++ * 0 if the @condition evaluated to %false after the @timeout elapsed,
++ * 1 if the @condition evaluated to %true after the @timeout elapsed,
++ * the remaining jiffies (at least 1) if the @condition evaluated
++ * to %true before the @timeout elapsed, or -%ERESTARTSYS if it was
++ * interrupted by a signal.
++ */
++#define wait_event_interruptible_timeout(wq_head, condition, timeout)		\
++({										\
++	long __linux_wait_event_interruptible_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_interruptible_timeout_ret))					\
++		__linux_wait_event_interruptible_timeout_ret = __wait_event_interruptible_timeout(wq_head,		\
++						condition, timeout);		\
++	__linux_wait_event_interruptible_timeout_ret;									\
++})
++
++#define __wait_event_hrtimeout(wq_head, condition, timeout, state)		\
++({										\
++	int __linux___wait_event_hrtimeout_ret = 0;								\
++	struct hrtimer_sleeper __t;						\
++										\
++	hrtimer_setup_sleeper_on_stack(&__t, CLOCK_MONOTONIC,			\
++				       HRTIMER_MODE_REL);			\
++	if ((timeout) != KTIME_MAX) {						\
++		hrtimer_set_expires_range_ns(&__t.timer, timeout,		\
++					current->timer_slack_ns);		\
++		hrtimer_sleeper_start_expires(&__t, HRTIMER_MODE_REL);		\
++	}									\
++										\
++	__linux___wait_event_hrtimeout_ret = ___wait_event(wq_head, condition, state, 0, 0,			\
++		if (!__t.task) {						\
++			__linux___wait_event_hrtimeout_ret = -ETIME;						\
++			break;							\
++		}								\
++		schedule());							\
++										\
++	hrtimer_cancel(&__t.timer);						\
++	destroy_hrtimer_on_stack(&__t.timer);					\
++	__linux___wait_event_hrtimeout_ret;									\
++})
++
++/**
++ * wait_event_hrtimeout - sleep until a condition gets true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, as a ktime_t
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function returns 0 if @condition became true, or -ETIME if the timeout
++ * elapsed.
++ */
++#define wait_event_hrtimeout(wq_head, condition, timeout)			\
++({										\
++	int __linux_wait_event_hrtimeout_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_hrtimeout_ret = __wait_event_hrtimeout(wq_head, condition, timeout,	\
++					       TASK_UNINTERRUPTIBLE);		\
++	__linux_wait_event_hrtimeout_ret;									\
++})
++
++/**
++ * wait_event_interruptible_hrtimeout - sleep until a condition gets true or a timeout elapses
++ * @wq: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, as a ktime_t
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function returns 0 if @condition became true, -ERESTARTSYS if it was
++ * interrupted by a signal, or -ETIME if the timeout elapsed.
++ */
++#define wait_event_interruptible_hrtimeout(wq, condition, timeout)		\
++({										\
++	long __linux_wait_event_interruptible_hrtimeout_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_interruptible_hrtimeout_ret = __wait_event_hrtimeout(wq, condition, timeout,		\
++					       TASK_INTERRUPTIBLE);		\
++	__linux_wait_event_interruptible_hrtimeout_ret;									\
++})
++
++#define __wait_event_interruptible_exclusive(wq, condition)			\
++	___wait_event(wq, condition, TASK_INTERRUPTIBLE, 1, 0,			\
++		      schedule())
++
++#define wait_event_interruptible_exclusive(wq, condition)			\
++({										\
++	int __linux_wait_event_interruptible_exclusive_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_interruptible_exclusive_ret = __wait_event_interruptible_exclusive(wq, condition);	\
++	__linux_wait_event_interruptible_exclusive_ret;									\
++})
++
++#define __wait_event_killable_exclusive(wq, condition)				\
++	___wait_event(wq, condition, TASK_KILLABLE, 1, 0,			\
++		      schedule())
++
++#define wait_event_killable_exclusive(wq, condition)				\
++({										\
++	int __linux_wait_event_killable_exclusive_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_killable_exclusive_ret = __wait_event_killable_exclusive(wq, condition);		\
++	__linux_wait_event_killable_exclusive_ret;									\
++})
++
++
++#define __wait_event_freezable_exclusive(wq, condition)				\
++	___wait_event(wq, condition, (TASK_INTERRUPTIBLE|TASK_FREEZABLE), 1, 0,\
++			schedule())
++
++#define wait_event_freezable_exclusive(wq, condition)				\
++({										\
++	int __linux_wait_event_freezable_exclusive_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_freezable_exclusive_ret = __wait_event_freezable_exclusive(wq, condition);	\
++	__linux_wait_event_freezable_exclusive_ret;									\
++})
++
++/**
++ * wait_event_idle - wait for a condition without contributing to system load
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_IDLE) until the
++ * @condition evaluates to true.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ */
++#define wait_event_idle(wq_head, condition)					\
++do {										\
++	might_sleep();								\
++	if (!(condition))							\
++		___wait_event(wq_head, condition, TASK_IDLE, 0, 0, schedule());	\
++} while (0)
++
++/**
++ * wait_event_idle_exclusive - wait for a condition with contributing to system load
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_IDLE) until the
++ * @condition evaluates to true.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * The process is put on the wait queue with an WQ_FLAG_EXCLUSIVE flag
++ * set thus if other processes wait on the same list, when this
++ * process is woken further processes are not considered.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ */
++#define wait_event_idle_exclusive(wq_head, condition)				\
++do {										\
++	might_sleep();								\
++	if (!(condition))							\
++		___wait_event(wq_head, condition, TASK_IDLE, 1, 0, schedule());	\
++} while (0)
++
++#define __wait_event_idle_timeout(wq_head, condition, timeout)			\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      TASK_IDLE, 0, timeout,					\
++		      __ret = schedule_timeout(__ret))
++
++/**
++ * wait_event_idle_timeout - sleep without load until a condition becomes true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_IDLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * Returns:
++ * 0 if the @condition evaluated to %false after the @timeout elapsed,
++ * 1 if the @condition evaluated to %true after the @timeout elapsed,
++ * or the remaining jiffies (at least 1) if the @condition evaluated
++ * to %true before the @timeout elapsed.
++ */
++#define wait_event_idle_timeout(wq_head, condition, timeout)			\
++({										\
++	long __linux_wait_event_idle_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_idle_timeout_ret))					\
++		__linux_wait_event_idle_timeout_ret = __wait_event_idle_timeout(wq_head, condition, timeout);	\
++	__linux_wait_event_idle_timeout_ret;									\
++})
++
++#define __wait_event_idle_exclusive_timeout(wq_head, condition, timeout)	\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      TASK_IDLE, 1, timeout,					\
++		      __ret = schedule_timeout(__ret))
++
++/**
++ * wait_event_idle_exclusive_timeout - sleep without load until a condition becomes true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_IDLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * The process is put on the wait queue with an WQ_FLAG_EXCLUSIVE flag
++ * set thus if other processes wait on the same list, when this
++ * process is woken further processes are not considered.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * Returns:
++ * 0 if the @condition evaluated to %false after the @timeout elapsed,
++ * 1 if the @condition evaluated to %true after the @timeout elapsed,
++ * or the remaining jiffies (at least 1) if the @condition evaluated
++ * to %true before the @timeout elapsed.
++ */
++#define wait_event_idle_exclusive_timeout(wq_head, condition, timeout)		\
++({										\
++	long __linux_wait_event_idle_exclusive_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_idle_exclusive_timeout_ret))					\
++		__linux_wait_event_idle_exclusive_timeout_ret = __wait_event_idle_exclusive_timeout(wq_head, condition, timeout);\
++	__linux_wait_event_idle_exclusive_timeout_ret;									\
++})
++
++extern int do_wait_intr(wait_queue_head_t *, wait_queue_entry_t *);
++extern int do_wait_intr_irq(wait_queue_head_t *, wait_queue_entry_t *);
++
++#define __wait_event_interruptible_locked(wq, condition, exclusive, fn)		\
++({										\
++	int __linux___wait_event_interruptible_locked_ret;								\
++	DEFINE_WAIT(__wait);							\
++	if (exclusive)								\
++		__wait.flags |= WQ_FLAG_EXCLUSIVE;				\
++	do {									\
++		__linux___wait_event_interruptible_locked_ret = fn(&(wq), &__wait);					\
++		if (__linux___wait_event_interruptible_locked_ret)							\
++			break;							\
++	} while (!(condition));							\
++	__remove_wait_queue(&(wq), &__wait);					\
++	__set_current_state(TASK_RUNNING);					\
++	__linux___wait_event_interruptible_locked_ret;									\
++})
++
++
++/**
++ * wait_event_interruptible_locked - sleep until a condition gets true
++ * @wq: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq is woken up.
++ *
++ * It must be called with wq.lock being held.  This spinlock is
++ * unlocked while sleeping but @condition testing is done while lock
++ * is held and when this macro exits the lock is held.
++ *
++ * The lock is locked/unlocked using spin_lock()/spin_unlock()
++ * functions which must match the way they are locked/unlocked outside
++ * of this macro.
++ *
++ * wake_up_locked() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_locked(wq, condition)				\
++	((condition)								\
++	 ? 0 : __wait_event_interruptible_locked(wq, condition, 0, do_wait_intr))
++
++/**
++ * wait_event_interruptible_locked_irq - sleep until a condition gets true
++ * @wq: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq is woken up.
++ *
++ * It must be called with wq.lock being held.  This spinlock is
++ * unlocked while sleeping but @condition testing is done while lock
++ * is held and when this macro exits the lock is held.
++ *
++ * The lock is locked/unlocked using spin_lock_irq()/spin_unlock_irq()
++ * functions which must match the way they are locked/unlocked outside
++ * of this macro.
++ *
++ * wake_up_locked() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_locked_irq(wq, condition)			\
++	((condition)								\
++	 ? 0 : __wait_event_interruptible_locked(wq, condition, 0, do_wait_intr_irq))
++
++/**
++ * wait_event_interruptible_exclusive_locked - sleep exclusively until a condition gets true
++ * @wq: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq is woken up.
++ *
++ * It must be called with wq.lock being held.  This spinlock is
++ * unlocked while sleeping but @condition testing is done while lock
++ * is held and when this macro exits the lock is held.
++ *
++ * The lock is locked/unlocked using spin_lock()/spin_unlock()
++ * functions which must match the way they are locked/unlocked outside
++ * of this macro.
++ *
++ * The process is put on the wait queue with an WQ_FLAG_EXCLUSIVE flag
++ * set thus when other process waits process on the list if this
++ * process is awaken further processes are not considered.
++ *
++ * wake_up_locked() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_exclusive_locked(wq, condition)		\
++	((condition)								\
++	 ? 0 : __wait_event_interruptible_locked(wq, condition, 1, do_wait_intr))
++
++/**
++ * wait_event_interruptible_exclusive_locked_irq - sleep until a condition gets true
++ * @wq: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq is woken up.
++ *
++ * It must be called with wq.lock being held.  This spinlock is
++ * unlocked while sleeping but @condition testing is done while lock
++ * is held and when this macro exits the lock is held.
++ *
++ * The lock is locked/unlocked using spin_lock_irq()/spin_unlock_irq()
++ * functions which must match the way they are locked/unlocked outside
++ * of this macro.
++ *
++ * The process is put on the wait queue with an WQ_FLAG_EXCLUSIVE flag
++ * set thus when other process waits process on the list if this
++ * process is awaken further processes are not considered.
++ *
++ * wake_up_locked() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_exclusive_locked_irq(wq, condition)		\
++	((condition)								\
++	 ? 0 : __wait_event_interruptible_locked(wq, condition, 1, do_wait_intr_irq))
++
++
++#define __wait_event_killable(wq, condition)					\
++	___wait_event(wq, condition, TASK_KILLABLE, 0, 0, schedule())
++
++/**
++ * wait_event_killable - sleep until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ *
++ * The process is put to sleep (TASK_KILLABLE) until the
++ * @condition evaluates to true or a signal is received.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a
++ * signal and 0 if @condition evaluated to true.
++ */
++#define wait_event_killable(wq_head, condition)					\
++({										\
++	int __linux_wait_event_killable_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_killable_ret = __wait_event_killable(wq_head, condition);		\
++	__linux_wait_event_killable_ret;									\
++})
++
++#define __io_wait_event_killable(wq, condition)					\
++	___wait_event(wq, condition, TASK_KILLABLE, 0, 0, io_schedule())
++
++/*
++ * wait_event_killable() - link wait_event_killable but with io_schedule()
++ */
++#define io_wait_event_killable(wq_head, condition)				\
++({										\
++	int __linux_io_wait_event_killable_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_io_wait_event_killable_ret = __io_wait_event_killable(wq_head, condition);		\
++	__linux_io_wait_event_killable_ret;									\
++})
++
++#define __wait_event_state(wq, condition, state)				\
++	___wait_event(wq, condition, state, 0, 0, schedule())
++
++/**
++ * wait_event_state - sleep until a condition gets true
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @state: state to sleep in
++ *
++ * The process is put to sleep (@state) until the @condition evaluates to true
++ * or a signal is received (when allowed by @state).  The @condition is checked
++ * each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * The function will return -ERESTARTSYS if it was interrupted by a signal
++ * (when allowed by @state) and 0 if @condition evaluated to true.
++ */
++#define wait_event_state(wq_head, condition, state)				\
++({										\
++	int __linux_wait_event_state_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_state_ret = __wait_event_state(wq_head, condition, state);		\
++	__linux_wait_event_state_ret;									\
++})
++
++#define __wait_event_state_exclusive(wq, condition, state)			\
++	___wait_event(wq, condition, state, 1, 0, schedule())
++
++#define wait_event_state_exclusive(wq, condition, state)			\
++({										\
++	int __linux_wait_event_state_exclusive_ret = 0;								\
++	might_sleep();								\
++	if (!(condition))							\
++		__linux_wait_event_state_exclusive_ret = __wait_event_state_exclusive(wq, condition, state);	\
++	__linux_wait_event_state_exclusive_ret;									\
++})
++
++#define __wait_event_killable_timeout(wq_head, condition, timeout)		\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      TASK_KILLABLE, 0, timeout,				\
++		      __ret = schedule_timeout(__ret))
++
++/**
++ * wait_event_killable_timeout - sleep until a condition gets true or a timeout elapses
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_KILLABLE) until the
++ * @condition evaluates to true or a kill signal is received.
++ * The @condition is checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * Returns:
++ * 0 if the @condition evaluated to %false after the @timeout elapsed,
++ * 1 if the @condition evaluated to %true after the @timeout elapsed,
++ * the remaining jiffies (at least 1) if the @condition evaluated
++ * to %true before the @timeout elapsed, or -%ERESTARTSYS if it was
++ * interrupted by a kill signal.
++ *
++ * Only kill signals interrupt this process.
++ */
++#define wait_event_killable_timeout(wq_head, condition, timeout)		\
++({										\
++	long __linux_wait_event_killable_timeout_ret = timeout;							\
++	might_sleep();								\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_killable_timeout_ret))					\
++		__linux_wait_event_killable_timeout_ret = __wait_event_killable_timeout(wq_head,			\
++						condition, timeout);		\
++	__linux_wait_event_killable_timeout_ret;									\
++})
++
++
++#define __wait_event_lock_irq(wq_head, condition, lock, cmd)			\
++	(void)___wait_event(wq_head, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			    spin_unlock_irq(&lock);				\
++			    cmd;						\
++			    schedule();						\
++			    spin_lock_irq(&lock))
++
++/**
++ * wait_event_lock_irq_cmd - sleep until a condition gets true. The
++ *			     condition is checked under the lock. This
++ *			     is expected to be called with the lock
++ *			     taken.
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @lock: a locked spinlock_t, which will be released before cmd
++ *	  and schedule() and reacquired afterwards.
++ * @cmd: a command which is invoked outside the critical section before
++ *	 sleep
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * This is supposed to be called while holding the lock. The lock is
++ * dropped before invoking the cmd and going to sleep and is reacquired
++ * afterwards.
++ */
++#define wait_event_lock_irq_cmd(wq_head, condition, lock, cmd)			\
++do {										\
++	if (condition)								\
++		break;								\
++	__wait_event_lock_irq(wq_head, condition, lock, cmd);			\
++} while (0)
++
++/**
++ * wait_event_lock_irq - sleep until a condition gets true. The
++ *			 condition is checked under the lock. This
++ *			 is expected to be called with the lock
++ *			 taken.
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @lock: a locked spinlock_t, which will be released before schedule()
++ *	  and reacquired afterwards.
++ *
++ * The process is put to sleep (TASK_UNINTERRUPTIBLE) until the
++ * @condition evaluates to true. The @condition is checked each time
++ * the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * This is supposed to be called while holding the lock. The lock is
++ * dropped before going to sleep and is reacquired afterwards.
++ */
++#define wait_event_lock_irq(wq_head, condition, lock)				\
++do {										\
++	if (condition)								\
++		break;								\
++	__wait_event_lock_irq(wq_head, condition, lock, );			\
++} while (0)
++
++
++#define __wait_event_interruptible_lock_irq(wq_head, condition, lock, cmd)	\
++	___wait_event(wq_head, condition, TASK_INTERRUPTIBLE, 0, 0,		\
++		      spin_unlock_irq(&lock);					\
++		      cmd;							\
++		      schedule();						\
++		      spin_lock_irq(&lock))
++
++/**
++ * wait_event_interruptible_lock_irq_cmd - sleep until a condition gets true.
++ *		The condition is checked under the lock. This is expected to
++ *		be called with the lock taken.
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @lock: a locked spinlock_t, which will be released before cmd and
++ *	  schedule() and reacquired afterwards.
++ * @cmd: a command which is invoked outside the critical section before
++ *	 sleep
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or a signal is received. The @condition is
++ * checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * This is supposed to be called while holding the lock. The lock is
++ * dropped before invoking the cmd and going to sleep and is reacquired
++ * afterwards.
++ *
++ * The macro will return -ERESTARTSYS if it was interrupted by a signal
++ * and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_lock_irq_cmd(wq_head, condition, lock, cmd)	\
++({										\
++	int __linux_wait_event_interruptible_lock_irq_cmd_ret = 0;								\
++	if (!(condition))							\
++		__linux_wait_event_interruptible_lock_irq_cmd_ret = __wait_event_interruptible_lock_irq(wq_head,		\
++						condition, lock, cmd);		\
++	__linux_wait_event_interruptible_lock_irq_cmd_ret;									\
++})
++
++/**
++ * wait_event_interruptible_lock_irq - sleep until a condition gets true.
++ *		The condition is checked under the lock. This is expected
++ *		to be called with the lock taken.
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @lock: a locked spinlock_t, which will be released before schedule()
++ *	  and reacquired afterwards.
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or signal is received. The @condition is
++ * checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * This is supposed to be called while holding the lock. The lock is
++ * dropped before going to sleep and is reacquired afterwards.
++ *
++ * The macro will return -ERESTARTSYS if it was interrupted by a signal
++ * and 0 if @condition evaluated to true.
++ */
++#define wait_event_interruptible_lock_irq(wq_head, condition, lock)		\
++({										\
++	int __linux_wait_event_interruptible_lock_irq_ret = 0;								\
++	if (!(condition))							\
++		__linux_wait_event_interruptible_lock_irq_ret = __wait_event_interruptible_lock_irq(wq_head,		\
++						condition, lock,);		\
++	__linux_wait_event_interruptible_lock_irq_ret;									\
++})
++
++#define __wait_event_lock_irq_timeout(wq_head, condition, lock, timeout, state)	\
++	___wait_event(wq_head, ___wait_cond_timeout(condition, __ret),			\
++		      state, 0, timeout,					\
++		      spin_unlock_irq(&lock);					\
++		      __ret = schedule_timeout(__ret);				\
++		      spin_lock_irq(&lock));
++
++/**
++ * wait_event_interruptible_lock_irq_timeout - sleep until a condition gets
++ *		true or a timeout elapses. The condition is checked under
++ *		the lock. This is expected to be called with the lock taken.
++ * @wq_head: the waitqueue to wait on
++ * @condition: a C expression for the event to wait for
++ * @lock: a locked spinlock_t, which will be released before schedule()
++ *	  and reacquired afterwards.
++ * @timeout: timeout, in jiffies
++ *
++ * The process is put to sleep (TASK_INTERRUPTIBLE) until the
++ * @condition evaluates to true or signal is received. The @condition is
++ * checked each time the waitqueue @wq_head is woken up.
++ *
++ * wake_up() has to be called after changing any variable that could
++ * change the result of the wait condition.
++ *
++ * This is supposed to be called while holding the lock. The lock is
++ * dropped before going to sleep and is reacquired afterwards.
++ *
++ * The function returns 0 if the @timeout elapsed, -ERESTARTSYS if it
++ * was interrupted by a signal, and the remaining jiffies otherwise
++ * if the condition evaluated to true before the timeout elapsed.
++ */
++#define wait_event_interruptible_lock_irq_timeout(wq_head, condition, lock,	\
++						  timeout)			\
++({										\
++	long __linux_wait_event_interruptible_lock_irq_timeout_ret = timeout;							\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_interruptible_lock_irq_timeout_ret))					\
++		__linux_wait_event_interruptible_lock_irq_timeout_ret = __wait_event_lock_irq_timeout(				\
++					wq_head, condition, lock, timeout,	\
++					TASK_INTERRUPTIBLE);			\
++	__linux_wait_event_interruptible_lock_irq_timeout_ret;									\
++})
++
++#define wait_event_lock_irq_timeout(wq_head, condition, lock, timeout)		\
++({										\
++	long __linux_wait_event_lock_irq_timeout_ret = timeout;							\
++	if (!___wait_cond_timeout(condition, __linux_wait_event_lock_irq_timeout_ret))					\
++		__linux_wait_event_lock_irq_timeout_ret = __wait_event_lock_irq_timeout(				\
++					wq_head, condition, lock, timeout,	\
++					TASK_UNINTERRUPTIBLE);			\
++	__linux_wait_event_lock_irq_timeout_ret;									\
++})
++
++/*
++ * Waitqueues which are removed from the waitqueue_head at wakeup time
++ */
++void prepare_to_wait(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state);
++bool prepare_to_wait_exclusive(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state);
++long prepare_to_wait_event(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state);
++void finish_wait(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry);
++long wait_woken(struct wait_queue_entry *wq_entry, unsigned mode, long timeout);
++int woken_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
++int woken_wake_bit_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
++int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
++
++#define DEFINE_WAIT_FUNC(name, function)					\
++	struct wait_queue_entry name = {					\
++		.private	= current,					\
++		.func		= function,					\
++		.entry		= LIST_HEAD_INIT((name).entry),			\
++	}
++
++#define DEFINE_WAIT(name) DEFINE_WAIT_FUNC(name, autoremove_wake_function)
++
++#define init_wait_func(wait, function)						\
++	do {									\
++		(wait)->private = current;					\
++		(wait)->func = function;					\
++		INIT_LIST_HEAD(&(wait)->entry);					\
++		(wait)->flags = 0;						\
++	} while (0)
++
++#define init_wait(wait)	init_wait_func(wait, autoremove_wake_function)
++
++typedef int (*task_call_f)(struct task_struct *p, void *arg);
++extern int task_call_func(struct task_struct *p, task_call_f func, void *arg);
++
++#endif /* _LINUX_WAIT_H */
+--- a/sys/external/bsd/drm2/include/linux/wait_bit.h
++++ b/sys/external/bsd/drm2/include/linux/wait_bit.h
+@@ -1,47 +1,334 @@
+-/*	$NetBSD: wait_bit.h,v 1.4 2021/12/19 12:36:08 riastradh Exp $	*/
+-
+-/*-
+- * Copyright (c) 2018 The NetBSD Foundation, Inc.
+- * All rights reserved.
+- *
+- * This code is derived from software contributed to The NetBSD Foundation
+- * by Taylor R. Campbell.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+- * POSSIBILITY OF SUCH DAMAGE.
+- */
+-
+-#ifndef	_LINUX_WAIT_BIT_H_
+-#define	_LINUX_WAIT_BIT_H_
+-
+-#define	clear_and_wake_up_bit	linux_clear_and_wake_up_bit
+-#define	wait_on_bit		linux_wait_on_bit
+-#define	wait_on_bit_timeout	linux_wait_on_bit_timeout
+-
+-int	linux_wait_bit_init(void);
+-void	linux_wait_bit_fini(void);
+-
+-void	clear_and_wake_up_bit(int, volatile unsigned long *);
+-int	wait_on_bit(const volatile unsigned long *, unsigned, int);
+-int	wait_on_bit_timeout(const volatile unsigned long *, unsigned, int,
+-	    unsigned long);
+-
+-#endif	/* _LINUX_WAIT_BIT_H_ */
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Selected keyed variable-callback subset from the frozen Linux wait-bit API.
++ * The native legacy bit/lock/IO/timeout APIs remain separate OPEN gates. */
++#ifndef _LINUX_WAIT_BIT_H_
++#define _LINUX_WAIT_BIT_H_
++#include <linux/wait.h>
++
++struct wait_bit_key {
++    unsigned long *flags;
++    int bit_nr;
++    unsigned long timeout;
++};
++struct wait_bit_queue_entry {
++    struct wait_bit_key key;
++    struct wait_queue_entry wq_entry;
++};
++
++#define __var_waitqueue linux___var_waitqueue
++#define __var_wake_key linux___var_wake_key
++#define init_wait_var_entry linux_init_wait_var_entry
++#define var_wake_function linux_var_wake_function
++#define wake_up_var linux_wake_up_var
++#define woken_wake_bit_function linux_woken_wake_bit_function
++
++int linux_wait_var_init(void);
++void linux_wait_var_fini(void);
++wait_queue_head_t *__var_waitqueue(void *);
++struct wait_bit_key *__var_wake_key(struct wait_queue_entry *, void *);
++void init_wait_var_entry(struct wait_bit_queue_entry *, void *, int);
++int var_wake_function(struct wait_queue_entry *, unsigned int, int, void *);
++void wake_up_var(void *);
++int woken_wake_bit_function(struct wait_queue_entry *, unsigned int, int, void *);
++
++/* Preserve the existing native ABI declarations rather than hiding them.
++ * These legacy functions do not supply keyed variable callback queues. */
++#define clear_and_wake_up_bit linux_clear_and_wake_up_bit
++#define wait_on_bit linux_wait_on_bit
++#define wait_on_bit_timeout linux_wait_on_bit_timeout
++int linux_wait_bit_init(void);
++void linux_wait_bit_fini(void);
++void clear_and_wake_up_bit(int, volatile unsigned long *);
++int wait_on_bit(const volatile unsigned long *, unsigned int, int);
++int wait_on_bit_timeout(const volatile unsigned long *, unsigned int, int,
++    unsigned long);
++
++#define ___wait_var_event(var, condition, state, exclusive, ret, cmd)	\
++({									\
++	__label__ __out;						\
++	struct wait_queue_head *__wq_head = __var_waitqueue(var);	\
++	struct wait_bit_queue_entry __wbq_entry;			\
++	long __ret = ret; /* explicit shadow */				\
++									\
++	init_wait_var_entry(&__wbq_entry, var,				\
++			    exclusive ? WQ_FLAG_EXCLUSIVE : 0);		\
++	for (;;) {							\
++		long __int = prepare_to_wait_event(__wq_head,		\
++						   &__wbq_entry.wq_entry, \
++						   state);		\
++		if (condition)						\
++			break;						\
++									\
++		if (___wait_is_interruptible(state) && __int) {		\
++			__ret = __int;					\
++			goto __out;					\
++		}							\
++									\
++		cmd;							\
++	}								\
++	finish_wait(__wq_head, &__wbq_entry.wq_entry);			\
++__out:	__ret;								\
++})
++
++#define __wait_var_event(var, condition)				\
++	___wait_var_event(var, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			  schedule())
++#define __wait_var_event_io(var, condition)				\
++	___wait_var_event(var, condition, TASK_UNINTERRUPTIBLE, 0, 0,	\
++			  io_schedule())
++
++/**
++ * wait_var_event - wait for a variable to be updated and notified
++ * @var: the address of variable being waited on
++ * @condition: the condition to wait for
++ *
++ * Wait for a @condition to be true, only re-checking when a wake up is
++ * received for the given @var (an arbitrary kernel address which need
++ * not be directly related to the given condition, but usually is).
++ *
++ * The process will wait on a waitqueue selected by hash from a shared
++ * pool.  It will only be woken on a wake_up for the given address.
++ *
++ * The condition should normally use smp_load_acquire() or a similarly
++ * ordered access to ensure that any changes to memory made before the
++ * condition became true will be visible after the wait completes.
++ */
++#define wait_var_event(var, condition)					\
++do {									\
++	might_sleep();							\
++	if (condition)							\
++		break;							\
++	__wait_var_event(var, condition);				\
++} while (0)
++
++/**
++ * wait_var_event_io - wait for a variable to be updated and notified
++ * @var: the address of variable being waited on
++ * @condition: the condition to wait for
++ *
++ * Wait for an IO related @condition to be true, only re-checking when a
++ * wake up is received for the given @var (an arbitrary kernel address
++ * which need not be directly related to the given condition, but
++ * usually is).
++ *
++ * The process will wait on a waitqueue selected by hash from a shared
++ * pool.  It will only be woken on a wake_up for the given address.
++ *
++ * This is similar to wait_var_event(), but calls io_schedule() instead
++ * of schedule().
++ *
++ * The condition should normally use smp_load_acquire() or a similarly
++ * ordered access to ensure that any changes to memory made before the
++ * condition became true will be visible after the wait completes.
++ */
++#define wait_var_event_io(var, condition)				\
++do {									\
++	might_sleep();							\
++	if (condition)							\
++		break;							\
++	__wait_var_event_io(var, condition);				\
++} while (0)
++
++#define __wait_var_event_killable(var, condition)			\
++	___wait_var_event(var, condition, TASK_KILLABLE, 0, 0,		\
++			  schedule())
++
++/**
++ * wait_var_event_killable - wait for a variable to be updated and notified
++ * @var: the address of variable being waited on
++ * @condition: the condition to wait for
++ *
++ * Wait for a @condition to be true or a fatal signal to be received,
++ * only re-checking the condition when a wake up is received for the given
++ * @var (an arbitrary kernel address which need not be directly related
++ * to the given condition, but usually is).
++ *
++ * This is similar to wait_var_event() but returns a value which is
++ * 0 if the condition became true, or %-ERESTARTSYS if a fatal signal
++ * was received.
++ *
++ * The condition should normally use smp_load_acquire() or a similarly
++ * ordered access to ensure that any changes to memory made before the
++ * condition became true will be visible after the wait completes.
++ */
++#define wait_var_event_killable(var, condition)				\
++({									\
++	int __linux_wait_var_event_killable_ret = 0;							\
++	might_sleep();							\
++	if (!(condition))						\
++		__linux_wait_var_event_killable_ret = __wait_var_event_killable(var, condition);	\
++	__linux_wait_var_event_killable_ret;								\
++})
++
++#define __wait_var_event_timeout(var, condition, timeout)		\
++	___wait_var_event(var, ___wait_cond_timeout(condition, __ret),		\
++			  TASK_UNINTERRUPTIBLE, 0, timeout,		\
++			  __ret = schedule_timeout(__ret))
++
++/**
++ * wait_var_event_timeout - wait for a variable to be updated or a timeout to expire
++ * @var: the address of variable being waited on
++ * @condition: the condition to wait for
++ * @timeout: maximum time to wait in jiffies
++ *
++ * Wait for a @condition to be true or a timeout to expire, only
++ * re-checking the condition when a wake up is received for the given
++ * @var (an arbitrary kernel address which need not be directly related
++ * to the given condition, but usually is).
++ *
++ * This is similar to wait_var_event() but returns a value which is 0 if
++ * the timeout expired and the condition was still false, or the
++ * remaining time left in the timeout (but at least 1) if the condition
++ * was found to be true.
++ *
++ * The condition should normally use smp_load_acquire() or a similarly
++ * ordered access to ensure that any changes to memory made before the
++ * condition became true will be visible after the wait completes.
++ */
++#define wait_var_event_timeout(var, condition, timeout)			\
++({									\
++	long __linux_wait_var_event_timeout_ret = timeout;						\
++	might_sleep();							\
++	if (!___wait_cond_timeout(condition, __linux_wait_var_event_timeout_ret))				\
++		__linux_wait_var_event_timeout_ret = __wait_var_event_timeout(var, condition, timeout); \
++	__linux_wait_var_event_timeout_ret;								\
++})
++
++#define __wait_var_event_interruptible(var, condition)			\
++	___wait_var_event(var, condition, TASK_INTERRUPTIBLE, 0, 0,	\
++			  schedule())
++
++/**
++ * wait_var_event_interruptible - wait for a variable to be updated and notified
++ * @var: the address of variable being waited on
++ * @condition: the condition to wait for
++ *
++ * Wait for a @condition to be true or a signal to be received, only
++ * re-checking the condition when a wake up is received for the given
++ * @var (an arbitrary kernel address which need not be directly related
++ * to the given condition, but usually is).
++ *
++ * This is similar to wait_var_event() but returns a value which is 0 if
++ * the condition became true, or %-ERESTARTSYS if a signal was received.
++ *
++ * The condition should normally use smp_load_acquire() or a similarly
++ * ordered access to ensure that any changes to memory made before the
++ * condition became true will be visible after the wait completes.
++ */
++#define wait_var_event_interruptible(var, condition)			\
++({									\
++	int __linux_wait_var_event_interruptible_ret = 0;							\
++	might_sleep();							\
++	if (!(condition))						\
++		__linux_wait_var_event_interruptible_ret = __wait_var_event_interruptible(var, condition);	\
++	__linux_wait_var_event_interruptible_ret;								\
++})
++
++/**
++ * wait_var_event_any_lock - wait for a variable to be updated under a lock
++ * @var: the address of the variable being waited on
++ * @condition: condition to wait for
++ * @lock: the object that is locked to protect updates to the variable
++ * @type: prefix on lock and unlock operations
++ * @state: waiting state, %TASK_UNINTERRUPTIBLE etc.
++ *
++ * Wait for a condition which can only be reliably tested while holding
++ * a lock.  The variables assessed in the condition will normal be updated
++ * under the same lock, and the wake up should be signalled with
++ * wake_up_var_locked() under the same lock.
++ *
++ * This is similar to wait_var_event(), but assumes a lock is held
++ * while calling this function and while updating the variable.
++ *
++ * This must be called while the given lock is held and the lock will be
++ * dropped when schedule() is called to wait for a wake up, and will be
++ * reclaimed before testing the condition again.  The functions used to
++ * unlock and lock the object are constructed by appending _unlock and _lock
++ * to @type.
++ *
++ * Return %-ERESTARTSYS if a signal arrives which is allowed to interrupt
++ * the wait according to @state.
++ */
++#define wait_var_event_any_lock(var, condition, lock, type, state)	\
++({									\
++	int __linux_wait_var_event_any_lock_ret = 0;							\
++	if (!(condition))						\
++		__linux_wait_var_event_any_lock_ret = ___wait_var_event(var, condition, state, 0, 0,	\
++					  type ## _unlock(lock);	\
++					  schedule();			\
++					  type ## _lock(lock));		\
++	__linux_wait_var_event_any_lock_ret;								\
++})
++
++/**
++ * wait_var_event_spinlock - wait for a variable to be updated under a spinlock
++ * @var: the address of the variable being waited on
++ * @condition: condition to wait for
++ * @lock: the spinlock which protects updates to the variable
++ *
++ * Wait for a condition which can only be reliably tested while holding
++ * a spinlock.  The variables assessed in the condition will normal be updated
++ * under the same spinlock, and the wake up should be signalled with
++ * wake_up_var_locked() under the same spinlock.
++ *
++ * This is similar to wait_var_event(), but assumes a spinlock is held
++ * while calling this function and while updating the variable.
++ *
++ * This must be called while the given lock is held and the lock will be
++ * dropped when schedule() is called to wait for a wake up, and will be
++ * reclaimed before testing the condition again.
++ */
++#define wait_var_event_spinlock(var, condition, lock)			\
++	wait_var_event_any_lock(var, condition, lock, spin, TASK_UNINTERRUPTIBLE)
++
++/**
++ * wait_var_event_mutex - wait for a variable to be updated under a mutex
++ * @var: the address of the variable being waited on
++ * @condition: condition to wait for
++ * @lock: the mutex which protects updates to the variable
++ *
++ * Wait for a condition which can only be reliably tested while holding
++ * a mutex.  The variables assessed in the condition will normal be
++ * updated under the same mutex, and the wake up should be signalled
++ * with wake_up_var_locked() under the same mutex.
++ *
++ * This is similar to wait_var_event(), but assumes a mutex is held
++ * while calling this function and while updating the variable.
++ *
++ * This must be called while the given mutex is held and the mutex will be
++ * dropped when schedule() is called to wait for a wake up, and will be
++ * reclaimed before testing the condition again.
++ */
++#define wait_var_event_mutex(var, condition, lock)			\
++	wait_var_event_any_lock(var, condition, lock, mutex, TASK_UNINTERRUPTIBLE)
++
++/**
++ * wake_up_var_protected - wake up waiters for a variable asserting that it is safe
++ * @var: the address of the variable being waited on
++ * @cond: the condition which afirms this is safe
++ *
++ * When waking waiters which use wait_var_event_any_lock() the waker must be
++ * holding the reelvant lock to avoid races.  This version of wake_up_var()
++ * asserts that the relevant lock is held and so no barrier is needed.
++ * The @cond is only tested when CONFIG_LOCKDEP is enabled.
++ */
++#define wake_up_var_protected(var, cond)				\
++do {									\
++	lockdep_assert(cond);						\
++	wake_up_var(var);						\
++} while (0)
++
++/**
++ * wake_up_var_locked - wake up waiters for a variable while holding a spinlock or mutex
++ * @var: the address of the variable being waited on
++ * @lock: The spinlock or mutex what protects the variable
++ *
++ * Send a wake up for the given variable which should be waited for with
++ * wait_var_event_spinlock() or wait_var_event_mutex().  Unlike wake_up_var(),
++ * no extra barriers are needed as the locking provides sufficient sequencing.
++ */
++#define wake_up_var_locked(var, lock)					\
++	wake_up_var_protected(var, lockdep_is_held(lock))
++
++
++#endif
+--- a/sys/external/bsd/drm2/include/linux/kthread.h
++++ b/sys/external/bsd/drm2/include/linux/kthread.h
+@@ -35,2 +35,4 @@
+ #include <linux/spinlock.h>
++#include <linux/list.h>
++#include <linux/task_netbsd.h>
+ 
+@@ -64,2 +66,70 @@
+ 
++/* Immediate kthread workers, backed by a native joinable LWP. */
++struct kthread_work;
++typedef void (*kthread_work_func_t)(struct kthread_work *);
++
++enum {
++	KTW_FREEZABLE = 1U << 0,
++};
++
++struct kthread_work {
++	struct list_head node;
++	kthread_work_func_t func;
++	struct kthread_worker *worker;
++	unsigned int canceling;
++};
++
++struct kthread_worker {
++	unsigned int flags;
++	raw_spinlock_t lock;
++	struct list_head work_list;
++	struct task_struct *task;
++	struct kthread_work *current_work;
++
++	/* Native fields: no queue-lock -> sleep-lock acquisition. */
++	spinlock_t kw_sleep_lock;
++	drm_waitqueue_t kw_wq;
++	void *kw_softint;
++	bool kw_started;
++	bool kw_destroying;
++};
++
++#define KTHREAD_WORK_INIT(work, fn) {				\
++	.node = LIST_HEAD_INIT((work).node),			\
++	.func = (fn),						\
++}
++#define DEFINE_KTHREAD_WORK(work, fn)				\
++	struct kthread_work work = KTHREAD_WORK_INIT(work, fn)
++
++static inline void
++kthread_init_work(struct kthread_work *work, kthread_work_func_t func)
++{
++	INIT_LIST_HEAD(&work->node);
++	work->func = func;
++	work->worker = NULL;
++	work->canceling = 0;
++}
++
++#define kthread_create_worker	linux_kthread_create_worker
++#define kthread_run_worker	linux_kthread_run_worker
++#define kthread_queue_work	linux_kthread_queue_work
++#define kthread_cancel_work_sync	linux_kthread_cancel_work_sync
++#define kthread_flush_work	linux_kthread_flush_work
++#define kthread_flush_worker	linux_kthread_flush_worker
++#define kthread_destroy_worker	linux_kthread_destroy_worker
++
++struct kthread_worker *kthread_create_worker(unsigned int, const char *, ...)
++	__printflike(2, 3);
++struct kthread_worker *kthread_run_worker(unsigned int, const char *, ...)
++	__printflike(2, 3);
++bool kthread_queue_work(struct kthread_worker *, struct kthread_work *);
++bool kthread_cancel_work_sync(struct kthread_work *);
++void kthread_flush_work(struct kthread_work *);
++void kthread_flush_worker(struct kthread_worker *);
++void kthread_destroy_worker(struct kthread_worker *);
++
++/* The scheduler calls the locked variant while holding task->lt_lock. */
++int linux_kthread_wake_locked(struct task_struct *);
++int linux_kthread_wake(struct task_struct *);
++
+ #endif  /* _LINUX_KTHREAD_H_ */
+--- a/sys/external/bsd/common/include/linux/completion.h
++++ b/sys/external/bsd/common/include/linux/completion.h
+@@ -57,2 +57,3 @@
+ #include <linux/errno.h>
++#include <linux/wait.h>
+ 
+--- a/sys/external/bsd/common/include/linux/math.h
++++ b/sys/external/bsd/common/include/linux/math.h
+@@ -6,3 +6,3 @@
+ #include <asm/div64.h>
+-#include <uapi/linux/kernel.h>
++#include <linux/const.h>
+ 
+--- a/sys/external/bsd/drm2/linux/files.drmkms_linux
++++ b/sys/external/bsd/drm2/linux/files.drmkms_linux
+@@ -25,2 +25,5 @@
+ file	external/bsd/drm2/linux/linux_kthread.c		drmkms_linux
++file	external/bsd/drm2/linux/linux_task.c	drmkms_linux
++file	external/bsd/drm2/linux/linux_wait.c	drmkms_linux
++file	external/bsd/drm2/linux/linux_wait_var.c	drmkms_linux
+ file	external/bsd/drm2/linux/linux_list_sort.c	drmkms_linux
+--- a/sys/modules/drmkms_linux/Makefile
++++ b/sys/modules/drmkms_linux/Makefile
+@@ -44,2 +44,6 @@
+ SRCS+=	linux_module.c
++SRCS+=	linux_kthread.c
++SRCS+=	linux_task.c
++SRCS+=	linux_wait.c
++SRCS+=	linux_wait_var.c
+ SRCS+=	linux_notifier.c
+--- a/sys/external/bsd/drm2/linux/linux_module.c
++++ b/sys/external/bsd/drm2/linux/linux_module.c
+@@ -114,2 +114,8 @@
+ 
++	error = linux_wait_var_init();
++	if (error) {
++		printf("linux: unable to initialize variable waits: %d\n", error);
++		goto fail9;
++	}
++
+ 	linux_irq_work_init();
+@@ -119,3 +125,3 @@
+ 
+-fail9: __unused
++fail9:
+ 	linux_kthread_fini();
+@@ -151,2 +157,3 @@
+ 	linux_irq_work_fini();
++	linux_wait_var_fini();
+ 	linux_kthread_fini();
+@@ -173,5 +180,9 @@
+ #endif
+-	case MODULE_CMD_FINI:
++	case MODULE_CMD_FINI: {
++		int error = linux_task_system_quiesce();
++		if (error != 0)
++			return error;
+ 		linux_fini();
+ 		return 0;
++	}
+ 	default:

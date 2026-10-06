@@ -1,0 +1,9 @@
+{
+  "linux_task.c": "d434fcaa9dea2e01d52b44605c3b2eedf9045550b1ff9c572c19e85eb0600ee4",
+  "linux_wait.c": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69",
+  "linux_wait_var.c": "c9493b685923c0f89fb5c6e752db753c8ee2801fd4e97643644686d71ce23920",
+  "include/linux/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+  "include/linux/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+  "include/linux/wait.h": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86",
+  "include/linux/wait_bit.h": "03c6c7fad5f76cbb64b2813eac9db4f98f0ba28376da2cdff404b5c16631490e"
+}
