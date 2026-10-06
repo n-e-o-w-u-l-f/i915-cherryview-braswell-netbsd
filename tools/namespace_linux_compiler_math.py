@@ -13,7 +13,8 @@ import re
 import subprocess
 
 PIN='fd179f8a05be3ccae366b9b96e176b51fbe54aab'
-INCLUDE_CONTRACT_VERSION=1
+INCLUDE_CONTRACT_VERSION=3
+PWM_NAMES=('pwm_polarity','pwm_enable','pwm_disable')
 UUID_NAMES=('uuid_t','uuid_null','uuid_equal','uuid_copy','import_uuid',
             'export_uuid','uuid_is_null','generate_random_uuid','uuid_gen',
             'uuid_index','uuid_parse')
@@ -29,13 +30,35 @@ def frozen(linux,path):
     return subprocess.check_output(['git','-C',str(linux),'show',PIN+':'+path],text=True)
 
 def adapt_includes(text,linux_path,version=INCLUDE_CONTRACT_VERSION):
-    if version not in (0,1):raise RuntimeError('unknown include-contract version')
-    if version==0 or linux_path not in UUID_INCLUDE_CONTRACTS:return text
-    anchor=UUID_INCLUDE_CONTRACTS[linux_path]
-    addition=anchor+'#include <linux/uuid.h>\n'
-    if addition in text:return text
-    if text.count(anchor)!=1:raise RuntimeError('changed frozen UUID include anchor: '+linux_path)
-    return text.replace(anchor,addition)
+    if version not in (0,1,2,3):raise RuntimeError('unknown include-contract version')
+    if version==0:return text
+    if linux_path in UUID_INCLUDE_CONTRACTS:
+        anchor=UUID_INCLUDE_CONTRACTS[linux_path]
+        addition=anchor+'#include <linux/uuid.h>\n'
+        if addition not in text:
+            if text.count(anchor)!=1:raise RuntimeError('changed frozen UUID include anchor: '+linux_path)
+            text=text.replace(anchor,addition)
+    if version>=2:
+        contracts={
+            'include/drm/drm_modes.h':('struct videomode;\n','struct videomode;\nstruct device_node;\n'),
+            'include/drm/drm_atomic.h':('#include <drm/drm_crtc.h>\n','#include <linux/completion.h>\n#include <drm/drm_crtc.h>\n'),
+        }
+        if linux_path in contracts:
+            anchor,addition=contracts[linux_path]
+            if addition not in text:
+                if text.count(anchor)!=1:raise RuntimeError('changed complete-type include anchor: '+linux_path)
+                text=text.replace(anchor,addition)
+    if version>=3:
+        contracts={
+            'include/drm/drm_connector.h':('struct drm_connector_helper_funcs;\n','struct dentry;\nstruct drm_connector_helper_funcs;\n'),
+            'include/drm/drm_crtc.h':('#include <linux/types.h>\n','#include <linux/types.h>\n#include <linux/ktime.h>\n'),
+        }
+        if linux_path in contracts:
+            anchor,addition=contracts[linux_path]
+            if addition not in text:
+                if text.count(anchor)!=1:raise RuntimeError('changed direct dependency anchor: '+linux_path)
+                text=text.replace(anchor,addition)
+    return text
 
 def bindings(linux):
     head=subprocess.check_output(['git','-C',str(linux),'rev-parse','HEAD'],text=True).strip()
@@ -56,6 +79,10 @@ def bindings(linux):
     if any(not re.search(r'\b'+name+r'\b',uuid_header) for name in UUID_NAMES):
         raise RuntimeError('changed pinned UUID interfaces')
     names.update(UUID_NAMES)
+    pwm_header=frozen(linux,'include/linux/pwm.h')
+    if any(not re.search(r'\b'+name+r'\b',pwm_header) for name in PWM_NAMES):
+        raise RuntimeError('changed pinned PWM interfaces')
+    names.update(PWM_NAMES)
     # This spelling is also a GCC attribute property inside its own definition.
     # It is not a native collision and must retain its compiler spelling.
     names.discard('__alloc_size__')
@@ -118,7 +145,7 @@ def integrate(linux,tree,manifest,api,out):
         if temp.exists():raise RuntimeError('preserve interrupted source write '+str(temp))
         temp.write_bytes(data);temp.replace(path)
     report['compiler_math_namespace']={'tokenizer_version':2,'include_contract_version':INCLUDE_CONTRACT_VERSION,
-        'include_contracts':UUID_INCLUDE_CONTRACTS,'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
+        'include_contracts':dict(UUID_INCLUDE_CONTRACTS, **{'include/drm/drm_modes.h':'file-scope opaque device_node', 'include/drm/drm_atomic.h':'explicit linux/completion.h', 'include/drm/drm_connector.h':'file-scope opaque dentry', 'include/drm/drm_crtc.h':'explicit real linux/ktime.h'}),'mapping':mapping,'seeds':seeds,'changed_files':len(plans),
         'acceptance':'OPEN; token bindings preserve algorithms but do not prove all OS/ABI/runtime semantics'}
     out.write_text(json.dumps(report,indent=2)+'\n')
     return len(plans),sum(row['changed'] for row in seeds)

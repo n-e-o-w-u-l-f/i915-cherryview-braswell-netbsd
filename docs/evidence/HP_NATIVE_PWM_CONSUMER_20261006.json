@@ -1,0 +1,4164 @@
+{
+  "state": "IN_PROGRESS",
+  "updated": "2026-10-06T09:48:56.286857+00:00",
+  "source_base": "9cce9ab2b9b31b925bdda07cd18e11297735489a",
+  "build_install_host": "HP ONLY",
+  "regressions": {
+    "count": 35,
+    "exit": 0,
+    "tests": [
+      "test_materialize_linux_i915.py",
+      "test_linux_memory_ordering.py",
+      "test_linux_kconfig.py",
+      "test_linux_posix_types.py",
+      "test_linux_rbtree.py",
+      "test_linux_wordsize.py",
+      "test_linux_raw_spinlock.py",
+      "test_linux_instruction_pointer.py",
+      "test_hp_shared_kconfig.py",
+      "test_linux_compiler_math.py",
+      "test_linux_math64.py",
+      "test_linux_completion.py",
+      "test_linux_typecheck_wordpart.py",
+      "test_linux_container.py",
+      "test_linux_typed_alloc.py",
+      "test_linux_task_wait_worker.py",
+      "test_linux_uuid.py",
+      "test_linux_pwm.py",
+      "test_vlv_chv_audio_phase.py",
+      "test_early_probe_unwind.py",
+      "test_opregion_optional_asle.py",
+      "test_opregion_rvda_map_failure.py",
+      "test_register_failure.py",
+      "test_drm_registration_source_contract.py",
+      "test_chv_dpio_routing_source_contract.py",
+      "test_chv_pipe_msa_misc_reference.py",
+      "test_chv_full_ppgtt_source_contract.py",
+      "test_gen8_ppgtt_vm_init_unwind.py",
+      "test_gen6_ppgtt_vm_flush_unwind.py",
+      "test_ppgtt_terminal_ownership_contract.py",
+      "test_edp_aux_irq_fallback.py",
+      "test_edp_fixed_mode.py",
+      "test_edp_dpcd_rates.py",
+      "test_chv_aux_precharge_reference.py",
+      "test_chv_phy_powerwell_sync_reference.py"
+    ],
+    "log_sha256": "99686f94016d3bfd67669140392ac5192801fbe0e9cedf8322ad0c06117b13df"
+  },
+  "native_objects_and_functional_proof": {
+    "host": "hp-tpnw121.fritz.box",
+    "os": "NetBSD-11.0-amd64-x86_64-64bit-ELF",
+    "checks": [
+      {
+        "check": "native-pwm-before",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/native_probe_before.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-before.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-pwm-before.log"
+      },
+      {
+        "check": "native-pwm-after",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/native_probe_after.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-after.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-pwm-after.log"
+      },
+      {
+        "check": "native-pwm-absent",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/config_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-absent.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-pwm-absent.log"
+      },
+      {
+        "check": "native-pwm-zero",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-DCONFIG_PWM=0",
+          "-DCONFIG_PWM_MODULE=0",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/config_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-zero.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-pwm-zero.log"
+      },
+      {
+        "check": "native-pwm-enabled-rejected",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-DCONFIG_PWM=1",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/config_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-enabled-rejected.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 1,
+        "expected": "reject",
+        "validated": true,
+        "log": "native-pwm-enabled-rejected.log"
+      },
+      {
+        "check": "native-pwm-module-rejected",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-DCONFIG_PWM_MODULE=1",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/config_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-module-rejected.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 1,
+        "expected": "reject",
+        "validated": true,
+        "log": "native-pwm-module-rejected.log"
+      },
+      {
+        "check": "native-of-pointer-disabled",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/of_pointer_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-of-pointer-disabled.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-of-pointer-disabled.log"
+      },
+      {
+        "check": "native-of-pointer-enabled",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-DCONFIG_OF=1",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/of_pointer_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-of-pointer-enabled.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-of-pointer-enabled.log"
+      },
+      {
+        "check": "native-of-before-rejected",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/of_pointer_before_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-of-before-rejected.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 1,
+        "expected": "reject",
+        "validated": true,
+        "log": "native-of-before-rejected.log"
+      },
+      {
+        "check": "native-of-enabled-before-rejected",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+          "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+          "-DCONFIG_OF=1",
+          "-fwrapv",
+          "-mcmodel=kernel",
+          "-mno-red-zone",
+          "-mno-mmx",
+          "-mno-sse",
+          "-mno-avx",
+          "-msoft-float",
+          "-mindirect-branch=thunk",
+          "-mindirect-branch-register",
+          "-ffreestanding",
+          "-fno-zero-initialized-in-bss",
+          "-fno-delete-null-pointer-checks",
+          "-g",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fstack-protector",
+          "-Wstack-protector",
+          "--param",
+          "ssp-buffer-size=1",
+          "-fstack-usage",
+          "-Wstack-usage=3584",
+          "-fno-strict-aliasing",
+          "-fno-common",
+          "-fwrapv",
+          "-std=gnu11",
+          "-Werror",
+          "-Wall",
+          "-Wno-main",
+          "-Wno-format-zero-length",
+          "-Wpointer-arith",
+          "-Wmissing-prototypes",
+          "-Wstrict-prototypes",
+          "-Wold-style-definition",
+          "-Wswitch",
+          "-Wshadow",
+          "-Wcast-qual",
+          "-Wwrite-strings",
+          "-Wno-unreachable-code",
+          "-Wno-pointer-sign",
+          "-Wno-attributes",
+          "-Wno-type-limits",
+          "-Wextra",
+          "-Wno-unused-parameter",
+          "-Wold-style-definition",
+          "-Wno-sign-compare",
+          "-Wno-address-of-packed-member",
+          "-Walloca",
+          "-Wno-missing-field-initializers",
+          "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+          "-Damd64",
+          "-Dx86_64",
+          "-I.",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+          "-nostdinc",
+          "-DCOMPAT_UTILS",
+          "-D__XEN_INTERFACE_VERSION__=0x3020a",
+          "-DCOMPAT_44",
+          "-D_KERNEL",
+          "-D_KERNEL_OPT",
+          "-std=gnu11",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+          "-D__KERNEL__",
+          "-DCONFIG_X86",
+          "-DCONFIG_X86_64",
+          "-DCONFIG_X86_PAT",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+          "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+          "-UCONFIG_FB",
+          "-UCONFIG_LOCKDEP",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_DRM_LEGACY",
+          "-DCONFIG_64BIT=1",
+          "-include",
+          "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+          "-DCONFIG_64BIT=1",
+          "-DCONFIG_ACPI=1",
+          "-DCONFIG_AGP=1",
+          "-DCONFIG_COMPAT=1",
+          "-DCONFIG_DRM=1",
+          "-DCONFIG_DRM_BUDDY=1",
+          "-DCONFIG_DRM_CLIENT=1",
+          "-DCONFIG_DRM_CLIENT_SELECTION=1",
+          "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+          "-DCONFIG_DRM_DISPLAY_HELPER=1",
+          "-DCONFIG_DRM_FBDEV_EMULATION=1",
+          "-DCONFIG_DRM_I915=1",
+          "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+          "-DCONFIG_DRM_I915_PXP=1",
+          "-DCONFIG_DRM_KMS_HELPER=1",
+          "-DCONFIG_DRM_MIPI_DSI=1",
+          "-DCONFIG_DRM_PANEL=1",
+          "-DCONFIG_DRM_TTM=1",
+          "-DCONFIG_HWMON=1",
+          "-DCONFIG_PCI=1",
+          "-DCONFIG_PERF_EVENTS=1",
+          "-DCONFIG_X86=1",
+          "-DCONFIG_CC_HAS_INT128=1",
+          "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+          "-D_FORTIFY_SOURCE=2",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+          "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+          "-c",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/of_pointer_before_probe.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-of-enabled-before-rejected.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+        "exit": 1,
+        "expected": "reject",
+        "validated": true,
+        "log": "native-of-enabled-before-rejected.log"
+      },
+      {
+        "check": "userland-compile",
+        "argv": [
+          "/usr/bin/cc",
+          "-D_NETBSD_SOURCE",
+          "-std=gnu11",
+          "-O2",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/test_pwm.c",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/test_pwm"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "userland-compile.log"
+      },
+      {
+        "check": "userland-test",
+        "argv": [
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/test_pwm"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "userland-test.log"
+      },
+      {
+        "check": "native-relocatable-link",
+        "argv": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-ld",
+          "-r",
+          "-o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/pwm-consumer-and-pointer-probes.o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-after.o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-pwm-absent.o",
+          "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-of-pointer-disabled.o"
+        ],
+        "cwd": "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g",
+        "exit": 0,
+        "expected": "pass",
+        "validated": true,
+        "log": "native-relocatable-link.log"
+      }
+    ],
+    "files": {
+      "include/linux/pwm.h": {
+        "bytes": 11956,
+        "sha256": "59afead456585a1f7205fb32df04ea0256fceb19c5dd246333a3580e11fa3ab7"
+      },
+      "native-pwm.patch": {
+        "bytes": 12536,
+        "sha256": "199d50c006b2ea16186fd71d1dc8aa8ded6b5a6eb0e0d8f42a72fed8b8c7561c"
+      },
+      "pwm-namespace.json": {
+        "bytes": 543,
+        "sha256": "1fdf7dd5c826d905f2deb6182b67a67dee426a6e9b1ade70b7fe629c8d5fd671"
+      },
+      "generate.py": {
+        "bytes": 7162,
+        "sha256": "daa71a4002a8e152aa57b7560233e78e7d9d497165d90b1946bfa77d476e16f9"
+      },
+      "build_hp.py": {
+        "bytes": 7411,
+        "sha256": "140eed951b4ffdcef9cf5ae21fc53182e96ee123da99423113c4dc9bb43c248c"
+      },
+      "audit_hp.py": {
+        "bytes": 4101,
+        "sha256": "fe1cc591b75ec970f4b5035c882c25b3e3f9eb4025336e598dcdc079c5051442"
+      },
+      "modern/include/drm/drm_modes.h": {
+        "bytes": 20536,
+        "sha256": "6037cf02ac45700c5e9c354ca9c444263f5548b3badc69806113ca23b843683a"
+      },
+      "of-pointer-hygiene.patch": {
+        "bytes": 295,
+        "sha256": "4ef552ca74ed3685c1d7eee260ebb9dbc74c1670865fa6f5a2795f9b00f0e031"
+      },
+      "of-pointer-manifest.json": {
+        "bytes": 511,
+        "sha256": "64ca0086ec07c5d1cd88c26d917b6fc3b956d365f5e76e96fe2877789c89b63a"
+      },
+      "tests/prepare.py": {
+        "bytes": 6012,
+        "sha256": "51a24c666262f83383a6f8414bdf6e76c6336b5c14209008be95499f933cdc0b"
+      },
+      "tests/test_pwm.c": {
+        "bytes": 7172,
+        "sha256": "12e7e448a0fc6ada812e59d02acd54830681b698238e278dbc5aca36563caf79"
+      },
+      "tests/test_pwm_header.h": {
+        "bytes": 11789,
+        "sha256": "193d78c7f63fa22d62f50c099a72759aafa28a3fd4a9b47402df4a7dd9845802"
+      },
+      "tests/test_err_header.h": {
+        "bytes": 2480,
+        "sha256": "d3a2f7c7280cb140b3f4e55c254f0fddf33a29a91203006e3f50589355021040"
+      },
+      "tests/test_math_macros.h": {
+        "bytes": 388,
+        "sha256": "5363efceec2c74dfede001bff0a268f5136f0d14595fc8cf57a9158ff18dc118"
+      },
+      "tests/test_list_type.h": {
+        "bytes": 72,
+        "sha256": "014b56093fe4ec1b0753d6c9e120cb60524a5000df242515e10c4c897fa5a635"
+      },
+      "tests/vectors.h": {
+        "bytes": 1444261,
+        "sha256": "bc78df786ff423708f105322ace7086dbe46a7cfe63458d173456b7ea03fc0c3"
+      },
+      "tests/vector-manifest.json": {
+        "bytes": 353,
+        "sha256": "6ab27c4afc9b046795139708c3e7613091a630d3e73aa1c71e6ca3abe99fa61b"
+      },
+      "tests/test_pwm": {
+        "bytes": 576816,
+        "sha256": "0defa099fd67dc8127a986e57638d8e8997ebb7fdeb6d5ae2496b680a3b3b66c"
+      },
+      "tests/linux_consumer_probe.inc": {
+        "bytes": 2545,
+        "sha256": "3bac75cf36e222fca42825f29358f5a182fe3f86abf9599b28d3d1e50ef5ee5f"
+      },
+      "tests/native_probe_prefix.inc": {
+        "bytes": 47,
+        "sha256": "15b70bdf6a512fdac733f4f969ab7ce001f55e03719605d92e5fd30718257d45"
+      },
+      "tests/native_probe_before.c": {
+        "bytes": 2676,
+        "sha256": "7f6527f56650e574f90bf6c9d6a61ad7b1de9582becd4db8d44a23546c8dbcff"
+      },
+      "tests/native_probe_after.c": {
+        "bytes": 2676,
+        "sha256": "13b37d11e2110c41cb29184689500a40904edbdcb005d8d4a964c4e2b09d0330"
+      },
+      "tests/config_probe.c": {
+        "bytes": 166,
+        "sha256": "4ba782dfdea2815a1275fc505e498e64e1983fcfca095c41537a0ecfde2c0778"
+      },
+      "tests/of_pointer_probe.c": {
+        "bytes": 1194,
+        "sha256": "b63b50184cc927bf34902504bcef547877102bee59bff3ea59bfe454c8a566d9"
+      },
+      "tests/of_pointer_before_probe.c": {
+        "bytes": 1174,
+        "sha256": "f7ade1fdeca4b668df8f7624e6f840cbb68820f68f2a0f3e656073381a1a12e3"
+      },
+      "tests/full_of_header_probe.c": {
+        "bytes": 290,
+        "sha256": "13e498d7d0d77f24600280951f9662578f6fd7b33f61554a6e7093a94ab07a9c"
+      },
+      "native-pwm-before.o": {
+        "bytes": 24048,
+        "sha256": "b34d09f262238e1061b3750d2136d472ac11865d846b06df701adadd64bfd6ed"
+      },
+      "native-pwm-after.o": {
+        "bytes": 24048,
+        "sha256": "7238f018a70276dd0396480e2c8e9003dd7728f9a85b827608b7329242f8fac1"
+      },
+      "native-pwm-absent.o": {
+        "bytes": 8536,
+        "sha256": "30a4a54cefe0292f9ddb9b937171dfb34598efe32b972d7ac42140acfd108e71"
+      },
+      "native-pwm-zero.o": {
+        "bytes": 8536,
+        "sha256": "30a4a54cefe0292f9ddb9b937171dfb34598efe32b972d7ac42140acfd108e71"
+      },
+      "native-of-pointer-disabled.o": {
+        "bytes": 5168,
+        "sha256": "1ec67013adf88d9c7c6ca3e9a5e0665421b0fb8a73f2ca875d6621565e47dea9"
+      },
+      "native-of-pointer-enabled.o": {
+        "bytes": 5808,
+        "sha256": "cb1e6ad5202106eb20e399330ad71f638b730b587a34a75dd22e038525384291"
+      },
+      "pwm-consumer-and-pointer-probes.o": {
+        "bytes": 30768,
+        "sha256": "d13c8e640ca07b029f7441c2e4ae5f22361552f7f6ba9c7af0f3bd96b48ec872"
+      },
+      "native-symbols.log": {
+        "bytes": 3409,
+        "sha256": "ede0b37a3ae8b93e293dc74a080b3f50e39303c2e910ed1401967508e612389d"
+      },
+      "probe_include/drm/drm_modes.h": {
+        "bytes": 20549,
+        "sha256": "8f6d35309400c30a26824ade6ed43b6462568a86956e0eb02f7be881c272ce0f"
+      },
+      "pwm-call-audit.json": {
+        "bytes": 119779,
+        "sha256": "84eff4e6b8b9a2bf97053f669cea4fb308a4818757af1e1b8ab788f8ff4caf0f"
+      },
+      "native-full-of-header.o": {
+        "bytes": 13168,
+        "sha256": "0bff6e1f682503b5e239b8c8ca75a6a8b5249f087bd65ef84492c3a3242e3cf7"
+      }
+    },
+    "base_sha256": {
+      "linux_div64.h": "288acb881f07893b78dde25bd9df2185db53442a38dc42de4ece20e34a7ccdb9",
+      "linux_drm_modes.h": "89fd24d07f8e9852705ff51d563ce645b2ecb90f310f69baad748562998d08e5",
+      "linux_i915_Kconfig": "673d9eb80ad622c559fc2dac0f1bcffc80d9bd6c154a90f612d807cf4876f262",
+      "linux_math.h": "e0437f2850ef21b25d7f574830d2213cfc97441883624577d7bf1fd7e61adcf1",
+      "linux_of.h": "cef3c80f7b56a4e4e280780baf314f4b8495ccd0dd929ac08d6a08363f11ccbc",
+      "linux_pwm.h": "0edf8e8abb8d79335d6dea27df20aa032a4178eb1d58653e16ded48fcf78393e",
+      "linux_pwm_Kconfig": "ab3523430a4f3512eb290564270fdaef28fdd5a591f54e356ed89be0409801c7",
+      "native_err.h": "0d878c3aa7c480164dbbb125ff40226df3a9459ae9c94c98a6a4229e31c55119",
+      "native_files_pwm": "767e37a69735b13523504d13a08be73df84ac5a2faab6f4be45ab3200ce4ba6f",
+      "native_list.h": "0049e571462e5fae2f910e14647f844fcc3ae9d9c7ba50b67626f0aac70bbea0",
+      "native_lpssreg.h": "7874a697206e3e543adadf2bed95173c27daac56f5240ad4e4136d8ba6fe2e06",
+      "native_pwm.c": "b1b9123a04eb64d4fceb5ca4d596b6e38637dda23a2a312a79328fb9c3d05ce7",
+      "native_pwm.h": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "native_pwmvar.h": "3f858fb95a2d3b7002eb10186359d4a4f2ccc8d48aa31c94e5ada8164788dfd4",
+      "native_types.h": "54b523717eb9f2ed1d4441cf215a08b3a9905e629ecf36285c52c301e7afdeb9"
+    },
+    "vectors": {
+      "seed": "0x50574d",
+      "get_count": 8486,
+      "set_count": 8448,
+      "getter_domain": "period=0 or 1..UINT32_MAX, scale=uint32, duty=uint64; result=uint32",
+      "setter_domain": "period=uint64, scale/duty=uint32; invalid scale/duty preserve state",
+      "arithmetic": "unbounded Python oracle; explicit modulo2^64 before division; getter result modulo2^32"
+    },
+    "native_full_of_header": {
+      "argv": [
+        "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+        "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/include",
+        "-I/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/probe_include",
+        "-fwrapv",
+        "-mcmodel=kernel",
+        "-mno-red-zone",
+        "-mno-mmx",
+        "-mno-sse",
+        "-mno-avx",
+        "-msoft-float",
+        "-mindirect-branch=thunk",
+        "-mindirect-branch-register",
+        "-ffreestanding",
+        "-fno-zero-initialized-in-bss",
+        "-fno-delete-null-pointer-checks",
+        "-g",
+        "-O2",
+        "-fno-omit-frame-pointer",
+        "-fstack-protector",
+        "-Wstack-protector",
+        "--param",
+        "ssp-buffer-size=1",
+        "-fstack-usage",
+        "-Wstack-usage=3584",
+        "-fno-strict-aliasing",
+        "-fno-common",
+        "-fwrapv",
+        "-std=gnu11",
+        "-Werror",
+        "-Wall",
+        "-Wno-main",
+        "-Wno-format-zero-length",
+        "-Wpointer-arith",
+        "-Wmissing-prototypes",
+        "-Wstrict-prototypes",
+        "-Wold-style-definition",
+        "-Wswitch",
+        "-Wshadow",
+        "-Wcast-qual",
+        "-Wwrite-strings",
+        "-Wno-unreachable-code",
+        "-Wno-pointer-sign",
+        "-Wno-attributes",
+        "-Wno-type-limits",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wold-style-definition",
+        "-Wno-sign-compare",
+        "-Wno-address-of-packed-member",
+        "-Walloca",
+        "-Wno-missing-field-initializers",
+        "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+        "-Damd64",
+        "-Dx86_64",
+        "-I.",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+        "-nostdinc",
+        "-DCOMPAT_UTILS",
+        "-D__XEN_INTERFACE_VERSION__=0x3020a",
+        "-DCOMPAT_44",
+        "-D_KERNEL",
+        "-D_KERNEL_OPT",
+        "-std=gnu11",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+        "-D__KERNEL__",
+        "-DCONFIG_X86",
+        "-DCONFIG_X86_64",
+        "-DCONFIG_X86_PAT",
+        "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+        "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+        "-DCONFIG_DRM_FBDEV_EMULATION=1",
+        "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+        "-UCONFIG_FB",
+        "-UCONFIG_LOCKDEP",
+        "-DCONFIG_PCI=1",
+        "-DCONFIG_DRM_LEGACY",
+        "-DCONFIG_64BIT=1",
+        "-include",
+        "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+        "-DCONFIG_64BIT=1",
+        "-DCONFIG_ACPI=1",
+        "-DCONFIG_AGP=1",
+        "-DCONFIG_COMPAT=1",
+        "-DCONFIG_DRM=1",
+        "-DCONFIG_DRM_BUDDY=1",
+        "-DCONFIG_DRM_CLIENT=1",
+        "-DCONFIG_DRM_CLIENT_SELECTION=1",
+        "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HELPER=1",
+        "-DCONFIG_DRM_FBDEV_EMULATION=1",
+        "-DCONFIG_DRM_I915=1",
+        "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+        "-DCONFIG_DRM_I915_PXP=1",
+        "-DCONFIG_DRM_KMS_HELPER=1",
+        "-DCONFIG_DRM_MIPI_DSI=1",
+        "-DCONFIG_DRM_PANEL=1",
+        "-DCONFIG_DRM_TTM=1",
+        "-DCONFIG_HWMON=1",
+        "-DCONFIG_PCI=1",
+        "-DCONFIG_PERF_EVENTS=1",
+        "-DCONFIG_X86=1",
+        "-DCONFIG_CC_HAS_INT128=1",
+        "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+        "-D_FORTIFY_SOURCE=2",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+        "-c",
+        "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/tests/full_of_header_probe.c",
+        "-o",
+        "/root/hp-driver-port-20261005/pwm-integration-model-3_cqvh0g/native-full-of-header.o"
+      ],
+      "cwd": "/root/hp-driver-port-20261005/full-linux-obj",
+      "exit": 0,
+      "log": "native-full-of-header.log",
+      "status": "PASS"
+    },
+    "unresolved_linux_pwm": [],
+    "acceptance": "OPEN: enabled Linux PWM lookup/ownership/provider and LPSS runtime, full selected graph/link/native hardware; OF fields/provider unimplemented",
+    "scope": "Frozen CONFIG_PWM-disabled consumer layouts/state helpers/arithmetic/errors; opaque OF tag hygiene separate",
+    "integrated_pwm_header_sha256": "59afead456585a1f7205fb32df04ea0256fceb19c5dd246333a3580e11fa3ab7",
+    "candidate_header_matches_shared_stage": true,
+    "actual_complete_type_probe": {
+      "exit": 0,
+      "command": [
+        "/root/hp-driver-port-20261005/full-linux-tools/bin/x86_64--netbsd-gcc",
+        "-fwrapv",
+        "-mcmodel=kernel",
+        "-mno-red-zone",
+        "-mno-mmx",
+        "-mno-sse",
+        "-mno-avx",
+        "-msoft-float",
+        "-mindirect-branch=thunk",
+        "-mindirect-branch-register",
+        "-ffreestanding",
+        "-fno-zero-initialized-in-bss",
+        "-fno-delete-null-pointer-checks",
+        "-g",
+        "-O2",
+        "-fno-omit-frame-pointer",
+        "-fstack-protector",
+        "-Wstack-protector",
+        "--param",
+        "ssp-buffer-size=1",
+        "-fstack-usage",
+        "-Wstack-usage=3584",
+        "-fno-strict-aliasing",
+        "-fno-common",
+        "-fwrapv",
+        "-std=gnu11",
+        "-Werror",
+        "-Wall",
+        "-Wno-main",
+        "-Wno-format-zero-length",
+        "-Wpointer-arith",
+        "-Wmissing-prototypes",
+        "-Wstrict-prototypes",
+        "-Wold-style-definition",
+        "-Wswitch",
+        "-Wshadow",
+        "-Wcast-qual",
+        "-Wwrite-strings",
+        "-Wno-unreachable-code",
+        "-Wno-pointer-sign",
+        "-Wno-attributes",
+        "-Wno-type-limits",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wold-style-definition",
+        "-Wno-sign-compare",
+        "-Wno-address-of-packed-member",
+        "-Walloca",
+        "-Wno-missing-field-initializers",
+        "--sysroot=/root/hp-driver-port-20261005/full-linux-obj/destdir.amd64",
+        "-Damd64",
+        "-Dx86_64",
+        "-I.",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/mit/xen-include-public/dist/",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libx86emu",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/lib/libc/misc",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/arch",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys",
+        "-nostdinc",
+        "-DCOMPAT_UTILS",
+        "-D__XEN_INTERFACE_VERSION__=0x3020a",
+        "-DCOMPAT_44",
+        "-D_KERNEL",
+        "-D_KERNEL_OPT",
+        "-std=gnu11",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/quad",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/string",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/string",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/arch/x86_64/atomic",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/lib/libkern/../../../common/lib/libc/hash/sha3",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/include/drm",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/drm",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/include/uapi",
+        "-D__KERNEL__",
+        "-DCONFIG_X86",
+        "-DCONFIG_X86_64",
+        "-DCONFIG_X86_PAT",
+        "-UCONFIG_BACKLIGHT_CLASS_DEVICE",
+        "-UCONFIG_BACKLIGHT_CLASS_DEVICE_MODULE",
+        "-DCONFIG_DRM_FBDEV_EMULATION=1",
+        "-DCONFIG_DRM_FBDEV_OVERALLOC=100",
+        "-UCONFIG_FB",
+        "-UCONFIG_LOCKDEP",
+        "-DCONFIG_PCI=1",
+        "-DCONFIG_DRM_LEGACY",
+        "-DCONFIG_64BIT=1",
+        "-include",
+        "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/common/include/linux/kconfig.h",
+        "-DCONFIG_64BIT=1",
+        "-DCONFIG_ACPI=1",
+        "-DCONFIG_AGP=1",
+        "-DCONFIG_COMPAT=1",
+        "-DCONFIG_DRM=1",
+        "-DCONFIG_DRM_BUDDY=1",
+        "-DCONFIG_DRM_CLIENT=1",
+        "-DCONFIG_DRM_CLIENT_SELECTION=1",
+        "-DCONFIG_DRM_DISPLAY_DP_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_DSC_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HDCP_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HDMI_HELPER=1",
+        "-DCONFIG_DRM_DISPLAY_HELPER=1",
+        "-DCONFIG_DRM_FBDEV_EMULATION=1",
+        "-DCONFIG_DRM_I915=1",
+        "-DCONFIG_DRM_I915_CAPTURE_ERROR=1",
+        "-DCONFIG_DRM_I915_PXP=1",
+        "-DCONFIG_DRM_KMS_HELPER=1",
+        "-DCONFIG_DRM_MIPI_DSI=1",
+        "-DCONFIG_DRM_PANEL=1",
+        "-DCONFIG_DRM_TTM=1",
+        "-DCONFIG_HWMON=1",
+        "-DCONFIG_PCI=1",
+        "-DCONFIG_PERF_EVENTS=1",
+        "-DCONFIG_X86=1",
+        "-DCONFIG_CC_HAS_INT128=1",
+        "-DCONFIG_ARCH_SUPPORTS_INT128=1",
+        "-D_FORTIFY_SOURCE=2",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/dist",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/isc/atheros_hal/ic",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/../common/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/acpica/dist/include",
+        "-I/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/libnv/dist",
+        "-c",
+        "/root/hp-driver-port-20261005/i915-pwm-proof-1791279994317572980/complete_type_probe.c",
+        "-o",
+        "/root/hp-driver-port-20261005/i915-pwm-proof-1791279994317572980/complete_type_probe.o"
+      ],
+      "object_sha256": "cc0dd5b10cee68e9a47087719c587ba42aa6e27c45f9fd608ff554ba0469d98d"
+    }
+  },
+  "selected_source_audit": {
+    "selected_c_count": 410,
+    "profile_pwm_disabled": true,
+    "pwm_matches": 190,
+    "audit_sha256": "84eff4e6b8b9a2bf97053f669cea4fb308a4818757af1e1b8ab788f8ff4caf0f",
+    "source_hashes": [
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_ch7017.c",
+        "sha256": "af2afa70f96c252a04ee0ad15cf5f6511d77669eb0b06ddead341d569f30208a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_ch7xxx.c",
+        "sha256": "811cfbacf6c512cf04d54c03c983b2ea5b105f15a500c6dfbb465d89dcd3c2cd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_ivch.c",
+        "sha256": "c26906b3a53b011a61d6b319940a8c970cb1c046233938b62164f0128df3714a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_ns2501.c",
+        "sha256": "8612bc6f606647b6cbd8c238343ce8c4cffcad3b7d93f1b945e8f7bade3e46fb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_sil164.c",
+        "sha256": "79a1f2cdbb328328824076d0b357ad0629117f7602cff1b6c07b911664aa051a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/dvo_tfp410.c",
+        "sha256": "26b6858c34bb429e2022e9975b96f634aa7d2cff6f389b3b2803a9400706b5cb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/g4x_dp.c",
+        "sha256": "3502c31b52433798b21175eec36bd95df4c63e2ed1612d662b4fc0f7adbea255"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/g4x_hdmi.c",
+        "sha256": "0a40a259d87568bc0a198046f73380ff3ca304acb6dd671de7a992355b73fa17"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/hsw_ips.c",
+        "sha256": "4d33d29342f63110360eaa0e83655219a12992fcc3950a3ad80736faec787637"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/i9xx_display_sr.c",
+        "sha256": "8183f6fd2fa4b9d1c4fedcd6adb73659bcc44b5956ae3d977956954a8acc235e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/i9xx_plane.c",
+        "sha256": "30e2221a4d4a0cfe3f5350ae9854b0e68ad336ff7b47dfd8b275ef7794bffcc5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/i9xx_wm.c",
+        "sha256": "fdfcd6a211a829914287188d53c3b3116a612d61c97cb83dc872a73127361a53"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/icl_dsi.c",
+        "sha256": "d75506fe8cd60ffb67f86c732c81c4491969c3c607533d746405622b11e5de49"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_acpi.c",
+        "sha256": "4c8fcf24649d8d888eac1181ebe1f05f00bec4084fa5d8ae0749a8d15fbccbd3"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_alpm.c",
+        "sha256": "f78686e3b36216607f30488c1727527937b4af55e43f7c6f52efb39bb2615306"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_atomic.c",
+        "sha256": "a4e76c70ef943f61f8b0e973976f2d031dbd90db4d1591b480ff88394235c7b8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_audio.c",
+        "sha256": "1065323c317daf9519d432ecc691cd892d9a2cd7994812535aded53cea92a6d6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_backlight.c",
+        "sha256": "fbf07622da8e6b7ec2d6e1b5538f1ac0115df300e1ef6c47fcd229a521c44493"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_bios.c",
+        "sha256": "d7354c190ded889f8de9a918962b158928c4bb32838485b16e9b08c7263f566c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_bo.c",
+        "sha256": "bae057957d08d977546b6111f90121a14ed23eb3e3ee61dcd5bbfac932664a7e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_bw.c",
+        "sha256": "0d52b0b3800e86418d026593e31496ff5c9cbf94b29cd72898b9e1dbdcb147c5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_casf.c",
+        "sha256": "b976fcd972d41000d74c1c9265aed93e873d6640e7c9e77338334c76570eaea8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_cdclk.c",
+        "sha256": "d90b49c8ca06721158c759214fbb4a79fcd5fa1a417e9c224d4c6d9b99671837"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_cmtg.c",
+        "sha256": "6be1f93f262eb27152bf79db733a15e53842630e9b4cdfd2fb91b07328363532"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_color.c",
+        "sha256": "811fdcca104b25117133445e1f50d56719134634454e8d83cc68ff88a82610b8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_color_pipeline.c",
+        "sha256": "42661615a40050f41863fd2db9c1143d47c58184c13ec412bc5eb0fce072fba7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_colorop.c",
+        "sha256": "a73ce2d45f12539cae471c8d57307dfdd51a0160104deb2573c772230709633a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_combo_phy.c",
+        "sha256": "fe7e499be6c073de4c0bf09e260688bb26ac396d31663ee36d42399cf71069f6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_connector.c",
+        "sha256": "3afe9dc3e2aea3ff9127b355228e6f452d9c7cd5490e93fc2aae0a8baa0b63b9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_crt.c",
+        "sha256": "53ca1afc2d60d495e80807a194dcb2908f04be6f768cd5cdd3823cbd487ff21c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_crtc.c",
+        "sha256": "900bba26657de05f95df0b720ae250d2ae6fe06734474fe69f843421d8ebc98d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_crtc_state_dump.c",
+        "sha256": "a73870d6fa80ad16a091eb3af81041ae6e55f049cde7dc6ef2e487138cd29eb3"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_cursor.c",
+        "sha256": "dc0c7da9778b78923222fe509e68cb482a26603c32328d72c6c65c44919eee58"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_cx0_phy.c",
+        "sha256": "e5d9ef5d5db850e68b2e84076c5b46919200de1243ef2c3a43603a5e2b0bd662"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dbuf_bw.c",
+        "sha256": "270c7264724a18125c5b584584aef2b69a0eadc25ca1256eb1a73fd82eb86f3d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_ddi.c",
+        "sha256": "7a6d1fc6e250a182780e16a1943d6ab0d54a1b1656e0088524baeac70b16f26d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_ddi_buf_trans.c",
+        "sha256": "98dd3629f2637f26d789ca1908fa648c5a64c87ea1805b5ac9c69dbf43f365f8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_de.c",
+        "sha256": "013021f178e05959e1a28ee65df4efb04928e99b409504efe715563f30b30e4e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display.c",
+        "sha256": "881c3dd8543017d15bb77272931f1af59e44dfd0c8ac22f39550028cd45a76eb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_clock_gating.c",
+        "sha256": "dfc7a10ea368a6cd0fb4e5a028654aa62b0054ac101689524c5485e82833fc43"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_conversion.c",
+        "sha256": "958281a2ed7a262c1cb57ad3a01009e1356d405e8955d07097ab7cf1f035619d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_device.c",
+        "sha256": "8103a6bd1f2c8a1dc18d0fd2e9f82d78752153227b1007d5f55f9fbd9c14a94d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_driver.c",
+        "sha256": "e495e7558f59a7ea1ab96e0e794fcd89e844527964979649cb677d23ad83bbd2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_irq.c",
+        "sha256": "5e538ba48d95c3fae09a4c284999838821a742adf5049fe58e2d581f10c52005"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_params.c",
+        "sha256": "93aab842a3e4b5caf99d7cffa0777f2da5cd62051854b4dd6c402f97a5764d9f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_power.c",
+        "sha256": "dd13990d50bcbb289e65c289f85ab9e14bdad930639b8b7e3ab64ef4f83db3e8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_power_map.c",
+        "sha256": "2b858673985472ea80b102e4b95a2f8fa7ecbfd914a118796e5b3cfa09e48054"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_power_well.c",
+        "sha256": "71033e18e3884cfa488cb58f217dc26e083e18ee407b1fe6b562229327423ec9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_reset.c",
+        "sha256": "973d40477f72ed1d0a4fbea138a06e76a559ad02d3e45d29614d30361138df3c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_rpm.c",
+        "sha256": "16dda85fb6117c096dda27124e638cca196cf7edce55d6229500e6574e064a26"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_rps.c",
+        "sha256": "5ed03aee92052d114f68c504b08eaebc8e09a37f3fbc53d6adeb669b5b2196c8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_snapshot.c",
+        "sha256": "4384b06d5c6e64a6c7a22e7cd01db33c53566fe73efbac7cbd9bb341c6b96ed2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_trace.c",
+        "sha256": "0d88d6853daa2a05bc61b7f632ff8a72497748ebf813afe2fa456fb735121b10"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_utils.c",
+        "sha256": "9ad79c1af87b8b371631811c1e32a7268e4592fa097268ed184571fad7a06dee"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_display_wa.c",
+        "sha256": "36efeb473a3c087140591998b8eca0bd13822766e85d5ef1b178224928ba2085"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dkl_phy.c",
+        "sha256": "d20b285d7d427049b87b0df3f2b3f626e9fc6e8816c4b567c26778cdb38fa7a0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dmc.c",
+        "sha256": "f3e91191b0a9d44440a2d5ec2c4639c99e39df496fc1b3caa1112010fa5aa453"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dmc_wl.c",
+        "sha256": "3803be6814b55368348c1a38667228ed6fee03b40860fbc4bcc7721e6f84d715"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp.c",
+        "sha256": "3591140a984783d0d36e82c0ce38e7fa881bd887b7caf8498f0f6a01a7d8dfa7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_aux.c",
+        "sha256": "a019d82f28c9863fbdaa48168768e8de5e4768b43a944b24425f3efc2aa3e790"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_aux_backlight.c",
+        "sha256": "67636c534e1a97066c892968b47b3bd8a2af4bd71aca3ad60ea92043e1b67650"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_hdcp.c",
+        "sha256": "aca6034ae97596c1b613e33567d33fd6433b5ceebae8ceae1dd27c1b9f0384a9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_link_caps.c",
+        "sha256": "45ddad874c7aafffe478a2797b4c30ff2440807de967354648b30a7aacdfa32a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_link_training.c",
+        "sha256": "bdb35d3e860f40df86408e1646adb0cf943aa50236efeb293873f67b49fa50fb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_mst.c",
+        "sha256": "199fe3aa8edba8fc2d840934205b8d2a7ecda34b95885023b69a68dfae85a1bd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dp_test.c",
+        "sha256": "ae2f65a43d6907a46644e7acefb3d1946b298542a36880a16b04153b8a7e1c5f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dpio_phy.c",
+        "sha256": "117ec33b1547aaded94c75256332b06ebab2665feae7ce0d3604cf453e9a0fc4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dpll.c",
+        "sha256": "8a7ce2b44ef0993c967081943a79024ffaa20adddbb233a4c4fcab2c8433090f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dpll_mgr.c",
+        "sha256": "145d4c3157930ab00645436bb887451614f6d60d5153af3fb0dade9f9a229b00"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dpt.c",
+        "sha256": "cccb899e669965860c88636778b82e799ddb325f762228229ef07074252774cc"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dram.c",
+        "sha256": "a12069e9710fa891a30f05b9ace9bea0101287468931a10dd54ecd4e26990f4e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_drrs.c",
+        "sha256": "b9187f26dda80af0ad144328a5319adfc5f0f4a5e73a446b7e7f3332053d1cb4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dsb.c",
+        "sha256": "ecfc6b971073f39605cc3de4232de8a7401f1bb969a2a9e1ebaf4bdd51a13963"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dsi.c",
+        "sha256": "d7726405689a2a07adaa4874ebbbe9a587549b55b4e648c899ca61c9d7cff2e2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dsi_dcs_backlight.c",
+        "sha256": "e16d54bc4ab86830b9a55a1c57c89261a386eb46224465b383e119f42cc19e09"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dsi_vbt.c",
+        "sha256": "32b3a6877796fbd421f9ee4651a5f6f7348a427b04c474e816c7da0bc9993323"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_dvo.c",
+        "sha256": "b408838b424b19855ca0a81ff4fc50508b375be59a5ff4405f4b3811c5aa1310"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_encoder.c",
+        "sha256": "58ad6066e64bacb5b877941433bdb3f06b6a557ee364ee9ff50ed2e343e6dcff"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_fb.c",
+        "sha256": "41313fbd5910f63724264db43cadb270f528e53c4ab2ba0776cef1cc114239c0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_fbc.c",
+        "sha256": "2cf36cdbb816842927e65f74e4509b21cf599f909b602760be077c6427727606"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_fbdev.c",
+        "sha256": "48ffd0f2f0f6f7ca77df01b6357bc1da018654542a8451ae2da0aaae0e9ed7ea"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_fdi.c",
+        "sha256": "1bf3b4cdb66bcfb05d42cd2dc85a6201b80aedbb3f99265728f33bff81042a71"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_fifo_underrun.c",
+        "sha256": "4780a9e6704f3ecaa886a2bf7ddc10d35da15aed6896531e974e10e28c3ad78f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_flipq.c",
+        "sha256": "ac7d2778fcf09139b066d84bb70c97af6dc7c11247c72dca1fc048b4975ffa73"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_frontbuffer.c",
+        "sha256": "4d188f5471854d32bf85c76cb8ebf45ac1e7ac2eab5480fa54b9c69d80bc7404"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_global_state.c",
+        "sha256": "c50f551c396d61acd0abafd5536e5e93fd47fb3b796929a0e2d11ab394f66295"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_gmbus.c",
+        "sha256": "cace6b065fdad0eaf26bad3ef2ac3b888465778e3b7743296b1c017aaa23afb6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hdcp.c",
+        "sha256": "401526c474974f79254c7d274bb004c9d2b93e45e691c40d44a861afd508edc8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hdcp_gsc_message.c",
+        "sha256": "df4d209ece54ff65f566d4ad38d142d815ec81274eb8c82ad82f0c41faefd69b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hdmi.c",
+        "sha256": "6e432fc1cf8b1d73278ec1c3207721b2be455aabd9d849eac8a145df16ef86e8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hotplug.c",
+        "sha256": "d26108403e48812e45d162c0c8fb1df37b4215afd8784fadbd3c1d5b15473736"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hotplug_irq.c",
+        "sha256": "f15065e8fa8d5e16300c0d6e1f60377734c954554100b838d4d3ad05aed091a6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_hti.c",
+        "sha256": "16da445f2b4a0e103075ee0b437b1b697078be35a06d07116a59c0088d6b94fb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_initial_plane.c",
+        "sha256": "702bd57d0bb750f4223ba004df16fe822e70f358d1e60340222fadbe5b17cc4a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_link_bw.c",
+        "sha256": "87f72541bbe126056e45726da2e0930cff2f0942a463131647db557d400f7b37"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_load_detect.c",
+        "sha256": "40dc19eca300978b28a3d9435fc234535da3bd6650e032b8769d50483268a456"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_lpe_audio.c",
+        "sha256": "ab6225e3ffae887dd86ec431ac86b158649902792d8d79d724242049e39138da"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_lspcon.c",
+        "sha256": "43ea9498dae9867f2b1407ecd9cad2c51275b9422495b41e24d36e5db1162135"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_lt_phy.c",
+        "sha256": "697438579d2c37146838558040a4a559a99ec2a437575c1f1b2b4406d7c08bfb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_lvds.c",
+        "sha256": "7ca447f30057e6132d7d10b601bd0ef3c6b4ad6b9e96900b803ea75e7cc0459a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_mchbar.c",
+        "sha256": "900fdc315a9c60ba01016c9a9936991f5cc62026ae240ca71494aa0d24e91490"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_modeset_lock.c",
+        "sha256": "d9ae8f05ca34cbb1513aa89b3ec6a276b675629ab6d531f44625387b81398f1e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_modeset_setup.c",
+        "sha256": "b7d265dc82ddb74a8de285413f88fdbc54195d0a343c7361829f797e90bbfe08"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_modeset_verify.c",
+        "sha256": "ba26c60d2d194830e5553bc24534e28d81608743d43e8b87b993ff2078391161"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_opregion.c",
+        "sha256": "6d998aa3b2fe6f05e7a2dfe6113c7d6b0fe714eee4d84be1e9d93736d9216fb6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_overlay.c",
+        "sha256": "353ba122bb184f1709ee556a54c57ba66216371acec9455b13b496af137d2345"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_panel.c",
+        "sha256": "f143322a37885df81dc016a1aac6a0adac5f2e847cb797a28f942135e38e37f6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_parent.c",
+        "sha256": "bcdcc44765890f5e607788e820234c8f5453ae98e175874f3180cff49f612b04"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pch.c",
+        "sha256": "1e255f1f40fe284f02152d031551f6873963927d66b3a041c0f9c6aa3e221c59"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pch_display.c",
+        "sha256": "4afd412719b3e7e7f0adea1852613b28d03c0abe48220a7a82dbb590d8cf4ec2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pch_refclk.c",
+        "sha256": "28186a838d6d5f27f619bd38c2f0c9a09a5f879bd7115c4b76048088615e8f93"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pfit.c",
+        "sha256": "caf652b7ae974b661375a7d11b6d4a5e05d96ef1056f2a9404e2528a718e1dfe"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_plane.c",
+        "sha256": "a535480c3fc8a9a09534ffc2b1ef09044a6af5678eae340e292a452af92b29eb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pmdemand.c",
+        "sha256": "8d9ceebe2ed24b424669ab57f9815cf83209f0fb6c487f340e00c278e4d7007e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_pps.c",
+        "sha256": "1f37deb0efbf7c73149ef8a829ded1860ca77287b24845f8dc16719f858523c8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_psr.c",
+        "sha256": "f9ca660a0f4caf3a8fb47d274bc713d15d342520534d1b0fbfdf499084496a60"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_qp_tables.c",
+        "sha256": "4768ad52073c774ef94653acd1f78f418c5ffebaac959a4606ef948f4c001a25"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_quirks.c",
+        "sha256": "907cad1d97a14e1416f92fa58b7be2196a16e32bb918c89c8fbc4d09871a9494"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_rom.c",
+        "sha256": "b86682675f6425ba7067488f46a21c24e58e77a4bdfb026dc6a48212c1b85e6a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_sbi.c",
+        "sha256": "cce2b0d5436954c54827837ca5fefd71eaaf9b42a744c39c1b7becc48c524661"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_sdvo.c",
+        "sha256": "5e0f6902049fb654ab7b44aaabfac0518f5105dc99a462f84c1ca0c4e88b3be4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_snps_hdmi_pll.c",
+        "sha256": "5ccf700c4ccde67b3876d715b7ff7e7577831186611f231303d91ce9df2f4e7c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_snps_phy.c",
+        "sha256": "bc8daf21fa6ce6f18819aa97d1968fa996b5f1e79700ee473f37f0a4d5cf2552"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_sprite.c",
+        "sha256": "000520053d7811ffd737712d42dd6c62661f738eba2eb81e4387160d71d444f0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_sprite_uapi.c",
+        "sha256": "e2a9a6ec47a4e5a6df94ed1d9274c41d6129f535220908658d511b13838e1120"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_tc.c",
+        "sha256": "d157c19e931a16199271f5d68b99b55eafa4fcbea0afaeb8495fec9de5b9e733"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_tv.c",
+        "sha256": "f52e5c25c8d5e17c2d990bc18b7807a45659d9f581fd0a7773c5c9dbd1c98476"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_vblank.c",
+        "sha256": "057fc7609e83920f58eda28f6deb322f0076b3802443e5b9ee41347acfdc351e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_vdsc.c",
+        "sha256": "02974df069fb83ac11126cad8a5c93bc4b44ec4368084a63d2d8171286feee28"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_vga.c",
+        "sha256": "678313518bc3684bd7e19bd3c412f7cab020e4aee1d35e53f83d7db5d0f7b5b2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_vrr.c",
+        "sha256": "5b04fb442114ad9ecb72283a614e6213aa86dc429c128966842d6e67e25527d5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/intel_wm.c",
+        "sha256": "4b83ed5702141a742691a8e1b68feb4938726c6bce3738553bfe6ba00bc323f0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/skl_prefill.c",
+        "sha256": "387fe3194ccfd73ad8f98d05e68b97eab83a506887f51089a3dbfc6eb16f2b35"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/skl_scaler.c",
+        "sha256": "2be30609ab75fc8c608b36bd9573deb69109ebebaa5058f2e50d64976e910ba7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/skl_universal_plane.c",
+        "sha256": "a15f8a2b15930454b3fd81627e3ee8e0939072fb61fab8d7e1e1862a51a1215e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/skl_watermark.c",
+        "sha256": "fa592f930a081874e7f0316204b4bbebfcee86caeeb8a77aa466989e36042aed"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/vlv_clock.c",
+        "sha256": "e98673ae5fd5e75483c8d3d72ec9ddbf548ff4e8ac5adb9421d0ff0563550834"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/vlv_dsi.c",
+        "sha256": "01cb43161e1616bc6291ce3de876baf126944c986ef7f94f80fbbf3bc5103da5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/vlv_dsi_pll.c",
+        "sha256": "efcac81dac407be954d4aeca09891633c9e663f76f603843cf9d0f0287f810dd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/display/vlv_sideband.c",
+        "sha256": "5f2033d4476bf8b7acc3f7dfdeaab15356b5ed95af7aa9b6dc4f6263ad53902e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_busy.c",
+        "sha256": "92e61aacf666385380417f2660cc7637a404d55031620a3bd0f9c85211f49029"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_clflush.c",
+        "sha256": "0ae339efab2fef2dd25eb5c829c8ba68dbd0ef22e72f3fba268818bf229d5986"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_context.c",
+        "sha256": "9691b06131f879424d29feb05659e047613267fe6e9b9c713232f75e8263d4ef"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_create.c",
+        "sha256": "e0b67c48dddda205200714c791531d2feb73c7427337f3878a49b229be248d07"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_dmabuf.c",
+        "sha256": "adde33cb7541a41d450f40a99b931ddc8f13e6db4c76463fbc29cf1b86956ae6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_domain.c",
+        "sha256": "4c1a320ede0afd6e942f5e419e35a8a3ee7a2c1c06f9e41ee91c3bd845272f58"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_execbuffer.c",
+        "sha256": "a48a25f4306e8c52d6c31782d41fb32ccbb9092a05290c9cecf959dd482e83a5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_internal.c",
+        "sha256": "06a8faead27ccfd71601ef6997168b3a1f57e44f0b7a4f5ac7a8ce0788dc3e7c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_lmem.c",
+        "sha256": "0e08a1dc08c31581ff1536996e38eeb18e9c284b178ad0fd580c4fff43e104e2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_mman.c",
+        "sha256": "56f5b95b70440b3157713f421a0060a675367cb0669be0e3b1ff375826343326"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_object.c",
+        "sha256": "6f27be844fab01663159e128da7b6a220f7bb671c996c39421270e121b97659b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_object_frontbuffer.c",
+        "sha256": "44afd917c13f385405add3c73ac1f8a1ba6e233040e4d65829b96b8f9d5ee84c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_pages.c",
+        "sha256": "4f82b61a533be039c44ace8d8714287d690fb53becbd4ff1fb553cb5fe427ed9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_panic.c",
+        "sha256": "eeb2f023507c65c4a23c26e5d5a34f6b3831e8c252da2a84e098774b58dd2842"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_phys.c",
+        "sha256": "8db45c1801398a808487697fcf2e4612d88a13a8c56afd19af7dbf3cc0b96989"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_pm.c",
+        "sha256": "682cb6f6b927b86105db13ef1db9b18cfedb529ac5c209b5f4396c4dab4b0963"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_region.c",
+        "sha256": "e31c4d55ddd94851ec7b00e41d251cd77d01d2313b17597d9f60c9633a6a9204"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_shmem.c",
+        "sha256": "f7b344c4498f57445550cc8f3b86e17e240bd09146d5d3eb824978003ec640ad"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_shrinker.c",
+        "sha256": "c3aa5027f4febbf70dbceb7a9e682913880d7635636f7faccc4cbc4094303d27"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_stolen.c",
+        "sha256": "51ccb7e03da7292bd8ca2cd3e2e73b5466bb6c94d4947869e0ecef3f9f4d7918"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_throttle.c",
+        "sha256": "6ca6fe57770361a2139d782bb646f41e48a85fbec6f51d69618549af5dcd953a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_tiling.c",
+        "sha256": "f86808d286bc304555af92aa59bce070d8f5be63ed09116650812c99ded50703"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_ttm.c",
+        "sha256": "9c5cb96403c188b93bb76a148d9c0ece4c528adb94c249ca7d5c9c968a1ca56b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_ttm_move.c",
+        "sha256": "c1aefec314ca504eff2d27703689f59f97b01332b55bf48049c2065dc67c3275"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_ttm_pm.c",
+        "sha256": "37e8bc36044302117361885556b05d1ccca7ad1c9fe39bb60d64abeedd0afdc9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_userptr.c",
+        "sha256": "e2c5feb20364cb0130467a54d45300e5cb95d747afd37c62c86be6176d2f27da"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gem/i915_gem_wait.c",
+        "sha256": "2b31ae6c9aecd207ac8d1d6ecc3bd8aa670c24887f8ec246e6433f7b8c3ad639"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen2_engine_cs.c",
+        "sha256": "983bb8788e49f67fa9dbb2330f59645abc963958acbd2e38fac5fdc3a1ed3b60"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen6_engine_cs.c",
+        "sha256": "940e5ed76582fc4762c2855ecba230887aaa08460526fcc25d4e7212d2c5c2aa"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen6_ppgtt.c",
+        "sha256": "3d115a100c5896700504f5e80e7477841665d45a6ef481d821a1d936ef1cb8ca"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen6_renderstate.c",
+        "sha256": "4850e0c844ca40bd8f22cf5cbfb86ddbace16254af1a385d51d66222107eb554"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen7_renderclear.c",
+        "sha256": "d64df4edb8620b1f61d8d41e309673868722bf5bbf2afdc7d9fb7eca44517e17"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen7_renderstate.c",
+        "sha256": "52e5ca5bc8fa2f72d87e3224c9c33169ac092ae441db55d81ac56a5dd0a0c81d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen8_engine_cs.c",
+        "sha256": "4178e3a44cb327746184da69608498f7b1c668151fb1346f7ff968e504057386"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen8_ppgtt.c",
+        "sha256": "6e9db4a213b7d4f03c1f2c00595e62ee96722d6097c7e507605d250fade13209"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen8_renderstate.c",
+        "sha256": "cffe0c6be33864388d772a06424141ba2603f863bac4d3f7ed2aad661fcfce4a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/gen9_renderstate.c",
+        "sha256": "866725da713301df8918bd7b26d15debbf10e212d1b28f7ab5da8136e3ffd5ba"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_breadcrumbs.c",
+        "sha256": "ca32b6d556d28c9da137d2fb085a0cf95424c3764f6b53bfb285ca364220e968"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_context.c",
+        "sha256": "b40102147e69bfeaf6574eb463241bed1f4d0d83d7565e8f7637e565e4adf140"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_context_sseu.c",
+        "sha256": "652e8273508ce95ecc9178819614d461111a77be803615817880e3d9b9afabf9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_engine_cs.c",
+        "sha256": "7a9ec464e822eb28f4d55ab4af9f22469983e1b23defeebe6e93520b2dd4f650"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_engine_heartbeat.c",
+        "sha256": "621e5538b74bacbceca67db73e9a6094e892784a9fd3615ef4e01e35a3314d85"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_engine_pm.c",
+        "sha256": "f3865907d40325fcaf87d3448e97b020f6263091ec06c3deb28558085cd1766d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_engine_user.c",
+        "sha256": "e3564da7ce2f5c5d9174a5e0ba3025ae5d362d4950ef5993313a51703200c649"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_execlists_submission.c",
+        "sha256": "f948129122dc0c4da0877c97b8231937428f292060def83222600b7b3c6bf8e3"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ggtt.c",
+        "sha256": "b10ccf9b5ff536fcd383e50e561fcecdc5b2843822f083c7ae845b8282cac1e6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ggtt_fencing.c",
+        "sha256": "2cf9a840f75076622318d8845a1b8cc6ce5a5720d1ed590c9e9d31c6f7edd735"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ggtt_gmch.c",
+        "sha256": "77c2c2cea9def7e4cef2f16f0c03a24d27ea36a8e103033d3442f97f54249000"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gsc.c",
+        "sha256": "ada4a821dc2d976552ed204869789c689f65d185cf622a6fa861983329ae5be6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt.c",
+        "sha256": "20854e3e4015f1551608c8c59658bb62c8c14154a2d853c261655288f464f507"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_buffer_pool.c",
+        "sha256": "7c394c8c1a5be3f8f8e497bf36538ddbc0e4e28d4e0880175068a7c5a20087bb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_ccs_mode.c",
+        "sha256": "aaec539a60e0bb99ddb3cfc79e856ddf7401ee43d7c22d22931dcd20b4c2d21b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_clock_utils.c",
+        "sha256": "3cbfe9e20294e4deb866960ffabae964c1af8ba90a1f3d2de06781be9df470b6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_debugfs.c",
+        "sha256": "2ae6f3f961f110d382743de665dc72ece495b392c8675f2fc37171612c9a41cc"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_engines_debugfs.c",
+        "sha256": "7a202669de4e1c12b58883da8e66b10dad254a59f71035334c9f025d0f5e6f26"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_irq.c",
+        "sha256": "fb6c6a1c749cb1a4caec14c5ada1240dbe49a7cae9e095b618c0ceac0ae78ee7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_mcr.c",
+        "sha256": "4ad38868090e4ec329d5ec194a3df71085dc576ca2334c0ca0934e4c2c2098f0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_pm.c",
+        "sha256": "f4a53dd7bb61126b5759e1bdcf60b963fef8ccb90334e7d0f5ed7c827ac466a2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_pm_debugfs.c",
+        "sha256": "9118999836fbb0b55062828765298a63debdf736e0600297d5146e85099daa80"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_pm_irq.c",
+        "sha256": "50eacd01c2001715f8978a7405f35304da6af20ac22a2c4d5b978f41f741d5cb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_requests.c",
+        "sha256": "e1b74e07e51a95a02de773033db51971071ac924e1d692975d9894a577cf0da4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_sysfs.c",
+        "sha256": "176538afa2a650930dc462b2a9c4488a4206c9ac694a6a31c736b343414e4334"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gt_sysfs_pm.c",
+        "sha256": "e95b212a1c39468f743b087d1452833ee62e43b556f469668d787ec945920cd4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_gtt.c",
+        "sha256": "bf5ff945aaa3e01dd2f615ea14986ffb097a6c0f910e79b37ed2d37b849001d3"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_llc.c",
+        "sha256": "fcf321072113a7fafa307dd40fe07c88ed5ecc8ce77eb8a034a554e89db47f93"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_lrc.c",
+        "sha256": "495af97e266d2040930eaba15f87dc05c857480e2652a3e1124d5683ead62f92"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_migrate.c",
+        "sha256": "6dc95c427368090f8fed740a2233f72c10b1db260c8a29c8850056aca0232bd6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_mocs.c",
+        "sha256": "dc367b364d8a9242967ec00f6456b0ed4960383761936207b4b6b0acd3e34f21"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ppgtt.c",
+        "sha256": "33e355e970a0654b224534a5f823a12e8b7bc0cbf22d87dbfdf238c253415f5c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_rc6.c",
+        "sha256": "07504f1981dbd4cb78b374883abc58bd2a631200c6e089cf9a84f5a7c00767a2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_region_lmem.c",
+        "sha256": "11db1f7177b0dd4be70d21390b96a2715adb4c9176e8215628fad82ba43cc836"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_renderstate.c",
+        "sha256": "39e6a7de925459b6879dfde3d2b12fe490ec5efcfaeec2d2e9f23b6b2ce90398"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_reset.c",
+        "sha256": "d947b2db0d25541792d2e43c566df83c464402e848839839f4609e64cf4db4df"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ring.c",
+        "sha256": "d72915d204a8ea82e15d2b706800a28af40e0c3ba992c3bfc9fd8ace96978de0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_ring_submission.c",
+        "sha256": "59b204c8b52c33a1416379e11fd41e5b1b9f915ad2d4b60ddf2362d15a40bffa"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_rps.c",
+        "sha256": "84d3f5d7d9978e4d71eca2051c72b44651f20eb8b4c518078821b6f4b15eafee"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_sa_media.c",
+        "sha256": "b86523c3101b12e9180d8bc995a381839ba3132ba3b653c21fc0a48c762ccc21"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_sseu.c",
+        "sha256": "08abd0d48fcabe2ee39c5bb7c735e3ebe21acaf9be1205acb57aba83915a365e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_sseu_debugfs.c",
+        "sha256": "b4325c10bde01337dcd56cc846e9cfe16639943454dbd340735cc57c7b3409ed"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_timeline.c",
+        "sha256": "986b88b09fb6eeaa9e163d0aff20c8d718bbfd6d8cfebaa17e33b315a7552bbd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_tlb.c",
+        "sha256": "eef089cd245411d0a65e46362ff70b8deaf3c4406cb258dec1adfb199ba0147e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_wopcm.c",
+        "sha256": "ba3e705957ff6cbea252b6b2e7c01fc5ae5b21c6fe24089297bd5b177ce640b8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/intel_workarounds.c",
+        "sha256": "fdfb251bcf57dc307a49a8fd0ef134e8733446e97288b433768a04ab6079390d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/shmem_utils.c",
+        "sha256": "cc68c806a3206a78b8ae05c891964cdc9321189b08c9852999d871107ef772d7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/sysfs_engines.c",
+        "sha256": "c6d82603510e151cc3cd38f08edf91db013e9b02e22e4defa7deef482e3e3efb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_gsc_fw.c",
+        "sha256": "1666c3d4adcd0ea1c7265d8e6cff09706bb8f1c26b5ac30492e83d6b5c007035"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_gsc_proxy.c",
+        "sha256": "84f045df9b325c4df859e8928275e9376fa7b43bb98cfed3bc3709546db9ef31"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_gsc_uc.c",
+        "sha256": "88a9a836efb1af176138d5085f21d4753b90a98753bbe029b2355148ab1d3076"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_gsc_uc_debugfs.c",
+        "sha256": "2dd37631bb86265a223ed5d1ee46ed3a5e1313a3f64a02c266fbc9d150e451ca"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_gsc_uc_heci_cmd_submit.c",
+        "sha256": "13686922343868fe14fa228d7263ac3b653fcb3a2d3a759c1e0e746d929d8b67"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc.c",
+        "sha256": "5ea208187875e2a851e0f0369a9d318988ba6611b33cf593989502db6a96aaf3"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_ads.c",
+        "sha256": "a08813bd1da3a1efe037471fd90e3233485c0c2203f7a88baf6b5a6b478d47e0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_capture.c",
+        "sha256": "afd2921384a95a44dc6d8cbf3c2a129888bb53be6132e555216ff3aec3576264"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_ct.c",
+        "sha256": "913eb4ebbe2aa123a8f9bf5f21a5685c0e2b63528bb3995e1e89cb652c7c7ffe"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_debugfs.c",
+        "sha256": "f847d23b1cb04e7825969224c872c80c83e2e079bfccf3a441e117437d73410d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_fw.c",
+        "sha256": "73b6d716d98781fd405556722f6c55cce28a98e18302e049f44716e7b7e591f1"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_hwconfig.c",
+        "sha256": "45a7af0d88dd12772d761b85c9f9992cbf4ea882fbb7b7a89b8249ec4199d24d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_log.c",
+        "sha256": "a876e2a636b69f704ab662fc6246605b2d062d1b357737c619a430454e84c7a0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_log_debugfs.c",
+        "sha256": "2eba29a2c3d82099d42d483ae33789cb2920ffbb620d1f6d4b33ec6f1efde72d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_rc.c",
+        "sha256": "bf3383508b29f53febbbc351e775916adaf583bbc418e720c6404c210d53eb59"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_slpc.c",
+        "sha256": "f0b8d0eeb3ba4689a8a08fcb473ba1cb599fb74d2f05454e7316576a5e0e1bf7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_guc_submission.c",
+        "sha256": "8fcace6a49bd5d460d545d18f6463a65d6da9d7303fe2be03af8083784a85df4"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_huc.c",
+        "sha256": "cf0dd624d873874ce7225c4faa6ca72bdd5e9ddecde1e457ed5824ed7e8be36c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_huc_debugfs.c",
+        "sha256": "9d826429b335360833d8f20f0b739c67b3dec6dbf668f582d9b4bfc81be05275"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_huc_fw.c",
+        "sha256": "be94e52d1c58cdab785686713e37222069c67f7de7d568bc5a0f3d29b51d0f8d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_uc.c",
+        "sha256": "fe4551ae33f6ac11928e8284b48be47959042d8c3ab8963febca19697c6abeaf"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_uc_debugfs.c",
+        "sha256": "2391754cdbb0a83989d5678b49097f53a5ca249d83d54dde883110b20bc2c147"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/gt/uc/intel_uc_fw.c",
+        "sha256": "cda812515b31792227f3f82022012d0c297e54dd5b02c607d76c38ba5e34ddee"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_active.c",
+        "sha256": "4b4ba6faa0e1394693bb0d3772f144eda3faa96ca275f02dc919eae6fd077eab"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_bo.c",
+        "sha256": "73a9d4d261802c7879a541b3a1e7584e1e98b960c1d07500debb674b8c86bf32"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_cmd_parser.c",
+        "sha256": "a5283c7f5fcf0387e2a740cd517ee2f7fd85059e6bdb111c591de55c3f098c23"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_config.c",
+        "sha256": "217f8969570ff0d0f2c8273e54ddd1cc21c5ef802f02331d34a3d88d2550d161"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_deps.c",
+        "sha256": "b448ae9122b8a985661eb670aafd530f7659072ab0e8ebcf5e8d308b93764449"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_display_pc8.c",
+        "sha256": "d82f30918f2b46208986bcde2e5faa7350cc0930f0dfe5187c6217b4ad5d31eb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_dpt.c",
+        "sha256": "f41e8ab5855cd23bafa4c3bbc1d7dc20e561bfbc6c3c0c317f0ecd6cd7958269"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_driver.c",
+        "sha256": "ade562191b40f2329eab125ddaaba2dd0c0825965be2a095da154c62daac1ffd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_drm_client.c",
+        "sha256": "9fb23869fa01c85589c9e90319824e2faaddf4b280523ca93751a0e9658fb81f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_dsb_buffer.c",
+        "sha256": "e5c662fbc06f0cd30e5d2a2938909a19f0be95245bcef7154699e24148ae2a5c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_edram.c",
+        "sha256": "f389592eb02a977c760af93e348c79cb9fb7a433701adc3d2ab5af5b7f47d245"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_fb_pin.c",
+        "sha256": "2070301ca42334f192659a6ce2b243afb2e380f683057f72ca62652eff101297"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_freq.c",
+        "sha256": "4872a0841209058e8357262a1229b65e9ded4a9bfccdd74a7e156bb81e0df56b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gem.c",
+        "sha256": "9d1ea6dc4cf32de945027e2d7028a9bfb535e7639c9d9b528b8015a540bd5fc6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gem_evict.c",
+        "sha256": "cf3682366783ceb676deb05c515a67f004f4e54957795e5997ae8ae12a9fbc2d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gem_gtt.c",
+        "sha256": "b29f047131ca7723e5752f8384e1ba50f4ecbdd0546c4a660bcd592a92d9f7e2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gem_ww.c",
+        "sha256": "cbeeb59eff0dcb79a3f2259e4dad1948b29b445a9d9a6f5b822b03006db01da0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_getparam.c",
+        "sha256": "e2f14d7c2eb837102d76758fce8a25b0deb02aba42af8c9a98a8c3b501759968"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gmch.c",
+        "sha256": "041173495245879ac490b4a3fe9a60476e9903978cc6b0add26efd235aeca2e2"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_gpu_error.c",
+        "sha256": "fb52e166ef6d427a0861a012ed65f7d654d9d1858b62c632fdb7a100cddde519"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_hdcp_gsc.c",
+        "sha256": "1db22927e2febd13db6984ccf8e4a7c4a3ee8764f589556f8baa22c8b41458c1"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_hwmon.c",
+        "sha256": "5fefbccd1e3972965e118cd7c53424b976939dd5402ffa0074da526c07022130"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_initial_plane.c",
+        "sha256": "84dde5c6aec68403084ced00a3a8d4f27be0c25d4cbd9ea4a47cec96a8a75e6a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_ioc32.c",
+        "sha256": "f3b41726cbe4bfd4553050f3f51a1ebbc96653f5d8f3516bc83574f4e134be36"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_ioctl.c",
+        "sha256": "39320e1fe22fc5a9f6c39a81938a05e2d259ce53ed240435ae4ccbf9fa163ebd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_irq.c",
+        "sha256": "331a3be3ba0a8e2cef5c0a7e408486ab9192d3646a303674870a26d30ba62bec"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_memcpy.c",
+        "sha256": "23460f386fddea34a06393d099efd882d6cad4eb348ba299286633760795825f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_mitigations.c",
+        "sha256": "b8a979644b57500eb89d1fde59e1cb61a3fbc0109cf9411bd9353e43a27212c0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_mm.c",
+        "sha256": "02c2a81197280d7258462fc07cb8c82d07ea9fe270b2e5505d3511b89c314107"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_mmio_range.c",
+        "sha256": "3950ce3291f3702365edf64566a5f6a7e20d271178f6c18c4d9ea110ed8e57ac"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_module.c",
+        "sha256": "ee414e86eacd7cc1c7665abfdc01075cf835670119620cc237f377b61dc0a25b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_overlay.c",
+        "sha256": "99ad2bf4c0c642da5cd201a00e2f8c66279a6e0241bce3c03cf01919a6965467"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_params.c",
+        "sha256": "32e80e830516075006785ca88fddb29abb4b916b9446a0e84837436c10bd86bb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_pci.c",
+        "sha256": "faf891f17e233c24c183338e798c8867a4e0f7afced17c7f342e988fbc38dbf1"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_perf.c",
+        "sha256": "abfd3daf93eb934638651ff9eb370675b0e451bbd432682634ebad0424088e4c"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_pmu.c",
+        "sha256": "a3227f5c8c7459be116f94cd9001925ed835c4d611b00b3a489e54ddf5e58932"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_query.c",
+        "sha256": "85b55a1611d6ed16fb62b5e67c6ae617009ed4b660e6d875834440faedbc04da"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_request.c",
+        "sha256": "cd0b9632bd4b2d53782d93047db07d024f4619e062de74693341a6725820cd61"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_scatterlist.c",
+        "sha256": "6b1ccf1959dcff21ab9ba42cae77bd6e4484fd0e1d85e4b1289a366fb715a690"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_scheduler.c",
+        "sha256": "8858b7105c293a7a7e0dbe683f9d1ef706a06fbb22fc84d2b86f3947d95b930a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_sw_fence.c",
+        "sha256": "b8ddba37665e1b762e3a8c3d40890fbbe363a8f8331c0f44b86c690d69b0dfc6"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_sw_fence_work.c",
+        "sha256": "6a8dc5af7a31fd2461cce76380ce968ddc1e345889114a9254b54082cec30722"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_switcheroo.c",
+        "sha256": "ba094d2eff2d1dd34959c41e4208240cfb6bcac4da1c14bef2e0b476ff814a84"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_syncmap.c",
+        "sha256": "76b541b86487c7d7b3388bdac266895b0055f1a7faa7e6be137d28d51543267b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_sysfs.c",
+        "sha256": "a6c42b14d4e933209b58c789532d90bbdcccca428394ccd630be85a266cfd4bd"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_timer_util.c",
+        "sha256": "e7dba64c8e3c4634ee42340c3bed1516befe30070b32f2647be305950f11114b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_trace_points.c",
+        "sha256": "3de65423e2d4afc915167bd4920b28cf0fcaf2c7aae9a3b4dcb846e224fd88b0"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_ttm_buddy_manager.c",
+        "sha256": "645368153651ad763b85d9e229025d84fc452efa5f346c4d4e57eb65cd8c2103"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_user_extensions.c",
+        "sha256": "a0f8af80cca6f05cfac1ccb8f998f0f34c6b5a3a851d61838156fc992b6b553b"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_utils.c",
+        "sha256": "0803d4077fe9aa505f4990c600886367186911812911eed91225d73f7d408461"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_vgpu.c",
+        "sha256": "f3e12fac7a91b24701a1900371b463ff1f6f0bb501df977c14a811ddccdb2122"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_vma.c",
+        "sha256": "5d2d88f3d7f3a44a3dcab83b2c5e98250d4201b751f3cbd21a6854f2f64e13a5"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/i915_vma_resource.c",
+        "sha256": "eaa7de3373e53491ead4c910d4b99f833f375f53cdcdfcb16176b39c4c3f0517"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_clock_gating.c",
+        "sha256": "76702b9c14bc0ecb9f4f3ecd961038bbb17097220dbe8ac7bfae433d02e134cf"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_cpu_info.c",
+        "sha256": "cb4fbab203814f265cc5ec100cb9be7506c508b402336a0a25afe3a053968f37"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_device_info.c",
+        "sha256": "7b56603515011916ebdff65bc9dbd4e88812e3e81e9f0d693d993d5c6ad34ff9"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_memory_region.c",
+        "sha256": "39c3f62aa2a42a03ed9ccf4a4995937c01fc73d5e82565c634d67d76e15ca4da"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_pcode.c",
+        "sha256": "d0b7b6aea1cf5b23db34bfc83f4daa44adc3933bbbf2fe2f1a9e334230f6dd46"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_region_ttm.c",
+        "sha256": "147b5237757e9874cd24fa8fcba2226dae1b99b8d8ecd89d4704950885631a4f"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_runtime_pm.c",
+        "sha256": "0d4fe75fe1cdadd38c3654716f51f971e6932cdf851c7cf648d132b4cd4787a8"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_step.c",
+        "sha256": "67f07f0bab8760e89d0b953bb26a4e8a9113e07ebc5660553829419a0322670d"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_uncore.c",
+        "sha256": "9c7d1ac9d4d7a0e4661c98fbc56558d5232fe94d51e721c913dd571095f50c42"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_uncore_trace.c",
+        "sha256": "e9636d4310766d94027af32bf382b053c2b9d308e022d2ef38caddaad7c76b32"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/intel_wakeref.c",
+        "sha256": "cc9f413d5ae0e01e9c1efac87719af9812c8d633c20b639ad1555f483e5e4178"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp.c",
+        "sha256": "95a3a63b04e509ff2d31fc8c31a29ee123963ad9c6a65506533fa663fc4d528e"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_cmd.c",
+        "sha256": "73a081eb414cea1a291f036f26840010e1910cf30aeb282cc4984f18e4903d49"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_debugfs.c",
+        "sha256": "e9f5c99ef4b2705e7dd3b9bb79925a8dccb6de49c28ebb6d5be0b19c7b8c00fb"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_gsccs.c",
+        "sha256": "1fbd47b2194f8e781c60b0b4c07fb8372755f24f242c09459ba2814cc7292a64"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_huc.c",
+        "sha256": "2e8a38d9ee5cfd286c9a1442756d03f73802b4f668d74fd577ec64d7e08bdeef"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_irq.c",
+        "sha256": "7c4a17728c40748a754e0f293fd5e5264ee1adf5b3661c7b0e8ac2ff40507082"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_pm.c",
+        "sha256": "c6d66f6b03db3dc355127bc7e6e03487850007a8b2333f2d0ac22dcbabf23d3a"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_session.c",
+        "sha256": "513bdd4f14010540ea8f06b75763880f2362004728651d79851ebc2175f35c01"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/pxp/intel_pxp_tee.c",
+        "sha256": "6f469b4d8d75512f462dcd704744612a7210b84dfbf7d145cf7545e0134a1da7"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/vlv_iosf_sb.c",
+        "sha256": "ce076e147edc00599df16641cf9f1587ee24277f858c7df4aff00f8d690b2e65"
+      },
+      {
+        "group": "i915",
+        "path": "drm/i915/vlv_suspend.c",
+        "sha256": "6fd2f6b561fb411ad69365b4237413a667cadc7d740d73322883167d6cfaa73a"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_atomic.c",
+        "sha256": "755ef2a07ca80fc700c47238242c84a7075f4235acfdf7c6ef3773257351d743"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_atomic_helper.c",
+        "sha256": "955f3e6398c1b08eced8c65af944b4ec21a4311b55200cf31dbefbb500929bc3"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_atomic_state_helper.c",
+        "sha256": "87c0f9d5f47e39d99d85012a01649998ce75bb613806acbac76f621789689c84"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_atomic_uapi.c",
+        "sha256": "40866cabaa591f506d446895fa1a1e1a69244d6611b0d6599028a4c6141e89dd"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_auth.c",
+        "sha256": "7d1153e2c16818ceb325c4e3edc223b041e69e8d6b26a7b4f80078f6d560671a"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_blend.c",
+        "sha256": "d82b9ff3ecbcb97313e757bd5ce1964973b7bfc16ae26f2a6e3f8fd8e1f72960"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_bridge.c",
+        "sha256": "968ec5558c3424d289cd8d7896ae7469c8ff448c81a86b233b95cb84a0ae5944"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_bridge_helper.c",
+        "sha256": "5a2f78613dc696ef79e27335147e6cef96acc4263613ada49e7162a03fd20b4b"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_buddy.c",
+        "sha256": "ded4b572f7d0cda8fa9a6bbafd497ec3fe305aecd5e30883ce72889407a045bf"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_cache.c",
+        "sha256": "de06f98ccc7fbadd08fbf2168c87c952eed0be1ad050942dac1c20c2a4ddd55d"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_client.c",
+        "sha256": "5f75a89dab8034772dc9d96473d9117e2e3df351f33fec39672aaefcc7361343"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_client_event.c",
+        "sha256": "77f4ac3cfa83b782a8310f9a728d01a3db1c293524964bbb6e444c13b5f0ad14"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_client_modeset.c",
+        "sha256": "fff12ddc34e088b7519384f4646404b4822c138b769c32823d93b5b75161f687"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_client_sysrq.c",
+        "sha256": "2bfde441f097eb99ceb54d3c6e7be2f0ce456955e77d2766bc22850bf2c7bcbc"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_color_mgmt.c",
+        "sha256": "4de212252bac90c4f538a85e2705c7750fa5c21b75251ab3c8adcca6491ca80d"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_colorop.c",
+        "sha256": "e53fe766c34ad2cf8b28fb20dd677b3b810868c9872ac63f62229add2d2e903b"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_connector.c",
+        "sha256": "1d239f884580505c24dbfadf47f5240a0911b04945eb714f03189ffd9c7c4123"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_crtc.c",
+        "sha256": "0b315b049f773d749137e24592aea2d855aa0e5095f7277e05ee338d26042781"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_crtc_helper.c",
+        "sha256": "964a19bfc2362ee10622b8e58925817da262f66a21ced2380b4ce7725e87de91"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_damage_helper.c",
+        "sha256": "36d00db8f5615116c146409ccf971ed9f6c168197b6b892997874b670d4c8e36"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_displayid.c",
+        "sha256": "0d9f59ede6769080d80ebd7bef8ff9779bf4c082c487fb8751e47b67f8721f27"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_drv.c",
+        "sha256": "c7e9a33efd38970f82123c342bb9504d74b261da4bea0306d38a7a6d1660b404"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_dumb_buffers.c",
+        "sha256": "2c3b7330f83f9a7fab2e862a3ea04917ebbeb76ccdb82dfd3fe6298efc4cad75"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_edid.c",
+        "sha256": "0d311f86f832f9c8d1f1e7c97b383496007d8d5688a7318ebc2e0bbc11856fc7"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_eld.c",
+        "sha256": "5284adfd06376cf1fe10a1122a6acdd75f0ce238028a64327a6acd0d7becd9b2"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_encoder.c",
+        "sha256": "026f7a78160c57aa5eb8b94cfb8e1cd65856a68be35f8ba14960915e2e57d351"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_fb_helper.c",
+        "sha256": "38c8c4227e1d95d6558c5278db3d350ada7b71e1328848dca5a324b97fe75290"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_file.c",
+        "sha256": "6c8f1dffcb976e640871f0fd324489bb64392207a3c2b87c2890b4f761eea186"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_flip_work.c",
+        "sha256": "8bbf6cc0060689db5fe42757dd79307a05ddc4957c0d6a95d9f154a4f2875870"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_format_helper.c",
+        "sha256": "58bebb35fe289a789478b64654b17dc4325e970ee243d455f9e4d3106ec555ac"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_fourcc.c",
+        "sha256": "d941c347115c68fff3e2b1de86d28765bdda5c95aea209e5c97be845f140e9c3"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_framebuffer.c",
+        "sha256": "807807510d26aa7e456ccd9c26036a3537cdb3eaf0b1036e63334e1c1287cbb8"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_gem.c",
+        "sha256": "16fbbe97bad9a8755bfe27ad834090687ab1d1b9065ab9083b4d826daff148a5"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_gem_atomic_helper.c",
+        "sha256": "d688bb144c7e7ad59cc8b1adc085000db96338a7f3501a274fdca3c3e6e58826"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_gem_framebuffer_helper.c",
+        "sha256": "b72c9c3f25593c8f12de6f8fa079031fcbca1cd01b6134ea49370ff36db14b49"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_ioc32.c",
+        "sha256": "4d00b182ee9ebae60d6db797bbd1a7571cc04b50a31c0a1e0320223efc3a0d83"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_ioctl.c",
+        "sha256": "106d88395f14ccb6ef1969e12d8497af8e4f9cba558bfd22ed8f5d8ab69715e5"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_kms_helper_common.c",
+        "sha256": "5e7030ceb612d89d21a2fb49e81a379a29f0c84360d01051698b297b5ea286fe"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_lease.c",
+        "sha256": "c398967f9bc7e7d8ca4d51355dfa3e3e8d81f0257ef2f25b151d417260eb74d0"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_managed.c",
+        "sha256": "e23a9c21f6e41929e3446b0909d7de5ac17ec2117b688ef1717d3c146d7322d5"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_mipi_dsi.c",
+        "sha256": "634ea3e6f848b725e758a8525e6ef93d5bc3068862f04a0d0c6514bee435d6b3"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_mm.c",
+        "sha256": "2dc0d833ccd189a336f11e70c485707c650ad97ba882efcdf55297bf80e89232"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_mode_config.c",
+        "sha256": "43e40da729dec0f1349435e0cf88318e1f798670b692356e2605cbd5341c7dd6"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_mode_object.c",
+        "sha256": "421ad21ddc040c71b180780dc406089b0810c1ce410ca270e1c804e18fd5b9f6"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_modes.c",
+        "sha256": "752c07fa6281230a3766c3f6327542e48a2a338f18f2ffb4d116454bc2d21b09"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_modeset_helper.c",
+        "sha256": "83ab58f0db29ef190caae8449c3ecc7544f1673cf91a3d282a7135f191687fdf"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_modeset_lock.c",
+        "sha256": "a34751e528d22e36d6781a60f6c80bb77251874bfc4d77270da34a14ecad6bf6"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_panel.c",
+        "sha256": "b9c74ebded79460a1a1504b1c6a6eace7092a0826bfe506606e0d3ee41f1527a"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_pci.c",
+        "sha256": "52b434d38a0d1e0b91fba9bfb5f5510fc1996db23fbc686173ddf44dbf54d355"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_plane.c",
+        "sha256": "802220885db6418a7b1199a4da4aecb361003761675e5a674dbcc3a4a177f057"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_plane_helper.c",
+        "sha256": "5c8b9bed0822dcc4bde5bd05c5ea4690eec64ddd8a9f0f1da070f7da70ae4b1c"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_prime.c",
+        "sha256": "1fd8a924b5d42dafe227d4774923e7b85859495d3d4e0c1e9f3a318967f5738f"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_print.c",
+        "sha256": "f3b5610ab2f55a2bfe3b941cfae479191788508fc27e1ae811ed3142181fc943"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_probe_helper.c",
+        "sha256": "b5cc5fae2c8055a7c423c0e0fdad5380b8565fe2a9574ceed016470096bf962f"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_property.c",
+        "sha256": "328a30779fa16e768c3b39f2eac6270a84b0eb65c99266d04872b1600da7f8d4"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_rect.c",
+        "sha256": "43d303a283d2304a994f58d291146eb05be8db37b0c55391e74bf1ece3cda292"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_self_refresh_helper.c",
+        "sha256": "21460f761f540a17587f2ea97e74e252cbaf54c59fbaab7e26eb4bd4a10643a6"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_simple_kms_helper.c",
+        "sha256": "fd57b7fce76989647609d13d7db71d7fbf452c6b4ab44cc294c7a54424f0549f"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_syncobj.c",
+        "sha256": "48d0d40ab132ae261c1eed207c431ad7f8da022bc97adf9ff485849f40254ad5"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_sysfs.c",
+        "sha256": "7f0b83b44b71348357e809b29ed905250a180bcc6664a5eb101faf74373768f1"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_trace_points.c",
+        "sha256": "5e6770325d2721f34b508fe7e86008b6a4f5ad9936ad3475d9b25db2e7d82abf"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_vblank.c",
+        "sha256": "bbdf4c2a45a82097f65527d3a8aed0aa41cdd470a578a54001154dac70bf09d9"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_vblank_helper.c",
+        "sha256": "466695e93710038c9ae6f76d8cd86bf1496d863fec30ba8f3afa0970082377ec"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_vblank_work.c",
+        "sha256": "9cd5fc6e2d1c5d34a165999d00af67c64de399b3f43ececb1077d85624574171"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_vma_manager.c",
+        "sha256": "0ecc800a2f5a8034cad92b3e43a05fdcef94dc1fe14587705e57d5b4daa19caa"
+      },
+      {
+        "group": "drm",
+        "path": "drm/drm_writeback.c",
+        "sha256": "c8983cd42319c7f7bb5e956a4e485bd70779952e82c57733e71febdfdaa8eacb"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_display_helper_mod.c",
+        "sha256": "3b0935abf7d6d92312c54bb4e7f29bf3544666b4d80befec432eb256f275e42c"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_dp_dual_mode_helper.c",
+        "sha256": "3c58c370830fbf2e3565deb0d1effed291aed1e52547af406e21f6fdb8a46a1a"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_dp_helper.c",
+        "sha256": "6953013aa2661a33e9027af7aa244924b97dc1abd4f75bb4aac231c358ec9417"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_dp_mst_topology.c",
+        "sha256": "43d654fef9f34c51f24efdb0d2c757252169a85fc04a3016c8dc8f05eb81a536"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_dsc_helper.c",
+        "sha256": "761548ac1b2b77da2769931472b8e856d2853cb4a4faa36f8f37c7332532fe7a"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_hdcp_helper.c",
+        "sha256": "a25c68a54aeb90d07637b0eff4a255844e1794d4146afb2221e49790cc6aad86"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_hdmi_helper.c",
+        "sha256": "991b16b7a21e6f7ea6284f16faf18258ad7e4662b4ac69d3b8d1601f3ecd76df"
+      },
+      {
+        "group": "display",
+        "path": "drm/display/drm_scdc_helper.c",
+        "sha256": "788982dabccf73591cbc18a0ef7aa8e46c36e64b70589ccfca5071517d608de9"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_agp_backend.c",
+        "sha256": "7ac639142d80dae2112da630d5a17e3f2319722f4e7c48218ff167bde95540f8"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_backup.c",
+        "sha256": "3ec2de88ed0c378a55222cfd0a6f37632243f8baa9c8fe126e6642de5354ca5d"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_bo.c",
+        "sha256": "d105209b2a3b97a69e5bc5bb363b699cf1612ff9ee9bd7246538fcc35f57ac54"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_bo_util.c",
+        "sha256": "a0d3d69e61944a0a1b48650668b6e37f838f4a0f27dc093250d49db4f92eca17"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_bo_vm.c",
+        "sha256": "1dab81853d14587c588465f67bebd94b38296563b473140ccc41206f0b9ff875"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_device.c",
+        "sha256": "a7e65e9f4337f1806509ee670d9d63c114c2008294c02f7129118f523eb374a6"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_execbuf_util.c",
+        "sha256": "ed9837d93fb986ac7f2aae6f4ea4621fd815686f0040aa71767473b9e2dd6269"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_module.c",
+        "sha256": "d1506c719f637e83e0c6b48ba9b2a155eca541a8f6e271566b7624076bfd971d"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_pool.c",
+        "sha256": "50ca911cab17a667fdaad58985f10cfe201021639e5e0452adf6ac1bb9d805fd"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_range_manager.c",
+        "sha256": "20349fa676bc1a653dce05a1463d68ffb7743295f389a9e606486f5c34277172"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_resource.c",
+        "sha256": "2b4d65bd4fe064799df61607ca8252829eec089e93071da58cbecab4b226a90b"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_sys_manager.c",
+        "sha256": "cb8285b05e0f9bf9f61f96f3d78aff94636511f9628f82e6f1fdc27804a16c48"
+      },
+      {
+        "group": "ttm",
+        "path": "drm/ttm/ttm_tt.c",
+        "sha256": "4a393fbeba430f232ee276a3276aab7ce79035a7dc77036226aec35b8cd73400"
+      }
+    ]
+  },
+  "namespace": {
+    "bindings": 92,
+    "include_contract_version": 3,
+    "include_contracts": {
+      "include/drm/display/drm_dp_mst_helper.h": "#include <linux/types.h>\n",
+      "include/linux/vfio.h": "#include <linux/iommu.h>\n",
+      "include/drm/drm_modes.h": "file-scope opaque device_node",
+      "include/drm/drm_atomic.h": "explicit linux/completion.h",
+      "include/drm/drm_connector.h": "file-scope opaque dentry",
+      "include/drm/drm_crtc.h": "explicit real linux/ktime.h"
+    },
+    "latest_changed_files": 2,
+    "ledger_sha256": "22f8d8827afddc837df953db5d3c94cb0c3c68cbd6e444ae4bf2da67c51b10d8"
+  },
+  "fresh_modern_objects": {
+    "state": "PASSED",
+    "host": "HP ONLY",
+    "objects": [
+      {
+        "object": "drm_buddy",
+        "exit": 0,
+        "command": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/nbmake-amd64",
+          "-C",
+          "/root/hp-driver-port-20261005/full-linux-obj",
+          "drm_buddy.o"
+        ],
+        "source": "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/drm/drm_buddy.c",
+        "source_sha256": "ded4b572f7d0cda8fa9a6bbafd497ec3fe305aecd5e30883ce72889407a045bf",
+        "source_bytes_unchanged_by_mtime_refresh": true,
+        "compile_invoked": true,
+        "log": "/root/hp-driver-port-20261005/native-pwm-final-drm_buddy.log",
+        "log_sha256": "7aace731c1c40c98e9d5d558763df9d88afd4dcaa20c4702aadd75f67317134d",
+        "errors": [],
+        "object_path": "/root/hp-driver-port-20261005/full-linux-obj/drm_buddy.o",
+        "object_sha256": "74edb7159d0abce97acf0431a52d91a4af2bccce6de03b84450cf567ec8b67f5",
+        "object_bytes": 18904
+      },
+      {
+        "object": "dvo_ch7017",
+        "exit": 0,
+        "command": [
+          "/root/hp-driver-port-20261005/full-linux-tools/bin/nbmake-amd64",
+          "-C",
+          "/root/hp-driver-port-20261005/full-linux-obj",
+          "dvo_ch7017.o"
+        ],
+        "source": "/root/hp-driver-port-20261005/netbsd-full-linux/sys/external/bsd/drm2/dist/drm/i915/display/dvo_ch7017.c",
+        "source_sha256": "af2afa70f96c252a04ee0ad15cf5f6511d77669eb0b06ddead341d569f30208a",
+        "source_bytes_unchanged_by_mtime_refresh": true,
+        "compile_invoked": true,
+        "log": "/root/hp-driver-port-20261005/native-pwm-final-dvo_ch7017.log",
+        "log_sha256": "d0e587ec1bad1b9628a08a481a6807918c97f1e8459670712df0522acb9cdf73",
+        "errors": [],
+        "object_path": "/root/hp-driver-port-20261005/full-linux-obj/dvo_ch7017.o",
+        "object_sha256": "7041f37d79b0878a0e7b3afaae1d7f7701c6cbc80f858256fb3517e714e3c0d1",
+        "object_bytes": 70944
+      }
+    ],
+    "acceptance": "OPEN: bounded object checks only, not full410/kernel/runtime acceptance",
+    "updated": "2026-10-06T09:47:27.927176+00:00"
+  },
+  "owned_source_sha256": {
+    "compat/native-pwm/INTEGRATION.md": "d7c8cc17437e5d3d6873913a8a245f1cb0b036cd7c9380b0b59232001d588e8a",
+    "compat/native-pwm/audit_hp.py": "fe1cc591b75ec970f4b5035c882c25b3e3f9eb4025336e598dcdc079c5051442",
+    "compat/native-pwm/base/linux_div64.h": "288acb881f07893b78dde25bd9df2185db53442a38dc42de4ece20e34a7ccdb9",
+    "compat/native-pwm/base/linux_drm_modes.h": "89fd24d07f8e9852705ff51d563ce645b2ecb90f310f69baad748562998d08e5",
+    "compat/native-pwm/base/linux_i915_Kconfig": "673d9eb80ad622c559fc2dac0f1bcffc80d9bd6c154a90f612d807cf4876f262",
+    "compat/native-pwm/base/linux_math.h": "e0437f2850ef21b25d7f574830d2213cfc97441883624577d7bf1fd7e61adcf1",
+    "compat/native-pwm/base/linux_of.h": "cef3c80f7b56a4e4e280780baf314f4b8495ccd0dd929ac08d6a08363f11ccbc",
+    "compat/native-pwm/base/linux_pwm.h": "0edf8e8abb8d79335d6dea27df20aa032a4178eb1d58653e16ded48fcf78393e",
+    "compat/native-pwm/base/linux_pwm_Kconfig": "ab3523430a4f3512eb290564270fdaef28fdd5a591f54e356ed89be0409801c7",
+    "compat/native-pwm/base/native_err.h": "0d878c3aa7c480164dbbb125ff40226df3a9459ae9c94c98a6a4229e31c55119",
+    "compat/native-pwm/base/native_files_pwm": "767e37a69735b13523504d13a08be73df84ac5a2faab6f4be45ab3200ce4ba6f",
+    "compat/native-pwm/base/native_list.h": "0049e571462e5fae2f910e14647f844fcc3ae9d9c7ba50b67626f0aac70bbea0",
+    "compat/native-pwm/base/native_lpssreg.h": "7874a697206e3e543adadf2bed95173c27daac56f5240ad4e4136d8ba6fe2e06",
+    "compat/native-pwm/base/native_pwm.c": "b1b9123a04eb64d4fceb5ca4d596b6e38637dda23a2a312a79328fb9c3d05ce7",
+    "compat/native-pwm/base/native_pwm.h": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compat/native-pwm/base/native_pwmvar.h": "3f858fb95a2d3b7002eb10186359d4a4f2ccc8d48aa31c94e5ada8164788dfd4",
+    "compat/native-pwm/base/native_types.h": "54b523717eb9f2ed1d4441cf215a08b3a9905e629ecf36285c52c301e7afdeb9",
+    "compat/native-pwm/build_hp.py": "140eed951b4ffdcef9cf5ae21fc53182e96ee123da99423113c4dc9bb43c248c",
+    "compat/native-pwm/generate.py": "daa71a4002a8e152aa57b7560233e78e7d9d497165d90b1946bfa77d476e16f9",
+    "compat/native-pwm/tests/config_probe.c": "4ba782dfdea2815a1275fc505e498e64e1983fcfca095c41537a0ecfde2c0778",
+    "compat/native-pwm/tests/full_of_header_probe.c": "13e498d7d0d77f24600280951f9662578f6fd7b33f61554a6e7093a94ab07a9c",
+    "compat/native-pwm/tests/linux_consumer_probe.inc": "3bac75cf36e222fca42825f29358f5a182fe3f86abf9599b28d3d1e50ef5ee5f",
+    "compat/native-pwm/tests/native_probe_after.c": "af06717e0fe1cb526466fcd8ed3a3bcc2b799ebf07497301e8cd40c3b019dfbb",
+    "compat/native-pwm/tests/native_probe_before.c": "e736c8b468dd6e9795df6c05b7c0b7129543868908c4dd1ad196e37b8dcfa398",
+    "compat/native-pwm/tests/native_probe_prefix.inc": "15b70bdf6a512fdac733f4f969ab7ce001f55e03719605d92e5fd30718257d45",
+    "compat/native-pwm/tests/of_pointer_before_probe.c": "f7ade1fdeca4b668df8f7624e6f840cbb68820f68f2a0f3e656073381a1a12e3",
+    "compat/native-pwm/tests/of_pointer_probe.c": "b63b50184cc927bf34902504bcef547877102bee59bff3ea59bfe454c8a566d9",
+    "compat/native-pwm/tests/prepare.py": "51a24c666262f83383a6f8414bdf6e76c6336b5c14209008be95499f933cdc0b",
+    "compat/native-pwm/tests/test_err_header.h": "d3a2f7c7280cb140b3f4e55c254f0fddf33a29a91203006e3f50589355021040",
+    "compat/native-pwm/tests/test_list_type.h": "014b56093fe4ec1b0753d6c9e120cb60524a5000df242515e10c4c897fa5a635",
+    "compat/native-pwm/tests/test_math_macros.h": "5363efceec2c74dfede001bff0a268f5136f0d14595fc8cf57a9158ff18dc118",
+    "compat/native-pwm/tests/test_pwm.c": "12e7e448a0fc6ada812e59d02acd54830681b698238e278dbc5aca36563caf79",
+    "compat/native-pwm/tests/test_pwm_header.h": "193d78c7f63fa22d62f50c099a72759aafa28a3fd4a9b47402df4a7dd9845802",
+    "patches/0034-netbsd-linux-pwm-consumer.patch": "199d50c006b2ea16186fd71d1dc8aa8ded6b5a6eb0e0d8f42a72fed8b8c7561c",
+    "tests/test_linux_pwm.py": "6e0e4f66006ae485d398c79dd14e9e2d3e997456909f019b18a80fa07206462e",
+    "tools/generate_linux_pwm_patch.py": "023ac024119071b5f62d8e60049aba864c823fb0d8a83d51865d10f37d1b8aaa",
+    "tools/namespace_linux_compiler_math.py": "95bf614bc233efc52d9a8679ac57a51809d957dae322e761bfeafbc697198ffb",
+    "tools/prepare_hp_full_graph.py": "e6e15b955ccb9b49ccf793a59851aedb5f1ab3fdde7e28106c0ef9957f2bd41e",
+    "tools/run_pinned_i915_source_checks.py": "21f7974e2b3d5abc5f107ed315fdd18aac65cea38f66b0940f70b5f5de04182f"
+  },
+  "retained_failure_sha256": {
+    "first_suite_direct_header_dependencies": "acbc5624ca32e9fc15fce44479fe533813e7c9501d2af99a2b5aee30e8cdc30c",
+    "first_bounded_proof_metadata_missing_prior_failed_object_path": "a57a24e031e6f4beea8dcbfc6afa9ed18ccdc6f8f8af4f5b28e322ae884a1778"
+  },
+  "safe_state_sha256": {
+    "/boot.cfg": "aaf16e4c185f59e925ab8cff9aaf1d45545896ab84a5cf46ddcb3d3c85ba6b1f",
+    "/netbsd": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde",
+    "/netbsd.v1-f77-linux-efuse-map-20260926": "b14ef473add01bbfa8523bc97aec9d0d9ea3ce38cd16663f221d33f323ab73de"
+  },
+  "acceptance": "OPEN: full410 modern C/kernel/lifecycle/native scheduler/KMS. No installation/reboot.",
+  "limitations": [
+    "The frozen CONFIG_PWM-disabled profile implements actual layouts/helper/error/release bodies; enabled PWM/LPSS ownership/lookup/providers remain explicitly rejected and OPEN.",
+    "Opaque device_node and dentry tags establish only prototype identity; no fields or provider behavior are invented. Completion and ktime includes use the actual native implementations.",
+    "13 validated PWM checks include four expected negative compilations; they are not 13 successful driver object compilations.",
+    "Full selected410 object/kernel link, real MM/folio/UVM, native task entry/fatal/code-owner integration, enabled providers and physical KMS remain OPEN."
+  ]
+}

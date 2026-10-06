@@ -2,6 +2,41 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
 
+## PWM consumer and direct header dependencies
+
+Patch0034 implements the true frozen CONFIG_PWM-disabled consumer types, state
+helpers, rounding and error/release bodies. Enabled PWM/LPSS consumer ownership,
+lookup and providers are still explicitly rejected. Native PWM names coexist
+through three private Linux bindings. No fake device_node or dentry layouts
+are introduced: their file-scope declarations establish opaque tag identity.
+Modern DRM includes actual native completion for three embedded fields and
+actual ktime for its vblank callback; UUID/vfio dependencies remain preserved.
+
+All 35 source/C scripts pass on HP. The PWM proof validates 13 checks including
+four expected negative compilations, actual arithmetic bodies against 8486
+getter and 8448 setter Python-oracle cases, real Native coexistence, relocatable
+link and complete-type tests using the shared modern headers. The fresh selected
+410-source/Kconfig audit is reproduced in each test without an agent directory.
+The full OF-header probe now compiles too; it proves opaque prototypes only.
+
+Both fresh real modern drm_buddy and dvo_ch7017 objects now compile with -Werror.
+Their source bytes are preserved during the explicit mtime refresh. The proof
+recorder was corrected to derive a newly successful object's artifact path
+when its prior failed record lacked one. First direct-header errors and that
+proof-metadata failure are retained rather than presented as compiler passes.
+
+See [HP PWM consumer evidence](evidence/HP_NATIVE_PWM_CONSUMER_20261006.json).
+The namespace now has 92 private bindings and six version3 include contracts.
+Full410/kernel/lifecycle, MM/folio/UVM, native task entry/fatal/code ownership,
+enabled PWM/LPSS providers and physical KMS remain OPEN. No installation or
+reboot; boot/running/F77 recovery hashes remain unchanged.
+
+## Earlier checkpoints
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Builds/install: HP only.
+
 ## Native UUID/GUID and explicit type dependencies
 
 Patch0033 implements the frozen 16-byte UUID/GUID APIs, endian initializers,
