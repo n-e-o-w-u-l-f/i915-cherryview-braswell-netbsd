@@ -2,6 +2,42 @@
 
 STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
 
+## Pinned container and assertion contracts
+
+Patch 0030 binds the complete pinned container/type-check and optional-message
+static assertion macros through private Linux names. Native container and
+CTASSERT wrappers retain their previous definitions. Linux-owned source and
+API inputs are verified against the frozen reference and preceding translation
+ledger before expansion to the 78-name private namespace.
+
+The first actual kernel header compile caught GNU void-pointer arithmetic and
+const-removal warnings in the Linux container expression. The adapter uses
+native char-pointer byte arithmetic and __UNCONST, preserving strict member
+checks, the intentional non-const container result and the const-selecting
+_Generic interface. No compiler warning is disabled. The original generated
+patch and failed native proof are retained. An initial userspace-only assert.h
+macro conflict was also recorded and corrected in the explicit test include
+model; native adapter macros were not changed to accommodate that model.
+
+All 31 source/C scripts pass. Tests execute const and void pointer cases,
+nonzero offsets, one evaluation and four compile-failure controls for member
+types and assertions. The real native kernel header object and freshly compiled
+modern buddy object pass. Fresh DVO compilation no longer reports missing
+container_of_const; actual wait/task, completion/GUID include, PWM and typed
+allocation dependencies remain open. Its vblank-work field is kthread_work,
+not irq_work. All compiler execution occurred on HP.
+
+See [native container evidence](evidence/HP_NATIVE_CONTAINER_20261006.json).
+The full 323 i915/410 modern C graph, complete native OS/ABI/lifecycle/kernel
+link and physical KMS acceptance remain required. No installation or reboot
+occurred; boot/running/recovery hashes remain unchanged.
+
+## Earlier checkpoint
+
+### HP i915 checkpoint, 2026-10-06
+
+STATE: IN_PROGRESS. Full port acceptance remains OPEN. Build and installation: HP only.
+
 ## Private typechecks and word-part interfaces
 
 Patch 0029 provides the complete pinned typecheck and word-part macro bodies

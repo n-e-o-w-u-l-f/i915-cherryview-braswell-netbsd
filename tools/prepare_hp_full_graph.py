@@ -153,7 +153,8 @@ def main():
                       "0026-netbsd-linux-compiler-math.patch",
                       "0027-netbsd-linux-math64.patch",
                       "0028-netbsd-linux-completion-contract.patch",
-                      "0029-netbsd-linux-typecheck-wordpart.patch"):
+                      "0029-netbsd-linux-typecheck-wordpart.patch",
+                      "0030-netbsd-linux-container-type-contract.patch"):
             run(["git", "-C", str(tree), "apply", "--check", str(owner / "patches" / patch)])
             run(["git", "-C", str(tree), "apply", str(owner / "patches" / patch)])
         # Source paths are translated explicitly, preserving the reference tree

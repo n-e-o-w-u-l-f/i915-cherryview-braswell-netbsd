@@ -1,0 +1,61 @@
+--- a/sys/external/bsd/common/include/linux/build_bug.h
++++ b/sys/external/bsd/common/include/linux/build_bug.h
+@@ -40,2 +40,6 @@
+ 
++/* Pinned Linux C11 assertions; native CTASSERT spelling remains intact. */
++#define netbsd_linux_static_assert(expr, ...) netbsd_linux_static_assert_message(expr, ##__VA_ARGS__, #expr)
++#define netbsd_linux_static_assert_message(expr, msg, ...) _Static_assert(expr, msg)
++
+ #define	BUILD_BUG()			do {} while (0)
+--- /dev/null
++++ b/sys/external/bsd/common/include/linux/container_of.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_CONTAINER_OF_H
++#define _LINUX_CONTAINER_OF_H
++
++#include <sys/cdefs.h>
++
++#include <linux/build_bug.h>
++#include <linux/compiler.h>
++#include <linux/stddef.h>
++
++#define netbsd_linux_typeof_member(T, m)	typeof(((T*)0)->m)
++
++/**
++ * container_of - cast a member of a structure out to the containing structure
++ * @ptr:	the pointer to the member.
++ * @type:	the type of the container struct this is embedded in.
++ * @member:	the name of the member within the struct.
++ *
++ * WARNING: any const qualifier of @ptr is lost.
++ * Do not use container_of() in new code.
++ */
++#define netbsd_linux_container_of(ptr, type, member) ({				\
++	netbsd_linux_static_assert(__same_type(*(ptr), netbsd_linux_typeof_member(type, member)) || \
++		      __same_type(*(ptr), void),			\
++		      "pointer type mismatch in container_of()");	\
++	(type *)((char *)__UNCONST(ptr) - offsetof(type, member)); })
++
++/**
++ * container_of_const - cast a member of a structure out to the containing
++ *			structure and preserve the const-ness of the pointer
++ * @ptr:		the pointer to the member
++ * @type:		the type of the container struct this is embedded in.
++ * @member:		the name of the member within the struct.
++ *
++ * Always prefer container_of_const() instead of container_of() in new code.
++ */
++#define netbsd_linux_container_of_const(ptr, type, member)				\
++	_Generic(ptr,							\
++		const typeof(*(ptr)) *: ((const type *)netbsd_linux_container_of(ptr, type, member)),\
++		default: ((type *)netbsd_linux_container_of(ptr, type, member))	\
++	)
++
++#endif	/* _LINUX_CONTAINER_OF_H */
+--- a/sys/external/bsd/common/include/linux/kernel.h
++++ b/sys/external/bsd/common/include/linux/kernel.h
+@@ -46,2 +46,3 @@
+ #include <linux/compiler.h>
++#include <linux/container_of.h>
+ #include <linux/log2.h>

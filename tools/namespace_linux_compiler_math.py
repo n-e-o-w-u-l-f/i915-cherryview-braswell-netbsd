@@ -25,13 +25,22 @@ def bindings(linux):
     if head!=PIN:raise RuntimeError('wrong frozen Linux reference')
     names=set()
     for path,guard in [('include/linux/compiler_attributes.h','__LINUX_COMPILER_ATTRIBUTES_H'),('include/linux/math.h','_LINUX_MATH_H'),
-                       ('include/linux/typecheck.h','TYPECHECK_H_INCLUDED'),('include/linux/wordpart.h','_LINUX_WORDPART_H')]:
+                       ('include/linux/typecheck.h','TYPECHECK_H_INCLUDED'),('include/linux/wordpart.h','_LINUX_WORDPART_H'),
+                       ('include/linux/container_of.h','_LINUX_CONTAINER_OF_H')]:
         names.update(re.findall(r'^\s*#\s*define\s+([A-Za-z_][A-Za-z_0-9]*)',frozen(linux,path),re.M))
         names.discard(guard)
+    # Keep NetBSD's legacy assertions for native callers; Linux-owned source
+    # uses the complete pinned optional-message C11 assertion wrappers.
+    assertion_names=re.findall(r'^#define (static_assert|__static_assert)\(',frozen(linux,'include/linux/build_bug.h'),re.M)
+    if set(assertion_names)!={'static_assert','__static_assert'}:
+        raise RuntimeError('changed pinned static assertion declarations')
+    names.update(assertion_names)
     # This spelling is also a GCC attribute property inside its own definition.
     # It is not a native collision and must retain its compiler spelling.
     names.discard('__alloc_size__')
     result={name:'netbsd_linux_'+name.lstrip('_') for name in sorted(names)}
+    # The helper and public spelling differ only in leading underscores.
+    result['__static_assert']='netbsd_linux_static_assert_message'
     if len(set(result.values()))!=len(result):raise RuntimeError('namespace collision')
     return result
 
