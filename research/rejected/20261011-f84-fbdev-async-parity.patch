@@ -1,0 +1,63 @@
+--- external/bsd/drm2/dist/drm/i915/display/intel_fbdev.c
++++ external/bsd/drm2/dist/drm/i915/display/intel_fbdev.c
+@@ -67,6 +67,7 @@
+ 
+ #ifdef __NetBSD__
+ #include "intelfb.h"
++#include "i915_pci.h"
+ #include <linux/nbsd-namespace.h>
+ #endif
+ 
+@@ -540,6 +541,23 @@ static void intel_fbdev_initial_config(void *data, async_cookie_t cookie)
+ 		intel_fbdev_unregister(to_i915(ifbdev->helper.dev));
+ }
+ 
++#ifdef __NetBSD__
++struct intel_fbdev_initial_config_task {
++	struct i915drmkms_task	task;
++	struct intel_fbdev		*ifbdev;
++};
++
++static void
++intel_fbdev_initial_config_task(struct i915drmkms_task *task)
++{
++	struct intel_fbdev_initial_config_task *const config =
++	    container_of(task, struct intel_fbdev_initial_config_task, task);
++
++	intel_fbdev_initial_config(config->ifbdev, 1);
++	kfree(config);
++}
++#endif
++
+ void intel_fbdev_initial_config_async(struct drm_device *dev)
+ {
+ 	struct intel_fbdev *ifbdev = to_i915(dev)->fbdev;
+@@ -548,7 +549,28 @@ void intel_fbdev_initial_config_async(struct drm_device *dev)
+ 	if (!ifbdev)
+ 		return;
+ 
++#ifdef __NetBSD__
++	struct intel_fbdev_initial_config_task *config;
++
++	/*
++	 * Linux schedules this after i915 registration.  Do not invoke it
++	 * reentrantly through the NetBSD async compatibility stub: defer it
++	 * through the i915 autoconfiguration task boundary instead.
++	 */
++	config = kzalloc(sizeof(*config), GFP_KERNEL);
++	if (config == NULL) {
++		DRM_ERROR("unable to defer initial fbdev configuration\n");
++		intel_fbdev_initial_config(ifbdev, 1);
++		return;
++	}
++
++	config->ifbdev = ifbdev;
++	i915drmkms_task_init(&config->task, intel_fbdev_initial_config_task);
++	ifbdev->cookie = 1;
++	i915drmkms_task_schedule(dev->dev, &config->task);
++#else
+ 	ifbdev->cookie = async_schedule(intel_fbdev_initial_config, ifbdev);
++#endif
+ }
+ 
+ static void intel_fbdev_sync(struct intel_fbdev *ifbdev)
