@@ -1,64 +1,48 @@
-# Project status
+# i915 Cherryview/Braswell NetBSD status
 
-Date: 2026-09-14
+Date: 2026-10-11
 
-## Hardware
+## State
 
-HP TPN-W121, Intel Celeron N3060 / Braswell, NetBSD 11.0 amd64.
+**Diagnostic recovery only — not a functional i915drmkms release.**
 
-GPU:
+Target hardware is the HP TPN-W121 with Intel Cherryview GPU 8086:22b1 (revision 0x35) on NetBSD 11.0 amd64.
 
-```text
-PCI vendor/device: 8086:22b1
-Revision:           0x35
-Subsystem:          103c:8205
-Platform:           Intel Cherryview (CHV), Gen8 LP
-```
+The live recovery kernel is RTWN8723BE-F77-LINUX-EFUSE-MAP. It disables i915drmkms and retains the firmware framebuffer. It is the only normal boot target.
 
-## Reproduced problem
+## Reproduced KMS failure
 
-Normal boot with `i915drmkms` enabled results in a blackscreen.
+Both isolated i915 test kernels showed the same hardware result:
 
-Safe diagnostic boot currently keeps i915 disabled and uses `genfb0` for the console.
+1. Firmware green boot text is visible.
+2. i915drmkms takes the display path.
+3. The internal panel turns black while its backlight remains on.
 
-## Source findings
+F83 used the original NetBSD fbdev scheduling path. F84 deferred initial fbdev setup through the existing i915 autoconfiguration task boundary to match Linux's asynchronous registration boundary. F84 linked successfully, but reproduced the same black screen.
 
-- NetBSD i915 PCI identification already contains the CHV device mapping.
-- CHV-specific DPIO/PHY handling is already present in the imported driver.
-- NetBSD's CSR/DMC loader has no CHV firmware selection.
-- Current Arch Linux firmware listings contain BXT/GLK/SKL/newer i915 firmware but no CHV-specific i915 firmware family.
-- Linux documentation describes GuC/HuC/DMC firmware beginning with Gen9; CHV is Gen8.
+Thus the async compatibility difference is rejected as a sufficient cause. There is no retained early i915 trace identifying the failing display boundary.
 
-## Firmware conclusion
+The F83/F84 kernels, source configurations, build objects, temporary scripts, boot-menu entries and boot configuration backups were intentionally removed after the test. The rejected F84 patch and evidence are retained in Git history only:
 
-A BXT firmware blob is not a valid CHV firmware port. No source evidence currently supports adding a CHV DMC/GuC/HuC binary.
+- research/rejected/20261011-f84-fbdev-async-parity.patch
+- docs/HP_I915_BLACK_SCREEN_ROOT_CAUSE_20261011.md
 
-The project therefore changes direction from firmware fabrication to driver/display porting.
+## Port status
 
-## Build/test history
+The project contains selected NetBSD adapter work and source-level checks. It does **not** yet prove a complete i915 driver port, a working KMS console, a working DRM user ABI, or successful HP hardware operation.
 
-A dedicated `I915-BSW-DISPLAY-OFF` kernel was built as a controlled diagnostic kernel. The production `/netbsd` kernel remains unchanged.
+The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (v5.6-rc3 lineage). Modern Linux files must be ported by behavior and dependency, not copied over the older NetBSD DRM import.
 
-Known artifact:
+## Required next gate
 
-```text
-/netbsd.i915-bsw-display-off
-SHA256 1df288ee93e30956e55ed4cdf8a1aa932bbb13d6a317bac77180e93ae35dbee4
-```
+Before another i915 boot:
 
-The source was restored after the controlled build.
+1. Provide an independent serial or network console that survives internal panel takeover.
+2. Persist a trace at PCI probe, GT/GEM setup, VBT/eDP discovery, panel power, AUX/link training, DPIO/PLL, pipe/plane enable, fbdev creation, and wsdisplay handover.
+3. Execute one transition boundary per test, returning to F77 on failure.
 
-## Safety state
+No display register or firmware change is justified until this trace makes the failure observable.
 
-- No automatic reboot.
-- Production `/netbsd` not replaced.
-- i915 remains disabled for the normal diagnostic boot.
-- Future driver changes must be isolated and reversible.
+## Release gate
 
-## Next work package
-
-1. Diff the NetBSD CHV display path against a current Linux CHV implementation.
-2. Identify changes that are specifically applicable to Gen8 CHV.
-3. Port one functional change at a time.
-4. Build a separate test kernel.
-5. Preserve a fallback kernel and collect boot diagnostics before enabling the next stage.
+Packaging is deliberately deferred. A release requires a clean NetBSD 11.0 build, repeatable KMS boot, usable DRM/ioctl/mmap behavior, display recovery, and target-hardware acceptance. Only then may the project produce signed source/binary installer archives (.tgz, .tbz, .txz) and pkgsrc/pkgin metadata.
