@@ -47,15 +47,20 @@ The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b
 
 Before another i915 boot:
 
-1. Provide an independent serial or network console that survives internal panel takeover.
-2. Persist a trace at PCI probe, GT/GEM setup, VBT/eDP discovery, panel power, AUX/link training, DPIO/PLL, pipe/plane enable, fbdev creation, and wsdisplay handover.
+1. Provide a physically attached serial console configured for bootloader and
+   kernel output. An ordinary post-boot network/syslog path is not evidence
+   that G01--G09 is observable during built-in i915 attachment.
+2. Persist a trace at PCI probe, GT/GEM setup, VBT/eDP discovery, panel power,
+   AUX/link training, DPIO/PLL, pipe/plane enable, fbdev creation, and
+   wsdisplay handover.
 3. Execute one transition boundary per test, returning to F77 on failure.
 
 No display register or firmware change is justified until this trace makes the failure observable.
 
 The F77 transport audit found no attached serial console and does not treat
-the post-boot remote agent as an early-KMS trace sink. The required off-box
-trace gate is documented in `docs/HP_I915_TRACE_TRANSPORT_20261011.md`.
+the post-boot remote agent, Tailscale, or ordinary syslog as an early-KMS trace
+sink. The required trace gate is documented in
+`docs/HP_I915_TRACE_TRANSPORT_20261011.md`.
 
 ## Release gate
 
