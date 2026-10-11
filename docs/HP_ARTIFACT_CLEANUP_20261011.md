@@ -52,4 +52,3 @@
    recursive source-tree deletion.
 4. Recheck the protection set, `/boot.cfg`, and free space after deletion, then
    add the postflight result to this record.
-

@@ -92,4 +92,3 @@ candidate	/netbsd.v1.before-f19diag-20260921-build28	255595880	05c8dbf222f87adb5
 candidate	/netbsd.v1.before-f20diag-20260921-build30	255596648	44a437a1fd4588f2df4efe88d1a371ba7c6861f036b638c349ae7aed5339fba4	-	unreferenced historical kernel
 candidate	/netbsd.v1.before-f20diag-build31-20260921	27255232	95240f6d858eff74b0734aeffb83191ee254bef53853ffc686d69d4d2185d9c1	-	unreferenced historical kernel
 candidate	/netbsd.v1.before-v1-llt-fix-20260921	27255280	74e5f9c0d632049d5cc2a00e0b29e385c6178f1d3e26a086e8e9bb4453ddb92b	-	unreferenced historical kernel
-
