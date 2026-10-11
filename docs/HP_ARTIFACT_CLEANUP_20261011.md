@@ -1,6 +1,6 @@
 # HP artifact cleanup record — 2026-10-11
 
-## IST
+## IST before cleanup (historical preflight)
 
 - The live HP TPN-W121 system is still F77:
   `NetBSD 11.0 (RTWN8723BE-F77-LINUX-EFUSE-MAP) #0: Sat Sep 26 19:13:52 CEST 2026`.
@@ -41,14 +41,40 @@
     `display/intel_dp.c.pre-chv-audio-port`
     (SHA-256 `da6f6fa3ddc62c6f99891e996cd10ce4ffa4caa788d186db91a219cd69875bc1`).
 
+## IST after cleanup (postflight)
+
+- The manifest-driven cleanup completed on the live F77 system without a
+  reboot, kernel installation, boot-menu edit, or i915drmkms activation.
+  Exactly 90 unreferenced root-kernel candidates and exactly the three
+  explicitly listed redundant i915 backups were removed.
+- Exactly three regular root-level `/netbsd*` files remain:
+  `/netbsd` (F16.2 recovery),
+  `/netbsd.v1-f77-linux-efuse-map-20260926` (the active safe F77), and
+  `/netbsd.rtwn8723be-f15.1-dma-engine` (the successful F15.1 DMA reference).
+  Their documented SHA-256 values and the `/boot.cfg` SHA-256 remain unchanged.
+  The boot configuration still contains no F16.0, F83, or F84 entry and keeps
+  i915drmkms disabled.
+- Free space on `/` increased from 364,105,484 KiB to 371,218,872 KiB
+  (7,113,388 KiB). The difference need not equal the logical file-size sum
+  exactly because filesystem allocation is block based.
+- `i915_params.h` remains SHA-256
+  `fff4f1b3ba82fa71c2d71797b8fd5f1ebd89fce59eac2d18672e9a9b2a2df0d4`.
+  The retained `intel_dp.c.pre-chv-audio-port` remains SHA-256
+  `da6f6fa3ddc62c6f99891e996cd10ce4ffa4caa788d186db91a219cd69875bc1`.
+  The current `intel_dp.c` is deliberately a different later source state
+  (SHA-256 `83f78c9e1d96543a9eb40d9f9132d998ff2df0244262a5ccbf33c27e43df6fe7`);
+  it was not compared for equality and was not modified by cleanup.
+- An initial postflight assertion incorrectly assumed equality between that
+  retained historical `intel_dp` reference and current `intel_dp.c`. It ran
+  only after the exact removals, changed no additional file, and was replaced
+  by the separate hash-preservation check above. The final postflight gate is
+  green.
+
 ## NEXT
 
-1. Commit and push this exact preflight manifest before deleting any file.
-2. Recheck every TSV row against the live HP filesystem, including the three
-   protected kernel identities, the boot configuration hash, candidate count,
-   path-list hash, and the three backup equality checks.
-3. Remove only the verified candidate paths and the three listed backups,
-   using absolute individual names with root authority; do not use a glob or a
-   recursive source-tree deletion.
-4. Recheck the protection set, `/boot.cfg`, and free space after deletion, then
-   add the postflight result to this record.
+1. Treat the TSV as a completed historical cleanup record; do not rerun it on
+   a changed host or use it as a generic deletion list.
+2. Keep F77 and F15.1 as recovery references. Do not boot F16.0, F83, or F84.
+3. For i915, proceed only through the physically attached early serial-trace
+   gate documented in `STATUS.md`; no display-register experiment is authorized
+   by this cleanup.

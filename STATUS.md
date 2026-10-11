@@ -62,6 +62,11 @@ the post-boot remote agent, Tailscale, or ordinary syslog as an early-KMS trace
 sink. The required trace gate is documented in
 `docs/HP_I915_TRACE_TRANSPORT_20261011.md`.
 
+The completed, manifest-driven removal of obsolete F16.0/F83/F84-era artifacts
+and three byte-identical i915 source backups is recorded, with preflight and
+postflight hashes, in `docs/HP_ARTIFACT_CLEANUP_20261011.md`. It did not alter
+the recovery boot set or provide new evidence about the KMS failure.
+
 ## Release gate
 
 Packaging is deliberately deferred. A release requires a clean NetBSD 11.0 build, repeatable KMS boot, usable DRM/ioctl/mmap behavior, display recovery, and target-hardware acceptance. Only then may the project produce signed source/binary installer archives (.tgz, .tbz, .txz) and pkgsrc/pkgin metadata.
