@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Run pinned, isolated i915 error-path regressions on the permitted build host.
+"""Run host-independent pinned i915 source and patch regressions.
 
 Accept a clean frozen NetBSD git checkout and a clean pinned Linux checkout.
 Optionally check a separate *real* six-edit NetBSD port overlay. Never pass
 the frozen checkout again as the overlay: it would be misleading evidence.
-Only source/patched-function host C and patch application are checked;
-this is not a native NetBSD kernel build or hardware verification.
+Only source/patched-function checks and patch application are checked; this
+is not a NetBSD ABI compile, a kernel build, or hardware verification.
+
+Tests that compile against the NetBSD kernel ABI are deliberately excluded.
+They require a separately rebuilt, explicit HP/NetBSD stage and must never
+fall back to a deleted historical staging path.
 """
 from __future__ import annotations
 
@@ -70,26 +74,6 @@ def main() -> None:
 
     overlay_args = ["--overlay-tree", str(overlay)] if overlay else []
     invoke("test_materialize_linux_i915.py")
-    invoke("test_linux_memory_ordering.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
-    invoke("test_linux_kconfig.py", "--netbsd-tree", str(netbsd))
-    invoke("test_linux_posix_types.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
-    invoke("test_linux_rbtree.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
-    invoke("test_linux_wordsize.py", "--netbsd-tree", str(netbsd), "--apply-candidate")
-    invoke("test_linux_raw_spinlock.py")
-    invoke("test_linux_instruction_pointer.py", "--netbsd-tree", "/root/hp-driver-port-20261005/netbsd-full-linux")
-    invoke("test_hp_shared_kconfig.py")
-    invoke("test_linux_compiler_math.py")
-    invoke("test_linux_math64.py")
-    invoke("test_linux_completion.py")
-    invoke("test_linux_typecheck_wordpart.py")
-    invoke("test_linux_container.py")
-    invoke("test_linux_typed_alloc.py")
-    invoke("test_linux_task_wait_worker.py")
-    invoke("test_linux_uuid.py")
-    invoke("test_linux_pwm.py")
-    invoke("test_linux_fatal_wait.py")
-    invoke("test_linux_bit_wait.py")
-    invoke("test_linux_task_entry.py", "--netbsd-tree", str(netbsd))
     invoke("test_vlv_chv_audio_phase.py", "--netbsd-tree", str(netbsd))
     invoke("test_early_probe_unwind.py",
            "--netbsd-tree", str(netbsd), "--patch", str(p7),

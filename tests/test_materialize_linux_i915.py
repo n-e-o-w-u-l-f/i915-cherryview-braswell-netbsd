@@ -83,8 +83,12 @@ class MaterializeTest(unittest.TestCase):
         self.assertEqual(manifest["total_file_count"], 6)
         self.assertEqual(manifest["linux_head_observed"], self.git("rev-parse", "HEAD").strip())
         for entry in manifest["files"]:
+            committed = subprocess.check_output(
+                ["git", "-C", str(self.source), "show",
+                 "HEAD:" + entry["path"]]
+            )
             self.assertEqual((self.output / entry["path"]).read_bytes(),
-                             (self.source / entry["path"]).read_bytes())
+                             committed)
 
 if __name__ == "__main__":
     unittest.main()

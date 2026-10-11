@@ -111,8 +111,16 @@ def verify_sources(linux: Path, head: str | None) -> dict[str, str] | None:
         source = linux / name
         if kind != b"blob" or mode not in (b"100644", b"100755") or not source.is_file():
             raise SystemExit(f"missing or unsupported reference file {name}")
-        data = source.read_bytes()
-        actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        # Read the committed blob rather than hashing worktree bytes.  Git
+        # may clean/smudge line endings while still reporting the checkout
+        # clean; a portable staging tree must contain the canonical object
+        # bytes, not a platform-specific worktree representation.
+        data = subprocess.check_output(
+            ["git", "-C", str(linux), "show", "HEAD:" + name]
+        )
+        actual = hashlib.sha1(
+            b"blob " + str(len(data)).encode() + b"\0" + data
+        ).hexdigest()
         if actual != expected.decode():
             raise SystemExit(f"dirty reference file {name}")
         expected_files[name] = expected.decode()
@@ -151,14 +159,27 @@ def main() -> int:
     expected_files = verify_sources(linux, head)
     out.mkdir(parents=True)
 
-    for rel in COPY_PATHS:
-        copy_path(linux, out, rel)
-    copy_top_level_drm(linux, out)
+    if expected_files is None:
+        # This explicit unverified mode retains the caller's worktree bytes.
+        for rel in COPY_PATHS:
+            copy_path(linux, out, rel)
+        copy_top_level_drm(linux, out)
+    else:
+        # Do not let working-tree filters alter materialized source.  Each
+        # selected path is written from the exact Git blob verified above.
+        for name in sorted(expected_files):
+            target = out / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(subprocess.check_output(
+                ["git", "-C", str(linux), "show", "HEAD:" + name]
+            ))
 
     files = []
     for path in sorted(p for p in out.rglob("*") if p.is_file()):
         data = path.read_bytes()
-        name = str(path.relative_to(out))
+        # Git tree paths are always slash-separated, including when this
+        # source-only gate is run from a Windows checkout.
+        name = path.relative_to(out).as_posix()
         if expected_files is not None:
             actual = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
             if expected_files.get(name) != actual:

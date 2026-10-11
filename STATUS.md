@@ -31,6 +31,11 @@ The F83/F84 kernels, source configurations, build objects, temporary scripts, bo
 
 The project contains selected NetBSD adapter work and source-level checks. It does **not** yet prove a complete i915 driver port, a working KMS console, a working DRM user ABI, or successful HP hardware operation.
 
+The pinned source-check runner is host-independent. Historic checks that
+compiled a private HP staging tree are not part of that runner after the
+staging tree was removed; they require a fresh explicit NetBSD stage. See
+`docs/PINNED_SOURCE_CHECK_SCOPE_20261011.md`.
+
 The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (v5.6-rc3 lineage). Modern Linux files must be ported by behavior and dependency, not copied over the older NetBSD DRM import.
 
 ## Required next gate
