@@ -31,7 +31,9 @@ There is no retained trace identifying a failing register write, DP AUX timeout,
 
 The evidence narrows the failure to the shared i915drmkms display/takeover path before a usable NetBSD console is re-established. The next test must make the boundary observable before it changes display ownership:
 
-1. retain an independent serial or network console that does not rely on the internal panel;
+1. provide a physically attached serial console configured for bootloader and
+   kernel output; an ordinary post-boot network path does not meet this
+   early-attach trace requirement;
 2. record each boundary: PCI probe, GEM/GT initialization, VBT/eDP discovery, panel power sequence, AUX/link training, pipe/plane enable, fbdev creation, and wsdisplay takeover;
 3. test one boundary at a time against the F77 recovery kernel;
 4. preserve logs off-machine before any display-state transition.

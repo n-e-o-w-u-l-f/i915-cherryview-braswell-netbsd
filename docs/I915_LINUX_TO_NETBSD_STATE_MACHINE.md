@@ -26,7 +26,11 @@ A port is complete only when every phase below has an owner, dependency, error e
 
 F83 and F84 show firmware text and then a black panel with backlight. That places the reproducible failure somewhere from G04 through G09. F84 rejected only one G09 scheduling hypothesis. It does not identify the failed phase.
 
-The next instrumented test must log G01 through G09 to a serial or independent network console that remains live after panel ownership changes. A single test may cross one unobserved boundary only; all other phases remain at their F77 recovery behavior.
+The next instrumented test must log G01 through G09 to a physically attached
+serial console that remains live after panel ownership changes. An ordinary
+post-boot network path is not an early-attach trace transport. A single test
+may cross one unobserved boundary only; all other phases remain at their F77
+recovery behavior.
 
 ## Explicit non-claims
 
