@@ -6,7 +6,9 @@ on:
   # 404 BlobNotFound. This is not an accepted test pass. Do not repeatedly
   # enqueue unchanged failing automatic runs. Re-enable push/PR triggers
   # only after actual runner/billing/settings diagnostics and a verified
-  # manual workflow_dispatch run with job steps and logs.
+  # manual workflow_dispatch run with job steps and logs. A changed-source
+  # manual run on 2026-10-11 (38111117392) still failed before every step and
+  # exposed no job log, so it does not lift this quarantine.
   workflow_dispatch:
 
 permissions:
