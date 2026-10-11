@@ -53,6 +53,10 @@ Before another i915 boot:
 
 No display register or firmware change is justified until this trace makes the failure observable.
 
+The F77 transport audit found no attached serial console and does not treat
+the post-boot remote agent as an early-KMS trace sink. The required off-box
+trace gate is documented in `docs/HP_I915_TRACE_TRANSPORT_20261011.md`.
+
 ## Release gate
 
 Packaging is deliberately deferred. A release requires a clean NetBSD 11.0 build, repeatable KMS boot, usable DRM/ioctl/mmap behavior, display recovery, and target-hardware acceptance. Only then may the project produce signed source/binary installer archives (.tgz, .tbz, .txz) and pkgsrc/pkgin metadata.

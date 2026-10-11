@@ -38,6 +38,9 @@ The evidence narrows the failure to the shared i915drmkms display/takeover path 
 
 No further display-register change is justified until that trace exists.
 
+The F77 trace-transport audit and the exact next gate are recorded in
+`docs/HP_I915_TRACE_TRANSPORT_20261011.md`.
+
 ## Linux reference
 
 The authoritative behavioral reference is Linux `fd179f8a05be3ccae366b9b96e176b51fbe54aab` (v5.6-rc3 lineage), not a modern current-Linux file copy. NetBSD must adapt OS lifecycle APIs while retaining the Linux hardware transition order.
