@@ -45,4 +45,4 @@ The F77 trace-transport audit and the exact next gate are recorded in
 
 ## Linux reference
 
-The authoritative behavioral reference is Linux `fd179f8a05be3ccae366b9b96e176b51fbe54aab` (v5.6-rc3 lineage), not a modern current-Linux file copy. NetBSD must adapt OS lifecycle APIs while retaining the Linux hardware transition order.
+The authoritative behavioral reference is Linux `fd179f8a05be3ccae366b9b96e176b51fbe54aab` (Linux 7.3-rc4), not an unpinned current-Linux file copy. The older NetBSD DRM/i915 import is the v5.6-rc3 lineage. NetBSD must adapt OS lifecycle APIs while retaining the Linux hardware transition order.

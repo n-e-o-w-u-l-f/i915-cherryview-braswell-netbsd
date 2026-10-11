@@ -2,7 +2,7 @@
 
 ## Authority and rule
 
-Hardware ordering is frozen to Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (v5.6-rc3 lineage), using the i915 driver state in that revision. NetBSD may replace OS services only: PCI attachment, bus_space/bus_dma, workqueues/tasks, locking, firmware loading, DRM device publication, memory mapping, console attachment, power management and teardown.
+Hardware ordering is frozen to Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (Linux 7.3-rc4), using the i915 driver state in that revision. The NetBSD DRM/i915 import itself is from the older v5.6-rc3 lineage. NetBSD may replace OS services only: PCI attachment, bus_space/bus_dma, workqueues/tasks, locking, firmware loading, DRM device publication, memory mapping, console attachment, power management and teardown.
 
 A port is complete only when every phase below has an owner, dependency, error exit and target-hardware result. Copying a current Linux file into the older NetBSD drm2 import is not a port.
 

@@ -41,7 +41,7 @@ The one manual GitHub Actions run after this conversion,
 job log. It is an infrastructure failure, not evidence for or against any
 i915 source check. See `docs/GITHUB_ACTIONS_INFRASTRUCTURE_20261011.md`.
 
-The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (v5.6-rc3 lineage). Modern Linux files must be ported by behavior and dependency, not copied over the older NetBSD DRM import.
+The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (Linux 7.3-rc4). The older NetBSD DRM/i915 import is the v5.6-rc3 lineage; it must not be confused with the current frozen comparison tree. Modern Linux files must be ported by behavior and dependency, not copied over that older import.
 
 ## Required next gate
 
