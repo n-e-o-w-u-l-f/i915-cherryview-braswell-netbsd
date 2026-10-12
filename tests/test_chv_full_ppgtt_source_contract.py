@@ -16,6 +16,7 @@ import argparse
 from pathlib import Path
 import re
 import subprocess
+import tempfile
 
 NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 LINUX_PIN = "fd179f8a05be3ccae366b9b96e176b51fbe54aab"
@@ -63,6 +64,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--netbsd-tree", required=True, type=Path)
     ap.add_argument("--linux-tree", required=True, type=Path)
+    ap.add_argument("--patch", required=True, type=Path,
+                    help="apply the actual published CHV PPGTT patch on a disposable frozen copy")
     ap.add_argument("--overlay-tree", type=Path, default=None)
     args = ap.parse_args()
     net = args.netbsd_tree.resolve(strict=True)
@@ -124,6 +127,40 @@ def main() -> None:
     assert ((1 << 32) - 1) >> 32 == 0
     assert ((1 << 48) - 1) >> 32 != 0
     print("I915_CHV_PPGTT_PINNED_LINUX_NETBSD_REFERENCE_CONTRACT_OK",
+          flush=True)
+
+    # The old no-overlay path only established that Linux and NetBSD differ.
+    # A PASS must also prove that our ACTUAL published patch applies against
+    # the frozen NetBSD source and produces the Linux-derived state machine.
+    patch = args.patch.resolve(strict=True)
+    subprocess.run(["git", "-C", str(net), "apply", "--check", str(patch)],
+                   check=True)
+    with tempfile.TemporaryDirectory(prefix="chv-ppgtt-patch-") as td:
+        root = Path(td)
+        for rel, source in (
+            (NET_ROOT + "i915_pci.c", old_pci),
+            (NET_ROOT + "gt/intel_lrc.c", old_lrc),
+        ):
+            dest = root / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_text(source)
+        subprocess.run(["git", "-C", str(root), "apply", str(patch)],
+                       check=True)
+        changed_pci = (root / NET_ROOT / "i915_pci.c").read_text()
+        changed_lrc = (root / NET_ROOT / "gt/intel_lrc.c").read_text()
+        expected_pci = old_pci.replace(
+            chv_info(old_pci),
+            chv_info(old_pci).replace(
+                ".ppgtt_type = INTEL_PPGTT_ALIASING,",
+                ".ppgtt_type = INTEL_PPGTT_FULL,", 1),
+            1)
+        if changed_pci != expected_pci:
+            raise AssertionError("PPGTT patch changed unexpected PCI source")
+        if normalized(function(changed_lrc, "emit_pdps")) != expected_pdp:
+            raise AssertionError("actual patch differs from Linux PDP sequence")
+        if normalized(function(changed_lrc, "execlists_request_alloc")) != upstream_alloc:
+            raise AssertionError("actual patch diverges from Linux request gate")
+    print("I915_CHV_PPGTT_PUBLISHED_PATCH_PINNED_LINUX_MATCH_OK",
           flush=True)
 
     if args.overlay_tree is None:
