@@ -43,6 +43,37 @@ i915 source check. See `docs/GITHUB_ACTIONS_INFRASTRUCTURE_20261011.md`.
 
 The authoritative hardware-order reference remains Linux fd179f8a05be3ccae366b9b96e176b51fbe54aab (Linux 7.3-rc4). The older NetBSD DRM/i915 import is the v5.6-rc3 lineage; it must not be confused with the current frozen comparison tree. Modern Linux files must be ported by behavior and dependency, not copied over that older import.
 
+## 2026-10-12 source-prebuild gate: Cherryview full PPGTT
+
+A previously false-positive prebuild route was closed. Without `--overlay-tree`,
+`tests/test_chv_full_ppgtt_source_contract.py` previously exited successfully
+after comparing *different* frozen Linux and NetBSD sources, without actually
+testing application of the published `0001-chv-full-ppgtt` patch. This did
+not establish a ported NetBSD behavior.
+
+- Test source commit `1ae194bf01a34b787f8a5474e015382e22d328bc`
+  now requires `--patch`, runs `git apply --check` against the exact pinned
+  NetBSD checkout and applies the actual published patch to disposable copies
+  of `i915_pci.c` and `intel_lrc.c`. It checks exact CHV policy-only change
+  and normalized Linux PDP ring/request-allocation semantics.
+- Source-check runner commit `fea70a1c08b8e5b5f507d8ca0ca0000fbe4c2180`
+  now supplies the actual `patches/0001-chv-full-ppgtt-linux-1c8ee8b-netbsd11.patch`.
+- Independent source-only verification: 3 actual patch hunks (2 in
+  `gt/intel_lrc.c`, 1 in `i915_pci.c`) were applied in memory to exact
+  NetBSD `03d918f6d0e81fa05b8f1160eca0628ad39988a6`, then compared
+  with frozen Linux
+  `fd179f8a05be3ccae366b9b96e176b51fbe54aab`. The target
+  `emit_pdps` command sequence (omitting the duplicate final advance)
+  and `execlists_request_alloc` gate match expected reference behavior,
+  and CHV policy selects full 32-bit PPGTT. Source-only gate: PASS.
+
+**Verification boundary:** The updated Python source-check runner has not
+yet been executed on the real frozen checkout, and no NetBSD C object,
+fully selected kernel, HP KMS, Black Screen recovery or physical mode-setting
+pass is claimed. Full 323-C-unit DRM/TTM closure and early G01–G09
+console trace remain OPEN. A PPGTT difference is not the observed display
+black-screen root cause without a causal stack/phase trace.
+
 ## Required next gate
 
 Before another i915 boot:
