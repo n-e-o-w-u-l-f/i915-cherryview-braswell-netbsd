@@ -59,6 +59,7 @@ def main() -> None:
             raise RuntimeError("real unpublished overlay must be distinct")
         if git_head(overlay) != NETBSD_PIN:
             raise RuntimeError("unpublished overlay has wrong NetBSD base")
+    p1 = (ROOT / "patches/0001-chv-full-ppgtt-linux-1c8ee8b-netbsd11.patch").resolve(strict=True)
     p3 = (ROOT / "patches/0003-vlv-chv-pipe-msa-misc-linux-c931ef00-netbsd11.patch").resolve(strict=True)
     p7 = (ROOT / "patches/0007-i915-early-probe-resource-unwind-netbsd11.patch").resolve(strict=True)
     p8 = (ROOT / "candidates/0008-i915-drm-registration-unwind-netbsd11.patch").resolve(strict=True)
@@ -96,7 +97,7 @@ def main() -> None:
            "--patch", str(p3), *overlay_args)
     invoke("test_chv_full_ppgtt_source_contract.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
-           *overlay_args)
+           "--patch", str(p1), *overlay_args)
     invoke("test_gen8_ppgtt_vm_init_unwind.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p16), *overlay_args)
