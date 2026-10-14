@@ -14,10 +14,10 @@ import platform
 import socket
 import subprocess
 import sys
+from hp_graph_preflight import arguments, execution_identity, preflight, require_hp
+from audit_hp_native_drm_symbol_owners import verify_elf
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_NATIVE_STAGE = Path("/root/hp-driver-port-20261005/netbsd-full-linux")
-EXPECTED_OBJ_STAGE = Path("/root/hp-driver-port-20261005/full-linux-obj")
 EXPECTED_NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 EXPECTED_LINUX_PIN = "fd179f8a05be3ccae366b9b96e176b51fbe54aab"
 
@@ -27,11 +27,14 @@ def digest(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, required=True)
+    arguments(ap)
     args = ap.parse_args()
-    if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
-        ap.error("REFUSED: native kernel compilation is HP NetBSD only")
-    if not EXPECTED_NATIVE_STAGE.is_dir() or not (EXPECTED_OBJ_STAGE / "machine/cdefs.h").is_file():
-        ap.error("native HP source/object stage is absent")
+    require_hp()
+    if os.geteuid() == 0:
+        ap.error('use the unprivileged HP owner workspace')
+    inputs = preflight(args.native_tree, args.object_dir, args.tool_dir, args.graph_status)
+    identity = execution_identity(inputs)
+    native_tree, obj_stage, tool_dir = [Path(inputs[k]) for k in ('tree', 'object_dir', 'tool_dir')]
     output = args.output.resolve()
     if output.exists():
         ap.error("refusing existing output; choose a new audit directory")
@@ -39,19 +42,37 @@ def main():
     expected_parent = ROOT.parent.resolve()
     if output.parent != expected_parent or not output.name.startswith("i915-native-drm-"):
         ap.error("output must be an isolated sibling of source checkouts")
-    output.mkdir(mode=0o700)
+    if any(p == output or p in output.parents for p in (native_tree, obj_stage, tool_dir)):
+        ap.error('output must not be inside source/object/tools')
     evidence_path = ROOT / "docs/evidence/HP_NATIVE_DRM_TASK_ENTRY_20261006.json"
     evidence = json.loads(evidence_path.read_text())
     checks = evidence["native_three_unit_gate"]["status"]["checks"]
     checked = {item["name"]: item for item in checks}
     if set(checked) != {"linux_task", "linux_module", "drm_cdevsw"}:
         raise RuntimeError("historical compiler contract does not match three-unit gate")
-    staged = EXPECTED_NATIVE_STAGE / "sys/external/bsd/drm2/drm/drm_cdevsw.c"
     canonical = ROOT / "compat/native-drm/drm_cdevsw.c"
-    if canonical.read_bytes() != staged.read_bytes():
-        raise RuntimeError("GitHub DRM owner source differs from current HP stage")
-    if digest(canonical) != "ae0ddb2629a89a2729fef8b1d6c00c865998d19d59c5a0aebafc7a66e6b0abc7":
-        raise RuntimeError("DRM source baseline revision changed; review before native compilation")
+    commands = {}
+    # Historical commands supply the frozen strict flags, not current paths
+    # or a claim that the old FAILED three-object evidence was successful.
+    for name, row in checked.items():
+        cmd = list(row['command'])
+        if cmd.count('-o') != 1 or cmd.count('-c') != 1 or '-Werror' not in cmd or '-nostdinc' not in cmd:
+            raise RuntimeError('malformed frozen compiler contract: ' + name)
+        old_tree = '/root/hp-driver-port-20261005/netbsd-full-linux'
+        old_obj = '/root/hp-driver-port-20261005/full-linux-obj'
+        old_tools = '/root/hp-driver-port-20261005/full-linux-tools'
+        cmd = [arg.replace(old_tree, str(native_tree)).replace(old_obj, str(obj_stage))
+               .replace(old_tools, str(tool_dir)) for arg in cmd]
+        original_source = Path(cmd[cmd.index('-c') + 1])
+        if not original_source.is_file() or native_tree not in original_source.parents or original_source.stem != name:
+            raise RuntimeError('unexpected stage source: ' + name)
+        source = canonical if name == 'drm_cdevsw' else original_source
+        cmd[cmd.index('-c') + 1] = str(source)
+        cmd[cmd.index('-o') + 1] = str(output / (name + '.o'))
+        if cmd[0] != str(tool_dir / 'bin/x86_64--netbsd-gcc'):
+            raise RuntimeError('unexpected compiler')
+        commands[name] = (cmd, source)
+    output.mkdir(mode=0o700)
     state = {
         "state": "RUNNING",
         "hostname": socket.gethostname(),
@@ -60,7 +81,8 @@ def main():
         "source_sha256": digest(canonical),
         "source_path": str(canonical),
         "owner_output": str(output),
-        "original_compiler_cwd": str(EXPECTED_OBJ_STAGE),
+        "compiler_cwd": str(obj_stage), "preflight": inputs, "execution_identity": identity,
+        "frozen_command_ledger_sha256": digest(evidence_path),
         "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "units": [],
     }
@@ -72,19 +94,11 @@ def main():
     save()
     try:
         for name in ("linux_task", "linux_module", "drm_cdevsw"):
-            row = checked[name]
-            cmd = list(row["command"])
-            if "-o" not in cmd or "-c" not in cmd:
-                raise RuntimeError(f"malformed native compiler command: {name}")
-            original_source = Path(cmd[cmd.index("-c") + 1])
-            if not original_source.is_file() or EXPECTED_NATIVE_STAGE not in original_source.parents:
-                raise RuntimeError(f"unexpected original source path: {name}")
-            source = canonical if name == "drm_cdevsw" else original_source
-            cmd[cmd.index("-c") + 1] = str(source)
+            cmd, source = commands[name]
             obj = output / (name + ".o")
             cmd[cmd.index("-o") + 1] = str(obj)
             pre_hash = digest(source)
-            result = subprocess.run(cmd, cwd=EXPECTED_OBJ_STAGE,
+            result = subprocess.run(cmd, cwd=obj_stage,
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True, timeout=150)
             log = output / (name + ".log")
@@ -98,6 +112,7 @@ def main():
                 "object_sha256": digest(obj) if obj.is_file() else None,
                 "object_size": obj.stat().st_size if obj.is_file() else 0,
                 "compiler_arguments_count": len(cmd),
+                "command": cmd,
             }
             state["units"].append(entry)
             save()
@@ -105,6 +120,9 @@ def main():
                   entry["object_size"], flush=True)
             if result.returncode != 0 or not entry["source_unchanged"] or entry["object_size"] == 0:
                 raise RuntimeError("native compile/verification failed: " + name)
+            verify_elf(obj)
+        if preflight(args.native_tree, args.object_dir, args.tool_dir, args.graph_status) != inputs or digest(canonical) != state['source_sha256']:
+            raise RuntimeError('input identity changed during compilation')
         state["state"] = "PASSED"
         state["limitation"] = (
             "Three native NetBSD kernel objects only; NOT a full DRM/TTM/i915 "

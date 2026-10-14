@@ -14,36 +14,37 @@ import platform
 import socket
 import subprocess
 import time
+from hp_graph_preflight import arguments, digest, execution_identity, preflight, require_hp
+from audit_hp_native_drm_symbol_owners import verify_elf
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--workspace", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    arguments(p)
     a = p.parse_args()
-    if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
-        p.error("all compiler execution is authorized only on HP/NetBSD")
+    require_hp()
     work = a.workspace.resolve(strict=True)
     output = a.output.resolve()
-    if work != Path("/root/hp-driver-port-20261005") or output.parent != work or output.exists():
+    protected = [a.native_tree.resolve(), a.object_dir.resolve(), a.tool_dir.resolve()]
+    if output.parent != work or output.exists() or any(p == output or p in output.parents for p in protected):
         p.error("expected a new output directory in the isolated HP workspace")
-    staged = json.loads((work / "full-linux-graph-status.json").read_text())
-    if staged["state"] != "CONFIGURED" or len(staged["units"]["i915"]) != 323:
-        p.error("complete frozen i915 graph must be configured first")
-    tree, obj = work / "netbsd-full-linux", work / "full-linux-obj"
-    make = work / "full-linux-tools/bin/nbmake-amd64"
-    generated = (obj / "Makefile").read_text()
-    units = []
-    for group, names in staged["units"].items():
-        for name in names:
-            relative = "external/bsd/drm2/dist/drm/" + ("" if group == "drm" else group + "/") + name
-            if relative not in generated or not (tree / "sys" / relative).is_file():
-                p.error("configured native graph omits source: " + relative)
-            units.append((group, relative))
+    inputs = preflight(a.native_tree, a.object_dir, a.tool_dir, a.graph_status)
+    tree, obj = Path(inputs['tree']), Path(inputs['object_dir'])
+    make = Path(inputs['tool_dir']) / 'bin/nbmake-amd64'
+    units = inputs['units']
+    identity = execution_identity(inputs)
+    # An up-to-date old object is not evidence of this invocation compiling it.
+    for row in units:
+        for suffix in ('.o', '.d'):
+            if (obj / (Path(row['object']).stem + suffix)).exists():
+                p.error('preserve existing outputs and use a fresh configured object stage: ' + row['object'])
     output.mkdir()
     state = {"state": "RUNNING", "host": socket.gethostname(),
         "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "expected_units": len(units), "expected_i915_units": 323,
         "makefile_sha256": hashlib.sha256((obj / "Makefile").read_bytes()).hexdigest(),
+        "preflight": inputs, "execution_identity": identity,
         "units": [], "limitation": "native development compilation only; semantic/API/adapter/runtime closure remains required"}
     status = output / "status.json"
     def save():
@@ -51,7 +52,7 @@ def main():
         tmp = status.with_suffix(".tmp")
         tmp.write_text(json.dumps(state, indent=2) + "\n"); tmp.replace(status)
     def compile_one(item):
-        group, source = item
+        group, source = item['group'], item['source']
         stem = Path(source).stem
         started = time.monotonic()
         row = {"group": group, "source": source,
@@ -65,30 +66,53 @@ def main():
                     rc = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120).returncode
                 except subprocess.TimeoutExpired:
                     rc = 124
+                except OSError as error:
+                    log.write(str(error) + '\n')
+                    rc = 127
                 row[suffix[1:] + "_exit"] = rc
                 if rc != 0:
                     break
+                if suffix == '.d':
+                    dependency = obj / (stem + '.d')
+                    if not dependency.is_file() or not dependency.stat().st_size:
+                        row['error'] = 'successful dependency command produced no nonempty .d'
+                        break
         row["elapsed_seconds"] = round(time.monotonic() - started, 3)
-        row["state"] = "PASSED" if row.get("o_exit") == 0 else "FAILED"
+        row["source_unchanged"] = digest(tree / 'sys' / source) == row['source_sha256']
+        row["state"] = "PASSED" if row.get("o_exit") == 0 and row['source_unchanged'] else "FAILED"
         if row["state"] == "PASSED":
             artifact = obj / (stem + ".o")
             if not artifact.is_file() or not artifact.stat().st_size:
                 row["state"] = "FAILED"; row["error"] = "missing/empty object"
             else:
-                row["artifact"] = {"bytes": artifact.stat().st_size,
+                verify_elf(artifact)
+                row["artifact"] = {"path": str(artifact), "bytes": artifact.stat().st_size,
                     "sha256": hashlib.sha256(artifact.read_bytes()).hexdigest()}
         row["diagnostics"] = [line[:500] for line in log_path.read_text(errors="replace").splitlines()
             if "fatal error:" in line or "error:" in line or "Error code" in line][:6]
         return row
     save()
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        for future in as_completed([pool.submit(compile_one, unit) for unit in units]):
-            row = future.result(); state["units"].append(row); save()
+    # Serial by default: native dependency/header generators can share outputs.
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        futures = {pool.submit(compile_one, unit): unit for unit in units}
+        for future in as_completed(futures):
+            try:
+                row = future.result()
+            except Exception as error:
+                unit = futures[future]
+                row = dict(group=unit['group'], source=unit['source'], state='FAILED', error=str(error))
+            state["units"].append(row); save()
             print(row["group"], Path(row["source"]).name, row["state"], flush=True)
     state["units"].sort(key=lambda row: row["source"])
     state["passed"] = sum(row["state"] == "PASSED" for row in state["units"])
     state["failed"] = len(units) - state["passed"]
-    state["state"] = "PASSED" if not state["failed"] else "FAILED"
+    # Revalidate configuration/tool/source identity after all unit probes.
+    try:
+        if preflight(a.native_tree, a.object_dir, a.tool_dir, a.graph_status) != inputs:
+            raise ValueError('stage identity changed during probe')
+    except (ValueError, OSError) as error:
+        state['preflight_error'] = str(error)
+    state["state"] = "PASSED" if not state["failed"] and not state.get('preflight_error') else "FAILED"
     save()
     return 0 if state["state"] == "PASSED" else 1
 

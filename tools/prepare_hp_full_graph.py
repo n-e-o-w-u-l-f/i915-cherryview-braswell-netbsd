@@ -22,6 +22,7 @@ import tempfile
 
 from generate_netbsd_i915_filelist import CONFIG, LINUX_PIN
 from materialize_linux_i915 import NETBSD_PIN
+from hp_graph_preflight import require_hp, selected_units
 
 PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_CC_HAS_INT128="y",
     CONFIG_ARCH_SUPPORTS_INT128="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
@@ -78,17 +79,23 @@ def replace_units(path, units, attribute, additions):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--workspace", type=Path, required=True)
-    p.add_argument("--linux-tree", type=Path, default=Path("/root/linux-rtl8723be-ref-fresh"))
+    p.add_argument("--linux-tree", type=Path, required=True)
+    p.add_argument("--materialized-tree", type=Path, required=True)
+    p.add_argument("--netbsd-tree", type=Path, required=True)
+    p.add_argument("--base-tool-dir", type=Path, required=True)
     a = p.parse_args()
-    if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
-        p.error("native staging/build probes are authorized only on HP/NetBSD")
+    require_hp()
     work = a.workspace.resolve(strict=True)
-    if work != Path("/root/hp-driver-port-20261005"):
-        p.error("expected the isolated HP task workspace")
-    source = work / "full-scope-audit/linux-stage-verified"
+    source = a.materialized_tree.resolve(strict=True)
     manifest = json.loads((source / "PORT-MANIFEST.json").read_text())
     if not manifest.get("linux_head_verified") or manifest["linux_pin"] != LINUX_PIN or manifest["netbsd_pin"] != NETBSD_PIN:
         p.error("unverified or different frozen reference")
+    frozen = json.loads((Path(__file__).resolve().parents[1] /
+        "docs/evidence/HP_I915_REFERENCE_MANIFEST_20261005.json").read_text())
+    expected = {r["path"]: r["sha256"] for r in frozen["files"]}
+    observed = {r["path"]: r["sha256"] for r in manifest["files"]}
+    if observed != expected or len(observed) != len(manifest["files"]):
+        p.error("materialized source set/hashes differ from frozen 1266-file ledger")
     for row in manifest["files"]:
         if digest(source / row["path"]) != row["sha256"]:
             p.error("modified materialized reference: " + row["path"])
@@ -99,15 +106,23 @@ def main():
         "display": selected(source, "drivers/gpu/drm/display", ["drm_display_helper-y"]),
         "ttm": selected(source, "drivers/gpu/drm/ttm", ["ttm-y"]),
     }
-    if len(groups["i915"]) != 323:
-        p.error("frozen i915 graph changed")
+    selected_units(groups)
     linux_names = [Path(name).stem for names in groups.values() for name in names]
     if len(set(linux_names)) != len(linux_names):
         p.error("native object-name collision in frozen Linux graph")
     tree, obj, tools = [work / name for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")]
-    if any(path.exists() for path in (tree, obj, tools)):
+    if any(path.exists() for path in (tree, obj, tools, work / 'full-linux-graph-status.json')):
         p.error("full-graph output exists; preserve it and reconcile before another stage")
-    reference = work / "netbsd-reference"
+    reference = a.netbsd_tree.resolve(strict=True)
+    head = subprocess.check_output(["git", "-C", str(reference), "rev-parse", "HEAD"], text=True).strip()
+    dirty = subprocess.check_output(["git", "-C", str(reference), "status", "--porcelain"], text=True)
+    if head != NETBSD_PIN or dirty.strip():
+        p.error("clean frozen NetBSD reference required")
+    if tree in reference.parents or reference == tree:
+        p.error("reference must be separate from output stage")
+    base_tools = a.base_tool_dir.resolve(strict=True)
+    if not (base_tools / "bin/nbmake-amd64").is_file():
+        p.error("existing local native toolchain required")
     tree.mkdir()
     state = {"state": "STAGING", "host": socket.gethostname(), "linux_pin": LINUX_PIN,
         "netbsd_pin": NETBSD_PIN, "profile": PROFILE, "units": groups,
@@ -224,16 +239,16 @@ def main():
         replace_units(drm / "ttm/files.ttm",
             [prefix + "dist/drm/ttm/" + name for name in groups["ttm"]], "drmkms_ttm",
             [(prefix + "ttm/ttm_bus_dma.c", "drmkms_ttm")])
-        config = tree / "sys/arch/amd64/conf/HP-FULL-LINUX-20261005"
-        config.write_text('include "arch/amd64/conf/GENERIC"\nident "HP-FULL-LINUX-20261005"\n'
+        config = tree / "sys/arch/amd64/conf/HP-FULL-LINUX-PROBE"
+        config.write_text('include "arch/amd64/conf/GENERIC"\nident "HP-FULL-LINUX-PROBE"\n'
                           'no nouveau*\n')
         obj.mkdir(); tools.mkdir(); (tools / "bin").mkdir()
-        for entry in Path("/usr/tools").iterdir():
+        for entry in base_tools.iterdir():
             if entry.name != "bin": (tools / entry.name).symlink_to(entry, target_is_directory=entry.is_dir())
-        for entry in Path("/usr/tools/bin").iterdir():
+        for entry in (base_tools / "bin").iterdir():
             if entry.name != "nbmake-amd64": (tools / "bin" / entry.name).symlink_to(entry)
-        wrapper = (Path("/usr/tools/bin/nbmake-amd64")).read_text()
-        for old, new in [("/usr/src", tree), ("/usr/obj", obj), ("/usr/tools", tools)]: wrapper = wrapper.replace(old, str(new))
+        wrapper = (base_tools / "bin/nbmake-amd64").read_text()
+        for old, new in [("/usr/src", tree), ("/usr/obj", obj), (str(base_tools), tools)]: wrapper = wrapper.replace(old, str(new))
         (tools / "bin/nbmake-amd64").write_text(wrapper)
         (tools / "bin/nbmake-amd64").chmod(0o755)
         run([str(tools / "bin/nbconfig"), "-s", str(tree / "sys"), "-b", str(obj), str(config)])
@@ -242,6 +257,11 @@ def main():
         state["adapter_state"] = "UNREVIEWED; development probe only; installation prohibited"
         state["manifest_sha256"] = {str(path.relative_to(tree)): digest(path) for path in
             [drm / "i915drm/files.i915drmkms", drm_manifest, drm / "ttm/files.ttm"]}
+        state["makefile_sha256"] = digest(obj / "Makefile")
+        state["source_sha256"] = {r["source"]: digest(tree / "sys" / r["source"])
+            for r in selected_units(groups)}
+        state["paths"] = {"tree": str(tree), "object_dir": str(obj), "tool_dir": str(tools),
+            "reference": str(reference), "materialized": str(source)}
         save()
     except Exception as exc:
         state["state"] = "FAILED"; state["error"] = str(exc); save(); raise
