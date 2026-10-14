@@ -35,6 +35,8 @@ for test in (
     assert f'invoke("{test}"' not in RUNNER
 
 for test in (
+    "test_hp_graph_preflight.py",
+    "test_native_drm_error_paths.py",
     "test_materialize_linux_i915.py",
     "test_drm_registration_source_contract.py",
     "test_chv_dpio_routing_source_contract.py",

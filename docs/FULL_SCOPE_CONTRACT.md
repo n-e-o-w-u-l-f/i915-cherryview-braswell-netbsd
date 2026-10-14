@@ -2,7 +2,17 @@
 
 Status: IN_PROGRESS
 
-Latest HP checkpoint (2026-10-06): patch0037 adds explicit sleepable native
+Current checkpoint (2026-10-14): safe source/build-gate hardening only;
+30 Python gate/owner controls, four native-DRM source contracts, runner-scope
+and 90-file Python syntax checks PASS locally. No fresh HP native compilation,
+full kernel link or hardware acceptance. See
+[bounded checkpoint](I915_SAFE_HARDENING_20261014.md).
+The 2026-10-10 three-object native DRM compile/partial link superseded the
+2026-10-06 adapter compile failure for that dated source only; it retained
+121 unresolved partial imports and did not close this full-scope contract.
+The changed C adapter requires fresh HP compilation.
+
+Historical HP checkpoint (2026-10-06): patch0037 adds explicit sleepable native
 DRM ioctl entry references while preserving per-LWP identity until actual
 exit. All38 pinned source/C scripts pass on HP with exact0037/0035/0032
 source-chain verification. Complete actual task/native-shim normal+UBSan models pass13 scenarios/

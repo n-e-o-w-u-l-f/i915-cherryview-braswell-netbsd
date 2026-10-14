@@ -1,6 +1,6 @@
 # i915 Cherryview/Braswell NetBSD status
 
-Date: 2026-10-11
+Date: 2026-10-14
 
 ## State
 
@@ -8,7 +8,35 @@ Date: 2026-10-11
 
 Target hardware is the HP TPN-W121 with Intel Cherryview GPU 8086:22b1 (revision 0x35) on NetBSD 11.0 amd64.
 
-The live recovery kernel is RTWN8723BE-F77-LINUX-EFUSE-MAP. It disables i915drmkms and retains the firmware framebuffer. It is the only normal boot target.
+The historically verified recovery kernel is RTWN8723BE-F77-LINUX-EFUSE-MAP.
+It disables i915drmkms and retains the firmware framebuffer. Current governance
+also records a later request for a GENERIC default; current HP boot identity
+is unverified. Preserve F77 and do not infer or change the current boot default.
+
+## 2026-10-14 safe source/build hardening
+
+Isolated branch `work/i915-hardening-20261014` starts at current `main`
+`27fd4d7`. The four full-graph/native-DRM tools now take explicit stage paths;
+the old root stage is not an operational fallback. Preflight checks exact
+323 i915 + 66 DRM + 8 display + 13 TTM selections, real config(5)
+ALLFILES/OBJS owners, source/config/tool/header identity and generated ABI
+headers. The owner audit requires fresh, matching native object evidence,
+reports unresolved imports and duplicate strong owners, and keeps lexical
+candidates separate. Existing three-object links cannot close the full graph.
+
+The native DRM read adapter receives defensive checked-size and centralized
+whole-event-progress guards. Existing open/minor/fd/task cleanup and copy-fault
+rollback were reviewed; no proven KMS/root-cause fix or native ABI pass is claimed.
+
+Actual local Python-only validation: 30 gate/owner negative controls, four
+DRM source contracts, runner scope check and syntax checks of 90 Python files
+PASS. See [hardening and reproduction](docs/I915_SAFE_HARDENING_20261014.md)
+and [test evidence](docs/evidence/I915_LOCAL_HARDENING_FINAL_20261014.json).
+The complete pinned source runner and changed NetBSD C compilation remain
+NOT_RUN. HP SSH timed out directly and through Spinnennet and Legion; RDC
+reported exhausted quota. No kernel/boot/MMIO/firmware changes or paid/hosted
+build resources were used. Complete kernel link, ABI/semantic closure,
+physical early trace and KMS acceptance remain OPEN.
 
 ## Reproduced KMS failure
 
