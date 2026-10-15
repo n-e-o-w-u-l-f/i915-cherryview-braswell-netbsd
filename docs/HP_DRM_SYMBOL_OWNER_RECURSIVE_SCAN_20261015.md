@@ -32,7 +32,7 @@ Legion (via a temporary harness; no native compile) and reported
 
 The test confirms object path enumeration semantics only. It does not
 demonstrate matching symbol definitions, object ABI suitability,
-333+ translation-unit integration, final kernel link, or a usable display.
+the 323 selected i915 translation units plus separate DRM/TTM dependencies, final kernel link, or a usable display.
 (The frozen full i915 reference currently contains 323 active C units;
 the separate DRM/TTM dependency closure remains open.)
 

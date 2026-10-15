@@ -101,3 +101,28 @@ the recovery boot set or provide new evidence about the KMS failure.
 ## Release gate
 
 Packaging is deliberately deferred. A release requires a clean NetBSD 11.0 build, repeatable KMS boot, usable DRM/ioctl/mmap behavior, display recovery, and target-hardware acceptance. Only then may the project produce signed source/binary installer archives (.tgz, .tbz, .txz) and pkgsrc/pkgin metadata.
+
+## 2026-10-15 source-only continuation (isolated development branch)
+
+Development branch: `work/hp-native-drm-stage-replay-20261015`,
+based on `main@27fd4d7d483be456158884c08d04446dd5312326`.
+The HP native compiler-argv replay source test ran on Legion and PASSed;
+a new recursive symbol-owner provider scan test independently ran on
+Legion and PASSed (nested objects, de-duplication and symlink exclusion).
+These are host-independent Python tests, **not** NetBSD object/kernel builds.
+
+The native `fd_clone()` contract from frozen NetBSD
+`03d918f6d0e81fa05b8f1160eca0628ad39988a6`
+returns `EMOVEFD` unconditionally after `fd_affix`. The existing
+`KASSERT(error == EMOVEFD)` in DRM native open is consequently not an
+identified panic cause and was **not changed**. Native DRM close has
+a separate task-context/lifetime concern (see
+`docs/HP_DRM_FILE_LIFETIME_AUDIT_20261015.md`), but the corresponding
+Linux-file callback provider and quiescence contract must be checked on
+HP before implementing a guaranteed final-close path.
+
+The full 323-unit i915 + DRM/TTM build closure, actual symbol-owner audit,
+NetBSD kernel link, independent early-console transport, and hardware
+KMS/black-screen recovery remain **OPEN**. Neither kernel nor firmware,
+display MMIO, boot menu or host network was modified. No test kernel
+was installed or rebooted. Current HP boot identity is unverified.
