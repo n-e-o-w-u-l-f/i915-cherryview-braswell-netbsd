@@ -86,3 +86,29 @@ rejected fbdev-async hypothesis as a fix.
 NEXT: run portable Python source test where legitimately available; verify
 fresh HP source/object/tool stage, and only then perform native HP build.
 Do not promote this branch to `main` on the basis of this model check alone.
+
+## Additional source-owner scanner repair (same branch)
+
+The prior `tools/audit_hp_native_drm_symbol_owners.py` also used the retired
+root for the NetBSD `nm` binary, DRM source subtree and provider objects, plus
+a fixed 2026-10-10 three-object output path. It now requires explicit
+`--stage-root`, `--linked-object` and one or more `--provider-dir` inputs.
+Only verified native ELF objects supplied by the HP owner are scanned;
+no previous object set is silently reused, and each report records its input
+paths. The scan remains **read-only** with respect to kernel sources and ELF
+inputs, writing only the named output report directory.
+
+On HP only, after producing and verifying a three-object relocatable link:
+
+```sh
+python3 -B tools/audit_hp_native_drm_symbol_owners.py \
+  --stage-root /path/to/verified/fresh/hp-stage \
+  --linked-object /path/to/owner/modern_drm_three.o \
+  --provider-dir /path/to/verified/native/provider-objects \
+  --output /path/to/checkout-parent/i915-drm-owners-20261015
+```
+
+The Python scanner and any native `nm` inspection have **not been executed**
+in this conversation. Its textual C-definition candidates do not prove a
+compiled provider; the prior 121 unresolved imports refer only to the
+partial three-object link, not the final 323-unit kernel dependency graph.
