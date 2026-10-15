@@ -28,6 +28,33 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+MAX_PROVIDER_OBJECTS = 100000
+
+
+def provider_objects(directories: list[Path], linked_object: Path) -> list[Path]:
+    """Find native object providers throughout configured object subtrees.
+
+    NetBSD's kernel .o files normally live below the object root, not at its
+    top level. Resolve paths and refuse symlinks escaping the selected roots;
+    exclude the partial link being audited from its own provider inventory.
+    """
+    linked_object = linked_object.resolve(strict=True)
+    found: set[Path] = set()
+    for directory in directories:
+        root = directory.resolve(strict=True)
+        for candidate in root.rglob("*.o"):
+            obj = candidate.resolve(strict=True)
+            if not obj.is_relative_to(root):
+                raise RuntimeError("provider object escapes selected root: " +
+                                   str(candidate))
+            if not obj.is_file() or obj == linked_object:
+                continue
+            found.add(obj)
+            if len(found) > MAX_PROVIDER_OBJECTS:
+                raise RuntimeError("provider scan exceeds audited object bound")
+    return sorted(found)
+
+
 def symbols(args: list[str]) -> list[str]:
     p = subprocess.run(args, text=True, capture_output=True, timeout=80)
     if p.returncode != 0:
@@ -73,8 +100,7 @@ def main() -> None:
         if m:
             undefined.add(m.group(1))
 
-    objects = sorted({obj for p in directories for obj in p.glob("*.o")
-                      if obj.is_file()})
+    objects = provider_objects(directories, src)
     if not objects:
         ap.error("no native provider objects found in selected directories")
     definitions: dict[str, list[str]] = {symbol: [] for symbol in undefined}
