@@ -20,9 +20,8 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 WORK = ROOT.parent
-STAGE = Path("/root/hp-driver-port-20261005")
-NATIVE = STAGE / "netbsd-full-linux/sys/external/bsd/drm2"
-NM = STAGE / "full-linux-tools/bin/x86_64--netbsd-nm"
+# Stage, linked object and provider objects are selected explicitly by
+# the HP owner; an obsolete build workspace is never silently assumed.
 
 
 def digest(path: Path) -> str:
@@ -39,6 +38,12 @@ def symbols(args: list[str]) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output", type=Path, required=True)
+    ap.add_argument("--stage-root", type=Path, required=True,
+                    help="verified HP tree containing native sources and nm")
+    ap.add_argument("--linked-object", type=Path, required=True,
+                    help="actual three-object NetBSD ld -r output to inspect")
+    ap.add_argument("--provider-dir", type=Path, action="append", required=True,
+                    help="directory of previously compiled native .o files; repeatable")
     args = ap.parse_args()
     if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
         ap.error("native binary inspection is on HP NetBSD only")
@@ -48,32 +53,39 @@ def main() -> None:
     if (out.exists() or out.parent != WORK.resolve() or
             not out.name.startswith("i915-drm-owners-")):
         ap.error("create a new i915-drm-owners-* report beside checkouts")
-    src = WORK / "i915-native-drm-20261010/modern_drm_three.o"
-    if not src.is_file() or not NM.is_file() or not NATIVE.is_dir():
-        ap.error("verified previously compiled native DRM objects unavailable")
+    stage = args.stage_root.resolve(strict=True)
+    native = stage / "netbsd-full-linux/sys/external/bsd/drm2"
+    nm = stage / "full-linux-tools/bin/x86_64--netbsd-nm"
+    src = args.linked_object.resolve(strict=True)
+    directories = [item.resolve(strict=True) for item in args.provider_dir]
+    if (not stage.is_dir() or not native.is_dir() or not nm.is_file() or
+            not os.access(nm, os.X_OK) or not src.is_file() or
+            src.suffix != ".o" or WORK.resolve() not in src.parents):
+        ap.error("HP source, native nm or owner linked object missing/invalid")
+    if any(not p.is_dir() or (stage not in p.parents and
+               WORK.resolve() not in p.parents and p != stage)
+           for p in directories):
+        ap.error("provider directories must be under explicit stage or owner workspace")
 
     undefined = set()
-    for line in symbols([str(NM), "-u", str(src)]):
+    for line in symbols([str(nm), "-u", str(src)]):
         m = re.search(r"\bU\s+([A-Za-z_][\w.$@]*)\s*$", line)
         if m:
             undefined.add(m.group(1))
 
-    objects = []
-    for p in [
-        STAGE / "full-linux-obj",
-        STAGE / "i915-native-task-entry-shared-20261006",
-    ]:
-        if p.is_dir():
-            objects += sorted(p.glob("*.o"))
+    objects = sorted({obj for p in directories for obj in p.glob("*.o")
+                      if obj.is_file()})
+    if not objects:
+        ap.error("no native provider objects found in selected directories")
     definitions: dict[str, list[str]] = {symbol: [] for symbol in undefined}
     for obj in objects:
-        for line in symbols([str(NM), "-g", "--defined-only", str(obj)]):
+        for line in symbols([str(nm), "-g", "--defined-only", str(obj)]):
             m = re.search(r"\b[TDBRWAVGC]\s+([A-Za-z_][\w.$@]*)\s*$", line)
             if m and m.group(1) in definitions:
                 definitions[m.group(1)].append(str(obj))
 
     candidates: dict[str, list[str]] = {symbol: [] for symbol in undefined}
-    all_c = sorted(NATIVE.rglob("*.c"))
+    all_c = sorted(native.rglob("*.c"))
     for c in all_c:
         code = c.read_text(errors="replace")
         present = [sym for sym in undefined if sym in code]
@@ -83,12 +95,16 @@ def main() -> None:
             # compilation are deliberately not guessed away.
             pattern = r"(?m)^[A-Za-z_][\w\s*]*(?:\*\s*)?\b" + re.escape(sym) + r"\s*\([^;{}]{0,1000}\)\s*\{"
             if re.search(pattern, code):
-                candidates[sym].append(str(c.relative_to(NATIVE)))
+                candidates[sym].append(str(c.relative_to(native)))
     out.mkdir(mode=0o700)
     report = {
         "state": "SOURCE_OWNER_CANDIDATE_AUDIT_COMPLETE",
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "host": socket.gethostname(),
+        "source_stage_root": str(stage),
+        "linked_object": str(src),
+        "native_nm": str(nm),
+        "provider_directories": [str(p) for p in directories],
         "relocatable_object_sha256": digest(src),
         "undefined_symbol_count": len(undefined),
         "existing_object_files_checked": len(objects),
