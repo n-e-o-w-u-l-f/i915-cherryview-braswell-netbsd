@@ -126,3 +126,17 @@ NetBSD kernel link, independent early-console transport, and hardware
 KMS/black-screen recovery remain **OPEN**. Neither kernel nor firmware,
 display MMIO, boot menu or host network was modified. No test kernel
 was installed or rebooted. Current HP boot identity is unverified.
+
+## 2026-10-16 native file bridge stage prerequisites
+
+- Current source-only continuation branch `work/hp-native-drm-stage-replay-20261015`: native
+  three-unit replay now requires all four NetBSD-specific bridge
+  headers in the explicit staged include paths and follows compiled
+  objects with a separately recorded `ld -r` partial link.
+- Host-independent Python tests of argument replay and new header/link
+  command gate **PASSED** on Legion. Native C/ELF execution still HP-only.
+- Frozen NetBSD's `linux/file.h` does not supply the imported Linux
+  `fput` contract; bridge owners and `drm_native_close` final-release
+  lifecycle are **OPEN**.
+- Hardware, source tree on HP, kernel, firmware, recovery and boot
+  configuration have **NOT** been changed or freshly checked.

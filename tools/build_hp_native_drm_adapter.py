@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import socket
 import subprocess
 import sys
@@ -27,6 +28,13 @@ UNIT_RELS = {
 }
 EXPECTED_NETBSD_PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 EXPECTED_LINUX_PIN = "fd179f8a05be3ccae366b9b96e176b51fbe54aab"
+REQUIRED_BRIDGE_HEADERS = (
+    "linux/file_netbsd.h",
+    "linux/mm_netbsd.h",
+    "linux/task_netbsd.h",
+    "drm/drm_file_netbsd.h",
+)
+NATIVE_UNITS = ("linux_task", "linux_module", "drm_cdevsw")
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -69,6 +77,43 @@ def replay_command(row, name, stage_root, output, canonical):
     return cmd, source
 
 
+def verify_bridge_headers(cmd, canonical, stage_root):
+    """Prove explicit NetBSD adapter includes resolve inside the HP source stage.
+
+    Presence is necessary, but not proof of an ABI provider implementation.
+    """
+    declared = set(re.findall(r"(?m)^#include <([^>]+)>",
+                              Path(canonical).read_text()))
+    if not set(REQUIRED_BRIDGE_HEADERS).issubset(declared):
+        raise RuntimeError("DRM adapter include contract changed")
+    root = (Path(stage_root) / "netbsd-full-linux").resolve(strict=True)
+    include_dirs = [Path(arg[2:]) for arg in cmd
+                    if arg.startswith("-I") and len(arg) > 2]
+    found = {}
+    for header in REQUIRED_BRIDGE_HEADERS:
+        for directory in include_dirs:
+            candidate = directory / header
+            if candidate.is_file():
+                target = candidate.resolve(strict=True)
+                if not target.is_relative_to(root):
+                    raise RuntimeError("DRM native include escapes source stage: " +
+                                       header)
+                found[header] = str(target)
+                break
+    absent = sorted(set(REQUIRED_BRIDGE_HEADERS) - set(found))
+    if absent:
+        raise RuntimeError("missing native DRM bridge headers: " +
+                           ", ".join(absent))
+    return found
+
+
+def native_drm_partial_link_command(linker, output):
+    """Make one relocatable link; never output or install a kernel image."""
+    output = Path(output)
+    return [str(linker), "-r", "-o", str(output / "modern_drm_three.o"),
+            *(str(output / (unit + ".o")) for unit in NATIVE_UNITS)]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, required=True)
@@ -84,9 +129,11 @@ def main():
     native_stage = stage_root / "netbsd-full-linux"
     obj_stage = stage_root / "full-linux-obj"
     compiler = stage_root / "full-linux-tools/bin/x86_64--netbsd-gcc"
+    linker = stage_root / "full-linux-tools/bin/x86_64--netbsd-ld"
     if (not stage_root.is_dir() or not native_stage.is_dir() or
             not (obj_stage / "machine/cdefs.h").is_file() or
-            not compiler.is_file() or not os.access(compiler, os.X_OK)):
+            not compiler.is_file() or not os.access(compiler, os.X_OK) or
+            not linker.is_file() or not os.access(linker, os.X_OK)):
         ap.error("fresh HP native source/obj/tools stage is not configured")
     output = args.output.resolve()
     if output.exists():
@@ -119,6 +166,8 @@ def main():
             if digest(source) != expected:
                 raise RuntimeError("staged task/module source drift: " + name)
         prepared[name] = (cmd, source)
+    bridge_headers = verify_bridge_headers(
+        prepared["drm_cdevsw"][0], canonical, stage_root)
     if args.preflight_only:
         print("HP_NATIVE_DRM_STAGE_REPLAY_PREFLIGHT_PASS", stage_root)
         return 0
@@ -134,6 +183,8 @@ def main():
         "original_compiler_cwd": str(obj_stage),
         "stage_root": str(stage_root),
         "compiler": str(compiler),
+        "linker": str(linker),
+        "native_bridge_header_paths": bridge_headers,
         "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "units": [],
     }
@@ -169,10 +220,28 @@ def main():
                   entry["object_size"], flush=True)
             if result.returncode != 0 or not entry["source_unchanged"] or entry["object_size"] == 0:
                 raise RuntimeError("native compile/verification failed: " + name)
+        link_command = native_drm_partial_link_command(linker, output)
+        link = subprocess.run(link_command, cwd=obj_stage,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, timeout=150)
+        link_log = output / "partial-link.log"
+        link_log.write_text(link.stdout)
+        link_out = output / "modern_drm_three.o"
+        state["relocatable_link"] = {
+            "command": link_command, "exit": link.returncode,
+            "log_sha256": digest(link_log),
+            "object": str(link_out),
+            "object_sha256": digest(link_out) if link_out.is_file() else None,
+            "object_size": link_out.stat().st_size if link_out.is_file() else 0,
+        }
+        save()
+        if link.returncode != 0 or state["relocatable_link"]["object_size"] == 0:
+            raise RuntimeError("native NetBSD three-object ld -r link failed")
         state["state"] = "PASSED"
         state["limitation"] = (
-            "Three native NetBSD kernel objects only; NOT a full DRM/TTM/i915 "
-            "kernel link, HP KMS display/IRQ/PM acceptance or GPU hardware operation."
+            "Three native NetBSD objects and their relocatable ld -r partial "
+            "link only; NOT a full DRM/TTM/i915 kernel link, HP KMS, "
+            "display/IRQ/PM acceptance or GPU hardware operation."
         )
     except Exception as e:
         state["state"] = "FAILED"
