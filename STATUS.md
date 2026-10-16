@@ -152,3 +152,14 @@ passed on Legion; the real NetBSD `nm` run remains HP-only and OPEN.
 SSH via Legion to `andreas@10.1.0.44` was reached but publickey
 authentication was refused; the rejected attempt was not repeated and
 no credentials or host settings were modified.
+
+## 2026-10-16 all-323 direct header include closure
+
+Read-only frozen-reference audit on Legion scanned all 323 active i915 C
+units and their exact structural coverage rows. 215 distinct direct
+linux/drm/uapi header names observed: 137 same-path NetBSD DRM root matches,
+78 unmatched, referenced by 175 active units. Also recorded 553 distinct
+local quote-style includes. These are structural source gaps only, not
+78 proven missing APIs. See docs/I915_DIRECT_INCLUDE_CLOSURE_20261016.md
+and tools/audit_i915_direct_include_closure.py with regression test.
+All 323 per-unit ABI, semantic and lifecycle acceptances remain OPEN.
