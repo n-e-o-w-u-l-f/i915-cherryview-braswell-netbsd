@@ -193,3 +193,14 @@ C-level call sites and their MMIO provider owners remain UNVERIFIED.
 Pinned CHV CDCLK 500us/50ms and GMBUS 2us atomic→50ms fallback
 source-hash checked. Five additional C-host mock cases PASS; no NetBSD
 kernel link, physical modeset, or hardware MMIO proof.
+
+## 2026-10-17 parent callback provider closure gate
+
+A source-only fail-closed parent-interface auditor now validates all 323
+active Linux C units, all 16 parent provider assignments, all four
+independent callback functions, 95 declared struct methods and 94
+initialized provider methods. The only omitted method is NULL-guarded
+fb_pin.reuse_vma. CHV IOSF get/put/read/write all have Linux providers.
+Four adversarial missing-owner/probe-order regression tests pass.
+Provider source owners and hashes are reported to per-run JSON.
+This does NOT prove NetBSD ABI, callback bodies, kernel link or KMS.
