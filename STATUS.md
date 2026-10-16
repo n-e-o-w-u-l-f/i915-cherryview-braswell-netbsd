@@ -204,3 +204,15 @@ fb_pin.reuse_vma. CHV IOSF get/put/read/write all have Linux providers.
 Four adversarial missing-owner/probe-order regression tests pass.
 Provider source owners and hashes are reported to per-run JSON.
 This does NOT prove NetBSD ABI, callback bodies, kernel link or KMS.
+
+## 2026-10-17 CHV IOSF enum lock-mask translation contract
+
+Pinned modern Linux VLV IOSF enum has 9 units (includes DPIO_2 at
+index 4) while frozen NetBSD `intel_sideband.h` has 8; old
+`intel_sideband.c` is an active partial transport provider despite
+no same-basename `vlv_iosf_sb.c`. Directly passing Linux PUNIT
+BIT(8) to the NetBSD BIT(7) legacy lock protocol is incorrect.
+New isolated BSD-2-Clause enum/lock-mask translator has source-hash
+checks and host-C -Werror regression rejecting unsupported DPIO_2;
+no IO register changes. NetBSD old write discards status, old
+sideband has no modern locked_unit_mask; these must still be ported.
