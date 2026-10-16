@@ -85,3 +85,30 @@ C fixture and instruments `udelay` arguments. These synthetic tests do not
 prove NetBSD native DELAY timing, real kernel ABI, physical i915/KMS,
 safe scheduling or fairness. Native build/integration only on HP after
 recovery and G01-G09 trace prerequisites are met.
+
+## 2026-10-16 pinned CHV clock and GMBUS fast/slow callsite proof
+
+All **323** active Linux i915 C units from the materialized pinned source
+reference were audited: 32 normal `poll_timeout_us()` and one
+`poll_timeout_us_atomic()` invocation. No selected C source directly
+invokes generic `readb/readw/readl/readq*_poll_timeout` wrappers.
+Those wrappers are exposed for Linux API symmetry but native NetBSD
+register accessor ownership is **not** proven by this iopoll header.
+The frozen NetBSD linux/io.h and asm/io.h do not independently provide
+generic readl/readq functions: concrete MMIO providers need their own
+semantically correct NetBSD mappings.
+
+Pinned materialized sources:
+`display/intel_cdclk.c` SHA256
+1473d23c8f82692e8ae68ca129db11eb4007d4484fe12893cbad0a8f7da79780,
+`display/intel_gmbus.c` SHA256
+f950e8574a25291e7201551b7599c79abed9d2c2095f32c634868d6401b8c8f0.
+They were validated against the expected CHV CDCLK 500us/50ms poll,
+GMBUS 2us atomic poll and GMBUS 500us/50ms fallback sequence.
+
+`tests/test_i915_chv_cdclk_gmbus_poll.py` executes five additional
+host-C mocks for CHV success and timeout, GMBUS fast success,
+slow-poll success and complete timeout. C register masks and fake
+readers are synthetic, NOT real GPU PCI MMIO. Source hashes are of the
+materialized reference files, not independently proven git object
+identity. No HP kernel compilation or hardware boot was involved.

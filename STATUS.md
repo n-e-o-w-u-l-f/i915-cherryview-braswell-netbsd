@@ -184,3 +184,12 @@ and could truncate on LP64. New bounded 1ms slicing helper prevents
 this, while CHV-sized delays remain unchanged. Host mock 14-case
 regression plus separate 2501us and UINT_MAX+1 long-delay tests
 PASS on Legion. No native NetBSD kernel compile, install or KMS boot.
+
+## 2026-10-16 CDCLK/GMBUS source-pinned C polling proof
+
+323 active source units: 32 normal iopoll invocations and one
+atomic invocation; native generic readl wrappers not used at these
+C-level call sites and their MMIO provider owners remain UNVERIFIED.
+Pinned CHV CDCLK 500us/50ms and GMBUS 2us atomic→50ms fallback
+source-hash checked. Five additional C-host mock cases PASS; no NetBSD
+kernel link, physical modeset, or hardware MMIO proof.
