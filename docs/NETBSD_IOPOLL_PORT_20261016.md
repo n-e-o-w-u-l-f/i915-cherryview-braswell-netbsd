@@ -61,3 +61,27 @@ build manifests; test compiler -Werror and real CHV display call sites;
 audit NetBSD DELAY busy-wait impact; perform full DRM/TTM/323-unit
 compile/link and stable independent early-console recovery gate.
 Do not turn this source-only candidate into an F83/F84 kernel boot.
+
+## 2026-10-16 signed-width regression / CHV integration gate
+
+**PRE:** In the first isolated candidate, both atomic delay paths performed
+`udelay((unsigned int)__nb_pause_us)`, although Linux's API accepts
+`unsigned long`. The frozen NetBSD `linux/delay.h` declares
+`udelay(unsigned int)`. LP64 arguments greater than `UINT_MAX` therefore
+silently truncate (for `UINT_MAX+1`, to zero), breaking the requested
+delay/countdown correspondence. The original 14 C tests did not cover it.
+
+**PATCH:** `__nb_iopoll_udelay(unsigned long)` now splits atomic busy-waits
+into at most 1000us per native `udelay` call. Both pre-first-read and
+per-iteration delays use it, maintaining the full `unsigned long`
+parameter duration. Small sub-1ms CHV/CDCLK delays remain a single
+native call. The intent is correctness of this adapter, not to endorse
+multi-second busy polling in any production call site.
+
+**POST:** Existing 14 host-C mock cases and two new edge-case checks
+(`2501us` three segments; LP64 `UINT_MAX+1` no narrowing) PASSED
+before commit on Legion. The long-delay test reuses the published existing
+C fixture and instruments `udelay` arguments. These synthetic tests do not
+prove NetBSD native DELAY timing, real kernel ABI, physical i915/KMS,
+safe scheduling or fairness. Native build/integration only on HP after
+recovery and G01-G09 trace prerequisites are met.

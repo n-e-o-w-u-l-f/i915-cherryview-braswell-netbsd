@@ -175,3 +175,12 @@ HP-native compile. The candidate addresses a direct header-path gap in
 Pinned NetBSD `ktime_get` exists, `ktime_compare` does not.
 NetBSD `usleep_range` is DELAY (busy wait); native sleep/IRQ fairness
 and complete i915 driver runtime ABI remain OPEN. Kernel/boot unchanged.
+
+## 2026-10-16 atomic iopoll LP64 delay fix
+
+The isolated adapter's two atomic udelay call sites previously
+narrowed unsigned-long Linux delay arguments to NetBSD unsigned-int
+and could truncate on LP64. New bounded 1ms slicing helper prevents
+this, while CHV-sized delays remain unchanged. Host mock 14-case
+regression plus separate 2501us and UINT_MAX+1 long-delay tests
+PASS on Legion. No native NetBSD kernel compile, install or KMS boot.

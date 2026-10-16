@@ -64,6 +64,21 @@
 })
 
 /*
+ * NetBSD's udelay(unsigned int) is narrower than Linux's polling delay
+ * (unsigned long). Bound each busy-wait to 1ms to preserve elapsed duration
+ * without silent LP64 truncation or a huge single DELAY() request.
+ */
+static inline void
+__nb_iopoll_udelay(unsigned long usec)
+{
+	while (usec != 0) {
+		unsigned int slice = usec > 1000UL ? 1000U : (unsigned int)usec;
+		udelay(slice);
+		usec -= slice;
+	}
+}
+
+/*
  * Atomic variant: no clock queries (also works while timekeeping is
  * suspended). Count the requested delay in nanoseconds and charge one
  * nanosecond per CPU-relax iteration, as in the Linux API.
@@ -71,8 +86,8 @@
  * Use a saturating unsigned budget plus a separate expiration bit rather
  * than signed subtraction, so a huge timeout or delay cannot overflow into
  * an immediate success/failure or loop indefinitely due to underflow.
- * NetBSD's udelay() takes unsigned int; callers must use representable
- * microsecond delays. The i915 CHV callers use much smaller values.
+ * NetBSD's udelay() takes unsigned int; the helper splits wider
+ * unsigned-long delays into bounded 1ms segments.
  */
 #define poll_timeout_us_atomic(op, cond, delay_us, timeout_us, before)	\
 ({									\
@@ -83,7 +98,7 @@
 	bool __nb_overrun = false;					\
 	int __nb_result = -ETIMEDOUT;					\
 	if ((before) && __nb_pause_us != 0) {			\
-		udelay((unsigned int)__nb_pause_us);		\
+		__nb_iopoll_udelay(__nb_pause_us);		\
 		if (__nb_limit_us != 0) {			\
 			__nb_overrun = __nb_pause_ns > __nb_remain_ns; \
 			__nb_remain_ns = __nb_overrun ? 0 :	\
@@ -101,7 +116,7 @@
 		if (__nb_expired)					\
 			break;						\
 		if (__nb_pause_us != 0) {			\
-			udelay((unsigned int)__nb_pause_us);		\
+			__nb_iopoll_udelay(__nb_pause_us);		\
 			if (__nb_limit_us != 0) {		\
 				__nb_overrun = __nb_pause_ns > __nb_remain_ns; \
 				__nb_remain_ns = __nb_overrun ? 0 : \
