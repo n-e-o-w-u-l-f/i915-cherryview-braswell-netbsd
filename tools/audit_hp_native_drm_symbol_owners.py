@@ -55,6 +55,23 @@ def provider_objects(directories: list[Path], linked_object: Path) -> list[Path]
     return sorted(found)
 
 
+def provider_archives(directories: list[Path]) -> list[Path]:
+    """Find nested native static-library candidates, not link proof."""
+    archives: set[Path] = set()
+    for directory in directories:
+        root = directory.resolve(strict=True)
+        for candidate in root.rglob("*.a"):
+            archive = candidate.resolve(strict=True)
+            if not archive.is_relative_to(root):
+                raise RuntimeError("provider archive escapes selected root: " +
+                                   str(candidate))
+            if archive.is_file():
+                archives.add(archive)
+            if len(archives) > MAX_PROVIDER_OBJECTS:
+                raise RuntimeError("provider archive scan exceeds audited bound")
+    return sorted(archives)
+
+
 def symbols(args: list[str]) -> list[str]:
     p = subprocess.run(args, text=True, capture_output=True, timeout=80)
     if p.returncode != 0:
@@ -101,14 +118,27 @@ def main() -> None:
             undefined.add(m.group(1))
 
     objects = provider_objects(directories, src)
-    if not objects:
-        ap.error("no native provider objects found in selected directories")
+    archives = provider_archives(directories)
+    if not objects and not archives:
+        ap.error("no native provider objects or archives in selected directories")
+    if len(objects) + len(archives) > MAX_PROVIDER_OBJECTS:
+        ap.error("combined provider object/archive bound exceeded")
     definitions: dict[str, list[str]] = {symbol: [] for symbol in undefined}
+    archive_definitions: dict[str, list[str]] = {
+        symbol: [] for symbol in undefined
+    }
     for obj in objects:
         for line in symbols([str(nm), "-g", "--defined-only", str(obj)]):
             m = re.search(r"\b[TDBRWAVGC]\s+([A-Za-z_][\w.$@]*)\s*$", line)
             if m and m.group(1) in definitions:
-                definitions[m.group(1)].append(str(obj))
+                if str(obj) not in definitions[m.group(1)]:
+                    definitions[m.group(1)].append(str(obj))
+    for archive in archives:
+        for line in symbols([str(nm), "-g", "--defined-only", str(archive)]):
+            m = re.search(r"\b[TDBRWAVGC]\s+([A-Za-z_][\w.$@]*)\s*$", line)
+            if m and m.group(1) in archive_definitions:
+                if str(archive) not in archive_definitions[m.group(1)]:
+                    archive_definitions[m.group(1)].append(str(archive))
 
     candidates: dict[str, list[str]] = {symbol: [] for symbol in undefined}
     all_c = sorted(native.rglob("*.c"))
@@ -134,6 +164,7 @@ def main() -> None:
         "relocatable_object_sha256": digest(src),
         "undefined_symbol_count": len(undefined),
         "existing_object_files_checked": len(objects),
+        "native_archive_files_checked": len(archives),
         "drm_source_C_files_checked": len(all_c),
         "defined_by_existing_objects": {
             k: v for k, v in sorted(definitions.items()) if v
@@ -141,6 +172,13 @@ def main() -> None:
         "drm_source_definition_candidates": {
             k: v for k, v in sorted(candidates.items()) if v
         },
+        "defined_in_native_archives_unlinked": {
+            k: v for k, v in sorted(archive_definitions.items()) if v
+        },
+        "no_scanned_object_or_archive_provider": sorted(
+            k for k in undefined
+            if not definitions[k] and not archive_definitions[k]
+        ),
         "not_defined_in_scanned_existing_objects": sorted(
             k for k, v in definitions.items() if not v
         ),
@@ -149,14 +187,16 @@ def main() -> None:
         ),
         "limitations": (
             "This maps unresolved imports of only three partially linked "
-            "objects, not the final full i915/DRM/TTM kernel link. Regex-only "
-            "C definition candidates require review, and complete system "
-            "kernel providers are outside the DRM source-only candidate index."
+            "objects, not the final full i915/DRM/TTM kernel link. Archive "
+            "symbols are unlinked CANDIDATES, not resolved kernel definitions. "
+            "Regex-only source matches require review; kernel-wide symbol "
+            "providers remain outside the DRM-only source index."
         ),
     }
     (out / "status.json").write_text(json.dumps(report, indent=2) + "\n")
     print("HP_I915_DRM_UNRESOLVED", len(undefined),
           "OBJECT_PROVIDERS", len(report["defined_by_existing_objects"]),
+          "ARCHIVE_CANDIDATES", len(report["defined_in_native_archives_unlinked"]),
           "SOURCE_CANDIDATES", len(report["drm_source_definition_candidates"]),
           "REPORT", out, flush=True)
     for sym in ("drm_minor_acquire", "drm_guarantee_initialized",
@@ -164,6 +204,7 @@ def main() -> None:
                 "linux_file_native_view"):
         print("SYMBOL", sym,
               "obj", report["defined_by_existing_objects"].get(sym, []),
+              "archive", report["defined_in_native_archives_unlinked"].get(sym, []),
               "source", report["drm_source_definition_candidates"].get(sym, []),
               flush=True)
 

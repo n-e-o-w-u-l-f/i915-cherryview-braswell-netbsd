@@ -41,3 +41,26 @@ Next: run the updated scanner with current genuine HP object roots and
 compiled owner, native kernel provider, conditional build exclusion,
 or missing adapter. Maintain a full per-unit dependency map before
 any unobservable F83/F84-style hardware retest.
+
+## 2026-10-16 extension: archive ownership is candidate-only
+
+NetBSD kernel builds may contain static archives (`.a`) in nested
+object subtrees. The previous scanner searched only `.o`; it therefore
+could falsely suggest that no archive contains a definition for an
+undefined partial-link symbol. The native source-owner audit now
+enumerates selected `.a` candidates recursively with the same
+resolved-path / root confinement and input bounds as native objects.
+It asks the HP-native `nm -g --defined-only` to inspect archive members.
+
+Reports **separate** `defined_by_existing_objects` from
+`defined_in_native_archives_unlinked`: symbol presence in an archive
+does not establish that the linker extracted the member, that the
+provider was compatible with this kernel configuration, or that it
+functions in DRM/KMS. The new
+`no_scanned_object_or_archive_provider` field excludes both forms of
+container candidates but does not close source/kernel ABI gaps.
+
+Tested in a disposable Python fixture on Legion: recursive archive
+discovery, de-duplication, non-archive exclusion, outside-tree
+symlink rejection and count bound. No kernel compilation, link or
+hardware test was performed.

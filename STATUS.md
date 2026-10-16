@@ -140,3 +140,15 @@ was installed or rebooted. Current HP boot identity is unverified.
   lifecycle are **OPEN**.
 - Hardware, source tree on HP, kernel, firmware, recovery and boot
   configuration have **NOT** been changed or freshly checked.
+
+## 2026-10-16 native archive provider audit
+
+`tools/audit_hp_native_drm_symbol_owners.py` separately reports
+relocatable native `.o` symbols and *unlinked candidate* definitions
+from recursively discovered NetBSD `.a` archives, with path confinement
+and input bounds. These archive members must still be proven extracted
+and valid in the HP kernel ABI. The archive discovery Python regression
+passed on Legion; the real NetBSD `nm` run remains HP-only and OPEN.
+SSH via Legion to `andreas@10.1.0.44` was reached but publickey
+authentication was refused; the rejected attempt was not repeated and
+no credentials or host settings were modified.
