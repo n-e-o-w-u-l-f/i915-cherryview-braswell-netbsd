@@ -163,3 +163,15 @@ local quote-style includes. These are structural source gaps only, not
 65 proven missing APIs. See docs/I915_DIRECT_INCLUDE_CLOSURE_20261016.md
 and tools/audit_i915_direct_include_closure.py with regression test.
 All 323 per-unit ABI, semantic and lifecycle acceptances remain OPEN.
+
+## 2026-10-16 NetBSD LinuxKPI iopoll adapter candidate
+
+New BSD-licensed isolated Linux API polling adapter in
+`compat/native-runtime/iopoll/include/linux/iopoll.h`.
+Host C mock regression `tests/test_i915_netbsd_iopoll_contract.py`:
+14 positive/negative timeout and accessor cases PASS on Legion, not
+HP-native compile. The candidate addresses a direct header-path gap in
+19 of 323 pinned Linux i915 units, including CHV/VLV CDCLK readiness.
+Pinned NetBSD `ktime_get` exists, `ktime_compare` does not.
+NetBSD `usleep_range` is DELAY (busy wait); native sleep/IRQ fairness
+and complete i915 driver runtime ABI remain OPEN. Kernel/boot unchanged.
