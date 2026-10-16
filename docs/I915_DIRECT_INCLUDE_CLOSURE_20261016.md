@@ -13,13 +13,16 @@ It saves a full, reproducible per-unit JSON matrix in the chosen output path.
 Read-only Legion reference-stage run: 323/323 Linux C files present;
 136 EXACT_ACTIVE_DIST, 13 ACTIVE_OVERRIDE_OR_MOVED, 7 PRESENT_NOT_BUILT,
 167 UNRESOLVED_NO_BASENAME. Found 215 distinct direct shared Linux/DRM/UAPI
-header paths: 137 exact header path matches at selected NetBSD DRM roots,
-78 without exact paths; 175 Linux C files use at least one unmatched path.
+header paths: 150 exact header path matches at the selected NetBSD DRM
+and shared common LinuxKPI roots, 65 without exact paths; 140 Linux C
+files use at least one unmatched path.
 553 distinct quote-style local include names were also captured.
 
 Top direct header path gaps by user count: linux/string_helpers.h (37),
-linux/slab.h (29), drm/intel/display_parent_interface.h (24),
-linux/iopoll.h (19), linux/kernel.h (17).
+drm/intel/display_parent_interface.h (24), linux/iopoll.h (19),
+drm/intel/intel_pcode_regs.h (16), drm/intel/step.h (15).
+The earlier 137/78/175 result is superseded: shared NetBSD common/include
+provides linux/slab.h, linux/kernel.h and 11 other matching header paths.
 
 Missing SAME-PATH header does not prove a missing API. Headers may have
 NetBSD-specific names or live under roots not scanned. This is a lexical
@@ -40,3 +43,10 @@ Prioritize real CHV display/eDP/DP-AUX/DPIO and GEM/GT providers, then
 the DRM file/task/mmap lifecycle and TTM closure. Do not equate this report
 with a linked kernel or fixed F83/F84 blackscreen. HP-only kernel/native
 builds and physical early-console/rollback gates are still open.
+
+Corrected model test and full 323-stage audit executed on Legion after
+including the official sys/external/bsd/common/include directory;
+all source-only tests passed. Latest generated report SHA256:
+f4be73008d26e536fe5e63f936ce0893ba00cce24d97aafc11e8e4d9214b5158.
+This hash identifies temporary source-only JSON evidence; no NetBSD
+C compiler or physical HP hardware was invoked.

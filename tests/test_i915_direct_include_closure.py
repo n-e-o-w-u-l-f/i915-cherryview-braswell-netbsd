@@ -29,9 +29,12 @@ with tempfile.TemporaryDirectory(prefix="i915-include-closure-") as tmp:
     (netbsd / "include/linux").mkdir(parents=True)
     (netbsd / "dist/include/drm").mkdir(parents=True)
     (netbsd / "include/linux/existing.h").write_text("/* header */\n")
+    (base / "common/include/linux").mkdir(parents=True)
+    (base / "common/include/linux/shared.h").write_text("/* header */\n")
     (netbsd / "dist/include/drm/print.h").write_text("/* header */\n")
     (linux / "display/intel_dp.c").write_text(
         "#include <linux/existing.h>\n"
+        "#include <linux/shared.h>\n"
         "#include <linux/missing.h>\n"
         '#include "intel_dp.h"\n'
         "#if 0\n#include <drm/print.h>\n#endif\n")
@@ -48,8 +51,8 @@ with tempfile.TemporaryDirectory(prefix="i915-include-closure-") as tmp:
     report = tool.audit(manifest, linux, netbsd, coverage, 2)
     s = report["summary"]
     assert s["active_units"] == 2
-    assert s["unique_shared_direct_includes"] == 3
-    assert s["netbsd_exact_header_matches"] == 2
+    assert s["unique_shared_direct_includes"] == 4
+    assert s["netbsd_exact_header_matches"] == 3
     assert s["netbsd_exact_header_unmatched"] == 1
     assert s["units_with_unmatched_direct_include"] == 2
     assert report["unmatched_headers"][0]["header"] == "linux/missing.h"

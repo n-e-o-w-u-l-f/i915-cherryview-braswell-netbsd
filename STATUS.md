@@ -157,9 +157,9 @@ no credentials or host settings were modified.
 
 Read-only frozen-reference audit on Legion scanned all 323 active i915 C
 units and their exact structural coverage rows. 215 distinct direct
-linux/drm/uapi header names observed: 137 same-path NetBSD DRM root matches,
-78 unmatched, referenced by 175 active units. Also recorded 553 distinct
+linux/drm/uapi header names observed: 150 same-path NetBSD DRM plus
+common LinuxKPI root matches, 65 unmatched, referenced by 140 active units. Also recorded 553 distinct
 local quote-style includes. These are structural source gaps only, not
-78 proven missing APIs. See docs/I915_DIRECT_INCLUDE_CLOSURE_20261016.md
+65 proven missing APIs. See docs/I915_DIRECT_INCLUDE_CLOSURE_20261016.md
 and tools/audit_i915_direct_include_closure.py with regression test.
 All 323 per-unit ABI, semantic and lifecycle acceptances remain OPEN.

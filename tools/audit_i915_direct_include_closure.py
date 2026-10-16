@@ -66,7 +66,9 @@ def audit(filelist: Path, linux: Path, netbsd: Path, coverage: Path,
         raise ValueError("active/structural 323-unit closure mismatch")
     linux = linux.resolve(strict=True)
     netbsd = netbsd.resolve(strict=True)
+    # LinuxKPI shared-compat headers also live outside the drm2 subtree.
     include_roots = [netbsd / d for d in NETBSD_DIRS]
+    include_roots.append(netbsd.parent / "common/include")
     if not linux.is_dir() or not include_roots[0].is_dir():
         raise ValueError("incomplete reference include roots")
     usage = defaultdict(list)
