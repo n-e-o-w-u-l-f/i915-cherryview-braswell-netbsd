@@ -33,4 +33,7 @@ int drm_vblank_worker_init(struct drm_vblank_crtc *);
 void drm_vblank_worker_fini(struct drm_vblank_crtc *);
 void drm_handle_vblank_works(struct drm_vblank_crtc *);
 void drm_vblank_cancel_pending_works(struct drm_vblank_crtc *);
+/* Event-lock-owned native DRM reference API: safe without a live CRTC. */
+int nb_i915_vblank_ref_get_locked(struct drm_vblank_crtc *);
+void nb_i915_vblank_ref_put_locked(struct drm_vblank_crtc *);
 #endif
