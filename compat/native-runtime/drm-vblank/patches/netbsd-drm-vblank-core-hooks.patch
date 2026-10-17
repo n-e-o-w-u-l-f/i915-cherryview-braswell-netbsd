@@ -66,7 +66,28 @@
  err:
  	dev->num_crtcs = 0;
  	return ret;
-@@ -1259,6 +1273,7 @@
+@@ -1132,6 +1146,20 @@
+ 	}
+ }
+ 
++
++/* Native event-lock-owned VBlank references, independent of CRTC lifetime. */
++int
++nb_i915_vblank_ref_get_locked(struct drm_vblank_crtc *vblank)
++{
++	return drm_vblank_get_locked(vblank->dev, vblank->pipe);
++}
++
++void
++nb_i915_vblank_ref_put_locked(struct drm_vblank_crtc *vblank)
++{
++	drm_vblank_put_locked(vblank->dev, vblank->pipe);
++}
++
+ static void drm_vblank_put(struct drm_device *dev, unsigned int pipe)
+ {
+ 	struct drm_vblank_crtc *vblank = &dev->vblank[pipe];
+@@ -1259,6 +1287,7 @@
  	if (drm_core_check_feature(dev, DRIVER_ATOMIC) || !vblank->inmodeset)
  		drm_vblank_disable_and_save(dev, pipe);
  
@@ -74,7 +95,7 @@
  	DRM_SPIN_WAKEUP_ONE(&vblank->queue, &dev->event_lock);
  
  	/*
-@@ -1893,6 +1908,7 @@
+@@ -1893,6 +1922,7 @@
  		       !atomic_read(&vblank->refcount));
  
  	drm_handle_vblank_events(dev, pipe);
