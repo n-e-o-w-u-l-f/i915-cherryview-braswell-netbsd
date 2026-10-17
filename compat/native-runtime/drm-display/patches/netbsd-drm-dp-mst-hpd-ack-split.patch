@@ -1,0 +1,80 @@
+--- a/sys/external/bsd/drm2/dist/drm/drm_dp_mst_topology.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_dp_mst_topology.c
+@@ -3972,10 +3972,14 @@
+  * topology manager will process the sideband messages received as a result
+  * of this.
+  */
+-int drm_dp_mst_hpd_irq(struct drm_dp_mst_topology_mgr *mgr, u8 *esi, bool *handled)
++int
++nb_i915_drm_dp_mst_hpd_irq_handle_event(struct drm_dp_mst_topology_mgr *mgr,
++    const u8 *esi, u8 *ack, bool *handled)
+ {
+ 	int ret = 0;
+ 	int sc;
++	if (mgr == NULL || esi == NULL || ack == NULL || handled == NULL)
++		return -EINVAL;
+ 	*handled = false;
+ 	sc = esi[0] & 0x3f;
+ 
+@@ -3987,15 +3991,42 @@
+ 	if (esi[1] & DP_DOWN_REP_MSG_RDY) {
+ 		ret = drm_dp_mst_handle_down_rep(mgr);
+ 		*handled = true;
++		ack[1] |= DP_DOWN_REP_MSG_RDY;
+ 	}
+ 
+ 	if (esi[1] & DP_UP_REQ_MSG_RDY) {
+ 		ret |= drm_dp_mst_handle_up_req(mgr);
+ 		*handled = true;
+-	}
+-
+-	drm_dp_mst_kick_tx(mgr);
++		ack[1] |= DP_UP_REQ_MSG_RDY;
++	}
++
++	/* Do not kick TX until the driver's DPCD ACK has completed. */
+ 	return ret;
++}
++EXPORT_SYMBOL(nb_i915_drm_dp_mst_hpd_irq_handle_event);
++
++/* Called AFTER the DRM driver's ACK of the ESI ready bits. */
++void
++nb_i915_drm_dp_mst_hpd_irq_send_new_request(
++    struct drm_dp_mst_topology_mgr *mgr)
++{
++	if (mgr != NULL)
++		drm_dp_mst_kick_tx(mgr);
++}
++EXPORT_SYMBOL(nb_i915_drm_dp_mst_hpd_irq_send_new_request);
++
++/* Preserve the 2021 NetBSD ABI's synchronous kick behavior for old clients. */
++int
++drm_dp_mst_hpd_irq(struct drm_dp_mst_topology_mgr *mgr, u8 *esi, bool *handled)
++{
++	u8 ack[4] = { 0 };
++	int error;
++
++	error = nb_i915_drm_dp_mst_hpd_irq_handle_event(mgr, esi, ack,
++	    handled);
++	if (mgr != NULL && esi != NULL && handled != NULL)
++		nb_i915_drm_dp_mst_hpd_irq_send_new_request(mgr);
++	return error;
+ }
+ EXPORT_SYMBOL(drm_dp_mst_hpd_irq);
+ 
+--- a/sys/external/bsd/drm2/dist/include/drm/drm_dp_mst_helper.h
++++ b/sys/external/bsd/drm2/dist/include/drm/drm_dp_mst_helper.h
+@@ -735,6 +735,13 @@
+ 
+ 
+ int drm_dp_mst_hpd_irq(struct drm_dp_mst_topology_mgr *mgr, u8 *esi, bool *handled);
++/* Linux-era DP ESI ACK/next-request split, backed by native MST operations. */
++int nb_i915_drm_dp_mst_hpd_irq_handle_event(
++    struct drm_dp_mst_topology_mgr *mgr, const u8 *esi, u8 *ack,
++    bool *handled);
++void nb_i915_drm_dp_mst_hpd_irq_send_new_request(
++    struct drm_dp_mst_topology_mgr *mgr);
++
+ 
+ 
+ int
