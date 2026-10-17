@@ -26,9 +26,9 @@ nb_vblank_crtc(struct drm_vblank_crtc *vblank)
 }
 
 static bool
-nb_vblank_passed(u64 current, u64 target)
+nb_vblank_passed(u64 vblank_seq, u64 target)
 {
-	return (int64_t)(current - target) >= 0;
+	return (int64_t)(vblank_seq - target) >= 0;
 }
 
 static void
@@ -151,11 +151,11 @@ drm_handle_vblank_works(struct drm_vblank_crtc *vblank)
 	struct drm_device *dev = vblank->dev;
 	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	struct drm_vblank_work *work, *next;
-	u64 current = atomic64_read(&vblank->count);
+	u64 vblank_seq = atomic64_read(&vblank->count);
 
 	KASSERT(spin_is_locked(&dev->event_lock));
 	list_for_each_entry_safe(work, next, &vblank->pending_work, node) {
-		if (!nb_vblank_passed(current, work->count))
+		if (!nb_vblank_passed(vblank_seq, work->count))
 			continue;
 		KASSERT(work->pending_ref);
 		if (crtc != NULL)
@@ -185,7 +185,7 @@ drm_vblank_work_schedule(struct drm_vblank_work *work, u64 target,
 	struct drm_device *dev = vblank->dev;
 	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	unsigned long flags;
-	u64 current;
+	u64 vblank_seq;
 	bool passed;
 	int error = 0;
 
@@ -204,10 +204,10 @@ drm_vblank_work_schedule(struct drm_vblank_work *work, u64 target,
 			goto out;
 		work->pending_ref = true;
 	}
-	current = atomic64_read(&vblank->count);
-	passed = nb_vblank_passed(current, target);
+	vblank_seq = atomic64_read(&vblank->count);
+	passed = nb_vblank_passed(vblank_seq, target);
 	if (passed && nextonmiss)
-		target = current + 1;
+		target = vblank_seq + 1;
 	work->count = target;
 	if (!list_empty(&work->node))
 		list_del_init(&work->node);
