@@ -1,0 +1,61 @@
+--- a/sys/external/bsd/drm2/dist/drm/drm_dp_dual_mode_helper.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_dp_dual_mode_helper.c
+@@ -484,13 +484,16 @@
+  * Returns:
+  * 0 on success, -error on failure/timeout
+  */
+-int drm_lspcon_set_mode(struct i2c_adapter *adapter,
+-			enum drm_lspcon_mode mode)
++int
++nb_i915_drm_lspcon_set_mode(const struct drm_device *dev,
++    struct i2c_adapter *adapter, enum drm_lspcon_mode mode, int timeout_ms)
+ {
+ 	u8 data = 0;
+ 	int ret;
+-	int time_out = 200;
++	int time_out = timeout_ms;
+ 	enum drm_lspcon_mode current_mode;
++
++	(void)dev;
+ 
+ 	if (mode == DRM_LSPCON_MODE_PCON)
+ 		data = DP_DUAL_MODE_LSPCON_MODE_PCON;
+@@ -515,8 +518,11 @@
+ 			return ret;
+ 		} else {
+ 			if (current_mode != mode) {
+-				msleep(10);
+-				time_out -= 10;
++				int sleep_ms = time_out < 10 ? time_out : 10;
++				if (sleep_ms <= 0)
++					break;
++				msleep(sleep_ms);
++				time_out -= sleep_ms;
+ 			} else {
+ 				DRM_DEBUG_KMS("LSPCON mode changed to %s\n",
+ 						mode == DRM_LSPCON_MODE_LS ?
+@@ -529,4 +535,12 @@
+ 	DRM_ERROR("LSPCON mode change timed out\n");
+ 	return -ETIMEDOUT;
+ }
++EXPORT_SYMBOL(nb_i915_drm_lspcon_set_mode);
++
++/* Legacy NetBSD API retains its 200ms timeout and original symbol. */
++int
++drm_lspcon_set_mode(struct i2c_adapter *adapter, enum drm_lspcon_mode mode)
++{
++	return nb_i915_drm_lspcon_set_mode(NULL, adapter, mode, 200);
++}
+ EXPORT_SYMBOL(drm_lspcon_set_mode);
+--- a/sys/external/bsd/drm2/dist/include/drm/drm_dp_dual_mode_helper.h
++++ b/sys/external/bsd/drm2/dist/include/drm/drm_dp_dual_mode_helper.h
+@@ -118,4 +118,9 @@
+ 			enum drm_lspcon_mode *current_mode);
+ int drm_lspcon_set_mode(struct i2c_adapter *adapter,
+ 			enum drm_lspcon_mode reqd_mode);
++/* Modern i915 device-aware setter; real NetBSD I2C transport and timeout. */
++struct drm_device;
++int nb_i915_drm_lspcon_set_mode(const struct drm_device *,
++    struct i2c_adapter *, enum drm_lspcon_mode, int timeout_ms);
++
+ #endif
