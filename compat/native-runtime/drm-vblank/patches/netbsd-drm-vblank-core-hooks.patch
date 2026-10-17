@@ -1,0 +1,94 @@
+--- a/sys/external/bsd/drm2/dist/include/drm/drm_vblank.h
++++ b/sys/external/bsd/drm2/dist/include/drm/drm_vblank.h
+@@ -32,6 +32,7 @@
+ #define	pipe	pipe_drmhack	/* see intel_display.h */
+ #endif
+ 
++#include <linux/list.h>
+ #include <linux/seqlock.h>
+ #include <linux/idr.h>
+ #include <linux/poll.h>
+@@ -217,6 +218,13 @@
+ 	 * disabling functions multiple times.
+ 	 */
+ 	bool enabled;
++	struct lwp *work_thread;
++	struct list_head pending_work;
++	struct list_head ready_work;
++	drm_waitqueue_t work_wait_queue;
++	drm_waitqueue_t worker_wait_queue;
++	bool worker_running;
++	bool worker_stopping;
+ };
+ 
+ int drm_vblank_init(struct drm_device *dev, unsigned int num_crtcs);
+--- a/sys/external/bsd/drm2/dist/drm/drm_vblank.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_vblank.c
+@@ -38,6 +38,7 @@
+ #include <drm/drm_framebuffer.h>
+ #include <drm/drm_print.h>
+ #include <drm/drm_vblank.h>
++#include <drm/drm_vblank_work.h>
+ 
+ #include "drm_internal.h"
+ #include "drm_trace.h"
+@@ -462,6 +463,7 @@
+ 		WARN_ON(READ_ONCE(vblank->enabled) &&
+ 			drm_core_check_feature(dev, DRIVER_MODESET));
+ 
++		drm_vblank_worker_fini(vblank);
+ 		del_timer_sync(&vblank->disable_timer);
+ 		seqlock_destroy(&vblank->seqlock);
+ 	}
+@@ -506,6 +508,9 @@
+ 		DRM_INIT_WAITQUEUE(&vblank->queue, "drmvblnq");
+ 		timer_setup(&vblank->disable_timer, vblank_disable_fn, 0);
+ 		seqlock_init(&vblank->seqlock);
++		ret = drm_vblank_worker_init(vblank);
++		if (ret)
++			goto err_worker;
+ 	}
+ 
+ 	DRM_INFO("Supports vblank timestamp caching Rev 2 (21.10.2013).\n");
+@@ -525,6 +530,15 @@
+ 
+ 	return 0;
+ 
++err_worker:
++	while (i-- > 0) {
++		struct drm_vblank_crtc *old = &dev->vblank[i];
++		drm_vblank_worker_fini(old);
++		del_timer_sync(&old->disable_timer);
++		seqlock_destroy(&old->seqlock);
++	}
++	kfree(dev->vblank);
++	spin_lock_destroy(&dev->vblank_time_lock);
+ err:
+ 	dev->num_crtcs = 0;
+ 	return ret;
+@@ -1259,6 +1273,7 @@
+ 	if (drm_core_check_feature(dev, DRIVER_ATOMIC) || !vblank->inmodeset)
+ 		drm_vblank_disable_and_save(dev, pipe);
+ 
++	drm_vblank_cancel_pending_works(vblank);
+ 	DRM_SPIN_WAKEUP_ONE(&vblank->queue, &dev->event_lock);
+ 
+ 	/*
+@@ -1893,6 +1908,7 @@
+ 		       !atomic_read(&vblank->refcount));
+ 
+ 	drm_handle_vblank_events(dev, pipe);
++	drm_handle_vblank_works(vblank);
+ 
+ 	spin_unlock_irqrestore(&dev->event_lock, irqflags);
+ 
+--- a/sys/external/bsd/drm2/drm/files.drmkms
++++ b/sys/external/bsd/drm2/drm/files.drmkms
+@@ -184,6 +184,7 @@
+ file	external/bsd/drm2/drm/drm_sysfs.c	drmkms
+ file	external/bsd/drm2/dist/drm/drm_trace_points.c	drmkms
+ file	external/bsd/drm2/dist/drm/drm_vblank.c	drmkms
++file	external/bsd/drm2/dist/drm/drm_vblank_work.c	drmkms
+ file	external/bsd/drm2/drm/drm_vm.c	drmkms
+ file	external/bsd/drm2/drm/drm_vma_manager.c	drmkms
+ file	external/bsd/drm2/drm/drm_writeback.c	drmkms
