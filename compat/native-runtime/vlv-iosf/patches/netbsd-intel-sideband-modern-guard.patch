@@ -1,0 +1,148 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+@@ -219,6 +219,107 @@
+     return vlv_sideband_rw(i915, devfn, port, opcode, addr, val);
+ }
+ 
++/*
++ * Modern unit selection, real native sb_lock and ordered PUNIT ownership.
++ * Never feed Linux BIT(8) to the legacy BIT(7) PUNIT protocol.
++ */
++int
++nb_i915_iosf_acquire(struct drm_i915_private *i915, unsigned long units,
++    struct nb_i915_iosf_guard *guard)
++{
++	const unsigned long valid = (1UL << (NB_I915_IOSF_PUNIT + 1)) - 1UL;
++
++	if (i915 == NULL || guard == NULL || units == 0 || (units & ~valid))
++		return -EINVAL;
++	if (units & BIT(NB_I915_IOSF_GPIO))
++		return -EOPNOTSUPP;
++	if (guard->owner != NULL)
++		return -EBUSY;
++	if (units & BIT(NB_I915_IOSF_PUNIT))
++		__vlv_punit_get(i915);
++	mutex_lock(&i915->sb_lock);
++	guard->owner = i915;
++	guard->units = units;
++	return 0;
++}
++
++int
++nb_i915_iosf_release(struct nb_i915_iosf_guard *guard)
++{
++	struct drm_i915_private *i915;
++	unsigned long units;
++
++	if (guard == NULL || guard->owner == NULL)
++		return -EINVAL;
++	i915 = guard->owner;
++	units = guard->units;
++	guard->owner = NULL;
++	guard->units = 0;
++	mutex_unlock(&i915->sb_lock);
++	if (units & BIT(NB_I915_IOSF_PUNIT))
++		__vlv_punit_put(i915);
++	return 0;
++}
++
++static int
++nb_i915_iosf_route(unsigned int unit, bool write, u32 *port, u32 *op)
++{
++	switch (unit) {
++	case NB_I915_IOSF_BUNIT: *port = IOSF_PORT_BUNIT; break;
++	case NB_I915_IOSF_CCK: *port = IOSF_PORT_CCK; break;
++	case NB_I915_IOSF_CCU: *port = IOSF_PORT_CCU; break;
++	case NB_I915_IOSF_DPIO: *port = IOSF_PORT_DPIO; break;
++	case NB_I915_IOSF_DPIO2: *port = IOSF_PORT_DPIO_2; break;
++	case NB_I915_IOSF_FLISDSI: *port = IOSF_PORT_FLISDSI; break;
++	case NB_I915_IOSF_GPIO: return -EOPNOTSUPP;
++	case NB_I915_IOSF_NC: *port = IOSF_PORT_NC; break;
++	case NB_I915_IOSF_PUNIT: *port = IOSF_PORT_PUNIT; break;
++	default: return -EINVAL;
++	}
++	*op = (unit == NB_I915_IOSF_DPIO || unit == NB_I915_IOSF_DPIO2)
++	    ? (write ? SB_MWR_NP : SB_MRD_NP)
++	    : (write ? SB_CRWRDA_NP : SB_CRRDDA_NP);
++	return 0;
++}
++
++static int
++nb_i915_iosf_access(struct nb_i915_iosf_guard *guard, unsigned int unit,
++    u32 addr, u32 *value, bool write)
++{
++	u32 port, opcode, data;
++	int error;
++
++	if (guard == NULL || guard->owner == NULL || value == NULL)
++		return -EINVAL;
++	if (unit > NB_I915_IOSF_PUNIT)
++		return -EINVAL;
++	if ((guard->units & BIT(unit)) == 0)
++		return -EPERM;
++	error = nb_i915_iosf_route(unit, write, &port, &opcode);
++	if (error)
++		return error;
++	data = write ? *value : 0;
++	error = nb_i915_vlv_iosf_rw_checked(guard->owner, PCI_DEVFN(0, 0),
++	    port, opcode, addr, &data);
++	if (error == 0 && !write)
++		*value = data;
++	return error;
++}
++
++int
++nb_i915_iosf_read_checked(struct nb_i915_iosf_guard *guard,
++    unsigned int unit, u32 addr, u32 *value)
++{
++	return nb_i915_iosf_access(guard, unit, addr, value, false);
++}
++
++int
++nb_i915_iosf_write_checked(struct nb_i915_iosf_guard *guard,
++    unsigned int unit, u32 addr, u32 value)
++{
++	return nb_i915_iosf_access(guard, unit, addr, &value, true);
++}
++
+ void vlv_iosf_sb_write(struct drm_i915_private *i915,
+ 		       u8 port, u32 reg, u32 val)
+ {
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
+@@ -29,6 +29,35 @@
+ 	VLV_IOSF_SB_NC,
+ 	VLV_IOSF_SB_PUNIT,
+ };
++
++/*
++ * Modern IOSF numbering is distinct from the legacy VLV enum.
++ * Keep existing values untouched; modern PUNIT=8, DPIO_2=4.
++ */
++enum nb_i915_iosf_unit {
++	NB_I915_IOSF_BUNIT = 0,
++	NB_I915_IOSF_CCK = 1,
++	NB_I915_IOSF_CCU = 2,
++	NB_I915_IOSF_DPIO = 3,
++	NB_I915_IOSF_DPIO2 = 4,
++	NB_I915_IOSF_FLISDSI = 5,
++	NB_I915_IOSF_GPIO = 6,
++	NB_I915_IOSF_NC = 7,
++	NB_I915_IOSF_PUNIT = 8,
++};
++
++/* Caller initializes guard to {0}; same context must release it. */
++struct nb_i915_iosf_guard {
++	struct drm_i915_private *owner;
++	unsigned long units;
++};
++int nb_i915_iosf_acquire(struct drm_i915_private *,
++    unsigned long, struct nb_i915_iosf_guard *);
++int nb_i915_iosf_release(struct nb_i915_iosf_guard *);
++int nb_i915_iosf_read_checked(struct nb_i915_iosf_guard *,
++    unsigned int, u32, u32 *);
++int nb_i915_iosf_write_checked(struct nb_i915_iosf_guard *,
++    unsigned int, u32, u32);
+ 
+ void vlv_iosf_sb_get(struct drm_i915_private *i915, unsigned long ports);
+ u32 vlv_iosf_sb_read(struct drm_i915_private *i915, u8 port, u32 reg);
