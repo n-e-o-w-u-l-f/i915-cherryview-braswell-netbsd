@@ -216,3 +216,20 @@ New isolated BSD-2-Clause enum/lock-mask translator has source-hash
 checks and host-C -Werror regression rejecting unsupported DPIO_2;
 no IO register changes. NetBSD old write discards status, old
 sideband has no modern locked_unit_mask; these must still be ported.
+
+## 2026-10-17 source-derived CHV IOSF transaction/status patch
+
+On branch work/hp-native-drm-stage-replay-20261015, a tested isolated
+C route/transaction contract and a **native NetBSD source patch
+candidate** for `intel_sideband.c/.h` are now published. Route/opcode
+values are pinned and matched to both Linux and NetBSD register sources.
+The existing NetBSD static int `vlv_sideband_rw` already reports
+-EAGAIN/-ETIMEDOUT, but its legacy void write wrapper discards status.
+The patch provides a checked accessor while preserving the void ABI.
+Regression tests retrieved from the published GitHub branch PASS on
+Legion: host-C -Werror and exact native diff apply to frozen source
+with six status/error cases. This is *not* applied to HP NetBSD,
+has no kernel-native compiler/link validation, no sb_lock runtime
+ownership proof, and does not make DPIO_2 or the 323-unit i915
+DRM/GEM/UVM/TTM graph functional. See
+docs/I915_VLV_IOSF_CHECKED_NATIVE_PATCH_20261017.md.
