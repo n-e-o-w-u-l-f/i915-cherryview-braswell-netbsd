@@ -19,12 +19,6 @@
 #include <drm/drm_vblank_work.h>
 #include <drm/drm_wait_netbsd.h>
 
-static struct drm_crtc *
-nb_vblank_crtc(struct drm_vblank_crtc *vblank)
-{
-	return drm_crtc_from_index(vblank->dev, vblank->pipe);
-}
-
 static bool
 nb_vblank_passed(u64 vblank_seq, u64 target)
 {
@@ -112,7 +106,6 @@ void
 drm_vblank_cancel_pending_works(struct drm_vblank_crtc *vblank)
 {
 	struct drm_device *dev = vblank->dev;
-	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	struct drm_vblank_work *work, *next;
 
 	KASSERT(spin_is_locked(&dev->event_lock));
@@ -120,8 +113,7 @@ drm_vblank_cancel_pending_works(struct drm_vblank_crtc *vblank)
 		list_del_init(&work->node);
 		KASSERT(work->pending_ref);
 		work->pending_ref = false;
-		if (crtc != NULL)
-			drm_crtc_vblank_put_locked(crtc);
+		nb_i915_vblank_ref_put_locked(vblank);
 	}
 	DRM_SPIN_WAKEUP_ALL(&vblank->work_wait_queue, &dev->event_lock);
 }
@@ -149,7 +141,6 @@ void
 drm_handle_vblank_works(struct drm_vblank_crtc *vblank)
 {
 	struct drm_device *dev = vblank->dev;
-	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	struct drm_vblank_work *work, *next;
 	u64 vblank_seq = atomic64_read(&vblank->count);
 
@@ -158,8 +149,7 @@ drm_handle_vblank_works(struct drm_vblank_crtc *vblank)
 		if (!nb_vblank_passed(vblank_seq, work->count))
 			continue;
 		KASSERT(work->pending_ref);
-		if (crtc != NULL)
-			drm_crtc_vblank_put_locked(crtc);
+		nb_i915_vblank_ref_put_locked(vblank);
 		nb_vblank_ready(vblank, work);
 	}
 }
@@ -183,14 +173,11 @@ drm_vblank_work_schedule(struct drm_vblank_work *work, u64 target,
 {
 	struct drm_vblank_crtc *vblank = work->vblank;
 	struct drm_device *dev = vblank->dev;
-	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	unsigned long flags;
 	u64 vblank_seq;
 	bool passed;
 	int error = 0;
 
-	if (crtc == NULL)
-		return -EINVAL;
 	spin_lock_irqsave(&dev->event_lock, flags);
 	if (vblank->worker_stopping || work->cancelling ||
 	    vblank->inmodeset)
@@ -199,7 +186,7 @@ drm_vblank_work_schedule(struct drm_vblank_work *work, u64 target,
 		goto out;
 	/* Hold one real IRQ reference until dispatch/cancellation. */
 	if (!work->pending_ref) {
-		error = drm_crtc_vblank_get_locked(crtc);
+		error = nb_i915_vblank_ref_get_locked(vblank);
 		if (error < 0)
 			goto out;
 		work->pending_ref = true;
@@ -214,7 +201,7 @@ drm_vblank_work_schedule(struct drm_vblank_work *work, u64 target,
 	if (nextonmiss || !passed)
 		list_add_tail(&work->node, &vblank->pending_work);
 	else {
-		drm_crtc_vblank_put_locked(crtc);
+		nb_i915_vblank_ref_put_locked(vblank);
 		nb_vblank_ready(vblank, work);
 	}
 	error = 1;
@@ -228,7 +215,6 @@ drm_vblank_work_cancel_sync(struct drm_vblank_work *work)
 {
 	struct drm_vblank_crtc *vblank = work->vblank;
 	struct drm_device *dev = vblank->dev;
-	struct drm_crtc *crtc = nb_vblank_crtc(vblank);
 	unsigned long flags;
 	bool cancelled = false;
 	int error;
@@ -237,8 +223,8 @@ drm_vblank_work_cancel_sync(struct drm_vblank_work *work)
 	work->cancelling++;
 	if (!list_empty(&work->node)) {
 		list_del_init(&work->node);
-		if (work->pending_ref && crtc != NULL)
-			drm_crtc_vblank_put_locked(crtc);
+		if (work->pending_ref)
+			nb_i915_vblank_ref_put_locked(vblank);
 		work->pending_ref = false;
 		cancelled = true;
 	}
