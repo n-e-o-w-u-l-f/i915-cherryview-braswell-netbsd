@@ -233,3 +233,30 @@ has no kernel-native compiler/link validation, no sb_lock runtime
 ownership proof, and does not make DPIO_2 or the 323-unit i915
 DRM/GEM/UVM/TTM graph functional. See
 docs/I915_VLV_IOSF_CHECKED_NATIVE_PATCH_20261017.md.
+
+## 2026-10-17 actual HP native 323-unit compiler checkpoint
+
+Verified over strict Legion -> andreas@10.1.0.44 SSH: HP NetBSD 11 amd64
+actually boots F77; no kernel processes, compiler/nbconfig/linker present.
+Pinned old-NetBSD intel_sideband.c with both work-branch checked-status and
+modern-IOSF-guard patches compiled on the actual HP NetBSD kernel toolchain
+with -Werror: intel_sideband.o 348304 bytes, SHA256
+94ce1b608b3f7fae444c9e40c9ab324acbe4dc619756b547d6bff3bb9f0cfda8.
+Scratch path: /home/andreas/projects/i915-iosf-netbsd-native-04a97b3-20261017.
+
+HP historical /root/i915-full-port-work has 425 Linux i915 C files, 961
+uncommitted modifications: DIAGNOSTIC input ONLY, not release-ready i915.
+Its 323 selected modern C rows were merged with ORIGINAL NetBSD
+i915drmkms/intelfb device definitions and native glue, replacing 150
+legacy i915 C rows. Real native nbconfig PASS (exit 0) and generated
+Makefile contains modern i915_driver.c and vlv_iosf_sb.c. Private stage:
+/home/andreas/projects/i915-323-native-nbconfig-20261017.
+First dependall failure: missing sys/../common fixed via private symlink
+to /usr/src/common. Second real native dependall EXIT 2 at
+drm/display/drm_dp_dual_mode_helper.h missing. Linux/NetBSD same-name
+DP helper headers have DIFFERENT signatures (drm_device context and
+LSPCON timeout), so a blind header alias is NOT a functional repair.
+Logs/native-build-status-v2.json retained on HP. No final i915 kernel
+link, install, new boot, physical KMS or recovery-console verification.
+F77 remains in use with genfb0 and i915 disabled; no out-of-band
+G01–G09 early-console connection demonstrated.
