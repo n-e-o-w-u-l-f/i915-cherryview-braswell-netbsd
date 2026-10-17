@@ -1,0 +1,45 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+@@ -196,6 +196,29 @@
+ 	return val;
+ }
+ 
++/*
++ * Expose the existing serialized IOSF mailbox's error status to the
++ * modern display callback adapter. Existing void ABI stays intact.
++ * Caller must own i915->sb_lock and the PUNIT reservation where needed.
++ */
++int
++nb_i915_vlv_iosf_rw_checked(struct drm_i915_private *i915,
++    u32 devfn, u32 port, u32 opcode, u32 addr, u32 *val)
++{
++    if (val == NULL || port == 0)
++        return -EINVAL;
++    switch (opcode) {
++    case SB_MRD_NP:
++    case SB_MWR_NP:
++    case SB_CRRDDA_NP:
++    case SB_CRWRDA_NP:
++        break;
++    default:
++        return -EINVAL;
++    }
++    return vlv_sideband_rw(i915, devfn, port, opcode, addr, val);
++}
++
+ void vlv_iosf_sb_write(struct drm_i915_private *i915,
+ 		       u8 port, u32 reg, u32 val)
+ {
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
+@@ -32,6 +32,10 @@
+ 
+ void vlv_iosf_sb_get(struct drm_i915_private *i915, unsigned long ports);
+ u32 vlv_iosf_sb_read(struct drm_i915_private *i915, u8 port, u32 reg);
++/* Error-preserving entry for the modern i915 display IOSF bridge. */
++int nb_i915_vlv_iosf_rw_checked(struct drm_i915_private *i915,
++    u32 devfn, u32 port, u32 opcode, u32 addr, u32 *val);
++
+ void vlv_iosf_sb_write(struct drm_i915_private *i915,
+ 		       u8 port, u32 reg, u32 val);
+ void vlv_iosf_sb_put(struct drm_i915_private *i915, unsigned long ports);
