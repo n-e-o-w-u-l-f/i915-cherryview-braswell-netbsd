@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-NAMES=("nb_vblank_crtc","nb_vblank_passed","nb_vblank_ready",
+NAMES=("nb_vblank_passed","nb_vblank_ready",
        "drm_vblank_cancel_pending_works","drm_handle_vblank_works",
        "drm_vblank_work_init","drm_vblank_work_schedule",
        "drm_vblank_work_cancel_sync")
@@ -70,16 +70,13 @@ struct drm_vblank_crtc{
 };
 static struct drm_crtc g_crtc;
 static int refs,gets,put_calls,fail_get;
-static struct drm_crtc *drm_crtc_from_index(struct drm_device *d,unsigned idx){
- return g_crtc.dev==d && g_crtc.index==idx?&g_crtc:NULL;
-}
 static unsigned drm_crtc_index(struct drm_crtc *c){return c->index;}
-static int drm_crtc_vblank_get_locked(struct drm_crtc *c){
+static int nb_i915_vblank_ref_get_locked(struct drm_vblank_crtc *c){
  (void)c;
  if(fail_get){int err=fail_get;fail_get=0;return err;}
  refs++;gets++;return 0;
 }
-static void drm_crtc_vblank_put_locked(struct drm_crtc *c){
+static void nb_i915_vblank_ref_put_locked(struct drm_vblank_crtc *c){
  (void)c;if(refs<=0)abort();refs--;put_calls++;
 }
 static bool spin_is_locked(int *l){return *l>0;}
@@ -134,7 +131,13 @@ int main(void){
  CHECK(18,drm_vblank_work_cancel_sync(&a) && !drm_vblank_work_cancel_sync(&b));
  CHECK(19,nb_vblank_passed(0,UINT64_MAX) && !nb_vblank_passed(UINT64_MAX,0));
  CHECK(20,refs==0 && gets==put_calls);
- puts("NETBSD_I915_VBLANK_20_SOURCE_STATE_CASES_PASS");
+ /* CRTC already freed: native DRM VBlank core must still release IRQ refs. */
+ v.count=19;
+ CHECK(21,drm_vblank_work_schedule(&a,21,false)==1 && refs==1);
+ g_crtc.dev=NULL;
+ dev.event_lock++;drm_vblank_cancel_pending_works(&v);dev.event_lock--;
+ CHECK(22,refs==0 && list_empty(&v.pending_work));
+ puts("NETBSD_I915_VBLANK_22_SOURCE_STATE_CASES_PASS");
  return 0;
 }
 """
