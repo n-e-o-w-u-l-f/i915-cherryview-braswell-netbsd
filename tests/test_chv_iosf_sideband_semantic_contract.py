@@ -187,9 +187,19 @@ def main() -> None:
        "vlv_iosf_sb_get(i915, 0);"),
     )
     for label, owner, before, after in mutations:
-        need(text[owner].count(before) == 1,"nonunique mutation anchor "+label)
         mutant=dict(text)
-        mutant[owner]=mutant[owner].replace(before,after,1)
+        if label == "lost_sb_mutex_lock":
+            # Other functions also acquire sb_lock. Scope corruption
+            # exactly to the IOSF get() function under review.
+            original_func = func(mutant[owner], "vlv_iosf_sb_get")
+            need(original_func.count(before) == 1,
+                 "nonunique scoped mutex anchor")
+            mutant[owner] = mutant[owner].replace(
+                original_func, original_func.replace(before, after, 1), 1)
+        else:
+            need(text[owner].count(before) == 1,
+                 "nonunique mutation anchor "+label)
+            mutant[owner]=mutant[owner].replace(before,after,1)
         try:
             source_contract(mutant["linux"],mutant["sideband"],
                             mutant["driver"],mutant["header"],reg)
