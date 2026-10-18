@@ -10,6 +10,8 @@ import argparse
 import hashlib
 from pathlib import Path
 import re
+import resource
+import signal
 import subprocess
 import tempfile
 
@@ -153,8 +155,10 @@ static int kthread_join(struct lwp *l) {
 #define kthread_exit(e) pthread_exit(NULL)
 static pthread_mutex_t gate=PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t gate_wake=PTHREAD_COND_INITIALIZER;
-static int entered, release_callback;
-static atomic_int callbacks,flushed;
+static int entered, release_callback, release_second;
+static atomic_int callbacks,flushed,rearmed_seen,second_done;
+static struct drm_vblank_work *rearm_target;
+int drm_vblank_work_schedule(struct drm_vblank_work *,u64,bool);
 static void simple(struct kthread_work *w) {
     (void)w;atomic_fetch_add(&callbacks,1);
 }
@@ -167,8 +171,32 @@ static void blocked(struct kthread_work *w) {
     pthread_mutex_unlock(&gate);
     atomic_fetch_add(&callbacks,1);
 }
+static void rearm_once(struct kthread_work *w) {
+    (void)w;
+    int n=atomic_fetch_add(&rearmed_seen,1);
+    pthread_mutex_lock(&gate);
+    entered++;
+    pthread_cond_broadcast(&gate_wake);
+    if(n==0) {
+        while(!release_callback) pthread_cond_wait(&gate_wake,&gate);
+        pthread_mutex_unlock(&gate);
+        assert(drm_vblank_work_schedule(rearm_target,
+            rearm_target->vblank->count,false)==1);
+    } else {
+        assert(n==1);
+        while(!release_second) pthread_cond_wait(&gate_wake,&gate);
+        pthread_mutex_unlock(&gate);
+        atomic_store(&second_done,1);
+    }
+}
 static void gate_reset(void) {
-    pthread_mutex_lock(&gate);entered=0;release_callback=0;pthread_mutex_unlock(&gate);
+    pthread_mutex_lock(&gate);
+    entered=0;release_callback=0;release_second=0;
+    pthread_mutex_unlock(&gate);
+}
+static void gate_release_second(void) {
+    pthread_mutex_lock(&gate);release_second=1;
+    pthread_cond_broadcast(&gate_wake);pthread_mutex_unlock(&gate);
 }
 static void gate_entered(void) {
     pthread_mutex_lock(&gate);
@@ -226,7 +254,7 @@ int main(void) {
     simulate_irq(&v,12);
     assert(!pthread_join(waiter,NULL));
     spin_lock(&d.event_lock);
-    assert(references==0 && atomic_load(&callbacks)==1 && !a.running);
+    assert(references==0 && atomic_load(&callbacks)==1 && !a.running && !a.pending_ref);
     spin_unlock(&d.event_lock);
     puts("VBLANK_PTHREAD_PENDING_IRQ_FLUSH_OK");
 
@@ -270,6 +298,33 @@ int main(void) {
     assert(references==0 && !a.pending_ref && list_empty(&a.node));
     spin_unlock(&d.event_lock);
     puts("VBLANK_PTHREAD_FAILED_IRQ_REF_GET_OK");
+
+
+    /* A real FIFO fence must finish before work rearmed behind the fence.
+     * Block first callback, enqueue flush-all, then rearm behind fence.
+     * Second callback stays blocked while flush-all returns.
+     */
+    gate_reset();atomic_store(&flushed,0);
+    atomic_store(&rearmed_seen,0);atomic_store(&second_done,0);
+    rearm_target=&b;
+    drm_vblank_work_init(&b,&c,rearm_once);
+    assert(drm_vblank_work_schedule(&b,12,false)==1);
+    gate_entered();
+    j=(struct job){.crtc=&c,.all=true};
+    assert(!pthread_create(&waiter,NULL,wait_job,&j));
+    spin_lock(&d.event_lock);
+    while(list_empty(&v.ready_work))
+        assert(!pthread_cond_wait(&v.worker_wait_queue,&d.event_lock));
+    spin_unlock(&d.event_lock);
+    gate_release();
+    assert(!pthread_join(waiter,NULL));
+    assert(atomic_load(&flushed)==1);
+    assert(atomic_load(&second_done)==0);
+    gate_release_second();
+    drm_vblank_work_flush_all(&c);
+    assert(atomic_load(&rearmed_seen)==2 && atomic_load(&second_done)==1);
+    spin_lock(&d.event_lock);assert(references==0);spin_unlock(&d.event_lock);
+    puts("VBLANK_PTHREAD_REARM_AFTER_FENCE_SNAPSHOT_OK");
 
     assert(drm_vblank_work_schedule(&a,999,false)==1);
     drm_vblank_worker_fini(&v);
@@ -320,12 +375,49 @@ def main() -> None:
             "VBLANK_PTHREAD_PENDING_CANCEL_REF_DROP_OK",
             "VBLANK_PTHREAD_FAILED_IRQ_REF_GET_OK",
             "VBLANK_PTHREAD_TEARDOWN_QUIESCENCE_OK",
+            "VBLANK_PTHREAD_REARM_AFTER_FENCE_SNAPSHOT_OK",
         ]
         for label in expected:
             if label not in run.stdout:
                 raise AssertionError("missing runtime case " + label)
         print(run.stdout.strip())
-        print("I915_NETBSD_VBLANK_EXTRACTED_C11_PTHREAD_6_LIFECYCLE_CASES_PASS")
+        print("I915_NETBSD_VBLANK_EXTRACTED_C11_PTHREAD_7_LIFECYCLE_CASES_PASS")
+
+        def no_core():
+            resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+
+        bad_changes = (
+            ("missing_pending_ref_clear",
+             "work->pending_ref = false;",
+             "/* mutation: lost ref state transition */"),
+            ("missing_fini_pending_cancel",
+             "vblank->worker_stopping = true;\n\tdrm_vblank_cancel_pending_works(vblank);",
+             "vblank->worker_stopping = true;\n\t/* mutation: lost pending cancellation */"),
+        )
+        for i, (label, before, after) in enumerate(bad_changes):
+            method_name = ("nb_vblank_ready" if i == 0
+                           else "drm_vblank_worker_fini")
+            frag = extract(source, method_name)
+            if frag.count(before) != 1:
+                raise AssertionError("mutation source not unique " + label)
+            mutated = methods.replace(frag, frag.replace(before, after, 1), 1)
+            mutant_c = root / ("mutant_" + str(i) + ".c")
+            mutant_bin = root / ("mutant_" + str(i))
+            mutant_c.write_text(PRELUDE + "\n" + mutated + "\n" + MAIN)
+            compile_bad = subprocess.run(
+                ["cc", "-std=gnu11", "-Wall", "-Wextra", "-Werror",
+                 "-fsanitize=undefined", "-pthread", str(mutant_c),
+                 "-o", str(mutant_bin)], capture_output=True, text=True)
+            if compile_bad.returncode:
+                raise AssertionError("mutation did not compile: " +
+                                     compile_bad.stderr[:800])
+            bad = subprocess.run([str(mutant_bin)], capture_output=True,
+                                 text=True, timeout=18, preexec_fn=no_core)
+            if bad.returncode != -signal.SIGABRT:
+                raise AssertionError("unsafe mutation NOT caught: " +
+                                     label + " RC=" + str(bad.returncode))
+            print("VBLANK_PTHREAD_MUTANT_REFUSED_" + label.upper())
+        print("I915_NETBSD_VBLANK_PTHREAD_2_UNSAFE_SOURCE_MUTATIONS_REFUSED")
         print("LIMIT: host pthread substitutions, not a NetBSD HP native kernel/IRQ test")
 
 
