@@ -20,6 +20,8 @@ for phrase in (
     "/netbsd-11-xfce4", "/netbsd-11-kde", "/netbsd-11-shell",
     "authoritative_boot_cfg=UNKNOWN_REQUIRE_LOADER_AND_ESP_CHECK",
     "AUDIT_BOOTLOADER=UNKNOWN_REQUIRE_PHYSICAL_BIOS_UEFI_CHECK",
+    "sysctl -n machdep.bootmethod",
+    "uefi_esp_boot_cfg=UNKNOWN_REQUIRES_ESP_MOUNTPOINT_READBACK",
     "/EFI/NetBSD/boot.cfg", "/boot.cfg", "f77_recovery_sha256=UNKNOWN",
     "xfce4_session", "kde_plasma_x11", "kernel_syslog_route",
     "/var/log/hp-kernel-boot.log", "/var/run/dmesg.boot",
@@ -50,8 +52,12 @@ with tempfile.TemporaryDirectory(prefix="hp-boot-preflight-") as tmp:
     mock_sysctl = tools / "sysctl"
     mock_sysctl.write_text(
         '#!/bin/sh\n'
-        '[ "$1" = "-n" ] && [ "$2" = machdep.booted_kernel ] || exit 3\n'
-        'echo /netbsd-11-shell\n')
+        '[ "$1" = "-n" ] || exit 3\n'
+        'case "$2" in\n'
+        ' machdep.booted_kernel) echo /netbsd-11-shell ;;\n'
+        ' machdep.bootmethod) echo UEFI ;;\n'
+        ' *) exit 4 ;;\n'
+        'esac\n')
     mock_sysctl.chmod(0o755)
     environment = os.environ.copy()
     environment["PATH"] = str(tools) + os.pathsep + environment["PATH"]
@@ -62,6 +68,8 @@ with tempfile.TemporaryDirectory(prefix="hp-boot-preflight-") as tmp:
     rows = status.stdout.splitlines()
     assert "uname=NetBSD 11.0 amd64" in rows
     assert "booted_kernel=/netbsd-11-shell" in rows
+    assert "AUDIT_BOOTLOADER=UEFI" in rows
+    assert "uefi_esp_boot_cfg=UNKNOWN_REQUIRES_ESP_MOUNTPOINT_READBACK" in rows
     assert "AUDIT_MODE=READ_ONLY" in rows
     assert "AUDIT_INSTALL=NOT_RUN" in rows
     assert "AUDIT_BOOT_TEST=NOT_RUN" in rows
