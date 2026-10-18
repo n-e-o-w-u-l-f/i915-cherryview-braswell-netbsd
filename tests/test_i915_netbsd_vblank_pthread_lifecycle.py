@@ -62,6 +62,7 @@ PRELUDE = r"""
 #include <stdatomic.h>
 #include <time.h>
 #include <stddef.h>
+#include <unistd.h>
 typedef uint64_t u64;
 struct list_head { struct list_head *next, *prev; };
 #define INIT_LIST_HEAD(h) do { (h)->next=(h); (h)->prev=(h); } while (0)
@@ -105,7 +106,7 @@ struct drm_crtc { struct drm_device *dev; unsigned idx; };
 #define KTHREAD_MUSTJOIN 2
 #define KASSERT(e) assert(e)
 #define atomic64_read(p) (*(p))
-#define spin_is_locked(l) (true)
+#define spin_is_locked(l) ((void)(l),true)
 #define spin_lock(l) do {int _e=pthread_mutex_lock(l);assert(!_e);}while(0)
 #define spin_unlock(l) do {int _e=pthread_mutex_unlock(l);assert(!_e);}while(0)
 #define spin_lock_irqsave(l,f) do{(f)=0;spin_lock(l);}while(0)
@@ -115,16 +116,20 @@ struct drm_crtc { struct drm_device *dev; unsigned idx; };
 #define DRM_SPIN_WAKEUP_ALL(q,l) do{(void)(l);assert(!pthread_cond_broadcast(q));}while(0)
 #define DRM_SPIN_WAIT_NOINTR_UNTIL(e,q,l,c) \
  do{while(!(c)){assert(!pthread_cond_wait(q,l));}(e)=0;}while(0)
-static int references,gets,puts, fail_next_get;
+static int references,gets,ref_puts, fail_next_get;
 static int nb_i915_vblank_ref_get_locked(struct drm_vblank_crtc *v) {
     (void)v;
     if (fail_next_get) {int e=fail_next_get;fail_next_get=0;return e;}
     references++;gets++;return 0;
 }
 static void nb_i915_vblank_ref_put_locked(struct drm_vblank_crtc *v) {
-    (void)v;assert(references>0);references--;puts++;
+    (void)v;assert(references>0);references--;ref_puts++;
 }
 static unsigned drm_crtc_index(struct drm_crtc *c) {return c->idx;}
+void drm_handle_vblank_works(struct drm_vblank_crtc *);
+void drm_vblank_work_flush(struct drm_vblank_work *);
+void drm_vblank_work_flush_all(struct drm_crtc *);
+bool drm_vblank_work_cancel_sync(struct drm_vblank_work *);
 struct launch {void (*fn)(void *);void *ctx;};
 static void *entry(void *p) {
     struct launch item=*(struct launch*)p;free(p);
@@ -180,7 +185,7 @@ static void setup(struct drm_device *dev,struct drm_vblank_crtc *v,
     assert(!pthread_mutex_init(&dev->event_lock,NULL));
     dev->vblank=v;v->dev=dev;v->pipe=0;v->count=10;
     *crtc=(struct drm_crtc){.dev=dev,.idx=0};
-    references=gets=puts=fail_next_get=0;
+    references=gets=ref_puts=fail_next_get=0;
     atomic_store(&callbacks,0);atomic_store(&flushed,0);
 }
 struct job {struct drm_vblank_work *work; struct drm_crtc *crtc; bool all;bool cancel;bool cancelled;};
@@ -273,7 +278,7 @@ int main(void) {
     assert(references==0 && !a.pending_ref && list_empty(&v.pending_work));
     spin_unlock(&d.event_lock);
     assert(drm_vblank_work_schedule(&a,999,false)==0);
-    assert(gets==puts);
+    assert(gets==ref_puts);
     assert(!pthread_mutex_destroy(&d.event_lock));
     puts("VBLANK_PTHREAD_TEARDOWN_QUIESCENCE_OK");
     return 0;
