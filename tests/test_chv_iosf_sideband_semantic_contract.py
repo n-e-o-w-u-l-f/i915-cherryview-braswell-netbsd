@@ -188,12 +188,16 @@ def main() -> None:
     )
     for label, owner, before, after in mutations:
         mutant=dict(text)
-        if label == "lost_sb_mutex_lock":
-            # Other functions also acquire sb_lock. Scope corruption
-            # exactly to the IOSF get() function under review.
-            original_func = func(mutant[owner], "vlv_iosf_sb_get")
+        scoped = {
+            "lost_sb_mutex_lock": "vlv_iosf_sb_get",
+            "lost_timeout_eagain": "vlv_sideband_rw",
+        }
+        if label in scoped:
+            # Other i915 functions may use the same lock/errno.
+            # Mutate the exact reviewed function, never first-match.
+            original_func = func(mutant[owner], scoped[label])
             need(original_func.count(before) == 1,
-                 "nonunique scoped mutex anchor")
+                 "nonunique scoped mutation anchor " + label)
             mutant[owner] = mutant[owner].replace(
                 original_func, original_func.replace(before, after, 1), 1)
         else:
