@@ -83,11 +83,15 @@ def check(linux, native):
         "DRM_SPIN_WAKEUP_ALL(&vblank->work_wait_queue,",
     ):
         require(needle in worker, "NetBSD worker missing " + needle)
+    wake_after_callback = worker.find(
+        "DRM_SPIN_WAKEUP_ALL(&vblank->work_wait_queue,",
+        worker.index("work->running = false;"))
+    require(wake_after_callback >= 0,
+            "NetBSD worker missing post-callback completion notification")
     require(worker.index("list_del_init(&work->node);") <
             worker.index("work->running = true;") <
             worker.index("(*work->base.func)(&work->base);") <
-            worker.index("work->running = false;") <
-            worker.index("DRM_SPIN_WAKEUP_ALL(&vblank->work_wait_queue,"),
+            worker.index("work->running = false;") < wake_after_callback,
             "NetBSD worker completion order incorrect")
 
 
@@ -132,22 +136,43 @@ def main():
     linux, native = texts
     check(linux, native)
     fifo_model()
+    def mutate_method(src, symbol, before, after):
+        fragment = method(src, symbol)
+        require(fragment.count(before) == 1, "mutation ambiguous: " + symbol)
+        return src.replace(fragment, fragment.replace(before, after, 1), 1)
+
+    def mutate_section(src, start_tag, end_tag, before, after, last=False):
+        fragment = section(src, start_tag, end_tag)
+        require(before in fragment, "mutation anchor missing")
+        if last:
+            chunks = fragment.rsplit(before, 1)
+            changed = after.join(chunks)
+        else:
+            changed = fragment.replace(before, after, 1)
+        return src.replace(fragment, changed, 1)
+
     mutations = (
-        ("linux_lost_pending", linux.replace(
+        ("linux_lost_pending", mutate_method(
+            linux, "drm_vblank_work_flush_all",
             "list_empty(&vblank->pending_work)",
-            "list_empty(&vblank->ready_work)", 1), native),
-        ("native_lost_pending", linux, native.replace(
+            "list_empty(&vblank->ready_work)"), native),
+        ("native_lost_pending", linux, mutate_method(
+            native, "drm_vblank_work_flush_all",
             "list_empty(&vblank->pending_work)",
-            "list_empty(&vblank->ready_work)", 1)),
-        ("native_lost_pending_ref", linux, native.replace(
-            "!work->pending_ref",
-            "list_empty(&work->node)", 1)),
-        ("native_lost_fence", linux, native.replace(
+            "list_empty(&vblank->ready_work)")),
+        ("native_lost_pending_ref", linux, mutate_method(
+            native, "drm_vblank_work_flush",
+            "!work->pending_ref", "list_empty(&work->node)")),
+        ("native_lost_fence", linux, mutate_section(
+            native, "nb_vblank_flush_ready_locked(",
+            "drm_vblank_work_flush(",
             "list_empty(&fence.node) && !fence.running",
-            "list_empty(&fence.node)", 1)),
-        ("native_lost_wakeup", linux, native.replace(
+            "list_empty(&fence.node)")),
+        ("native_lost_wakeup", linux, mutate_section(
+            native, "nb_vblank_worker_main(",
+            "drm_vblank_worker_init(",
             "DRM_SPIN_WAKEUP_ALL(&vblank->work_wait_queue,",
-            "/* lost wakeup */", 1)),
+            "/* lost wakeup */", last=True)),
     )
     for label, l, n in mutations:
         require((l, n) != (linux, native), "invalid mutation " + label)
