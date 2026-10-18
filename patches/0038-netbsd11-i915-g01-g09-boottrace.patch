@@ -1,0 +1,118 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+@@ -307,7 +307,13 @@
+ 			goto out;
+ 	}
+ 
++#ifdef __NetBSD__
++	printf("[I915 G05] bios_vbt_init BEGIN\n");
++#endif
+ 	intel_bios_init(i915);
++#ifdef __NetBSD__
++	printf("[I915 G05] bios_vbt_init END\n");
++#endif
+ 
+ 	ret = intel_vga_register(i915);
+ 	if (ret)
+@@ -323,17 +329,35 @@
+ 	if (ret)
+ 		goto cleanup_vga_client;
+ 
++#ifdef __NetBSD__
++	printf("[I915 G06] power_domains_init_hw BEGIN\n");
++#endif
+ 	intel_power_domains_init_hw(i915, false);
++#ifdef __NetBSD__
++	printf("[I915 G06] power_domains_init_hw END\n");
++#endif
+ 
+ 	intel_csr_ucode_init(i915);
+ 
++#ifdef __NetBSD__
++	printf("[I915 G07] irq_install BEGIN\n");
++#endif
+ 	ret = intel_irq_install(i915);
++#ifdef __NetBSD__
++	printf("[I915 G07] irq_install END ret=%d\n", ret);
++#endif
+ 	if (ret)
+ 		goto cleanup_csr;
+ 
+ 	/* Important: The output setup functions called by modeset_init need
+ 	 * working irqs for e.g. gmbus and dp aux transfers. */
++#ifdef __NetBSD__
++	printf("[I915 G08] modeset_init BEGIN\n");
++#endif
+ 	ret = intel_modeset_init(i915);
++#ifdef __NetBSD__
++	printf("[I915 G08] modeset_init END ret=%d\n", ret);
++#endif
+ 	if (ret)
+ 		goto cleanup_irq;
+ 
+@@ -346,7 +370,13 @@
+ 	if (!HAS_DISPLAY(i915) || !INTEL_DISPLAY_ENABLED(i915))
+ 		return 0;
+ 
++#ifdef __NetBSD__
++	printf("[I915 G09] fbdev_init BEGIN\n");
++#endif
+ 	ret = intel_fbdev_init(&i915->drm);
++#ifdef __NetBSD__
++	printf("[I915 G09] fbdev_init END ret=%d\n", ret);
++#endif
+ 	if (ret)
+ 		goto cleanup_gem;
+ 
+@@ -1534,7 +1564,13 @@
+ 		return PTR_ERR(dev_priv);
+ 
+ #ifdef __NetBSD__
++#ifdef __NetBSD__
++	printf("[I915 G01] pci_attach BEGIN\n");
++#endif
+ 	ret = drm_pci_attach(&dev_priv->drm, pdev);
++#ifdef __NetBSD__
++	printf("[I915 G01] pci_attach END ret=%d\n", ret);
++#endif
+ 	if (ret)
+ 		goto out_destroy;
+ #endif
+@@ -1566,7 +1602,13 @@
+ 		goto out_fini;
+ #endif
+ 
++#ifdef __NetBSD__
++	printf("[I915 G02] early_probe BEGIN\n");
++#endif
+ 	ret = i915_driver_early_probe(dev_priv);
++#ifdef __NetBSD__
++	printf("[I915 G02] early_probe END ret=%d\n", ret);
++#endif
+ 	if (ret < 0)
+ 		goto out_pci_disable;
+ 
+@@ -1574,11 +1616,23 @@
+ 
+ 	i915_detect_vgpu(dev_priv);
+ 
++#ifdef __NetBSD__
++	printf("[I915 G03] mmio_probe BEGIN\n");
++#endif
+ 	ret = i915_driver_mmio_probe(dev_priv);
++#ifdef __NetBSD__
++	printf("[I915 G03] mmio_probe END ret=%d\n", ret);
++#endif
+ 	if (ret < 0)
+ 		goto out_runtime_pm_put;
+ 
++#ifdef __NetBSD__
++	printf("[I915 G04] hardware_ggtt_probe BEGIN\n");
++#endif
+ 	ret = i915_driver_hw_probe(dev_priv);
++#ifdef __NetBSD__
++	printf("[I915 G04] hardware_ggtt_probe END ret=%d\n", ret);
++#endif
+ 	if (ret < 0)
+ 		goto out_cleanup_mmio;
+ 
