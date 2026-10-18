@@ -48,6 +48,37 @@ backing up the old xdm-config and original Xsession; the wrapper chains
 that original for any legacy kernel. The script does NOT silently
 replace existing per-user `.xsession` or alter passwords/login accounts.
 
+### Verified historical HP UEFI state and read-only probe
+
+The existing, earlier `docs/UEFI-BOOT-CHAIN.md` records a **real HP**
+`machdep.bootmethod=UEFI` with a 128-MiB FAT16 EFI System Partition
+(GPT partition 1) containing `EFI/BOOT/BOOTX64.EFI`. It also records
+the verified NetBSD `/usr/mdec/bootx64.efi` loader digest. These are
+historical direct-host observations, not today's active boot state.
+NetBSD's x86/boot(8) says an EFI loader reads configuration from
+`/EFI/NetBSD/boot.cfg` **on its EFI System Partition**, not necessarily
+from the NetBSD root filesystem's `/boot.cfg`. The named kernel ELF
+images remain on the NetBSD root filesystem, NOT on the FAT ESP.
+
+**Do not assume the NetBSD root `/EFI/NetBSD` is the mounted ESP.**
+Before changing any menu, inspect actual bootmethod, root/ESP device
+and mounts, the loader-selected configuration, and preserve both the
+preexisting standard kernel and F77 rescue image/hashes.
+
+`tools/audit_hp_netbsd11_boot_readonly.sh` is a POSIX shell-only, no-
+change probe; it refuses execution off NetBSD and reports the actual
+`machdep.bootmethod`, running kernel identity, standard kernel SHA256,
+candidate images, xdm/XFCE/KDE executables, syslog route/file and
+savecore/dmesg prerequisites. If the ESP is not independently verified
+it reports `uefi_esp_boot_cfg=UNKNOWN` rather than checking the wrong
+root path and misreporting an absent firmware config.
+
+The new source-only regression
+`tests/test_hp_netbsd11_boot_audit_source.py` passes in a disposable
+Legion copy against a synthetic NetBSD `uname`/`sysctl` fixture,
+checks no-overwrite and non-NetBSD refusal; it is **NOT** proof that
+the real HP audit was run.
+
 ### Real HP pre-install checklist
 
 1. Actual authoritative **direct** controller-to-HP executor first
