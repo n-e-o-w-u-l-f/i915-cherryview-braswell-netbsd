@@ -138,7 +138,16 @@ def run(source_paths: dict[str, Path]) -> None:
     for label, (key, before, after) in mutations.items():
         check(before in src[key], "mutation anchor missing " + label)
         changed = dict(src)
-        changed[key] = changed[key].replace(before, after, 1)
+        if label == "CHV_OFFSET":
+            # VLV and CHV each declare this property. Mutate the CHV
+            # record, not the earlier VLV entry (a prior false negative).
+            prefix, sep, tail = changed[key].partition(
+                "static const struct intel_device_info chv_info = {")
+            check(bool(sep) and before in tail.split("};", 1)[0],
+                  "CHV mutation must target the CHV declaration")
+            changed[key] = prefix + sep + tail.replace(before, after, 1)
+        else:
+            changed[key] = changed[key].replace(before, after, 1)
         try:
             validate(changed)
         except AssertionError:
