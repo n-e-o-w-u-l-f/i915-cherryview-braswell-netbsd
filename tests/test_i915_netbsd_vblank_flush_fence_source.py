@@ -10,7 +10,7 @@ from pathlib import Path
 REQUIRE = (
     ("worker removes queued node", "list_del_init(&work->node);\n\t\tKASSERT(!work->running);"),
     ("worker marks callback active", "work->running = true;"),
-    ("worker marks callback complete", "work->running = false;"),
+    ("worker marks callback complete", "work->running = false;\\n\\t\\tvblank->worker_running = false;"),
     ("worker executes callback", "(*work->base.func)(&work->base);"),
     ("fence inserted after existing ready callbacks",
      "list_add_tail(&fence.node, &vblank->ready_work);"),
