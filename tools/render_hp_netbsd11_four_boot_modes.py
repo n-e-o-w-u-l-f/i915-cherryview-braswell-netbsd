@@ -50,7 +50,7 @@ echo "Original Xsession missing" >&2; exit 127
 SYSLOG = "kern.*\t/var/log/hp-kernel-boot.log\n"
 DEBUG = """# Diagnostic kernel options: verify against actual NetBSD 11 source.
 options DDB
-options DDB_TEE_MSGBUF
+options DDB_TEE_MSGBUF=1
 options MSGBUFSIZE=262144
 # Isolated driver printf tags: G01 PCI, G02 MMIO, G03 GTT/GEM,
 # G04 VBT/eDP, G05 panel power, G06 AUX link, G07 DPIO/PLL,
