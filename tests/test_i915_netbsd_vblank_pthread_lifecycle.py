@@ -403,7 +403,11 @@ def main() -> None:
             mutated = methods.replace(frag, frag.replace(before, after, 1), 1)
             mutant_c = root / ("mutant_" + str(i) + ".c")
             mutant_bin = root / ("mutant_" + str(i))
-            mutant_c.write_text(PRELUDE + "\n" + mutated + "\n" + MAIN)
+            # A lost pending-ref transition deadlocks the pending-stage flush.
+            # Keep negative timeouts short and treat SIGALRM as the precise
+            # expected failure for that mutant rather than an assertion.
+            mutant_main = MAIN.replace("alarm(12);", "alarm(2);", 1)
+            mutant_c.write_text(PRELUDE + "\n" + mutated + "\n" + mutant_main)
             compile_bad = subprocess.run(
                 ["cc", "-std=gnu11", "-Wall", "-Wextra", "-Werror",
                  "-fsanitize=undefined", "-pthread", str(mutant_c),
@@ -413,7 +417,9 @@ def main() -> None:
                                      compile_bad.stderr[:800])
             bad = subprocess.run([str(mutant_bin)], capture_output=True,
                                  text=True, timeout=18, preexec_fn=no_core)
-            if bad.returncode != -signal.SIGABRT:
+            expected_signal = (signal.SIGALRM if i == 0
+                               else signal.SIGABRT)
+            if bad.returncode != -expected_signal:
                 raise AssertionError("unsafe mutation NOT caught: " +
                                      label + " RC=" + str(bad.returncode))
             print("VBLANK_PTHREAD_MUTANT_REFUSED_" + label.upper())
