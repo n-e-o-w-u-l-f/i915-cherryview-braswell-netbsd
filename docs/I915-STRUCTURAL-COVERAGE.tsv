@@ -16,7 +16,7 @@ display/intel_acpi.c	EXACT_ACTIVE_DIST	dist:display/intel_acpi.c	UNREVIEWED
 display/intel_alpm.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_atomic.c	EXACT_ACTIVE_DIST	dist:display/intel_atomic.c	UNREVIEWED
 display/intel_audio.c	EXACT_ACTIVE_DIST	dist:display/intel_audio.c	UNREVIEWED
-display/intel_backlight.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
+display/intel_backlight.c	ACTIVE_OVERRIDE_OR_MOVED	dist:display/intel_panel.c	UNREVIEWED
 display/intel_bios.c	EXACT_ACTIVE_DIST	dist:display/intel_bios.c	UNREVIEWED
 display/intel_bo.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_bw.c	EXACT_ACTIVE_DIST	dist:display/intel_bw.c	UNREVIEWED
@@ -46,7 +46,7 @@ display/intel_display_irq.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_display_params.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_display_power.c	EXACT_ACTIVE_DIST	dist:display/intel_display_power.c	UNREVIEWED
 display/intel_display_power_map.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
-display/intel_display_power_well.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
+display/intel_display_power_well.c	ACTIVE_OVERRIDE_OR_MOVED	dist:display/intel_display_power.c	UNREVIEWED
 display/intel_display_reset.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_display_rpm.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_display_rps.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
@@ -58,7 +58,7 @@ display/intel_dkl_phy.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_dmc.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_dmc_wl.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_dp.c	EXACT_ACTIVE_DIST	dist:display/intel_dp.c	UNREVIEWED
-display/intel_dp_aux.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
+display/intel_dp_aux.c	ACTIVE_OVERRIDE_OR_MOVED	dist:display/intel_dp.c	UNREVIEWED
 display/intel_dp_aux_backlight.c	EXACT_ACTIVE_DIST	dist:display/intel_dp_aux_backlight.c	UNREVIEWED
 display/intel_dp_hdcp.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_dp_link_caps.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
@@ -113,7 +113,7 @@ display/intel_pch_refclk.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_pfit.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_plane.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_pmdemand.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
-display/intel_pps.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
+display/intel_pps.c	ACTIVE_OVERRIDE_OR_MOVED	dist:display/intel_dp.c	UNREVIEWED
 display/intel_psr.c	EXACT_ACTIVE_DIST	dist:display/intel_psr.c	UNREVIEWED
 display/intel_qp_tables.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_quirks.c	EXACT_ACTIVE_DIST	dist:display/intel_quirks.c	UNREVIEWED
@@ -126,7 +126,7 @@ display/intel_sprite.c	EXACT_ACTIVE_DIST	dist:display/intel_sprite.c	UNREVIEWED
 display/intel_sprite_uapi.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
 display/intel_tc.c	EXACT_ACTIVE_DIST	dist:display/intel_tc.c	UNREVIEWED
 display/intel_tv.c	EXACT_ACTIVE_DIST	dist:display/intel_tv.c	UNREVIEWED
-display/intel_vblank.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
+display/intel_vblank.c	ACTIVE_OVERRIDE_OR_MOVED	dist:i915_irq.c	UNREVIEWED
 display/intel_vdsc.c	EXACT_ACTIVE_DIST	dist:display/intel_vdsc.c	UNREVIEWED
 display/intel_vga.c	EXACT_ACTIVE_DIST	dist:display/intel_vga.c	UNREVIEWED
 display/intel_vrr.c	UNRESOLVED_NO_BASENAME		UNREVIEWED
