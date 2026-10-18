@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""Generate, never install, the HP NetBSD-11 four-mode boot proposal."""
+import argparse
+import json
+from pathlib import Path
+
+KERNELS = ("netbsd-11-xfce4", "netbsd-11-kde", "netbsd-11-shell",
+           "netbsd-11-i915-rtl-diag")
+
+BOOT = """# Proposal only. Preserve and hash the existing /netbsd and F77 first.
+banner=HP NetBSD 11 - select desktop or diagnostic kernel
+format=n
+timeout=15
+default=3
+menu=NetBSD v11.0 with XFCE4:boot netbsd-11-xfce4
+menu=NetBSD v11.0 with KDE:boot netbsd-11-kde
+menu=NetBSD v11.0 shell only:boot netbsd-11-shell
+menu=NetBSD v11.0 logging i915+RTL8723BE:boot netbsd-11-i915-rtl-diag
+"""
+
+XDM_RC = """# Sourced by NetBSD rc.subr after rc.conf, for service xdm only.
+_hp_kernel="$(/sbin/sysctl -n machdep.booted_kernel 2>/dev/null)" || _hp_kernel=""
+case "$(/usr/bin/basename "$_hp_kernel")" in
+netbsd-11-xfce4|netbsd-11-kde) xdm=YES ;;
+netbsd-11-shell|netbsd-11-i915-rtl-diag) xdm=NO ;;
+*) : ;; # untouched fallback kernel: retain pre-existing xdm policy
+esac
+unset _hp_kernel
+"""
+
+XSESSION = """#!/bin/sh
+# Requires a backed-up original /etc/X11/xdm/Xsession and a narrow
+# xdm-config DisplayManager*session override verified on the HP.
+_hp_kernel="$(/sbin/sysctl -n machdep.booted_kernel 2>/dev/null)" || _hp_kernel=""
+case "$(/usr/bin/basename "$_hp_kernel")" in
+netbsd-11-xfce4)
+    if [ -x /usr/pkg/bin/xfce4-session ]; then exec /usr/pkg/bin/xfce4-session; fi
+    echo "XFCE4 session absent" >&2; exit 127 ;;
+netbsd-11-kde)
+    if [ -x /usr/pkg/bin/startplasma-x11 ]; then exec /usr/pkg/bin/startplasma-x11; fi
+    if [ -x /usr/pkg/bin/startkde ]; then exec /usr/pkg/bin/startkde; fi
+    echo "KDE X11 session absent" >&2; exit 127 ;;
+esac
+if [ -x /etc/X11/xdm/Xsession.pre-hp-modes ]; then
+    exec /etc/X11/xdm/Xsession.pre-hp-modes "$@"
+fi
+echo "Original Xsession missing" >&2; exit 127
+"""
+
+SYSLOG = "kern.*\t/var/log/hp-kernel-boot.log\n"
+DEBUG = """# Diagnostic kernel options: verify against actual NetBSD 11 source.
+options DDB
+options DDB_TEE_MSGBUF
+options MSGBUFSIZE=262144
+# Isolated driver printf tags: G01 PCI, G02 MMIO, G03 GTT/GEM,
+# G04 VBT/eDP, G05 panel power, G06 AUX link, G07 DPIO/PLL,
+# G08 pipe/fb, G09 wsdisplay. A userland log cannot survive a pre-rc hang.
+"""
+
+def render(stage):
+    stage = Path(stage)
+    if not stage.is_absolute() or stage == Path("/") or stage.exists():
+        raise ValueError("Require a NEW absolute, non-root stage directory")
+    files = {
+        "boot.cfg.proposed": BOOT,
+        "etc/rc.conf.d/xdm.proposed": XDM_RC,
+        "usr/local/libexec/hp-menu-xsession.proposed": XSESSION,
+        "etc/syslog.conf.kernel.proposed": SYSLOG,
+        "kernel-logging-options.proposed": DEBUG,
+    }
+    stage.mkdir(mode=0o700)
+    for name, content in files.items():
+        dest = stage / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(content, encoding="utf-8")
+    manifest = {
+        "status": "SOURCE_ONLY_NOT_INSTALLED",
+        "kernel_names": KERNELS,
+        "default_menu_option": 3,
+        "preconditions": [
+            "live HP NetBSD read-only identity and /boot.cfg check",
+            "all three standard kernel copies byte-identical with verified /netbsd",
+            "preserve byte-identical F77 image and manual boot-loader recovery",
+            "XFCE4 and KDE programs, X server and xdm verified",
+            "back up existing rc.conf.d/xdm, Xsession, xdm-config and syslog.conf",
+            "separate genuine i915+RTL native ELF for the diagnostic menu item",
+            "only then atomic install and readback, no unattended diagnostic boot",
+        ],
+        "written_files": list(files),
+    }
+    (stage / "stage-manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("--stage-dir", required=True)
+    args = p.parse_args()
+    print(json.dumps(render(args.stage_dir)))
