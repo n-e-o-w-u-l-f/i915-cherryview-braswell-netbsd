@@ -147,3 +147,11 @@ the target kernel, and HP GPU/KMS/eDP hardware evidence.
 COV-I915-008 stays IN_PROGRESS, and the 323-unit
 i915/DRM/TTM/LinuxKPI plus RTL8723BE contracts remain
 open. F77/F16.2 and F82 safety restrictions are unchanged.
+
+## 2026-10-18 frozen NetBSD patch replay; bounded source evidence
+
+- Legion fetched a **separate genuine shallow sparse Git checkout** of NetBSD/src at exact `03d918f6d0e81fa05b8f1160eca0628ad39988a6`; `git show HEAD:` was checked against all four frozen PPGTT owner/helper/reg C/H files.
+- Existing published `0001-chv-full-ppgtt-linux-1c8ee8b-netbsd11.patch` (SHA256 `629c1958d1bdd083b9d9a60e353f9a3f4f786c10b415bf5457929e768a08b09f`) **applies** with genuine `git apply --check` to the pinned NetBSD tree; exact two-file disposable patch application, a 32-bit `INTEL_PPGTT_FULL` CHV change, four PDP register-pair emission and pre-invalidate request gate were inspected. Duplicated application was refused; reverse application restored both original files byte-for-byte. **PASS, NetBSD source only**.
+- Actual immutable `gt/gen8_ppgtt.c` and `gt/gen6_ppgtt.c` were separately retrieved from the same frozen NetBSD revision. Existing `0016` and `0017` VM/error-cleanup patches each passed `git apply --check`, real scratch application, duplicate-application refusal and exact reversal. These checks **do not** run the published isolated C/sanitizer suites or a NetBSD compiler.
+- The frozen Linux sparse Git checkout **timed out after 170 s** before a Linux commit was materialized. A subsequent one-time direct frozen Linux file request returned **HTTP 429**. The current follow-up therefore **does not claim a new cross-Linux/NetBSD source-contract PASS**; the previously recorded historical semantic comparison remains earlier evidence, not today's full retest. The external fetch limit was not circumvented or blindly retried.
+- Required next work: full pinned Linux-vs-NetBSD function/ABI review when the same source becomes legitimately available, native NetBSD `intel_lrc.o`, `i915_pci.o`, PPGTT VM allocation and DMA/IRQ error paths, linked 323 semantic closure, then HP compile **only after** source closure. No HP install, boot, or physical KMS was performed.
