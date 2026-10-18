@@ -34,7 +34,16 @@ say "AUDIT_MODE=READ_ONLY"
 say "AUDIT_KERNEL_BUILD=NOT_RUN"
 say "AUDIT_INSTALL=NOT_RUN"
 say "AUDIT_BOOT_TEST=NOT_RUN"
-say "AUDIT_BOOTLOADER=UNKNOWN_REQUIRE_PHYSICAL_BIOS_UEFI_CHECK"
+# The historical HP UEFI audit observed machdep.bootmethod=UEFI,
+# but current mode must be read again; firmware mode is not an install path.
+if bootmethod=$(sysctl -n machdep.bootmethod 2>/dev/null); then
+  case "$bootmethod" in
+    UEFI|BIOS) say "AUDIT_BOOTLOADER=$bootmethod" ;;
+    *) say "AUDIT_BOOTLOADER=UNKNOWN_OTHER" ;;
+  esac
+else
+  say "AUDIT_BOOTLOADER=UNKNOWN_REQUIRE_PHYSICAL_BIOS_UEFI_CHECK"
+fi
 say "uname=$(uname -srm 2>/dev/null || printf UNKNOWN)"
 if kernel=$(sysctl -n machdep.booted_kernel 2>/dev/null); then
   say "booted_kernel=$kernel"
@@ -48,7 +57,9 @@ done
 # Never infer F77 file location from the last documented F77 boot.
 say "f77_recovery_sha256=UNKNOWN_REQUIRE_ACTUAL_PATH"
 bool_file "bios_boot_cfg" /boot.cfg
-bool_file "uefi_esp_boot_cfg" /EFI/NetBSD/boot.cfg
+# Never confuse the NetBSD root directory with the FAT EFI partition.
+# The actual mounted ESP and loader read path must be identified separately.
+say "uefi_esp_boot_cfg=UNKNOWN_REQUIRES_ESP_MOUNTPOINT_READBACK"
 # A mounted EFI system partition may be elsewhere; presence is NOT proof of use.
 say "authoritative_boot_cfg=UNKNOWN_REQUIRE_LOADER_AND_ESP_CHECK"
 bool_file "rc_conf" /etc/rc.conf
