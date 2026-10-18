@@ -41,12 +41,14 @@ def function(text: str, symbol: str) -> str:
     raise AssertionError("CHV_AUX_SOURCE_REFUSED: unmatched function body " + symbol)
 
 
-def macro_value(text: str, name: str, expected: int) -> None:
+def macro_value(text: str, name: str, expected: int) -> int:
     match = re.search(r"(?m)^#define\s+" + re.escape(name) +
                       r"\s+(?:\(\s*DISPLAY_MMIO_BASE\(dev_priv\)\s*\+\s*)?"
                       r"(0x[0-9a-fA-F]+)", text)
     check(match is not None, "missing MMIO macro: " + name)
-    check(int(match[1], 16) == expected, "offset mismatch: " + name)
+    observed = int(match[1], 16)
+    check(observed == expected, "offset mismatch: " + name)
+    return observed
 
 
 def validate(src: dict[str, str]) -> None:
@@ -60,16 +62,18 @@ def validate(src: dict[str, str]) -> None:
     check("GEN(8)" in chv and
           ".display_mmio_offset = VLV_DISPLAY_BASE" in chv,
           "CHV is not anchored to NetBSD VLV display MMIO")
-    for text, tag in ((n_reg, "NetBSD"), (l_defs, "Linux")):
-        macro_value(text, "VLV_DISPLAY_BASE", 0x180000)
+    netbsd_base = macro_value(n_reg, "VLV_DISPLAY_BASE", 0x180000)
+    linux_base = macro_value(l_defs, "VLV_DISPLAY_BASE", 0x180000)
+    offsets = {}
     for text, tag in ((n_reg, "NetBSD"), (l_reg, "Linux")):
-        for prefix, low, high in (
-            ("_DPA_AUX_CH_CTL", 0x64010, None),
-            ("_DPB_AUX_CH_CTL", 0x64110, None),
-            ("_DPA_AUX_CH_DATA1", 0x64014, None),
-            ("_DPB_AUX_CH_DATA1", 0x64114, None),
+        offsets[tag] = {}
+        for name, expected in (
+            ("_DPA_AUX_CH_CTL", 0x64010),
+            ("_DPB_AUX_CH_CTL", 0x64110),
+            ("_DPA_AUX_CH_DATA1", 0x64014),
+            ("_DPB_AUX_CH_DATA1", 0x64114),
         ):
-            macro_value(text, prefix, low)
+            offsets[tag][name] = macro_value(text, name, expected)
     check("#define DISPLAY_MMIO_BASE(dev_priv)" in n_reg and
           "INTEL_INFO(dev_priv)->display_mmio_offset" in n_reg,
           "NetBSD DISPLAY_MMIO_BASE dispatch changed")
@@ -104,15 +108,23 @@ def validate(src: dict[str, str]) -> None:
     check("VLV_DP_AUX_CH_CTL(aux_ch)" in l_ctl and
           "VLV_DP_AUX_CH_DATA(aux_ch, index)" in l_data,
           "Linux CHV AUX macro dispatch mismatch")
-    # The two source expressions yield equal MMIO addresses for all ports.
+    # Compute independently from each pinned source's macro operands,
+    # rather than comparing the same hard-coded address expression.
     for port_index in (1, 2, 3):  # AUX B, C, D
-        for data_index in range(5):
-            relative = 0x64014 + port_index * 0x100 + data_index * 4
-            linux = 0x180000 + relative
-            netbsd = 0x180000 + relative
-            check(linux == netbsd, "AUX data MMIO mismatch")
-        ctl = 0x180000 + 0x64010 + port_index * 0x100
-        check(ctl >= 0x1e4110, "AUX control MMIO invalid")
+        for data_index in range(-1, 5):  # -1 denotes AUX channel control
+            name_a = "_DPA_AUX_CH_CTL" if data_index == -1 else "_DPA_AUX_CH_DATA1"
+            name_b = "_DPB_AUX_CH_CTL" if data_index == -1 else "_DPB_AUX_CH_DATA1"
+            values = []
+            for owner, base in (("Linux", linux_base), ("NetBSD", netbsd_base)):
+                owner_offsets = offsets[owner]
+                low, high = owner_offsets[name_a], owner_offsets[name_b]
+                addr = base + low + (high - low) * port_index
+                if data_index >= 0:
+                    addr += 4 * data_index
+                values.append(addr)
+            check(values[0] == values[1],
+                  "AUX MMIO mismatch: port=" + str(port_index) +
+                  " data=" + str(data_index))
 
 
 def run(source_paths: dict[str, Path]) -> None:
