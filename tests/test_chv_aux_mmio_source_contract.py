@@ -146,6 +146,14 @@ def run(source_paths: dict[str, Path]) -> None:
             check(bool(sep) and before in tail.split("};", 1)[0],
                   "CHV mutation must target the CHV declaration")
             changed[key] = prefix + sep + tail.replace(before, after, 1)
+        elif label == "LINUX_CHV_DISPATCH":
+            # Earlier AUX helper code also mentions Cherryview; only the
+            # actual intel_dp_aux_init dispatch is relevant to this test.
+            prefix, sep, tail = changed[key].partition(
+                "void intel_dp_aux_init(struct intel_dp *intel_dp)")
+            check(bool(sep) and before in function(changed[key], "intel_dp_aux_init"),
+                  "Linux CHV dispatch mutation missed initializer")
+            changed[key] = prefix + sep + tail.replace(before, after, 1)
         else:
             changed[key] = changed[key].replace(before, after, 1)
         try:
