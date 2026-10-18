@@ -15,9 +15,6 @@ struct drm_vblank_work {
 	struct kthread_work base;
 	struct drm_vblank_crtc *vblank;
 	u64 count;
-	/* Accepted schedule and IRQ/ready/cancel handoff generations. */
-	u64 generation;
-	u64 handoff_generation;
 	int cancelling;
 	struct list_head node;
 	bool pending_ref;
