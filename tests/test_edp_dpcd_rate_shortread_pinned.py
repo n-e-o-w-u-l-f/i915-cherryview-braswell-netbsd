@@ -22,7 +22,7 @@ NEW = (
     "\t\t\t\t     sink_rates, sizeof(sink_rates)) !=\n"
     "\t\t    (ssize_t)sizeof(sink_rates)) {\n"
     "\t\t\tDRM_DEBUG_KMS(\"Unable to read eDP supported link rates, \"\n"
-    "\t\t\t\t\t      \"using default rates\\n\");\n"
+    "\t\t\t\t      \"using default rates\\n\");\n"
     "\t\t\tmemset(sink_rates, 0, sizeof(sink_rates));\n"
     "\t\t}"
 )
