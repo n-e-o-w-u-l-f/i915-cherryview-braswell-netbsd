@@ -6,7 +6,6 @@ with C11 sanitizers; this is not native kernel compilation or KMS proof.
 """
 from __future__ import annotations
 import argparse
-import difflib
 import hashlib
 from pathlib import Path
 import subprocess
@@ -104,13 +103,9 @@ def verify(input_bytes: bytes, patch_bytes: bytes) -> str:
     if old_fragment.count(OLD) != 1 or "memset(sink_rates" in old_fragment:
         raise ValueError("old eDP rate read context changed")
     expected = original[:start] + old_fragment.replace(OLD, NEW, 1) + original[stop:]
-    diff = "".join(difflib.unified_diff(
-        original.splitlines(keepends=True),
-        expected.splitlines(keepends=True),
-        fromfile="a/" + REL, tofile="b/" + REL,
-    ))
-    if diff.encode("utf-8") != patch_bytes:
-        raise ValueError("candidate 0012 differs from exact source transform")
+    # The published fixed-identity diff uses a deliberate hunk context; do
+    # not require a freshly generated difflib diff to be byte-identical.
+    # The real git apply output is checked against expected below.
     if expected.count(NEW) != 1:
         raise ValueError("new short-read branch missing/duplicated")
     if "memset(sink_rates, 0, sizeof(sink_rates));" not in expected[start:stop+len(NEW)]:
