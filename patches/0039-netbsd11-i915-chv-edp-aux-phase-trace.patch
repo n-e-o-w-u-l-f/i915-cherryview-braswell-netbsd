@@ -1,0 +1,93 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -3591,7 +3591,13 @@
+ 		intel_dp_enable_port(intel_dp, pipe_config);
+ 
+ 		edp_panel_vdd_on(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.P1] EDP_PANEL BEGIN\n");
++#endif
+ 		edp_panel_on(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.P1] EDP_PANEL END\n");
++#endif
+ 		edp_panel_vdd_off(intel_dp, true);
+ 	}
+ 
+@@ -3606,8 +3612,20 @@
+ 	}
+ 
+ 	intel_dp_sink_dpms(intel_dp, DRM_MODE_DPMS_ON);
++#ifdef __NetBSD__
++	printf("[I915 G08.L1] LINK_TRAIN BEGIN\n");
++#endif
+ 	intel_dp_start_link_train(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.L1] LINK_TRAIN END\n");
++#endif
++#ifdef __NetBSD__
++	printf("[I915 G08.L2] LINK_STOP BEGIN\n");
++#endif
+ 	intel_dp_stop_link_train(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.L2] LINK_STOP END\n");
++#endif
+ 
+ 	if (pipe_config->has_audio) {
+ 		DRM_DEBUG_DRIVER("Enabling DP audio on pipe %c\n",
+@@ -3770,7 +3788,13 @@
+ 			      const struct intel_crtc_state *pipe_config,
+ 			      const struct drm_connector_state *conn_state)
+ {
++#ifdef __NetBSD__
++	printf("[I915 G08.C1] CHV_PHY BEGIN\n");
++#endif
+ 	chv_phy_pre_encoder_enable(encoder, pipe_config);
++#ifdef __NetBSD__
++	printf("[I915 G08.C1] CHV_PHY END\n");
++#endif
+ 
+ 	intel_enable_dp(encoder, pipe_config, conn_state);
+ 
+@@ -3784,7 +3808,13 @@
+ {
+ 	intel_dp_prepare(encoder, pipe_config);
+ 
++#ifdef __NetBSD__
++	printf("[I915 G08.C2] CHV_PLL BEGIN\n");
++#endif
+ 	chv_phy_pre_pll_enable(encoder, pipe_config);
++#ifdef __NetBSD__
++	printf("[I915 G08.C2] CHV_PLL END\n");
++#endif
+ }
+ 
+ static void chv_dp_post_pll_disable(struct intel_encoder *encoder,
+@@ -7379,7 +7409,13 @@
+ 	}
+ 
+ 	/* Cache DPCD and EDID for edp. */
++#ifdef __NetBSD__
++	printf("[I915 G08.A2] EDP_DPCD BEGIN\n");
++#endif
+ 	has_dpcd = intel_edp_init_dpcd(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.A2] EDP_DPCD END success=%d\n", has_dpcd);
++#endif
+ 
+ 	if (!has_dpcd) {
+ 		/* if this fails, presume the device is a ghost */
+@@ -7554,7 +7590,13 @@
+ 
+ 	intel_encoder->hpd_pin = intel_hpd_pin_default(dev_priv, port);
+ 
++#ifdef __NetBSD__
++	printf("[I915 G08.A1] AUX_INIT BEGIN\n");
++#endif
+ 	intel_dp_aux_init(intel_dp);
++#ifdef __NetBSD__
++	printf("[I915 G08.A1] AUX_INIT END\n");
++#endif
+ 
+ 	intel_connector_attach_encoder(intel_connector, intel_encoder);
+ 
