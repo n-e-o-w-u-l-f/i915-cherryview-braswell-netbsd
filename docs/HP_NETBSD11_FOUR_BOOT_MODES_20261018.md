@@ -105,6 +105,40 @@ the real HP audit was run.
 7. On any mismatch use the pre-existing verified boot menu/kernel
    rather than discovering the recovery path by repeated blackscreens.
 
+### NetBSD pre-syslog logfile creation, isolated staging
+
+NetBSD `syslogd` does **not** create a missing output file.
+The renderer now includes **two additional staged-only artifacts**:
+
+- `etc/rc.d/hpbootlogprep.proposed`: opt-in NetBSD
+  `rc.subr` service, `PROVIDE: hpbootlogprep`,
+  `REQUIRE: mountcritlocal`, `BEFORE: newsyslog syslogd`.
+  It creates the file `/var/log/hp-kernel-boot.log` with
+  `umask 077` and shell `noclobber` only when missing. Existing
+  regular files are left intact; symlink and directory targets fail.
+- `etc/rc.conf.d/hpbootlogprep.proposed`: sets
+  `hpbootlogprep=YES`, to be activated **only after** verifying the
+  original HP rc.d/service layout, file mode, logrotate ownership
+  and source/configuration backups.
+
+The proposed `kern.* /var/log/hp-kernel-boot.log` syslog selector
+remains staged. The rc.d file, rc.conf.d setting, syslog route,
+filesystem mode and service order must be verified together on a
+legitimate HP owner session before any **atomic** deployment.
+
+The source test `tests/test_hp_kernel_presyslog_rc_source.py` extracts
+the precise shell creation function into a disposable fixture: new
+file mode 0600 PASS, preexisting content unchanged PASS, symlink and
+directory refusal PASS, `sh -n` PASS. On Legion exact i915 commit
+`ab774429472e481e78531786b009467b65773cf9`, all three
+boot/audit/pre-syslog Python source tests EXIT 0.
+
+**Important timing limit:** neither this service nor syslogd can
+persist a freeze *before* /var is mounted and userland begins.
+The kernel msgbuf, DDB and configured dumps remain independent
+diagnostic layers, with physically verifiable early console still
+needed for a non-dumpable hard lockup.
+
 ### Diagnostic logging and shared i915+RTL build
 
 Kernel KMS init occurs BEFORE userspace and filesystem logging. The
