@@ -85,7 +85,7 @@ def main():
       ("idle_timeout","vlv_sideband_rw","return -EAGAIN;","return -EBUSY;"),
       ("finish_timeout","vlv_sideband_rw","10000, 0, NULL","9000, 0, NULL"),
       ("lost_preemption","vlv_sideband_rw","preempt_disable();","/*removed*/"),
-      ("wrong_opcode","vlv_sideband_rw","SB_MWR_NP","SB_MRD_NP"),
+      ("wrong_read_opcode","vlv_sideband_rw","SB_MRD_NP","SB_MWR_NP"),
       ("lost_valleyview_qos","__vlv_punit_get",
        "pm_qos_update_request(&i915->sb_qos, 0);","/*removed*/"),
       ("lost_cpu_ping","__vlv_punit_get","on_each_cpu(ping, NULL, 1);","/*removed*/"),
