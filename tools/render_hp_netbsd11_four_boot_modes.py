@@ -48,6 +48,46 @@ echo "Original Xsession missing" >&2; exit 127
 """
 
 SYSLOG = "kern.*\t/var/log/hp-kernel-boot.log\n"
+# New, opt-in rc.d service. /var must exist before writing the log.
+# A normal userspace syslogd never guarantees pre-mount freeze persistence.
+BOOTLOG_RC = """#!/bin/sh
+# PROVIDE: hpbootlogprep
+# REQUIRE: mountcritlocal
+# BEFORE: newsyslog syslogd
+
+$_rc_subr_loaded . /etc/rc.subr
+
+name="hpbootlogprep"
+rcvar="$name"
+start_cmd="hpbootlogprep_start"
+stop_cmd=":"
+
+hpbootlogprep_file()
+{
+    target=$1
+    if [ -L "$target" ]; then
+        return 1
+    fi
+    if [ -e "$target" ]; then
+        [ -f "$target" ] || return 1
+        return 0
+    fi
+    # O_EXCL-style shell noclobber avoids overwriting a racing file.
+    ( umask 077; set -C; : > "$target" ) || return 1
+    [ -f "$target" ] && [ ! -L "$target" ]
+}
+
+hpbootlogprep_start()
+{
+    [ -d /var/log ] || return 1
+    hpbootlogprep_file /var/log/hp-kernel-boot.log
+}
+
+load_rc_config "$name"
+run_rc_command "$1"
+"""
+
+BOOTLOG_RCCONF = "hpbootlogprep=YES\\n"
 DEBUG = """# Diagnostic kernel options: verify against actual NetBSD 11 source.
 options DDB
 options DDB_TEE_MSGBUF=1
@@ -66,6 +106,8 @@ def render(stage):
         "etc/rc.conf.d/xdm.proposed": XDM_RC,
         "usr/local/libexec/hp-menu-xsession.proposed": XSESSION,
         "etc/syslog.conf.kernel.proposed": SYSLOG,
+        "etc/rc.d/hpbootlogprep.proposed": BOOTLOG_RC,
+        "etc/rc.conf.d/hpbootlogprep.proposed": BOOTLOG_RCCONF,
         "kernel-logging-options.proposed": DEBUG,
     }
     stage.mkdir(mode=0o700)
@@ -95,6 +137,8 @@ def render(stage):
             "back up existing rc.conf.d/xdm, Xsession, xdm-config and syslog.conf",
             "verify current rc.d/xdm and xdm security/session policy before choosing XDM wrapper",
             "syslogd requires precreated /var/log/hp-kernel-boot.log; prove kernel facility route and rotation",
+            "enable hpbootlogprep=YES only after verifying pinned NetBSD rcorder REQUIRE mountcritlocal BEFORE newsyslog/syslogd",
+            "no live file or rc.d installation until actual HP filesystem and syslogd config readback",
             "confirm dumpdev/savecore and actual independent recovery, not just dmesg.boot",
             "separate genuine i915+RTL native ELF for the diagnostic menu item",
             "only then atomic install and readback, no unattended diagnostic boot",
