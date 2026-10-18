@@ -67,6 +67,8 @@ def main() -> None:
         orig.splitlines(keepends=True), new.splitlines(keepends=True),
         fromfile="a/" + m.REL, tofile="b/" + m.REL))
     assert patch.count("+\tprintf(") == 18
+    committed_patch = ROOT / "patches/0038-netbsd11-i915-g01-g09-boottrace.patch"
+    assert committed_patch.read_text() == patch, "committed phase patch differs from generator"
     with tempfile.TemporaryDirectory(prefix="netbsd-i915-trace-fixture-") as td:
         root = Path(td)
         target = root / m.REL
