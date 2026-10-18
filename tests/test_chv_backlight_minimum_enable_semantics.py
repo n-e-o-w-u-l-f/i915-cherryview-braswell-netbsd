@@ -61,18 +61,18 @@ static struct intel_connector *to_intel_connector(void *c){
 }
 #define WARN_ON(cond) ((void)(cond))
 #define BACKLIGHT_POWER_ON 1
-static u32 scale_hw_to_user(struct intel_connector *c,u32 val,u32 max){
+static inline u32 scale_hw_to_user(struct intel_connector *c,u32 val,u32 max){
  (void)c;(void)max;return val;
 }
 static u32 observed;
 static unsigned enable_calls;
-static void native_enable(const struct intel_crtc_state *c,
+static inline void native_enable(const struct intel_crtc_state *c,
                           const struct drm_connector_state *s){
  (void)c;
  struct intel_connector *connector=to_intel_connector(s->connector);
  observed=connector->panel.backlight.level;enable_calls++;
 }
-static void linux_enable(const struct intel_crtc_state *c,
+static inline void linux_enable(const struct intel_crtc_state *c,
                          const struct drm_connector_state *s,u32 level){
  (void)c;(void)s;observed=level;enable_calls++;
 }
@@ -197,7 +197,9 @@ def main():
             ("netbsd_original_negative",old,NATIVE,True),
         ):
             c=root/(label+".c");exe=root/label
-            src="#define __NetBSD__ 1\n"+STUBS+"\n"+function+"\n"
+            # Host libc headers must parse under the host OS macros.
+            # Enable NetBSD guards only for the imported source function.
+            src=STUBS+"\n#define __NetBSD__ 1\n"+function+"\n"
             src+="#define DRIVER_CALL "+call+"\n"
             src+="#define ALLOW_EXPECTED_MISMATCH "+str(int(allow))+"\n"+MAIN
             c.write_text(src)
