@@ -238,6 +238,40 @@ drm_vblank_work_cancel_sync(struct drm_vblank_work *work)
 	return cancelled;
 }
 
+/*
+ * A worker-ordered fence, rather than a live-queue-empty wait.  A flush
+ * must not wait for new ready work enqueued after its own fence, e.g. by a
+ * callback that continuously rearms itself.  The stack-local sentinel
+ * remains alive until the worker has stopped referencing it.
+ *
+ * Caller holds event_lock.  The worker must still be live: lifecycle
+ * cleanup joins the thread only after clients have quiesced.
+ */
+static void
+nb_vblank_flush_fence_func(struct kthread_work *base)
+{
+	(void)base;
+}
+
+static void
+nb_vblank_flush_ready_locked(struct drm_vblank_crtc *vblank)
+{
+	struct drm_device *dev = vblank->dev;
+	struct drm_vblank_work fence = { 0 };
+	int error;
+
+	KASSERT(spin_is_locked(&dev->event_lock));
+	INIT_LIST_HEAD(&fence.node);
+	fence.base.func = nb_vblank_flush_fence_func;
+	list_add_tail(&fence.node, &vblank->ready_work);
+	DRM_SPIN_WAKEUP_ALL(&vblank->worker_wait_queue,
+	    &dev->event_lock);
+	DRM_SPIN_WAIT_NOINTR_UNTIL(error, &vblank->work_wait_queue,
+	    &dev->event_lock,
+	    list_empty(&fence.node) && !fence.running);
+	KASSERT(error == 0);
+}
+
 void
 drm_vblank_work_flush(struct drm_vblank_work *work)
 {
@@ -247,10 +281,18 @@ drm_vblank_work_flush(struct drm_vblank_work *work)
 	int error;
 
 	spin_lock_irqsave(&dev->event_lock, flags);
+	/*
+	 * Wait only for the VBlank pending stage to hand the work over
+	 * to the ready queue (or to cancel it).  A queue fence then waits
+	 * for all work ahead of it, including an already-running callback.
+	 * Concurrent rearming during this pending wait still needs a
+	 * generation-specific contract; see the scheduling parity audit.
+	 */
 	DRM_SPIN_WAIT_NOINTR_UNTIL(error, &vblank->work_wait_queue,
-	    &dev->event_lock,
-	    list_empty(&work->node) && !work->running);
+	    &dev->event_lock, !work->pending_ref);
 	KASSERT(error == 0);
+	if (!list_empty(&work->node) || work->running)
+		nb_vblank_flush_ready_locked(vblank);
 	spin_unlock_irqrestore(&dev->event_lock, flags);
 }
 
@@ -265,10 +307,8 @@ drm_vblank_work_flush_all(struct drm_crtc *crtc)
 
 	spin_lock_irqsave(&dev->event_lock, flags);
 	DRM_SPIN_WAIT_NOINTR_UNTIL(error, &vblank->work_wait_queue,
-	    &dev->event_lock,
-	    list_empty(&vblank->pending_work) &&
-	    list_empty(&vblank->ready_work) &&
-	    !vblank->worker_running);
+	    &dev->event_lock, list_empty(&vblank->pending_work));
 	KASSERT(error == 0);
+	nb_vblank_flush_ready_locked(vblank);
 	spin_unlock_irqrestore(&dev->event_lock, flags);
 }
