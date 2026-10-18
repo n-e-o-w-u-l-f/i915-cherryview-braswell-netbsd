@@ -87,7 +87,7 @@ load_rc_config "$name"
 run_rc_command "$1"
 """
 
-BOOTLOG_RCCONF = "hpbootlogprep=YES\\n"
+BOOTLOG_RCCONF = "hpbootlogprep=YES\n"
 DEBUG = """# Diagnostic kernel options: verify against actual NetBSD 11 source.
 options DDB
 options DDB_TEE_MSGBUF=1
