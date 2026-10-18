@@ -79,6 +79,7 @@ def render(stage):
         "default_menu_option": 3,
         "boot_loader_policy": {
             "active_firmware_mode": "UNKNOWN_REQUIRE_LIVE_HP_PROOF",
+            "last_documented_mode": "UEFI in docs/UEFI-BOOT-CHAIN.md; historical, recheck machdep.bootmethod",
             "bios_cfg": "/boot.cfg",
             "uefi_cfg": "/EFI/NetBSD/boot.cfg on the EFI system partition",
             "install_target": "UNKNOWN_DO_NOT_INSTALL",
