@@ -30,6 +30,17 @@ LINUX_ROOT_NAMES = {
     "display/vlv_sideband.c": "intel_sideband.c",
     "gt/intel_ggtt_fencing.c": "i915_gem_fence_reg.c",
 }
+# The legitimate Legion NetBSD worktree has six already modified i915
+# sources. Exact live blob identities are pinned separately. They are not
+# mislabeled as pristine frozen NetBSD or silently reset in-place.
+KNOWN_LOCAL_SOURCE_OVERLAYS = {
+    "display/intel_display.c": "b6d3b14e6467a14f34bb34d669b6feebaf6a5c8c",
+    "display/intel_display_power.c": "0bec2ec1aea544f29fb89996e57433d55d719463",
+    "display/intel_dp.c": "b8cb2d02793c867b1472ec0085f65b33b0673c99",
+    "gt/intel_lrc.c": "bd0a19f8a930c9f606ab35387fcfccd471f15e37",
+    "i915_pci.c": "14922ca1a75b8a17a25965c2a1241cc88394e74b",
+    "i915_reg.h": "70ae165e387ebb8331a45e41bab400b225150642",
+}
 REVIEW_GATES = (
     "linux_original_source_read",
     "chv_pci_reachability_verified",
@@ -93,16 +104,27 @@ def main() -> None:
     need(n["c_source_count"] == 264, "NetBSD frozen C owner count changed")
     native = x.netbsd_root / NETBSD_DIST
     all_native = {}
+    known_overlay = {}
+    frozen_unchanged = 0
     for f in n["files"]:
         candidate = native / f["path"]
         need(candidate.is_file() and not candidate.is_symlink(),
              "NetBSD source missing/symlink " + f["path"])
         data = candidate.read_bytes()
-        need(blob(data) == f["blob"],
-             "NetBSD frozen source SHA mismatch " + f["path"])
+        observed = blob(data)
+        if observed != f["blob"]:
+            need(KNOWN_LOCAL_SOURCE_OVERLAYS.get(f["path"]) == observed,
+                 "unexpected or unapproved native worktree drift " + f["path"])
+            known_overlay[f["path"]] = observed
+        else:
+            need(f["path"] not in KNOWN_LOCAL_SOURCE_OVERLAYS,
+                 "historical local source overlay unexpectedly disappeared " + f["path"])
+            frozen_unchanged += 1
         if f["path"].endswith(".c"):
             all_native[f["path"]] = funcs(data.decode(errors="replace"))
     need(len(all_native) == 264, "native C source inventory drift")
+    need(known_overlay == KNOWN_LOCAL_SOURCE_OVERLAYS,
+         "six known local overlay identities differ")
     # Build owner selection is distinct from mere existence in tree.
     selected = set()
     for p in (
@@ -194,7 +216,9 @@ def main() -> None:
         "linux_pin": LINUX_FROZEN,
         "netbsd_pin": NETBSD_FROZEN,
         "total": 300,
-        "native_c_blobs_pin_verified": 264,
+        "native_c_files_indexed": 264,
+        "netbsd_code_blobs_frozen_unchanged": frozen_unchanged,
+        "netbsd_known_local_modified_blobs": known_overlay,
         "linux_originals_content_verified": observed_linux,
         "summary": dict(sorted(summary.items())),
         "semantics_verified_and_accepted": 0,
@@ -209,7 +233,9 @@ def main() -> None:
     x.out.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
         "total": 300,
-        "netbsd_c_blobs_verified": 264,
+        "netbsd_c_files_indexed": 264,
+        "netbsd_all_code_blobs_frozen_unchanged": frozen_unchanged,
+        "netbsd_known_source_overlays": len(known_overlay),
         "linux_source_read": observed_linux,
         "summary": result["summary"],
         "semantic_verified": result["semantics_verified_and_accepted"],
