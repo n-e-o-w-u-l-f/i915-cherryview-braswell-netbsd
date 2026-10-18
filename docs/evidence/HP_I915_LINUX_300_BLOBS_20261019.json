@@ -1,0 +1,2714 @@
+{
+  "schema": "hp-i915-all-300-linux-immutable-reference-blobs/v1",
+  "inventory_type": "GIT_TREE_SOURCE_EXISTENCE_ONLY_NOT_SEMANTIC_VERIFICATION",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "linux_i915_tree_pin": "7539d62f58a7e879ed3899b7805f49ddba109846",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "matrix_blob": "011789f5dc3ef916b34019f088abcf53ef20e369",
+  "active_total": 323,
+  "unreviewed": 300,
+  "missing_git_blobs": [],
+  "rows": [
+    {
+      "linux_source": "display/dvo_ch7017.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_ch7017.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "326b08e7a362a47d8c87df89161f66e0eae2ffac",
+      "linux_bytes": 12680,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/dvo_ch7xxx.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_ch7xxx.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1382fe195bb1d53073bb10c0e6b40c70c9bfbef5",
+      "linux_bytes": 8876,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/dvo_ivch.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_ivch.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0970dc6fd73dec28b4fea8595b95a8e37e0661cf",
+      "linux_bytes": 12180,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/dvo_ns2501.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_ns2501.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6a6072b7841045b1cecbd99bcb7f47b10d4e918d",
+      "linux_bytes": 22424,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/dvo_sil164.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_sil164.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c6989a4bad0f1bbce123ba78ac4dae6215f9889f",
+      "linux_bytes": 7099,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/dvo_tfp410.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/dvo_tfp410.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "10d8dd4f4d176b86b40eedaa0fca466f6cb3b128",
+      "linux_bytes": 8217,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/g4x_dp.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b867443ff22721225689ddccca671fa36b9ea80d",
+      "linux_bytes": 42983,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/g4x_hdmi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4c33aa1d1d32e563577deddf815fa354ec26285f",
+      "linux_bytes": 23689,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/hsw_ips.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f828ec96216428c9040d57f252bb917deac34164",
+      "linux_bytes": 9901,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/i9xx_display_sr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1eb2f636cc65083edc198ec40ef9b43fb6294b67",
+      "linux_bytes": 2977,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/i9xx_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "df6da1c6a3593c713f9a651c59dbfd5856f9006d",
+      "linux_bytes": 37489,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/i9xx_wm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "86d1c9f7f0ff01f1f331aee092e0663c6e724a93",
+      "linux_bytes": 125423,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/icl_dsi.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:icl_dsi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ea0cdb7822f39f4d46e13f63858ab78055aed4f4",
+      "linux_bytes": 61680,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_acpi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_acpi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e06f324027bec90510e207039ea6ed0259ee62cc",
+      "linux_bytes": 9718,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_alpm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f1383764b7028f8391291842b60eff8b774a24b2",
+      "linux_bytes": 19642,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_atomic.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_atomic.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9d0d47c79dd12dd48d98d92022c4655ccff775b1",
+      "linux_bytes": 11823,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_audio.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_audio.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "eae76e9611055ea684dd98c34889be2413a89f80",
+      "linux_bytes": 45909,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_backlight.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:display/intel_panel.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b128896cb1c2de2d04225202da8f877a2319ee66",
+      "linux_bytes": 59384,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_bios.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_bios.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "97cbae2e547e2d11da6cc0e9f92801bf7ca969b3",
+      "linux_bytes": 107883,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_bo.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8ecdbb7e39f3df5e9f3901f60a9a27fe809e2243",
+      "linux_bytes": 3185,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_bw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_bw.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "99fd84a5ac13bf8002d100964c4e6042f743165b",
+      "linux_bytes": 42466,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_casf.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "cafd21a036320ced73d3a6370dd02b9313bd4163",
+      "linux_bytes": 7092,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_cdclk.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_cdclk.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a1a5720996b708d4b6e9ae9d189ec65a81af6dfd",
+      "linux_bytes": 127793,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_cmtg.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c8e0f90af91082b1a769080400e5aef89d747cf9",
+      "linux_bytes": 14650,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_color.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_color.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "87ced9f6ff408f4ee2ef1c1a6d09da8ec07ca85b",
+      "linux_bytes": 128477,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_color_pipeline.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6cf8080ee80003b0da9ff3c1a261c5a1bdf02102",
+      "linux_bytes": 4881,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_colorop.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2ec10cebaba5616156ef3a965bf98b811c38961f",
+      "linux_bytes": 799,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_combo_phy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_combo_phy.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9b4ecfbbed4f9a8e343176a9c88728f3b9aede4c",
+      "linux_bytes": 11345,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_connector.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_connector.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7ef9338d67abf07617dad228890fd9f4de260206",
+      "linux_bytes": 9856,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_crt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_crt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5b8968197fbcf04d1d582fe29d264cf14648df6e",
+      "linux_bytes": 33299,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_crtc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "10ed9bdfee763ccf88a613fe6d4d9acc09b0aa0d",
+      "linux_bytes": 25550,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_crtc_state_dump.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4493483f10a9e5b803625090ef1d582030f3f21d",
+      "linux_bytes": 14273,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_cursor.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "824ffeef0103cdc3d56c1c7c9a92afa07a58b98a",
+      "linux_bytes": 32958,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_cx0_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "dbebd7210848496ac09b47dd160aea7ad0bac5bf",
+      "linux_bytes": 116858,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dbuf_bw.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6cf674c586dc48a1a3fc1275b83524470a382916",
+      "linux_bytes": 8027,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_ddi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_ddi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "02a53c9848e1374bbde4b65a848c2792bc4a6968",
+      "linux_bytes": 170376,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_ddi_buf_trans.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4cd1e4d76c7afadb0060146c58fe849e8c1d57b5",
+      "linux_bytes": 74815,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_de.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a7417905192d120ad1270867c763fe22b3898e77",
+      "linux_bytes": 3945,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_display.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9dfd095f325f7d111e5525c522da5353b7c3282d",
+      "linux_bytes": 259260,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_clock_gating.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d036c7e5863d4a8698c53926763f5621c3ce036d",
+      "linux_bytes": 7964,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_conversion.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9a47aa38cf8246f9f1dba8080d438f47c42c70e0",
+      "linux_bytes": 622,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_device.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f17fc2c684724ed4be30f8e89471f02d0a86f194",
+      "linux_bytes": 55652,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_driver.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "70d112fd4287a307e461f9eeb5847a931518e4d2",
+      "linux_bytes": 24980,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_irq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a59b75830bd137b95dc7ae9d9b0ca486c1356eef",
+      "linux_bytes": 77860,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_params.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2aed110c5b090b760e288d6ad71bf6e12b77796a",
+      "linux_bytes": 8349,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_power.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_display_power.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0ebec6e0c24004b9188fe7a8408866143ea82c8f",
+      "linux_bytes": 83811,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_power_map.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3400080d78d2a3a164cd7eac1ba2d56b614efab0",
+      "linux_bytes": 57043,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_power_well.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:display/intel_display_power.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "02cb4d800e2389fc2a7d958ed78339a74f5c057e",
+      "linux_bytes": 64999,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_reset.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "504ec7043cd914b6e1bdb79313cd82922ff81435",
+      "linux_bytes": 3209,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_rpm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0a331f89b4db5cde62ff84635bba940f5e7e4cb0",
+      "linux_bytes": 1649,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_rps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2f824845882646ee40023820c226bebc41f1683d",
+      "linux_bytes": 2511,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_snapshot.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7f423182aa29acf77fa9d7c1a59aa718674975ad",
+      "linux_bytes": 1906,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_trace.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "737979ada869a2a6e3e6619688501a8e1d1e47a1",
+      "linux_bytes": 171,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "04d010f7c23e239c17586b81b43880f5e5dd9be7",
+      "linux_bytes": 681,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_display_wa.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3662e0f17c69b4f26fc6b5272582f54dc9115292",
+      "linux_bytes": 5641,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dkl_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "35e919eae3691e6264ed49cfb5ba420e6f5030bd",
+      "linux_bytes": 2843,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dmc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a191eee240d9f1f8108b1f5cb3158c7878841cd2",
+      "linux_bytes": 50025,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dmc_wl.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ab4e0e9573dfbc09af2070823b0d3f38503d783b",
+      "linux_bytes": 13589,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dp.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3152122e6aefe926e9ab128248dc2941da9958a6",
+      "linux_bytes": 220568,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_aux.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:display/intel_dp.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3cb07b0a901cff7291eca9479f24128989d6c0e7",
+      "linux_bytes": 24572,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_aux_backlight.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dp_aux_backlight.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "266e042e00237c100a18de16fec7f37333439343",
+      "linux_bytes": 28028,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_hdcp.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "14ed0ea22dd30fa42a574df3f2e8810004adbfe1",
+      "linux_bytes": 25387,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_link_caps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "abec3e2519ca67d8973d44811b8a66fae55643a3",
+      "linux_bytes": 39811,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_link_training.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dp_link_training.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9a692f4fdfee684a26ca4348f285c580afdc37b1",
+      "linux_bytes": 90972,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_mst.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dp_mst.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fb3942f56b1fa74a6e472055f229cc2a0e674f6c",
+      "linux_bytes": 71976,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dp_test.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0551a1ce60d39278b9108f337775ca6fdf7172a4",
+      "linux_bytes": 24819,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dpio_phy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dpio_phy.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8055f6ccc5c864802e3cdcbae798d6b93b016ec8",
+      "linux_bytes": 35441,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dpll.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f40807a5566b68dd771924fac237401050802325",
+      "linux_bytes": 67642,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dpll_mgr.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dpll_mgr.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0f933101b7dd16d82e782d0c9357dc03412ca067",
+      "linux_bytes": 149878,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dpt.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "145dc9511116a90258e09a980caca5a25df6f77a",
+      "linux_bytes": 2641,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dram.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0763d0bfd98ec64334410abc0d26278a4e507cd6",
+      "linux_bytes": 19939,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_drrs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6c95d4ae1ea908fcf034fee20f060a8509144077",
+      "linux_bytes": 11671,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dsb.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dsb.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d9a270362a82c23db84e0b31e99557282dee8106",
+      "linux_bytes": 33510,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dsi.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:display/intel_dsi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3a111f041071a5bf9fe2020b6cfa6c57651966e0",
+      "linux_bytes": 3316,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dsi_dcs_backlight.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:intel_dsi_dcs_backlight.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b3c453bf7d5c194ea69c24d9631c9585ca747b29",
+      "linux_bytes": 6533,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dsi_vbt.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:display/intel_dsi_vbt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fe12041e913cd45e20fb536508c57fc27b66cb20",
+      "linux_bytes": 29665,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_dvo.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_dvo.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f157699a7c4c4b9709b787e08c2f7586a526f854",
+      "linux_bytes": 16325,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_encoder.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d01b081a60740fcfed66092a3f92b7ba61a9b40b",
+      "linux_bytes": 2956,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_fb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1c0859d5f82986cb4a3e39da209722ed02e483af",
+      "linux_bytes": 73273,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_fbc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_fbc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f61b4a218d6ef4d4e2c4b01b91a0dac7c429d438",
+      "linux_bytes": 68935,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_fbdev.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_fbdev.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "db0e36dd8722fb69ca2cb3429a2cecd550b4447b",
+      "linux_bytes": 16339,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_fdi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c170d3104e4cb85699b2f6f907cdb3ab13f2ebc1",
+      "linux_bytes": 32988,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_fifo_underrun.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_fifo_underrun.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "eca016d725d25aab66e9047d58eff46c3a7656d5",
+      "linux_bytes": 18043,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_flipq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "bf278f60bba7804c23076d4514584241698c6be4",
+      "linux_bytes": 13974,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_frontbuffer.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_frontbuffer.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "705742e117caf6ca606c599854aab1a432b521be",
+      "linux_bytes": 8675,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_global_state.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "886caf29c9ae81d0f85e2ed1b06f2b618159700e",
+      "linux_bytes": 10249,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_gmbus.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_gmbus.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "60a70dea5d85629c475463507688e09f505c765d",
+      "linux_bytes": 27912,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hdcp.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_hdcp.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e56df337dc6d85d31bed37a7a5b313d5a25573fc",
+      "linux_bytes": 83260,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hdcp_gsc_message.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c2de48f57f300f71d2f0a00d75b401a0b24b24e0",
+      "linux_bytes": 21606,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hdmi.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_hdmi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8a019d3574df22b6c24bedb9dbca94a347d0cafe",
+      "linux_bytes": 102260,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hotplug.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_hotplug.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "970aa95ee344abe6cc1190be467c9c13db55eec9",
+      "linux_bytes": 40418,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hotplug_irq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "539fd555edcea770333186f00f65896d93abf112",
+      "linux_bytes": 41234,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_hti.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "dc454420c134e679b4bc7d1c030997f61d2dd5fa",
+      "linux_bytes": 1053,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_initial_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7427f41e4d7e1da568e92440ffc805777c5a61ab",
+      "linux_bytes": 6905,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_link_bw.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e71e76d6fd3e0687ec6f491181cc5068b16343d8",
+      "linux_bytes": 13215,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_load_detect.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3fef1ebc635702127353eae7afe6a6a4172a01d8",
+      "linux_bytes": 5718,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_lpe_audio.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:intel_lpe_audio.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ff2cf479d8e1800f5a6992eedd951f9b5054b558",
+      "linux_bytes": 10625,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_lspcon.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_lspcon.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9ceabbc981a16947110fe21545e43288cb1f211d",
+      "linux_bytes": 21326,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_lt_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "86492651b01d5ff8a9ef205b342ee1a370a972d7",
+      "linux_bytes": 59888,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_lvds.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_lvds.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "872753478cf21b659083b0ffae55655f01a5a2a6",
+      "linux_bytes": 30002,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_mchbar.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a3a69e11c390e8079e0f839ec5db27c1e15c795e",
+      "linux_bytes": 1855,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_modeset_lock.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "eb6a5a99328b6124243a0b54d78f83d17c4862df",
+      "linux_bytes": 923,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_modeset_setup.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6aed88173770573ca506cdfc51b75a7935f16f06",
+      "linux_bytes": 30090,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_modeset_verify.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2ec17c2bfe0fe23497b989846f2c771042542201",
+      "linux_bytes": 7852,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_opregion.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_opregion.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9f88b7cac9f74949ad567c0d83fa3e867c853a19",
+      "linux_bytes": 37201,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_overlay.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_overlay.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a809aa2950ac35820abb6df456155c23f21154b9",
+      "linux_bytes": 28420,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_panel.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_panel.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "81e638d0c7b33e2b1d3ab7f5bb8218c77589cdbe",
+      "linux_bytes": 20824,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_parent.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a5e41ea66921398ee0f38911ac6266ed07f4bed7",
+      "linux_bytes": 13357,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pch.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:intel_pch.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d2c1b17518380e7afef786c4f17b9c2ea40d6a9e",
+      "linux_bytes": 14530,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pch_display.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2fcf6c9c84cc80f96f46514a4c94066cc3c81dd8",
+      "linux_bytes": 19834,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pch_refclk.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5f88663ef5e8c43af93c38fc856d481993eebcb1",
+      "linux_bytes": 18126,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pfit.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5b170c74a5100aca01b82652650124c149e717c5",
+      "linux_bytes": 23577,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d0f99a87c42e8eaf796e2dcf2823049ca4418cb7",
+      "linux_bytes": 62282,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pmdemand.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f96545a5b8819ffafce30dbb53b2bcee83565721",
+      "linux_bytes": 19693,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_pps.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:display/intel_dp.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d4c98b150fa2b7c9736cf5071e67ac55d73f17cb",
+      "linux_bytes": 54984,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_psr.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_psr.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c28bcb1a018411f241334e2cef969b76a8c0326f",
+      "linux_bytes": 143676,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_qp_tables.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c05d4beb91d862e48e245fadc5f2df94bc9c7ed3",
+      "linux_bytes": 25367,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_quirks.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_quirks.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7d7db774d8c7b9e7f09c7d9a3e6fe89645ad6887",
+      "linux_bytes": 10482,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_rom.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "54f842c09fb06715bad6cce0ad15f6d531dfb80c",
+      "linux_bytes": 3235,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_sbi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b636a0060d39c2cacf4a3c5c11f2e267b31f0707",
+      "linux_bytes": 2134,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_sdvo.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_sdvo.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3075ef04df56668f11be1d61b62df22b6ac77fec",
+      "linux_bytes": 106642,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_snps_hdmi_pll.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7fe6b4a18213327d8d41e07f5fe772d071cc4178",
+      "linux_bytes": 13591,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_snps_phy.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "bf9df566630f013065f18e6256aef0a8d932db98",
+      "linux_bytes": 72370,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_sprite.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_sprite.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2321bfbb8630062b6f09474e50df58673776ba5e",
+      "linux_bytes": 48617,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_sprite_uapi.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a62146133f99044bbc9b45eb8072745259300254",
+      "linux_bytes": 3517,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_tc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_tc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f2d86b29c4154d9d298ba4b097fb2e838e2cf99c",
+      "linux_bytes": 54788,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_tv.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_tv.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "840e1dcdc2d0f190d9a6ce5244243c7811fbdc44",
+      "linux_bytes": 60179,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_vblank.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:i915_irq.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "28d81199792efd9c1c2188e94ce097dd0d8fcf33",
+      "linux_bytes": 25625,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_vdsc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_vdsc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8f06c3a4d56dfdbabab607eef99040a4d7a7fc00",
+      "linux_bytes": 41055,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_vga.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:display/intel_vga.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4966fd7eea92b9795fc2cc60b8364aa2d25e8af1",
+      "linux_bytes": 9324,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_vrr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "51e4f3309b8b168a2d27a9cd27e519995c973290",
+      "linux_bytes": 40098,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/intel_wm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b4aded774ce66fa0dd12e5319dcab80d4b10cb2a",
+      "linux_bytes": 10358,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/skl_prefill.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4707c2e7127ac706cef5e6411d67e8ea3252725c",
+      "linux_bytes": 4712,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/skl_scaler.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7994b983d509d153763997de56d6115462bc8f72",
+      "linux_bytes": 35620,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/skl_universal_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "eb5ed981b40f6ab15847f08901270c3edcd56a99",
+      "linux_bytes": 93914,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/skl_watermark.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ec1bfe46edefac188e36ecfc8fae279323ff74f1",
+      "linux_bytes": 115797,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/vlv_clock.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a589cdb749033527c94ccdfe94a692d64576d046",
+      "linux_bytes": 2500,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/vlv_dsi.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:vlv_dsi.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8829f365592efe367e6d027b7916eb78efcd9347",
+      "linux_bytes": 65916,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/vlv_dsi_pll.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:display/vlv_dsi_pll.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "68b73cca2aeced0b6f4acddf0b68cbe278826971",
+      "linux_bytes": 17995,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "display/vlv_sideband.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "068f58bd9a2b2229e2792fca06de455c0a1d797f",
+      "linux_bytes": 4488,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_busy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_busy.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6e4d0ce3952f75710a3c180274c9c2548a520834",
+      "linux_bytes": 4501,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_clflush.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_clflush.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7782ba44fabd8316392c2dc2eecf2e3ab8c3ed25",
+      "linux_bytes": 3649,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_context.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_context.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c58ffa5a8fa6f51178add1a668578b2a46f42eed",
+      "linux_bytes": 68583,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_create.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e12ec59afb8d0d3cf9f1934e0a461903ad30e62c",
+      "linux_bytes": 12466,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_dmabuf.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_dmabuf.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b43d34c7d6419e1d09071f5e042e600b3892d828",
+      "linux_bytes": 8660,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_domain.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_domain.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b7297c0a3a48e874dfad5cfb530a8e3fef4848cf",
+      "linux_bytes": 21213,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_execbuffer.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_execbuffer.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1f303d4eaa4d4f253e7de40b527a9d909692c08d",
+      "linux_bytes": 95736,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_internal.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_internal.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "37d286ecb99bfe350880777847ca4becaff08548",
+      "linux_bytes": 5180,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_lmem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_lmem.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f566191d843bc852ac83d82220c5759696a50cbb",
+      "linux_bytes": 3656,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_mman.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_mman.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9ca90c1bb5b422a4e2a0b9ed4fafa0d0c0a5f085",
+      "linux_bytes": 31065,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_object.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_object.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9e01f8b2079ababc38403437b497c1985d2549b8",
+      "linux_bytes": 28867,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_object_frontbuffer.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f885c4fb1326e42b600e431e9a5e62aa9d55a99f",
+      "linux_bytes": 4143,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_pages.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_pages.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "59e3d4de7d3c85ff4408326747e2536921e36c2d",
+      "linux_bytes": 17555,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_panic.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "91389d36f10196b98f329d1f8749cf43f4c23066",
+      "linux_bytes": 3795,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_phys.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_phys.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d53129eb56030da6e1129c864cd7f30ec4a34d46",
+      "linux_bytes": 6145,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_pm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f0857c5c96df3eb1cd9b2f95ebd9fcdf178cf813",
+      "linux_bytes": 6733,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_region.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_region.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "636768d0f57eb5a70b832885f9aae6c16f46a024",
+      "linux_bytes": 5772,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_shmem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_shmem.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ef94401662955aa94a8de3fb683e411ed83d952a",
+      "linux_bytes": 19411,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_shrinker.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_shrinker.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e0d1f369a16328110417aa4d46c90c088ba3fd78",
+      "linux_bytes": 17833,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_stolen.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_stolen.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1cfdcf5c11186a97bf10d52d11db74748128b23f",
+      "linux_bytes": 29623,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_throttle.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_throttle.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8814cbcde5b59fbf2f0c562f0f2b5ac0244d7409",
+      "linux_bytes": 2583,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_tiling.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_tiling.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "567b97d28d3084c04d9d02d11f23c3cbcc8d5f4f",
+      "linux_bytes": 13152,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "df3fcc2b1248ec42977fca9bba44d804e0034555",
+      "linux_bytes": 39072,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm_move.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "56489cc127d64281911ec52aea1df903fc996e25",
+      "linux_bytes": 22330,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm_pm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "4824f948daededca0216cf3bfaf3dd090c260a6f",
+      "linux_bytes": 6310,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_userptr.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:i915_gem_userptr.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "043095f93ac605129fdc3ae2a7184a716189eade",
+      "linux_bytes": 14714,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gem/i915_gem_wait.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gem/i915_gem_wait.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2893df65c3590bae32f50edb11a727edaab0108f",
+      "linux_bytes": 8154,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen2_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8c01fb6d4e7b46b60fb43aff8eca14dd431c7d26",
+      "linux_bytes": 7468,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen6_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5e65550b4dfb440beee0f7174c3b10b5f6f36c05",
+      "linux_bytes": 12125,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen6_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen6_ppgtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "438cd4724ac4c2d74dc6b90ac9b85f809265561a",
+      "linux_bytes": 11811,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen6_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen6_renderstate.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "555e83f3a93abd769597bfda436167e6b22b34d5",
+      "linux_bytes": 4044,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen7_renderclear.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6e89112f68ae46adff4298a11b01ab3709157b87",
+      "linux_bytes": 10746,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen7_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen7_renderstate.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c36e84d30d24602d4b6513458bb6a71455d1ec08",
+      "linux_bytes": 3563,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen8_engine_cs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "071c1cc45257a78515f7c5c2e7dfb8951ff343af",
+      "linux_bytes": 22879,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen8_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen8_ppgtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "cfa09b250a1b6ff793f40adde1087e15b1195eb2",
+      "linux_bytes": 28015,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen8_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen8_renderstate.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ef9d7b0dd2da86aa9dd9303d8499eb8401779090",
+      "linux_bytes": 12715,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/gen9_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/gen9_renderstate.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "428b724ded3e7b37c8237d5e683e554c49004e96",
+      "linux_bytes": 12925,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_breadcrumbs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_breadcrumbs.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c10ac0ab3bfa808e1b48a1a201c0208341494251",
+      "linux_bytes": 13903,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_context.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_context.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b1b8695ba7c97bcda353dd89fb686e3526f18a06",
+      "linux_bytes": 14868,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_context_sseu.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ece16c2b5b8ee02674553e8e0bb1fa9b6a16273b",
+      "linux_bytes": 2121,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_engine_cs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_engine_cs.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c0fd349a4600c638306fec937ecc77538ed23245",
+      "linux_bytes": 71135,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_engine_heartbeat.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_engine_heartbeat.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6424ecce8bcbeab731ce5ba863972bfb1b060afc",
+      "linux_bytes": 11225,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_engine_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_engine_pm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "26196a57041eb5f24f36e3872224b4ab6fe3e4c5",
+      "linux_bytes": 10022,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_engine_user.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_engine_user.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d5190e11b270627978dce3ea8fddae2fa7f6e110",
+      "linux_bytes": 8515,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_execlists_submission.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e693b0c9d2a3e2ee0530b0cafbe39621038c0c20",
+      "linux_bytes": 127064,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_ggtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "64ca5bbc53c686b6c083459216aa30516e39ed83",
+      "linux_bytes": 44506,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt_fencing.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6efc1ed3831b4db8307692c595fb06d6b210e47e",
+      "linux_bytes": 27332,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ggtt_gmch.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "cc5d345c5e2922027c1b4ad1e7dd09a51fe728c1",
+      "linux_bytes": 3417,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5c7f862f7100a054ed60bd73f9429ec843fe03b1",
+      "linux_bytes": 26405,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_buffer_pool.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "372cdc758c5f989406db4a2a7e79de66906682bf",
+      "linux_bytes": 5865,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_ccs_mode.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3c62a44e9106ceec802dc02645365a5e856fb041",
+      "linux_bytes": 838,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_clock_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "aecd120972eade8934e2fd750e33491d2923cf5d",
+      "linux_bytes": 6529,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "439076b11c04065a4aa0b9e7cc80a5670695f483",
+      "linux_bytes": 2826,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_engines_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ae6c78dfe4524eda256d2bcffd9331b6265f78ba",
+      "linux_bytes": 841,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gt_irq.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d85c849c008159790d2eafa2ee99632684bce71f",
+      "linux_bytes": 17149,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_mcr.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c3afa321fe30ddb6fec906d08bb806478da2e396",
+      "linux_bytes": 27693,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gt_pm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c7f59d60fac6405391314dbf0ff6bd173b286227",
+      "linux_bytes": 10522,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "adf2512e2ed523e71d91381f5ba72a0952e32929",
+      "linux_bytes": 18465,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_pm_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gt_pm_irq.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "52f2a28b2058e812bba5263a9fcd724b1f449db2",
+      "linux_bytes": 2431,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_requests.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gt_requests.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "93298820bee2cfdc876c990eff15bf05829a964f",
+      "linux_bytes": 6764,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_sysfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "33cba406b5698bd4496ad5298694698772087cc6",
+      "linux_bytes": 2808,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gt_sysfs_pm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a48601395dce18763ccb86b752fc404f73534c84",
+      "linux_bytes": 26574,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_gtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_gtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "afbc5c76930892fbc988766ca4ea8e164bd6e978",
+      "linux_bytes": 21284,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_llc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_llc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "82d9a8e50867ae8dde9ab2765ed094d1d7fe9972",
+      "linux_bytes": 4187,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_lrc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_lrc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "147d22907960b6280d8404f272d1ca235fe69312",
+      "linux_bytes": 46345,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_migrate.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "aff5aca591e6e59e0115863522ad43f1521b08ad",
+      "linux_bytes": 29127,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_mocs.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_mocs.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e8d93a657ef65323d7b0219c016cefa968509648",
+      "linux_bytes": 19694,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ppgtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_ppgtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "72d8473a448b9807dbc5158ba59b8609df90827a",
+      "linux_bytes": 6843,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_rc6.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_rc6.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e91e5cdca26ca60e0853c314c8b8f15feaad7403",
+      "linux_bytes": 26291,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_region_lmem.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:intel_region_lmem.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b8a39567a334b0c310fba39755158b2fdd79f7e7",
+      "linux_bytes": 7052,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_renderstate.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_renderstate.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d53766c288f7d74e3f5e62ae34059f68287b1062",
+      "linux_bytes": 5884,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_reset.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_reset.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6053f3e8aa27c1bcc6cb6ef0c38c14e8cdfa90a0",
+      "linux_bytes": 46492,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ring.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_ring.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "be7eeb95ff12bb1e872b5d81fc63d7159d51b280",
+      "linux_bytes": 7503,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_ring_submission.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_ring_submission.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "064e7cce412f5cb79d814b8eab86c70b6e97ac27",
+      "linux_bytes": 38813,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_rps.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_rps.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a33b19c04737a7f188df3d504e839ec3f67657f9",
+      "linux_bytes": 77529,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_sa_media.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fb260d1ec360c1fa33d5a848aadb1761954b1b54",
+      "linux_bytes": 1114,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_sseu.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_sseu.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "656a499b2706d8ba26a07f996c35f1795aa664eb",
+      "linux_bytes": 24755,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_sseu_debugfs.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "54f38bc4b1b5c0fe1be3a3c07a370c718c2db295",
+      "linux_bytes": 8410,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_timeline.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_timeline.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7070047bfbaaaa2fd31812b63143c886282c1dbd",
+      "linux_bytes": 12617,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_tlb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2487768bc23038df9e8897429427a3b6ff64e403",
+      "linux_bytes": 4458,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_wopcm.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "dist:intel_wopcm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "602e088fe045aa1dc05d2e1eecbb8112ebb6629d",
+      "linux_bytes": 10533,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/intel_workarounds.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/intel_workarounds.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "24ea5d8d529c0347d8aac8640171751ad0cc9901",
+      "linux_bytes": 92666,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/shmem_utils.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5850adaebf824fc1e2ddfcda6ed0f69cc26425aa",
+      "linux_bytes": 3638,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/sysfs_engines.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "da740bbcd083bc68ecbeb01b70327b00a486370d",
+      "linux_bytes": 14438,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_guc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1c276444032368f6ebd93a372a66215a29dcf4a0",
+      "linux_bytes": 27352,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_ads.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_guc_ads.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "46fabbfc775e07e17e46a308bc4ead59a8452a61",
+      "linux_bytes": 31590,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_ct.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_guc_ct.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1c455d84bf9d880de5f5d355d83e4ad4107c337c",
+      "linux_bytes": 38526,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_guc_fw.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b1bda1b84f0a14d1eea3228cf64be3be69997b9e",
+      "linux_bytes": 10763,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_log.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:intel_guc_log.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "cdff48920ee647dc111545feba00f91bd5995905",
+      "linux_bytes": 24974,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_guc_submission.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_guc_submission.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "788e59cdfac9b80706acb722855b1413fe1f4ff3",
+      "linux_bytes": 170593,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_huc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_huc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f3249b98c99280985c06771dd95d2b55c8dc1df0",
+      "linux_bytes": 20658,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_huc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_huc_fw.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b648238cc6757e67a99722a030a10c9112d267af",
+      "linux_bytes": 9087,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_uc.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_uc.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "bd07c72a66fce4c407b28b2f676dbd69f7cc6187",
+      "linux_bytes": 19067,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "gt/uc/intel_uc_fw.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:gt/uc/intel_uc_fw.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7fac97fe30a6391275afbdac093f5e5bde6f8cae",
+      "linux_bytes": 41770,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_active.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_active.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b2442f05825ee2fa94dbb1b48f85e20d7b9deb73",
+      "linux_bytes": 30509,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_bo.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "559341103ca7d93e2fcd16a964db1eacfef11d2d",
+      "linux_bytes": 7227,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_cmd_parser.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_cmd_parser.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "41fef2d02449bb8452526870f5856235c93fd892",
+      "linux_bytes": 50943,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_config.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9e13b1be407cc995de2c485768b98c1bfcd6a359",
+      "linux_bytes": 341,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_deps.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "40133e0ac01a0e15c226186a6ec6af36ec2c9c8e",
+      "linux_bytes": 6640,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_display_pc8.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2af5dbab20ef8a9953eea3978e9e03ed151b662a",
+      "linux_bytes": 776,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_dpt.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fcd7cced771d5281a9c4aa084bf9701fbbbb4e1b",
+      "linux_bytes": 6565,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_driver.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ce6d20958320c1f91a50678230eb96f88f0b357b",
+      "linux_bytes": 49942,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_drm_client.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "82cbb0528ff1fc4e8f1489169ecfebd2b1f5f60f",
+      "linux_bytes": 5631,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_dsb_buffer.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b797e0ccb70c1efff1cacc9f3d05fa429e8e385b",
+      "linux_bytes": 2719,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_edram.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5818ec396d1e311fbd330d3ccd01f85d609306a4",
+      "linux_bytes": 1106,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_fb_pin.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1034cb767e9f9eedefae20da39f6aa19a74080ba",
+      "linux_bytes": 8178,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_freq.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9547d087555f4ff229ed150cc7e73105f8effafb",
+      "linux_bytes": 2252,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gem.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_gem.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a432daf8038a5c2b0b1b34c97bbaf0c059390bac",
+      "linux_bytes": 35699,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gem_evict.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_gem_evict.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c02ebd6900aeeb550969a89339904dac7ef2c4bb",
+      "linux_bytes": 15981,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gem_gtt.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_gem_gtt.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "25295eb626dca0ac955fb12158c6040e1af06102",
+      "linux_bytes": 10114,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gem_ww.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3f6ff139478eea5e54191a4d581a3ffb98ffc83b",
+      "linux_bytes": 1430,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_getparam.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_getparam.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "cf47c2491a0a720023430cbd85ee6e713671a7d8",
+      "linux_bytes": 5939,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gmch.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "b0ef6ef577a3e3d359fec7576064872516d84556",
+      "linux_bytes": 3835,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_gpu_error.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_gpu_error.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5353a9c66694bde1696c691fb4547a576746fbd5",
+      "linux_bytes": 66506,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_hdcp_gsc.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "168b9ccbef3e85fee4babce0386e385999cf51df",
+      "linux_bytes": 7001,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_hwmon.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "da643b38064c8e16b375c1fad898b88a77e17c2f",
+      "linux_bytes": 25511,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_initial_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "98858a78e46a3adf1b048329534ebf571b396f68",
+      "linux_bytes": 7499,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_ioc32.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_ioc32.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "33348960f623289e2c4d8de7b4a72479276b5791",
+      "linux_bytes": 2948,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_ioctl.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "06a10ccea80b7c7bb6a1babb14afc129813de7dd",
+      "linux_bytes": 2395,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_irq.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_irq.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "932409b943ad252c2ad63b91384385fba0936a99",
+      "linux_bytes": 34479,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_memcpy.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_memcpy.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "20433621e09ade7481f38ce4b4b1ee4569863f28",
+      "linux_bytes": 4856,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_mitigations.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "def7302ef7fe27b53ff855f39b4e4a630cadefc3",
+      "linux_bytes": 3135,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_mm.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_mm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fd89e7c7d8d6f7501a7c5d5f9da1e1f276b1fdd0",
+      "linux_bytes": 4728,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_mmio_range.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "724041e81aa75a7d7be9bbb4e60b2553c363340b",
+      "linux_bytes": 331,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_module.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:i915_module.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "5d9c35b5a1820284e35cc8f017997f1ae1e6e50e",
+      "linux_bytes": 3104,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_overlay.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "6de550a17756718c277e417191ead5f4a8beb1be",
+      "linux_bytes": 12408,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_params.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_params.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "34ed82bb1b1a89cd6b10a0e7dd5f4fff4712ec6b",
+      "linux_bytes": 7027,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_pci.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_pci.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "2f03f95945f1b9a243a61db163576d0071d53e9c",
+      "linux_bytes": 26723,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_perf.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_perf.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "19b82427aa412f9dee5d761fd6669f630992610b",
+      "linux_bytes": 157067,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_pmu.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_pmu.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1c3bafda9c7081740b43e6da926f9e4216499286",
+      "linux_bytes": 29523,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_query.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_query.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "11157fb14db31399db75ec24477c3a776e145df7",
+      "linux_bytes": 15852,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_request.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_request.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d2c7b1090df0813afd11e34831ad5e49d1bba0e1",
+      "linux_bytes": 68143,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_scatterlist.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_scatterlist.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "9f81e206b646928557dcdd7d90dd8b069d7db484",
+      "linux_bytes": 6163,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_scheduler.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_scheduler.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "aec1342402cad85adcad092d5855f69470b0a8e7",
+      "linux_bytes": 13777,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_sw_fence.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_sw_fence.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "f24f616e23ee62f375b9f56c40557edc3cb9e673",
+      "linux_bytes": 14283,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_sw_fence_work.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_sw_fence_work.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "366418108f78f4470e36a8d877b1efce1d4ba639",
+      "linux_bytes": 2081,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_switcheroo.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:i915_switcheroo.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "7e0791024282e295433647385da8f4ecb5201110",
+      "linux_bytes": 2332,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_syncmap.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_syncmap.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "fbc3a13a4974bc461c5717f5c55bf3c206c6cfaf",
+      "linux_bytes": 11205,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_sysfs.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:i915_sysfs.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "70e0d86151605abf8e759a83cff6975eb8610d13",
+      "linux_bytes": 5401,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_timer_util.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "ee4cfd8b3c0759a89af971bd93f306e810dc2f21",
+      "linux_bytes": 799,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_trace_points.c",
+      "structural_class": "ACTIVE_OVERRIDE_OR_MOVED",
+      "netbsd_evidence": "glue:i915_trace_points.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "463a7177997cf4990ff97bedd39d21187d344a95",
+      "linux_bytes": 246,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_ttm_buddy_manager.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "10df50a54e8864ae9d5374d9eb8d38f675a8f84b",
+      "linux_bytes": 12600,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_user_extensions.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_user_extensions.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e3f808372c47b87bf9a91eb21e3003b9d595b2d3",
+      "linux_bytes": 1125,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_utils.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_utils.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "8c1aad312fd4baf023c6e0f61e92a24b3c12c05b",
+      "linux_bytes": 1181,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_vgpu.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_vgpu.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "d29a06ea51a504519f6062f90afb44c5dbe2254e",
+      "linux_bytes": 11566,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_vma.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:i915_vma.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "afc192d9931b887c7fb1964151062436b10320bd",
+      "linux_bytes": 60143,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "i915_vma_resource.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "a8f2112ce81f7f5468d3f7d18a4db189060d574e",
+      "linux_bytes": 12052,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_clock_gating.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "86bdeb20f427d768bfb214b58e7f9766555c1ad6",
+      "linux_bytes": 18095,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_cpu_info.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "e52d0ac713a9e2b8699c675176fc7d34098ea4df",
+      "linux_bytes": 1117,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_device_info.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:intel_device_info.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "bbe3a24fe3d9b26c91eafc795efe888b8f03e054",
+      "linux_bytes": 13221,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_memory_region.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:intel_memory_region.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "35f96ce7822f0358084e006ec570666df7bc6a07",
+      "linux_bytes": 9886,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_pcode.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "c07d48fc1b35502c0a62bc73df077cd2eff56595",
+      "linux_bytes": 8501,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_region_ttm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "47a69aad5c3fa218c1d5751a36fd182972806c7d",
+      "linux_bytes": 7641,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_runtime_pm.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:intel_runtime_pm.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "0d5b2624fe661f7d7fd2af2453814cdc8537e1e3",
+      "linux_bytes": 17386,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_step.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "60a2af5307fc32a2d6bd4986ab3127604de0ec01",
+      "linux_bytes": 7274,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_uncore.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:intel_uncore.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "170e83a8c9fc3ad5ad3406790134416328b85cf6",
+      "linux_bytes": 91692,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_uncore_trace.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "86f0c3942b1dd1274565010f86a9c06814921fb1",
+      "linux_bytes": 166,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "intel_wakeref.c",
+      "structural_class": "EXACT_ACTIVE_DIST",
+      "netbsd_evidence": "dist:intel_wakeref.c",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "98e7cee4e1dcc7b550dd5a8ed13eb68ba64398a0",
+      "linux_bytes": 5612,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "vlv_iosf_sb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "1f0332b4ad0df58af3b1bd0de7a9290dfa7cf758",
+      "linux_bytes": 6366,
+      "semantic_review": "NOT_VERIFIED"
+    },
+    {
+      "linux_source": "vlv_suspend.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED",
+      "linux_blob": "3612b03cabd144ea358a409d186bda0c0ade0899",
+      "linux_bytes": 14742,
+      "semantic_review": "NOT_VERIFIED"
+    }
+  ],
+  "limitations": "Blob identity does NOT establish source semantics, actual source content, kernel ABI or CHV reachability; all semantic statuses remain UNREVIEWED"
+}
