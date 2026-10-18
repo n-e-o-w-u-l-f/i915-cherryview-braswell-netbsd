@@ -57,6 +57,7 @@ done
 # Never infer F77 file location from the last documented F77 boot.
 say "f77_recovery_sha256=UNKNOWN_REQUIRE_ACTUAL_PATH"
 bool_file "bios_boot_cfg" /boot.cfg
+# The UEFI loader reads /EFI/NetBSD/boot.cfg *inside the actual ESP*.
 # Never confuse the NetBSD root directory with the FAT EFI partition.
 # The actual mounted ESP and loader read path must be identified separately.
 say "uefi_esp_boot_cfg=UNKNOWN_REQUIRES_ESP_MOUNTPOINT_READBACK"
