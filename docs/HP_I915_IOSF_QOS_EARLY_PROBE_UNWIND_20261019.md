@@ -2,6 +2,8 @@
 
 **Status:** source-confirmed bug and separate candidate `0042`, **regression execution blocked**, not native-accepted, not installed on HP.
 
+**Source-ABI correction (2026-10-19):** The original description of an actual **QoS resource leak** was inaccurate for the pinned NetBSD implementation: `sys/external/bsd/drm2/include/linux/pm_qos.h` defines a dummy request object and no-op add/update/remove functions. Patch `0042` restores *structural* early-resource unwinding (including real mutex/uncore cleanup) and upstream Valleyview-only conditions; it cannot restore CPU-latency enforcement or leak a live QoS request in this shim. `sys/external/bsd/drm2/include/asm/iosf_mbi.h` also makes PUNIT acquire/release no-ops. The complete [runtime ABI blocker audit](HP_I915_NETBSD_IOSF_PUNIT_QOS_SHIM_GAP_20261019.md) supersedes any implication of real QoS/MBI parity. Patch/test execution remains blocked and acceptance OPEN.
+
 ## Frozen source evidence
 
 Linux `torvalds/linux@fd179f8a05be3ccae366b9b96e176b51fbe54aab` `drivers/gpu/drm/i915/vlv_iosf_sb.c` (`1f0332b4ad0df58af3b1bd0de7a9290dfa7cf758`) initializes the IOSF mutex for VLV/CHV but calls `cpu_latency_qos_add_request`/`remove_request` **only on `IS_VALLEYVIEW`**. Frozen NetBSD `NetBSD/src@03d918f6d0e81fa05b8f1160eca0628ad39988a6` `sys/external/bsd/drm2/dist/drm/i915/i915_drv.c` (Git blob `bf64ff40059fc38188f6f3d7b55bef9793abeb57`, SHA256 `88c9e4c4ffb0669fdec14fd6a3589ab4aae43b2ef32ad5f6deb78b86ffd1d8e8`) registers `pm_qos_add_request` unconditionally in `i915_driver_early_probe`, and removes it only in the normal `i915_driver_late_release`.
