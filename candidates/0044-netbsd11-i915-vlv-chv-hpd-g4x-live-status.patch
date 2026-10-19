@@ -1,0 +1,23 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -5594,13 +5594,17 @@
+ 	if (HAS_GMCH(dev_priv)) {
+ 		if (IS_GM45(dev_priv))
+ 			return gm45_digital_port_connected(encoder);
+ 		else
+ 			return g4x_digital_port_connected(encoder);
+-	}
+-
+-	if (INTEL_PCH_TYPE(dev_priv) >= PCH_ICP)
++	}
++
++	/* VLV/CHV HPD is reported by PORT_HOTPLUG_STAT (G4X layout). */
++	if (IS_VALLEYVIEW(dev_priv) || IS_CHERRYVIEW(dev_priv))
++		return g4x_digital_port_connected(encoder);
++
++	if (INTEL_PCH_TYPE(dev_priv) >= PCH_ICP)
+ 		return icp_digital_port_connected(encoder);
+ 	else if (INTEL_PCH_TYPE(dev_priv) >= PCH_SPT)
+ 		return spt_digital_port_connected(encoder);
+ 	else if (IS_GEN9_LP(dev_priv))
+ 		return bxt_digital_port_connected(encoder);
