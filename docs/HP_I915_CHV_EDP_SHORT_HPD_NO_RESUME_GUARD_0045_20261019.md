@@ -11,6 +11,8 @@ Pinned NetBSD source `NetBSD/src@03d918f6d0e81fa05b8f1160eca0628ad39988a6`:
 - `display/intel_hotplug.c` blob `722edbed2be6b1c4b2d06269572a977e6ca7adef`
 Pinned Linux: `torvalds/linux@fd179f8a05be3ccae366b9b96e176b51fbe54aab`.
 
+> **2026-10-19 portability correction:** NetBSD's pinned `include/linux/pm_runtime.h` implements `pm_runtime_get_if_in_use()` as unconditional `return 1;`; therefore the 0045 v1 inference that the Linux helper proves an already-active RPM state was unsound. Candidate v2 explicitly checks i915 IRQ enablement and display-core suspend state before and under `pps_mutex`; pinned hunk is now old 30 → new 68 lines. The independent [PM-shim/RPM/VDD race follow-up](HP_I915_CHV_0045_NETBSD_PM_SHIM_RACE_REVIEW_20261019.md) supersedes any claim below that `get_if_enabled` alone is sufficient. No executable source test was run and deferred VDD-off TOCTOU remains OPEN.
+
 ## Why the patch is restricted to eDP short HPD
 
 NetBSD `intel_dp_hpd_pulse()` already ignores **long** eDP HPD (`intel_dp.c:6609–6624`). For short eDP HPD, it can call `intel_dp_short_pulse()` and issue AUX reads. The pinned Linux successor also ignores short eDP HPD while RPM is suspended or panel power/VDD is absent (`intel_dp.c:6814–6836`). On VLV/CHV a successfully initialized eDP connector is **B/C only** (`NetBSD intel_dp.c:7535–7539`), and regular eDP detection bypasses the general external HPD live-status check. Candidate 0044 remains external B/C/D only; 0045 does not change those paths.
