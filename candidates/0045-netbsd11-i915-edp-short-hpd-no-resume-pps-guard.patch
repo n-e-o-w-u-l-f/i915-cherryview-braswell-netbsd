@@ -1,6 +1,6 @@
 --- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
-@@ -6602,30 +6602,68 @@
+@@ -6602,30 +6602,74 @@
  
  static const struct drm_encoder_funcs intel_dp_enc_funcs = {
  	.reset = intel_dp_encoder_reset,
@@ -37,6 +37,12 @@
 +		  !dev_priv->power_domains.display_core_suspended &&
 +		  (edp_have_panel_power(intel_dp) ||
 +		   edp_have_panel_vdd(intel_dp));
++	/*
++	 * This is a snapshot, not a VDD lease across the following HPD.
++	 * A delayed VDD-off worker can run after the unlock. The later
++	 * AUX transfer takes its own PPS lock and ensures VDD before I/O.
++	 * Holding pps_mutex across intel_dp_short_pulse() would recurse.
++	 */
 +	mutex_unlock(&dev_priv->pps_mutex);
 +
 +	intel_display_power_put(dev_priv, domain, wakeref);
