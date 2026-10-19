@@ -128,7 +128,8 @@ def main() -> None:
             ("wrong_vlv_irq_mask", "IS_VALLEYVIEW(dev_priv) || IS_CHERRYVIEW(dev_priv)) &&",
              "IS_BROADWELL(dev_priv) || IS_CHERRYVIEW(dev_priv)) &&"),
             ("wrong_pin_A_capture", "encoder->hpd_pin == HPD_PORT_D))",
-             "encoder->hpd_pin == HPD_PORT_A))"),\n            ("wrong_irq_ack_reg", "I915_READ(PORT_HOTPLUG_STAT) & hotplug_status_mask",
+             "encoder->hpd_pin == HPD_PORT_A))"),
+            ("wrong_irq_ack_reg", "I915_READ(PORT_HOTPLUG_STAT) & hotplug_status_mask",
              "I915_READ(GEN8_DE_PORT_ISR) & hotplug_status_mask"),
         )
         for label, before, after in mutations:
