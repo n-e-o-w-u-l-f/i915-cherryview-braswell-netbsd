@@ -175,7 +175,7 @@ def main() -> None:
                             "missing NULL rejection " + request)
             require(requested_payload_status("invalid", length, True) == "EINVAL",
                     "invalid request admitted")
-        print("I915_DP_AUX_SIZE_T_BOUNDARY_MODEL_40_CASES_PASS")
+        print("I915_DP_AUX_SIZE_T_BOUNDARY_MODEL_38_CASES_PASS")
 
         run(["git", "apply", "--reverse", patch], root)
         require(target.read_bytes() == original, "not byte-exact rollback")
