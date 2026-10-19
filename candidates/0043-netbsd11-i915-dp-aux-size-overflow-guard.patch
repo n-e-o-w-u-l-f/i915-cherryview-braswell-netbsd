@@ -1,0 +1,44 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -1548,7 +1548,10 @@
+ 	u8 txbuf[20], rxbuf[20];
+ 	size_t txsize, rxsize;
+-	int ret;
+-
+-	intel_dp_aux_header(txbuf, msg);
++	int ret;
++
++	if (msg->size && !msg->buffer)
++		return -EINVAL;
++
++	intel_dp_aux_header(txbuf, msg);
+ 
+ 	switch (msg->request & ~DP_AUX_I2C_MOT) {
+@@ -1556,5 +1559,8 @@
+ 	case DP_AUX_I2C_WRITE:
+ 	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
+-		txsize = msg->size ? HEADER_SIZE + msg->size : BARE_ADDRESS_SIZE;
++		if (msg->size > sizeof(txbuf) - HEADER_SIZE)
++			return -E2BIG;
++
++		txsize = msg->size ? HEADER_SIZE + msg->size : BARE_ADDRESS_SIZE;
+ 		rxsize = 2; /* 0 or 1 data bytes */
+ 
+@@ -1584,5 +1590,8 @@
+ 	case DP_AUX_NATIVE_READ:
+ 	case DP_AUX_I2C_READ:
+-		txsize = msg->size ? HEADER_SIZE : BARE_ADDRESS_SIZE;
++		if (msg->size >= sizeof(rxbuf))
++			return -E2BIG;
++
++		txsize = msg->size ? HEADER_SIZE : BARE_ADDRESS_SIZE;
+ 		rxsize = msg->size + 1;
+ 
+@@ -1601,5 +1610,6 @@
+ 			 */
+ 			ret--;
+-			memcpy(msg->buffer, rxbuf + 1, ret);
++			if (ret)
++				memcpy(msg->buffer, rxbuf + 1, ret);
+ 		}
+ 		break;
