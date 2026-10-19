@@ -1,0 +1,16 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -2623,10 +2623,12 @@
+ 			I915_READ(pp_ctrl_reg));
+ 
+ 	if (intel_de_wait_for_register(dev_priv, pp_stat_reg,
+-				       mask, value, 5000))
++				       mask, value, 5000)) {
+ 		DRM_ERROR("Panel status timeout: status %08x control %08x\n",
+ 				I915_READ(pp_stat_reg),
+ 				I915_READ(pp_ctrl_reg));
++		return;
++	}
+ 
+ 	DRM_DEBUG_KMS("Wait complete\n");
+ }
