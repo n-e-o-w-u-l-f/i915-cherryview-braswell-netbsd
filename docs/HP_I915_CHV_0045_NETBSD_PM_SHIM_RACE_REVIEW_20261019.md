@@ -52,6 +52,8 @@ verified system suspend state, especially with always-on domains.
   mutex* before reading the panel-control registers. This does not rely
   exclusively on the NetBSD stub's fabricated in-use answer.
 
+> **2026-10-19 continuation:** [Pinned 0045 delayed-VDD/short-HPD interleaving audit](HP_I915_CHV_0045_VDD_SHORT_HPD_INTERLEAVINGS_20261019.md) compares both PPS lock-acquisition orders with NetBSD's exact AUX VDD-on and delayed VDD-off code and with Linux's own snapshot-based PPS predicate. Source ordering is consistent with serialized PPS register access; an extra VDD-off/on cycle and actual HP electrical/IRQ behavior remain **UNVERIFIED**. Candidate 0045 remains unintegrated. Its patch comment now records this snapshot/recursive-lock constraint; source-only hunk grew to old 30 → new 74 lines. This update supersedes old 30→68 line-count statements, not the unexecuted test status.
+
 ## Deferred panel-VDD and time-of-check/time-of-use limitation
 
 Pinned `intel_dp.c` lines 724–751 and 1140–1164 establish AUX-domain ->
