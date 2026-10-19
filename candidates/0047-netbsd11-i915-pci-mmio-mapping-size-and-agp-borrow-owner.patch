@@ -26,13 +26,40 @@
  	}
  }
  
-@@ -856,9 +857,10 @@
- 	if (error)
- 		return NULL;
- 	pdev->pd_resources[i].bst = pdev->pd_pa.pa_memt;
+@@ -846,19 +847,27 @@
+ 	KASSERT(i < PCI_NUM_RESOURCES);
+ 	KASSERT(pdev->pd_resources[i].kva == NULL);
+ 
+-	if (PCI_MAPREG_TYPE(pdev->pd_resources[i].type) != PCI_MAPREG_TYPE_MEM)
+-		return NULL;
+-	if (pdev->pd_resources[i].size < size)
+-		return NULL;
+-	error = bus_space_map(pdev->pd_pa.pa_memt, pdev->pd_resources[i].addr,
+-	    size, BUS_SPACE_MAP_LINEAR | pdev->pd_resources[i].flags,
+-	    &pdev->pd_resources[i].bsh);
+-	if (error)
+-		return NULL;
+-	pdev->pd_resources[i].bst = pdev->pd_pa.pa_memt;
 -	pdev->pd_resources[i].kva = bus_space_vaddr(pdev->pd_resources[i].bst,
 -	    pdev->pd_resources[i].bsh);
 -	pdev->pd_resources[i].mapped = true;
++	if (PCI_MAPREG_TYPE(pdev->pd_resources[i].type) != PCI_MAPREG_TYPE_MEM)
++		return NULL;
++	if (pdev->pd_resources[i].addr == 0 ||
++	    pdev->pd_resources[i].size == 0)
++		return NULL;
++	/* Linux pci_iomap(maxlen=0) maps the full BAR. */
++	if (size == 0)
++		size = pdev->pd_resources[i].size;
++	if (pdev->pd_resources[i].size < size)
++		return NULL;
++	/* pci_iomap is uncached; prefetchable/WC belongs to pci_iomap_wc. */
++	error = bus_space_map(pdev->pd_pa.pa_memt, pdev->pd_resources[i].addr,
++	    size, BUS_SPACE_MAP_LINEAR,
++	    &pdev->pd_resources[i].bsh);
++	if (error)
++		return NULL;
++	pdev->pd_resources[i].bst = pdev->pd_pa.pa_memt;
 +	pdev->pd_resources[i].kva = bus_space_vaddr(pdev->pd_resources[i].bst,
 +	    pdev->pd_resources[i].bsh);
 +	pdev->pd_resources[i].mapped_size = size;
@@ -40,7 +67,7 @@
  
  	return pdev->pd_resources[i].kva;
  }
-@@ -875,9 +877,12 @@
+@@ -875,9 +884,12 @@
  	}
  	KASSERT(i < PCI_NUM_RESOURCES);
  
@@ -83,3 +110,18 @@
  
  void intel_uncore_init_early(struct intel_uncore *uncore,
  			     struct drm_i915_private *i915)
+--- a/sys/dev/pci/agp_i810.c
++++ b/sys/dev/pci/agp_i810.c
+@@ -786,9 +786,9 @@
+ 		return 0;
+ 	if ((base - agp_i810_vga_regbase) > (agp_i810_vga_regsize - size))
+ 		return 0;
+-	if (bus_space_subregion(agp_i810_vga_bst, agp_i810_vga_bsh,
+-		(base - agp_i810_vga_regbase), (agp_i810_vga_regsize - size),
+-		hdlp))
++	if (bus_space_subregion(agp_i810_vga_bst, agp_i810_vga_bsh,
++		(base - agp_i810_vga_regbase), size,
++		hdlp))
+ 		return 0;
+ 	return 1;
+ }
