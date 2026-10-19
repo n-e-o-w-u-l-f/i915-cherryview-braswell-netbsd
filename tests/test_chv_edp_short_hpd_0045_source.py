@@ -40,7 +40,7 @@ def exact(path: Path, sha: str) -> str:
 
 
 def function(source: str, name: str) -> str:
-    pattern = (r"(?m)^(?:static\s+)?(?:bool|enum irqreturn|intel_wakeref_t|void)\s+"
+    pattern = (r"(?m)^(?:static\s+)?(?:inline\s+)?(?:bool|int|enum irqreturn|intel_wakeref_t|void)\s+"
                + re.escape(name) + r"\([^;]*?\)\s*\{")
     hit = re.search(pattern, source, flags=re.DOTALL)
     if not hit:
