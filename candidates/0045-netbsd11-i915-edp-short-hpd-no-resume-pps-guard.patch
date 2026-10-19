@@ -1,0 +1,63 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
+@@ -6602,30 +6602,57 @@
+ 
+ static const struct drm_encoder_funcs intel_dp_enc_funcs = {
+ 	.reset = intel_dp_encoder_reset,
+ 	.destroy = intel_dp_encoder_destroy,
+ };
+ 
++/*
++ * Read the eDP PPS state only while its AUX power domain is already active.
++ * Do not runtime-resume a powered-off panel merely to service a short HPD.
++ * Mirror pps_lock() ordering: AUX power reference before pps_mutex.
++ */
++static bool intel_dp_edp_hpd_panel_powered(struct intel_dp *intel_dp)
++{
++	struct drm_i915_private *dev_priv = dp_to_i915(intel_dp);
++	enum intel_display_power_domain domain =
++		intel_aux_power_domain(dp_to_dig_port(intel_dp));
++	intel_wakeref_t wakeref;
++	bool powered;
++
++	wakeref = intel_display_power_get_if_enabled(dev_priv, domain);
++	if (!wakeref)
++		return false;
++
++	mutex_lock(&dev_priv->pps_mutex);
++	powered = edp_have_panel_power(intel_dp) ||
++		  edp_have_panel_vdd(intel_dp);
++	mutex_unlock(&dev_priv->pps_mutex);
++
++	intel_display_power_put(dev_priv, domain, wakeref);
++	return powered;
++}
++
+ enum irqreturn
+ intel_dp_hpd_pulse(struct intel_digital_port *intel_dig_port, bool long_hpd)
+ {
+ 	struct intel_dp *intel_dp = &intel_dig_port->dp;
+ 
+-	if (long_hpd && intel_dig_port->base.type == INTEL_OUTPUT_EDP) {
++	if (intel_dig_port->base.type == INTEL_OUTPUT_EDP &&
++	    (long_hpd || !intel_dp_edp_hpd_panel_powered(intel_dp))) {
+ 		/*
+-		 * vdd off can generate a long pulse on eDP which
++		 * vdd off can generate a long or short pulse on eDP which
+ 		 * would require vdd on to handle it, and thus we
+ 		 * would end up in an endless cycle of
+-		 * "vdd off -> long hpd -> vdd on -> detect -> vdd off -> ..."
++		 * "vdd off -> hpd -> vdd on -> detect -> vdd off -> ..."
+ 		 */
+ 		DRM_DEBUG_KMS("ignoring long hpd on eDP [ENCODER:%d:%s]\n",
+ 			      intel_dig_port->base.base.base.id,
+ 			      intel_dig_port->base.base.name);
+ 		return IRQ_HANDLED;
+ 	}
+ 
+ 	DRM_DEBUG_KMS("got hpd irq on [ENCODER:%d:%s] - %s\n",
+ 		      intel_dig_port->base.base.base.id,
+ 		      intel_dig_port->base.base.name,
+ 		      long_hpd ? "long" : "short");
+ 
+ 	if (long_hpd) {
