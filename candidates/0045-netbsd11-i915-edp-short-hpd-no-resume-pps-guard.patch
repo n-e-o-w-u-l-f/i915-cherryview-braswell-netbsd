@@ -1,6 +1,6 @@
 --- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
-@@ -6602,30 +6602,58 @@
+@@ -6602,30 +6602,68 @@
  
  static const struct drm_encoder_funcs intel_dp_enc_funcs = {
  	.reset = intel_dp_encoder_reset,
@@ -20,13 +20,23 @@
 +	intel_wakeref_t wakeref;
 +	bool powered;
 +
++	/* NetBSD's pm_runtime_get_if_in_use() compatibility shim returns 1
++	 * even if the physical device is suspended. Do not rely on it alone.
++	 * The system suspend path first disables IRQs and drains HPD work.
++	 */
++	if (!dev_priv->runtime_pm.irqs_enabled ||
++	    dev_priv->power_domains.display_core_suspended)
++		return false;
++
 +	wakeref = intel_display_power_get_if_enabled(dev_priv, domain);
 +	if (!wakeref)
 +		return false;
 +
 +	mutex_lock(&dev_priv->pps_mutex);
-+	powered = edp_have_panel_power(intel_dp) ||
-+		  edp_have_panel_vdd(intel_dp);
++	powered = dev_priv->runtime_pm.irqs_enabled &&
++		  !dev_priv->power_domains.display_core_suspended &&
++		  (edp_have_panel_power(intel_dp) ||
++		   edp_have_panel_vdd(intel_dp));
 +	mutex_unlock(&dev_priv->pps_mutex);
 +
 +	intel_display_power_put(dev_priv, domain, wakeref);
