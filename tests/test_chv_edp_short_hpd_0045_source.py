@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Source-only acceptance for isolated NetBSD i915 0045 eDP short HPD guard.
 
+Includes 16 negative mutants, including fail-closed wakeref/PM-domain and
+strict panel-power OR semantics. Source-only, not a concurrency proof.
+
 Reads byte-exact pinned C and NetBSD's PM shim. Runs git apply/check/reverse
 ONLY in a temporary directory. This does not compile NetBSD, touch a live HP,
 validate real PM races or establish physical display acceptance.
@@ -85,6 +88,31 @@ def audit(dp: str, pm: str, power: str, hotplug: str) -> None:
         "intel_display_power_put(dev_priv, domain, wakeref)",
         "return powered;",
     ))
+    # Check boolean/branch semantics, not just presence/order of operands.
+    # Otherwise simple &&/|| or return-value mutations evade the old test.
+    if power_check.count("intel_aux_power_domain(dp_to_dig_port(intel_dp))") != 1:
+        fail("guard no longer acquires the exact eDP AUX power domain")
+    if not re.search(
+        r"if\s*\(!dev_priv->runtime_pm\.irqs_enabled\s*\|\|\s*"
+        r"dev_priv->power_domains\.display_core_suspended\)\s*return false;",
+        power_check,
+    ):
+        fail("early suspend gate no longer returns false")
+    if not re.search(r"if\s*\(!wakeref\)\s*return false;", power_check):
+        fail("failed conditional wakeref acquisition not safely rejected")
+    if not re.search(
+        r"powered\s*=\s*dev_priv->runtime_pm\.irqs_enabled\s*&&\s*"
+        r"!dev_priv->power_domains\.display_core_suspended\s*&&\s*"
+        r"\(\s*edp_have_panel_power\(intel_dp\)\s*\|\|\s*"
+        r"edp_have_panel_vdd\(intel_dp\)\s*\);",
+        power_check,
+    ):
+        fail("locked panel/VDD OR predicate or suspend gating changed")
+    if power_check.count("intel_display_power_get_if_enabled(dev_priv, domain)") != 1:
+        fail("conditional domain acquisition missing or duplicated")
+    if power_check.count("intel_display_power_put(dev_priv, domain, wakeref);") != 1:
+        fail("wakeref/domain must be released exactly once")
+
     if "edp_panel_vdd_on" in power_check or "intel_display_power_get(dev_priv" in power_check:
         fail("guard itself resumes or forces VDD")
     hp = function(dp, "intel_dp_hpd_pulse")
@@ -133,6 +161,25 @@ def main() -> None:
         helper = function(accepted, "intel_dp_edp_hpd_panel_powered")
         hp = function(accepted, "intel_dp_hpd_pulse")
         mutations = (
+            ("wrong_aux_domain", helper,
+             "intel_aux_power_domain(dp_to_dig_port(intel_dp))",
+             "POWER_DOMAIN_INIT"),
+            ("failed_wakeref_returns_true", helper,
+             "if (!wakeref)\n\t\treturn false;",
+             "if (!wakeref)\n\t\treturn true;"),
+            ("early_suspend_gate_returns_true", helper,
+             "dev_priv->power_domains.display_core_suspended)\n\t\treturn false;",
+             "dev_priv->power_domains.display_core_suspended)\n\t\treturn true;"),
+            ("panel_power_and_instead_of_or", helper,
+             "edp_have_panel_power(intel_dp) ||",
+             "edp_have_panel_power(intel_dp) &&"),
+            ("duplicate_power_put", helper,
+             "intel_display_power_put(dev_priv, domain, wakeref);",
+             "intel_display_power_put(dev_priv, domain, wakeref);\n"
+             "\tintel_display_power_put(dev_priv, domain, wakeref);"),
+            ("powered_predicate_or_instead_of_and", helper,
+             "powered = dev_priv->runtime_pm.irqs_enabled &&",
+             "powered = dev_priv->runtime_pm.irqs_enabled ||"),
             ("irq_gate_missing", helper,
              "if (!dev_priv->runtime_pm.irqs_enabled ||",
              "if (false ||"),
@@ -175,7 +222,7 @@ def main() -> None:
                     raise
             else:
                 fail("dangerous mutation accepted: " + label)
-        print("CHV_EDP_HPD0045_TEN_MUTATIONS_REFUSED")
+        print("CHV_EDP_HPD0045_SIXTEEN_MUTATIONS_REFUSED")
         run(["git", "apply", "--reverse", patch], root)
         if dest.read_bytes() != frozen:
             fail("failed to restore exact frozen source on reverse")
