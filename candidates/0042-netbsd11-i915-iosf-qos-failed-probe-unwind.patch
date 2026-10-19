@@ -1,0 +1,43 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
+@@ -527,8 +527,9 @@
+ 	mutex_init(&dev_priv->backlight_lock);
+ 
+ 	mutex_init(&dev_priv->sb_lock);
+-	pm_qos_add_request(&dev_priv->sb_qos,
+-			   PM_QOS_CPU_DMA_LATENCY, PM_QOS_DEFAULT_VALUE);
++	if (IS_VALLEYVIEW(dev_priv))
++		pm_qos_add_request(&dev_priv->sb_qos,
++				   PM_QOS_CPU_DMA_LATENCY, PM_QOS_DEFAULT_VALUE);
+ 
+ 	mutex_init(&dev_priv->av_mutex);
+ 	mutex_init(&dev_priv->wm.wm_mutex);
+@@ -540,7 +541,7 @@
+ 
+ 	ret = i915_workqueues_init(dev_priv);
+ 	if (ret < 0)
+-		return ret;
++		goto err_early_resources;
+ 
+ 	ret = vlv_alloc_s0ix_state(dev_priv);
+ 	if (ret < 0)
+@@ -576,6 +577,9 @@
+ 	vlv_free_s0ix_state(dev_priv);
+ err_workqueues:
+ 	i915_workqueues_cleanup(dev_priv);
++err_early_resources:
++	if (IS_VALLEYVIEW(dev_priv))
++		pm_qos_remove_request(&dev_priv->sb_qos);
+ 	mutex_destroy(&dev_priv->hdcp_comp_mutex);
+ 	mutex_destroy(&dev_priv->pps_mutex);
+ 	mutex_destroy(&dev_priv->wm.wm_mutex);
+@@ -604,7 +608,8 @@
+ 	vlv_free_s0ix_state(dev_priv);
+ 	i915_workqueues_cleanup(dev_priv);
+ 
+-	pm_qos_remove_request(&dev_priv->sb_qos);
++	if (IS_VALLEYVIEW(dev_priv))
++		pm_qos_remove_request(&dev_priv->sb_qos);
+ 	mutex_destroy(&dev_priv->hdcp_comp_mutex);
+ 	mutex_destroy(&dev_priv->pps_mutex);
+ 	mutex_destroy(&dev_priv->wm.wm_mutex);
