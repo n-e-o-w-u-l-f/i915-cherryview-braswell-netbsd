@@ -72,7 +72,7 @@ resume ordering, IRQ race, and eDP electrical timing remain OPEN.
 - Pinned NetBSD old-line hunk 6602 contains 30 original lines and now
   74 candidate lines. Exact line-context check and text inverse/source
   restoration were **STATIC SOURCE PASS**; **git apply --check, compile,
-  hardware and existing 10-mutation executable regression are NOT_RUN**.
+  hardware and expanded 16-mutation executable regression are NOT_RUN**.
 - No change to Linux reference, NetBSD kernel tree, HP target or bootloader.
   [Previous 0045 RPM review](HP_I915_CHV_0045_NETBSD_PM_SHIM_RACE_REVIEW_20261019.md)
   remains valid; this source audit narrows the VDD-off race mechanism without
