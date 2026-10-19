@@ -1,6 +1,6 @@
 --- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c
-@@ -6602,30 +6602,57 @@
+@@ -6602,30 +6602,58 @@
  
  static const struct drm_encoder_funcs intel_dp_enc_funcs = {
  	.reset = intel_dp_encoder_reset,
@@ -49,7 +49,9 @@
 -		 * "vdd off -> long hpd -> vdd on -> detect -> vdd off -> ..."
 +		 * "vdd off -> hpd -> vdd on -> detect -> vdd off -> ..."
  		 */
- 		DRM_DEBUG_KMS("ignoring long hpd on eDP [ENCODER:%d:%s]\n",
+-		DRM_DEBUG_KMS("ignoring long hpd on eDP [ENCODER:%d:%s]\n",
++		DRM_DEBUG_KMS("ignoring %s hpd on eDP [ENCODER:%d:%s]\n",
++			      long_hpd ? "long" : "short",
  			      intel_dig_port->base.base.base.id,
  			      intel_dig_port->base.base.name);
  		return IRQ_HANDLED;
