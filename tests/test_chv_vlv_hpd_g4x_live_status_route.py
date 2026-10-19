@@ -51,7 +51,10 @@ def audit(dp: str, irq: str) -> None:
     hpdi = function(irq, "i9xx_hpd_irq_handler")
 
     branch = "if ((IS_VALLEYVIEW(dev_priv) || IS_CHERRYVIEW(dev_priv)) &&"
-    expected = (branch + "\n\t    (encoder->hpd_pin == HPD_PORT_B ||"\n                 "\n\t     encoder->hpd_pin == HPD_PORT_C ||"\n                 "\n\t     encoder->hpd_pin == HPD_PORT_D))"\n                 "\n\t\treturn g4x_digital_port_connected(encoder);")
+    expected = (branch + "\n\t    (encoder->hpd_pin == HPD_PORT_B ||"
+                 "\n\t     encoder->hpd_pin == HPD_PORT_C ||"
+                 "\n\t     encoder->hpd_pin == HPD_PORT_D))"
+                 "\n\t\treturn g4x_digital_port_connected(encoder);")
     if connected.count(expected) != 1:
         fail("VLV/CHV route not selecting G4X live status")
     if not (connected.index("if (HAS_GMCH(dev_priv))") <
@@ -124,7 +127,8 @@ def main() -> None:
              "return bdw_digital_port_connected(encoder);\n\n\tif (INTEL_PCH_TYPE(dev_priv) >= PCH_ICP)"),
             ("wrong_vlv_irq_mask", "IS_VALLEYVIEW(dev_priv) || IS_CHERRYVIEW(dev_priv)) &&",
              "IS_BROADWELL(dev_priv) || IS_CHERRYVIEW(dev_priv)) &&"),
-            ("wrong_pin_A_capture", "encoder->hpd_pin == HPD_PORT_D))",\n             "encoder->hpd_pin == HPD_PORT_A))"),\n            ("wrong_irq_ack_reg", "I915_READ(PORT_HOTPLUG_STAT) & hotplug_status_mask",
+            ("wrong_pin_A_capture", "encoder->hpd_pin == HPD_PORT_D))",
+             "encoder->hpd_pin == HPD_PORT_A))"),\n            ("wrong_irq_ack_reg", "I915_READ(PORT_HOTPLUG_STAT) & hotplug_status_mask",
              "I915_READ(GEN8_DE_PORT_ISR) & hotplug_status_mask"),
         )
         for label, before, after in mutations:
