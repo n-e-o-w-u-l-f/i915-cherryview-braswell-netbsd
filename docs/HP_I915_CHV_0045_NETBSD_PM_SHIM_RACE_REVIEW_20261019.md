@@ -84,7 +84,7 @@ guarantee from source-only inspection.
   checks exact Git blob identities, scratch-only `git apply --check`/apply/
   reverse, the NetBSD always-1 PM shim, conditional domain acquisition,
   `intel_hpd_cancel_work`, both new suspend checks, mutex/ref ordering and
-  **ten source mutation** negative cases. It is **AUTHORED, NOT_RUN**.
+  **sixteen source mutation** negative cases (after fail-closed test-oracle strengthening). It is **AUTHORED, NOT_RUN**.
   Script parsing was corrected for `static inline int`; this edit is not
   evidence that the program actually runs successfully.
 
@@ -95,7 +95,7 @@ guarantee from source-only inspection.
    executor (not a reroute of the previously provider-denied equivalent test).
 2. Require all three exact source markers:
    `CHV_EDP_HPD0045_PINNED_SOURCE_GUARD_PASS`,
-   `CHV_EDP_HPD0045_TEN_MUTATIONS_REFUSED` and
+   `CHV_EDP_HPD0045_SIXTEEN_MUTATIONS_REFUSED` and
    `CHV_EDP_HPD0045_BYTE_EXACT_REVERSE_PASS`, actual exit 0.
 3. Check compatibility with i915 candidate patches 0013/0014/0043/0044;
    run native NetBSD compiled i915/DRM/TTM+RTL common-kernel tests before any
