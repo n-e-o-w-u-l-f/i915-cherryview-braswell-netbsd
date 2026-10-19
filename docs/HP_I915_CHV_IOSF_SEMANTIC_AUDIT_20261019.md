@@ -35,6 +35,30 @@ NetBSD `DPIO_PHY(pipe)` is `pipe >> 1`, yielding PHY0 for pipe indices 0/1 and P
 
 The first test passes three PHY and three pipe route cases, native global `sb_lock`, PUNIT sequencing/timeout source assertions and **eight deliberately corrupted input source variants refused**. The second passes three normalized genuine C-body comparisons and **seven deliberately corrupted C-body variants refused**. The test-harness mutation anchors were corrected to the owning functions after initial overbroad whole-file matching, then both full tests passed. These are Python source tests, **not compiled C or actual IRQ/DMA tests**.
 
+
+## Nine-unit port, device-function and opcode source verification
+
+The separate persistent regression \`tests/test_chv_iosf_nine_units_netbsd_guard_parity.py\` validates the *existing*, not-yet-native-integrated owner patch \`compat/native-runtime/vlv-iosf/patches/netbsd-intel-sideband-modern-guard.patch\` against the **real pinned Linux backend** \`drivers/gpu/drm/i915/vlv_iosf_sb.c\` (Git blob \`1f0332b4ad0df58af3b1bd0de7a9290dfa7cf758\`) and the **real pinned NetBSD** \`i915_reg.h\` (Git blob \`a070913dc965ebfb467b99da599e75dd03df61de\`). It does not infer this patch is selected in a compiled NetBSD kernel.
+
+| Linux unit | Native guard port | Read opcode | Write opcode | Source result |
+| --- | ---: | ---: | ---: | --- |
+| BUNIT | \`0x03\` | \`0x06\` | \`0x07\` | Matches |
+| CCK | \`0x14\` | \`0x06\` | \`0x07\` | Matches |
+| CCU | \`0xa9\` | \`0x06\` | \`0x07\` | Matches |
+| DPIO | \`0x12\` | \`0x00\` | \`0x01\` | Matches |
+| DPIO_2 | \`0x1a\` | \`0x00\` | \`0x01\` | Matches |
+| FLISDSI | \`0x1b\` | \`0x06\` | \`0x07\` | Matches |
+| GPIO | n/a | n/a | n/a | Linux returns no port (\`0\`); native candidate fails closed with \`-EOPNOTSUPP\`, not byte-level error-code parity |
+| NC | \`0x11\` | \`0x06\` | \`0x07\` | Matches |
+| PUNIT | \`0x04\` | \`0x06\` | \`0x07\` | Matches |
+
+Native \`DPIO_DEVFN = 0\` at pinned NetBSD; the candidate's \`PCI_DEVFN(0,0)\` is also \`0\`, so the upstream \`unit_to_devfn\` DPIO-versus-generic branch is not a different effective device-function number. All **18 read/write route combinations** were covered by the source contract, including the unsupported GPIO branch. Nine targeted negative mutations changed ports, opcodes, unit reservation or devfn; all nine were refused. The entire test passed **three independent reruns on Legion** (\`CHV_IOSF_NINE_UNITS_THREE_REPEAT_CLEAN_PASS\`). No native compiler or physical hardware was exercised.
+
+### Remaining lifecycle discrepancy
+
+The modern Linux IOSF owner \`vlv_iosf_sb_init/fini\` initializes/destroys its mutex on VLV/CHV but creates/removes the CPU latency QoS request **only on Valleyview**. Frozen NetBSD \`i915_driver_early_probe\` initializes \`sb_lock\` and registers \`sb_qos\` **unconditionally** for the driver, then \`i915_driver_late_release\` removes the QoS request and destroys the lock. Source lifetimes are paired in the normal call paths, but platform eligibility and the NetBSD QoS API contract are not proven equivalent. Do not treat this as an authorized kernel edit without tracing early-probe failures and registration lifetime.
+
+
 ## Known behavioral/ABI differences requiring separate closure
 
 - Modern Linux `vlv_iosf_sb_get/put` stores `locked_unit_mask` and checks a unit was reserved before read/write. The older NetBSD implementation serializes a shared `sb_lock` but does **not** track/verify individual reservations. Physical bus serialization is source-confirmed; per-unit ownership diagnostics and API parity are **not**.
