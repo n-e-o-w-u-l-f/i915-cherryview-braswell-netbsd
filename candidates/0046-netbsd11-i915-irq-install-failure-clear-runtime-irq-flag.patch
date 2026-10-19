@@ -1,0 +1,15 @@
+--- a/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
+@@ -4131,10 +4131,12 @@
+ #endif
+ 	if (ret < 0) {
+ 		dev_priv->drm.irq_enabled = false;
++		/* A failed IRQ install must also disable the AUX wait IRQ gate. */
++		dev_priv->runtime_pm.irqs_enabled = false;
+ 		return ret;
+ 	}
+ 
+ 	intel_irq_postinstall(dev_priv);
+ 
+ 	return ret;
+ }
