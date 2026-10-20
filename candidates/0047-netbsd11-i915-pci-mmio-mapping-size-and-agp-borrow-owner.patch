@@ -83,6 +83,30 @@
  }
  
  void
+@@ -1006,14 +1018,17 @@
+ 	if (ISSET(pdev->pd_kludges, NBPCI_KLUDGE_MAP_ROM)) {
+ 		pci_unmap_rom(pdev, pdev->pd_rom_vaddr);
+ 		pdev->pd_rom_vaddr = 0;
+ 	}
+-	for (i = 0; i < __arraycount(pdev->pd_resources); i++) {
+-		if (!pdev->pd_resources[i].mapped)
+-			continue;
+-		bus_space_unmap(pdev->pd_resources[i].bst,
+-		    pdev->pd_resources[i].bsh, pdev->pd_resources[i].size);
+-	}
++	for (i = 0; i < __arraycount(pdev->pd_resources); i++) {
++		if (!pdev->pd_resources[i].mapped)
++			continue;
++		bus_space_unmap(pdev->pd_resources[i].bst,
++		    pdev->pd_resources[i].bsh, pdev->pd_resources[i].mapped_size);
++		pdev->pd_resources[i].kva = NULL;
++		pdev->pd_resources[i].mapped_size = 0;
++		pdev->pd_resources[i].mapped = false;
++	}
+ 
+ 	/* There is no way these should be still in use.  */
+ 	KASSERT(pdev->pd_saved_state == NULL);
+ 	KASSERT(pdev->pd_intr_handles == NULL);
 --- a/sys/external/bsd/drm2/dist/drm/i915/intel_uncore.c
 +++ b/sys/external/bsd/drm2/dist/drm/i915/intel_uncore.c
 @@ -1745,12 +1745,18 @@
