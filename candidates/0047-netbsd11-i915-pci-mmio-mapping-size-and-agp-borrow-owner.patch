@@ -73,7 +73,7 @@
  
  	return pdev->pd_resources[i].kva;
  }
-@@ -875,9 +884,12 @@
+@@ -875,9 +890,12 @@
  	}
  	KASSERT(i < PCI_NUM_RESOURCES);
  
@@ -89,7 +89,7 @@
  }
  
  void
-@@ -1006,14 +1018,17 @@
+@@ -1006,14 +1024,17 @@
  	if (ISSET(pdev->pd_kludges, NBPCI_KLUDGE_MAP_ROM)) {
  		pci_unmap_rom(pdev, pdev->pd_rom_vaddr);
  		pdev->pd_rom_vaddr = 0;
