@@ -98,6 +98,5 @@ def main() -> int:
                       'kernel_compilation':'NOT_RUN','HP_runtime':'NOT_RUN'}, indent=2))
     return 0 if passed == len(facts) else 3
 
-
 if __name__ == '__main__':
     raise SystemExit(main())
