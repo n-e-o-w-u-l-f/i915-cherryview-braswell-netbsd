@@ -26,7 +26,7 @@
  	}
  }
  
-@@ -846,19 +847,27 @@
+@@ -846,19 +847,33 @@
  	KASSERT(i < PCI_NUM_RESOURCES);
  	KASSERT(pdev->pd_resources[i].kva == NULL);
  
@@ -62,6 +62,12 @@
 +	pdev->pd_resources[i].bst = pdev->pd_pa.pa_memt;
 +	pdev->pd_resources[i].kva = bus_space_vaddr(pdev->pd_resources[i].bst,
 +	    pdev->pd_resources[i].bsh);
++	if (pdev->pd_resources[i].kva == NULL) {
++		/* Do not retain a BAR mapping without a usable virtual address. */
++		bus_space_unmap(pdev->pd_resources[i].bst,
++		    pdev->pd_resources[i].bsh, size);
++		return NULL;
++	}
 +	pdev->pd_resources[i].mapped_size = size;
 +	pdev->pd_resources[i].mapped = true;
  
