@@ -1,0 +1,214 @@
+--- a/sys/external/bsd/drm2/include/linux/pci.h
++++ b/sys/external/bsd/drm2/include/linux/pci.h
+@@ -300,7 +300,7 @@
+ #define	pci_enable_atomic_ops_to_root	linux_pci_enable_atomic_ops_to_root
+ 
+ /* NetBSD local additions.  */
+-void		linux_pci_dev_init(struct pci_dev *, device_t, device_t,
++int		linux_pci_dev_init(struct pci_dev *, device_t, device_t,
+ 		    const struct pci_attach_args *, int);
+ void		linux_pci_dev_destroy(struct pci_dev *);
+ 
+--- a/sys/external/bsd/drm2/linux/linux_pci.c
++++ b/sys/external/bsd/drm2/linux/linux_pci.c
+@@ -42,7 +42,9 @@
+ #include <dev/acpi/acpi_pci.h>
+ #endif
+ 
+-#include <linux/pci.h>
++#include <sys/errno.h>
++
++#include <linux/pci.h>
+ 
+ #include <drm/drm_agp_netbsd.h>
+ 
+@@ -141,8 +143,8 @@
+ 	return parentdev;
+ }
+ 
+-void
+-linux_pci_dev_init(struct pci_dev *pdev, device_t dev, device_t parent,
++int
++linux_pci_dev_init(struct pci_dev *pdev, device_t dev, device_t parent,
+     const struct pci_attach_args *pa, int kludges)
+ {
+ 	const uint32_t subsystem_id = pci_conf_read(pa->pa_pc, pa->pa_tag,
+@@ -165,8 +167,10 @@
+ 	pdev->pd_saved_state = NULL;
+ 	pdev->pd_intr_handles = NULL;
+ 	pdev->pd_drvdata = NULL;
+-	pdev->bus = kmem_zalloc(sizeof(*pdev->bus), KM_NOSLEEP);
+-	pdev->bus->pb_pc = pa->pa_pc;
++	pdev->bus = kmem_zalloc(sizeof(*pdev->bus), KM_NOSLEEP);
++	if (pdev->bus == NULL)
++		return ENOMEM;
++	pdev->bus->pb_pc = pa->pa_pc;
+ 	pdev->bus->pb_dev = parent;
+ 	pdev->bus->number = pa->pa_bus;
+ 	/*
+@@ -204,10 +208,11 @@
+ 			pdev->pd_resources[i].size = 0;
+ 			pdev->pd_resources[i].flags = 0;
+ 		}
+-		pdev->pd_resources[i].kva = NULL;
+-		pdev->pd_resources[i].mapped = false;
+-	}
+-}
++		pdev->pd_resources[i].kva = NULL;
++		pdev->pd_resources[i].mapped = false;
++	}
++	return 0;
++}
+ 
+ int
+ pci_find_capability(struct pci_dev *pdev, int cap)
+@@ -603,9 +608,13 @@
+ 		return NULL;
+ 
+ 	struct pci_dev *const pdev = kmem_zalloc(sizeof(*pdev), KM_SLEEP);
+-	linux_pci_dev_init(pdev, NULL, NULL, &pa, NBPCI_KLUDGE_GET_MUMBLE);
+-
+-	return pdev;
++	if (linux_pci_dev_init(pdev, NULL, NULL, &pa,
++	    NBPCI_KLUDGE_GET_MUMBLE) != 0) {
++		kmem_free(pdev, sizeof(*pdev));
++		return NULL;
++	}
++
++	return pdev;
+ }
+ 
+ void
+@@ -659,9 +668,13 @@
+ 	if (!pci_find_device1(&pa, &pci_get_class_match, C))
+ 		goto out;
+ 	pdev = kmem_zalloc(sizeof(*pdev), KM_SLEEP);
+-	linux_pci_dev_init(pdev, NULL, NULL, &pa, NBPCI_KLUDGE_GET_MUMBLE);
+-
+-out:	if (from)
++	if (linux_pci_dev_init(pdev, NULL, NULL, &pa,
++	    NBPCI_KLUDGE_GET_MUMBLE) != 0) {
++		kmem_free(pdev, sizeof(*pdev));
++		pdev = NULL;
++	}
++
++out:	if (from)
+ 		pci_dev_put(from);
+ 	return pdev;
+ }
+@@ -996,7 +1009,7 @@
+ {
+ 	unsigned i;
+ 
+-	if (pdev->bus->self != NULL) {
++	if (pdev->bus != NULL && pdev->bus->self != NULL) {
+ 		kmem_free(pdev->bus->self, sizeof(*pdev->bus->self));
+ 	}
+ 	if (pdev->bus != NULL) {
+--- a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
++++ b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+@@ -145,7 +145,12 @@
+ 	pci_aprint_devinfo(pa, NULL);
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, parent, pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, parent, pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_dev = self;
+ 	sc->sc_pa = *pa;
+--- a/sys/external/bsd/drm2/amdgpu/amdgpu_pci.c
++++ b/sys/external/bsd/drm2/amdgpu/amdgpu_pci.c
+@@ -137,7 +137,12 @@
+ 	pci_aprint_devinfo(pa, NULL);
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_dev = self;
+ 	sc->sc_pa = *pa;
+--- a/sys/external/bsd/drm2/radeon/radeon_pci.c
++++ b/sys/external/bsd/drm2/radeon/radeon_pci.c
+@@ -190,7 +190,12 @@
+ 	pci_aprint_devinfo(pa, NULL);
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_dev = self;
+ 	sc->sc_pa = *pa;
+--- a/sys/external/bsd/drm2/nouveau/nouveau_pci.c
++++ b/sys/external/bsd/drm2/nouveau/nouveau_pci.c
+@@ -131,7 +131,9 @@
+ 	if (PCI_PRODUCT(pa->pa_id) >= 0x21ff)
+ 		return 0;
+ 
+-	linux_pci_dev_init(&pdev, parent /* XXX bogus */, parent, pa, 0);
++	if (linux_pci_dev_init(&pdev, parent /* XXX bogus */,
++	    parent, pa, 0) != 0)
++		return 0;
+ 	ret = nvkm_device_pci_new(&pdev, NULL, "error",
+ 	    /* detect */ true, /* mmio */ false, /* subdev_mask */ 0, &device);
+ 	if (ret == 0)		/* don't want to hang onto it */
+@@ -156,7 +158,12 @@
+ 	pci_aprint_devinfo(pa, NULL);
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_dev = self;
+ 	sc->sc_pa = *pa;
+--- a/sys/external/bsd/drm2/vmwgfx/vmwgfx_pci.c
++++ b/sys/external/bsd/drm2/vmwgfx/vmwgfx_pci.c
+@@ -143,7 +143,12 @@
+ 	pci_aprint_devinfo(pa, NULL);
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_dev = self;
+ 	sc->sc_pa = *pa;
+--- a/sys/external/bsd/drm2/via/via_pci.c
++++ b/sys/external/bsd/drm2/via/via_pci.c
+@@ -126,7 +126,12 @@
+ 	aprint_normal("\n");
+ 
+ 	/* Initialize the Linux PCI device descriptor.  */
+-	linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	error = linux_pci_dev_init(&sc->sc_pci_dev, self, device_parent(self), pa, 0);
++	if (error) {
++		aprint_error_dev(self, "unable to initialize PCI state: %d\n",
++		    error);
++		return;
++	}
+ 
+ 	sc->sc_drm_dev = drm_dev_alloc(via_drm_driver, self);
+ 	if (IS_ERR(sc->sc_drm_dev)) {
