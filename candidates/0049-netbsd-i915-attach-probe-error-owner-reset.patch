@@ -1,0 +1,17 @@
+--- a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
++++ b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+@@ -187,11 +187,14 @@
+ 
+ 	/* Attach the drm driver.  */
+ 	/* XXX errno Linux->NetBSD */
+ 	error = -i915_driver_probe(&sc->sc_pci_dev, ent);
+ 	if (error) {
++		/* A failed probe must not leave the attach LWP as task owner. */
++		KASSERT(SIMPLEQ_EMPTY(&sc->sc_tasks));
++		atomic_store_relaxed(&sc->sc_task_thread, NULL);
+ 		aprint_error_dev(self, "unable to register drm: %d\n", error);
+ 		return;
+ 	}
+ 	sc->sc_drm_dev = pci_get_drvdata(&sc->sc_pci_dev);
+ 
+ 	/*
