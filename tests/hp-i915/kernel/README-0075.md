@@ -5,7 +5,7 @@
 - [Official same-snapshot checksum manifest](https://nycdn.netbsd.org/pub/NetBSD-daily/netbsd-11/20261021045729Z/amd64/binary/sets/SHA512) is currently publicly visible and its **three digest strings match** those printed in the historical HP-I915 0066 report (3/3).
 - This verifier **does not download**, invoke external programs, mount, decompress, write to or execute a NetBSD guest; it reads a supplied local `SHA512` file and all three archive binaries in streaming mode, then checks pinned snapshot names, manifest digest text, original byte lengths and recomputed SHA512.
 - It rejects malformed/duplicate manifest entries, missing files, symlinks, size mismatch and hash mismatch. A checksum string-only match cannot result in `PASS`: **all three real archive files must be readable and match**.
-- The script's built-in seven synthetic self-tests passed in an isolated local Python 3 environment on 2026-10-21. Published Git blob equals tested local Git blob `55558ce2d5a5a44f369d3f4960ea5da202c4b1dd`. This is **not proof** that the original NetBSD archive contents were independently hashed today.
+- The script's built-in seven synthetic self-tests passed in an isolated local Python 3 environment on 2026-10-21. Published Git blob equals tested local Git blob `f2c5bcb01fa8656ca34eb9b6971caf39d2176847`. This is **not proof** that the original NetBSD archive contents were independently hashed today.
 - Original read-only/public retrieval via the separate local verifier environment could not resolve `nycdn.netbsd.org` (`curl` exit 6). No actual archive-byte verification was carried out in 0075. The 0071 denied Legion source read **must not be rerouted** via this utility.
 
 Self-test, runnable anywhere with Python 3 and a disposable synthetic test environment:
