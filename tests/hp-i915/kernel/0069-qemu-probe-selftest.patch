@@ -1,0 +1,99 @@
+--- a/netbsd/sys/external/bsd/drm2/dist/drm/i915/i915_utils.c
++++ b/netbsd/sys/external/bsd/drm2/dist/drm/i915/i915_utils.c
+@@ -12,6 +12,7 @@
+ 
+ #include "i915_drv.h"
+ #include "i915_utils.h"
++#include <machine/pio.h> /* QEMU-only diagnostic ISA debugcon. */
+ 
+ #ifdef __NetBSD__
+ #define	NBSD_BUG_URL "https://gnats.NetBSD.org/"
+@@ -135,3 +136,68 @@
+ 
+ 	mod_timer(t, jiffies + timeout);
+ }
++
++
++/*
++ * HP-I915-0069: QEMU-only kernel-runtime probe-injection diagnostic.
++ * Never install or boot this scratch-only kernel on physical hardware.
++ * Exercise the ORIGINAL __i915_inject_probe_error with a real NetBSD
++ * device_t and a disposable fake drm_i915_private. Restore all globals.
++ */
++#if IS_ENABLED(CONFIG_DRM_I915_DEBUG)
++void hp_i915_0069_kernel_probe_selftest(void);
++static void
++hp_i915_0069_debugcon(const char *s)
++{
++    while (*s)
++        outb(0xe9, (uint8_t)*s++);
++}
++
++void
++hp_i915_0069_kernel_probe_selftest(void)
++{
++    static struct drm_i915_private fake_i915;
++    device_t dev = device_find_by_xname("mainbus0");
++    unsigned int old_param = i915_modparams.inject_probe_failure;
++    unsigned int old_count = i915_probe_fail_count;
++    int disabled, before, hit, after;
++    bool fired, cleared, restored, pass;
++
++    if (dev == NULL) {
++        printf("HP_I915_0069_KERNEL_PROBE_FAIL no-mainbus0\n");
++        hp_i915_0069_debugcon("HP_I915_0069_KERNEL_PROBE_FAIL no-mainbus0\n");
++        return;
++    }
++    fake_i915.drm.dev = dev;
++    i915_probe_fail_count = 0;
++    i915_modparams.inject_probe_failure = 0;
++    disabled = __i915_inject_probe_error(&fake_i915, -EFAULT,
++        "HP_I915_0069_DISABLED", 1);
++    i915_modparams.inject_probe_failure = 2;
++    before = __i915_inject_probe_error(&fake_i915, -EFAULT,
++        "HP_I915_0069_BEFORE", 2);
++    hit = __i915_inject_probe_error(&fake_i915, -EFAULT,
++        "HP_I915_0069_HIT", 3);
++    after = __i915_inject_probe_error(&fake_i915, -EFAULT,
++        "HP_I915_0069_AFTER", 4);
++    fired = i915_error_injected();
++    i915_modparams.inject_probe_failure = 0;
++    i915_probe_fail_count = 0;
++    cleared = !i915_error_injected();
++    i915_modparams.inject_probe_failure = old_param;
++    i915_probe_fail_count = old_count;
++    restored = i915_modparams.inject_probe_failure == old_param &&
++        i915_probe_fail_count == old_count;
++    pass = disabled == 0 && before == 0 && hit == -EFAULT &&
++        after == 0 && fired && cleared && restored && old_param == 0;
++    {
++        char msg[240];
++        snprintf(msg, sizeof(msg),
++            "HP_I915_0069_KERNEL_PROBE_%s disabled=%d before=%d hit=%d after=%d fired=%d cleared=%d restored=%d old_param=%u\n",
++            pass ? "PASS" : "FAIL", disabled, before, hit, after,
++            fired, cleared, restored, old_param);
++        printf("%s", msg);
++        hp_i915_0069_debugcon(msg);
++    }
++}
++#endif
+--- a/netbsd/sys/kern/init_main.c
++++ b/netbsd/sys/kern/init_main.c
+@@ -256,6 +256,8 @@
+ static void configure2(void);
+ static void configure3(void);
+ void main(void);
++/* HP-I915-0069 QEMU scratch-only diagnostic. */
++void hp_i915_0069_kernel_probe_selftest(void);
+ 
+ /*
+  * System startup; initialize the world, create process 0, mount root
+@@ -549,6 +551,8 @@
+ 
+ 	/* Configure the system hardware.  This will enable interrupts. */
+ 	configure();
++	/* HP-I915-0069 QEMU scratch-only kernel-runtime check. */
++	hp_i915_0069_kernel_probe_selftest();
+ #ifdef __HAVE_LEGACY_INTRCNT
+ 	evcnt_attach_legacy_intrcnt();
+ #endif
