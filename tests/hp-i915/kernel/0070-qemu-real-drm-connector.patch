@@ -10,7 +10,7 @@
  #include <linux/nbsd-namespace.h>
  
  /**
-@@ -2409,3 +2412,169 @@
+@@ -2409,3 +2412,165 @@
  	return tg;
  }
  EXPORT_SYMBOL(drm_mode_create_tile_group);
@@ -92,7 +92,7 @@
 +        .name = "hp-i915-0070-qemu-only",
 +    };
 +    device_t mainbus = device_find_by_xname("mainbus0");
-+    bool own_ida = false, no_device_register = false;
++    bool no_device_register = false;
 +    bool failed_rollback = false, succeeded = false;
 +    bool unregistered = false, cleaned = false;
 +    int ret, id, calls_after_unregister;
@@ -103,14 +103,14 @@
 +        return;
 +    }
 +    hp0070_trace("START_DRM_CORE_READY", drm_core_init_complete);
++    if (!drm_core_init_complete) {
++        hp0070_trace("SKIP_UNINITIALIZED_DRM_CORE", 1);
++        return;
++    }
 +    ret = linux_guarantee_initialized();
 +    if (ret != 0) {
 +        hp0070_trace("FAIL_LINUX_INIT", ret);
 +        return;
-+    }
-+    if (!drm_core_init_complete) {
-+        drm_connector_ida_init();
-+        own_ida = true;
 +    }
 +
 +    fake.dev = mainbus;
@@ -160,8 +160,6 @@
 +    cleaned = fake.mode_config.num_connector == 0 &&
 +        idr_find(&fake.mode_config.object_idr, id) == NULL;
 +    drm_mode_config_cleanup(&fake);
-+    if (own_ida)
-+        drm_connector_ida_destroy();
 +
 +    snprintf(msg, sizeof(msg),
 +        "HP_I915_0070_DRM_CONNECTOR_%s init=1 no_dev=%d fail=%d success=%d unreg=%d cleanup=%d late=%d early=%d sysfs_stub=1 gpu=0\n",
@@ -175,8 +173,6 @@
 +
 +out_config:
 +    drm_mode_config_cleanup(&fake);
-+    if (own_ida)
-+        drm_connector_ida_destroy();
 +    hp0070_trace("FAIL_PRECONDITION", ret);
 +}
 +#endif
