@@ -54,6 +54,7 @@ def audit(sets_dir, manifest, expected=EXPECTED):
             with path.open("rb") as handle:
                 for chunk in iter(lambda: handle.read(1024 * 1024), b""):
                     digest.update(chunk)
+            row["archive_bytes_read_complete"] = True
             row["file_sha512_matches_manifest"] = (
                 digest.hexdigest() == records.get(name))
         except (OSError, ValueError) as exc:
@@ -62,7 +63,9 @@ def audit(sets_dir, manifest, expected=EXPECTED):
     passed = all(all(value for key, value in result.items() if key != "file_error")
                  for result in results.values())
     return {"snapshot": SNAPSHOT, "status": "PASS" if passed else "FAIL",
-            "hash_algorithm": "SHA512", "actual_archive_bytes_hashed": True,
+            "hash_algorithm": "SHA512",
+            "actual_archive_bytes_hashed": all(r.get("archive_bytes_read_complete", False)
+                                              for r in results.values()),
             "files": results}
 
 
