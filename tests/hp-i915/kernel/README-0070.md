@@ -32,7 +32,7 @@ The QEMU-only selftest uses `device_find_by_xname("mainbus0")` and a synthetic `
 4. `drm_connector_unregister` twice: UNREGISTERED and exactly one `early_unregister` callback.
 5. Real `drm_connector_cleanup` plus `drm_mode_config_cleanup`: connector count zero and object removed from IDR.
 
-The test also checks the original 0069 i915 probe helper marker. `drm_core_init_complete=1` was observed in the initial QEMU run. The fallback local connector IDA setup branch was not needed in that run.
+The test also checks the original 0069 i915 probe helper marker. `drm_core_init_complete=1` was observed in the initial QEMU run. If the DRM core is not ready, the test fails closed without manually initializing global connector IDAs.
 
 NetBSD's `sys/external/bsd/drm2/drm/drm_sysfs.c` implements `drm_sysfs_connector_add` by setting `connector->kdev = connector->dev->dev` and returning 0; `drm_sysfs_connector_remove` is empty. The diagnostic explicitly reports `sysfs_stub=1` and cannot validate Linux sysfs object lifecycle or real hardware resource unwind.
 
