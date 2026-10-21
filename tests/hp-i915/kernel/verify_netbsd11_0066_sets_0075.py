@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Strict offline verifier for the pinned NetBSD 11 daily 0066 root sets.
 
-Does not download, extract, mount, execute or write anything. A manifest-only
+Ordinary audit mode never downloads, extracts, mounts, executes or writes.\nSelf-test mode writes only disposable synthetic fixtures. A manifest-only
 match is not sufficient: success requires hashing all three archive files.
 """
 import argparse
@@ -12,6 +12,7 @@ import re
 import stat
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 SNAPSHOT = "netbsd-11/20261021045729Z/amd64/binary/sets"
 EXPECTED = {
@@ -38,35 +39,72 @@ def parse_manifest(text):
 def audit(sets_dir, manifest, expected=EXPECTED):
     records = parse_manifest(manifest)
     results = {}
-    for name, (expected_size, expected_hash) in expected.items():
-        row = {"manifest_matches_reference": records.get(name) == expected_hash,
-               "file_exists_and_regular": False,
-               "byte_size_matches_reference": False,
-               "file_sha512_matches_manifest": False}
-        path = sets_dir / name
-        try:
-            mode = path.lstat().st_mode
-            if not stat.S_ISREG(mode):
-                raise ValueError("not a regular file (symlink refused)")
-            row["file_exists_and_regular"] = True
-            row["byte_size_matches_reference"] = path.stat().st_size == expected_size
-            digest = hashlib.sha512()
-            with path.open("rb") as handle:
-                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-                    digest.update(chunk)
-            row["archive_bytes_read_complete"] = True
-            row["file_sha512_matches_manifest"] = (
-                digest.hexdigest() == records.get(name))
-        except (OSError, ValueError) as exc:
-            row["file_error"] = str(exc)
-        results[name] = row
-    passed = all(all(value for key, value in result.items() if key != "file_error")
-                 for result in results.values())
-    return {"snapshot": SNAPSHOT, "status": "PASS" if passed else "FAIL",
-            "hash_algorithm": "SHA512",
-            "actual_archive_bytes_hashed": all(r.get("archive_bytes_read_complete", False)
-                                              for r in results.values()),
-            "files": results}
+    directory_fd = None
+    try:
+        directory_fd = os.open(
+            sets_dir, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        for name, (expected_size, expected_hash) in expected.items():
+            row = {
+                "manifest_matches_reference": records.get(name) == expected_hash,
+                "file_exists_and_regular": False,
+                "byte_size_matches_reference": False,
+                "file_sha512_matches_manifest": False,
+                "archive_bytes_read_complete": False,
+                "stable_identity_and_metadata": False,
+            }
+            results[name] = row
+            try:
+                pre_path = os.stat(
+                    name, dir_fd=directory_fd, follow_symlinks=False)
+                if not stat.S_ISREG(pre_path.st_mode):
+                    raise ValueError("not a regular file (symlink refused)")
+                fd = os.open(
+                    name,
+                    os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
+                    dir_fd=directory_fd)
+                with os.fdopen(fd, "rb") as handle:
+                    pre = os.fstat(handle.fileno())
+                    if not stat.S_ISREG(pre.st_mode):
+                        raise ValueError("not a regular file")
+                    row["file_exists_and_regular"] = True
+                    row["byte_size_matches_reference"] = (
+                        pre.st_size == expected_size)
+                    if not row["byte_size_matches_reference"]:
+                        continue
+                    digest = hashlib.sha512()
+                    for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                        digest.update(chunk)
+                    post = os.fstat(handle.fileno())
+                    row["archive_bytes_read_complete"] = True
+                    row["stable_identity_and_metadata"] = all(
+                        getattr(pre, key) == getattr(post, key)
+                        for key in (
+                            "st_dev", "st_ino", "st_size",
+                            "st_mtime_ns", "st_ctime_ns"))
+                    row["file_sha512_matches_manifest"] = (
+                        digest.hexdigest() == records.get(name)
+                        and row["stable_identity_and_metadata"])
+            except (OSError, ValueError) as exc:
+                row["file_error"] = str(exc)
+    except (OSError, ValueError) as exc:
+        return {
+            "snapshot": SNAPSHOT, "status": "ERROR", "reason": str(exc),
+            "actual_archive_bytes_hashed": False, "files": results,
+        }
+    finally:
+        if directory_fd is not None:
+            os.close(directory_fd)
+    passed = (len(results) == len(expected)
+              and all(all(value for key, value in row.items()
+                          if key != "file_error")
+                      for row in results.values()))
+    return {
+        "snapshot": SNAPSHOT, "status": "PASS" if passed else "FAIL",
+        "hash_algorithm": "SHA512",
+        "actual_archive_bytes_hashed": all(
+            row["archive_bytes_read_complete"] for row in results.values()),
+        "files": results,
+    }
 
 
 def self_test():
@@ -102,7 +140,35 @@ def self_test():
         assert audit(root, manifest, expected)["status"] == "FAIL"
         forged = manifest.replace(expected["rescue.tar.xz"][1], "0" * 128)
         assert audit(root, forged, expected)["status"] == "FAIL"
-    return {"self_test": "PASS", "cases": 7,
+        (root / "base.tar.xz").write_bytes(payloads["base.tar.xz"])
+        linked_directory = root / "linked-sets"
+        linked_directory.symlink_to(root, target_is_directory=True)
+        assert audit(linked_directory, manifest, expected)["status"] == "ERROR"
+        linked_directory.unlink()
+        (root / "base.tar.xz").unlink()
+        os.mkfifo(root / "base.tar.xz")
+        assert audit(root, manifest, expected)["status"] == "FAIL"
+        (root / "base.tar.xz").unlink()
+        (root / "base.tar.xz").write_bytes(payloads["base.tar.xz"])
+        original_os_open = os.open
+        swapped = [False]
+
+        def swap_before_descriptor_open(name, flags, *args, **kwargs):
+            if (name == "etc.tar.xz" and kwargs.get("dir_fd") is not None
+                    and not swapped[0]):
+                swapped[0] = True
+                (root / "etc.tar.xz").unlink()
+                (root / "etc.tar.xz").symlink_to(root / "rescue.tar.xz")
+            return original_os_open(name, flags, *args, **kwargs)
+
+        with patch("os.open", side_effect=swap_before_descriptor_open):
+            outcome = audit(root, manifest, expected)
+        assert swapped[0] and outcome["status"] == "FAIL"
+        assert not outcome["files"]["etc.tar.xz"]["archive_bytes_read_complete"]
+        (root / "etc.tar.xz").unlink()
+        (root / "etc.tar.xz").write_bytes(payloads["etc.tar.xz"])
+
+    return {"self_test": "PASS", "cases": 10,
             "note": "synthetic fixtures only; NOT actual NetBSD archive verification"}
 
 
