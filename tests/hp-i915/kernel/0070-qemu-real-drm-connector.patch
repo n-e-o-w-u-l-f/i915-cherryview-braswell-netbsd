@@ -1,0 +1,201 @@
+--- a/netbsd/sys/external/bsd/drm2/dist/drm/drm_connector.c
++++ b/netbsd/sys/external/bsd/drm2/dist/drm/drm_connector.c
+@@ -38,6 +38,9 @@
+ #include "drm_crtc_internal.h"
+ #include "drm_internal.h"
+ 
++#include <machine/pio.h> /* 0070 QEMU-only ISA debugcon */
++#include <sys/device.h>
++#include <drm/drm_mode_config.h>
+ #include <linux/nbsd-namespace.h>
+ 
+ /**
+@@ -2409,3 +2412,169 @@
+ 	return tg;
+ }
+ EXPORT_SYMBOL(drm_mode_create_tile_group);
++
++/*
++ * HP-I915-0070: isolated QEMU-only real DRM core connector lifecycle.
++ * Not a physical GPU or PCI device. Never install on the HP target.
++ * The NetBSD sysfs connector hook is a stub, not real Linux sysfs.
++ */
++#ifdef __NetBSD__
++extern bool drm_core_init_complete;
++extern int linux_guarantee_initialized(void);
++void hp_i915_0070_kernel_connector_selftest(void);
++static int hp0070_late_calls, hp0070_early_calls;
++static bool hp0070_fail_late;
++
++static int
++hp0070_late_register(struct drm_connector *c)
++{
++    hp0070_late_calls++;
++    return hp0070_fail_late ? -EFAULT : 0;
++}
++
++static void
++hp0070_early_unregister(struct drm_connector *c)
++{
++    hp0070_early_calls++;
++}
++
++static enum drm_connector_status
++hp0070_detect(struct drm_connector *c, bool force)
++{
++    return connector_status_disconnected;
++}
++
++static int
++hp0070_fill_modes(struct drm_connector *c, uint32_t w, uint32_t h)
++{
++    return 0;
++}
++
++static void
++hp0070_destroy(struct drm_connector *c)
++{
++    drm_connector_cleanup(c);
++}
++
++static const struct drm_connector_funcs hp0070_funcs = {
++    .detect = hp0070_detect,
++    .fill_modes = hp0070_fill_modes,
++    .destroy = hp0070_destroy,
++    .late_register = hp0070_late_register,
++    .early_unregister = hp0070_early_unregister,
++};
++
++static void
++hp0070_debugcon(const char *s)
++{
++    while (*s)
++        outb(0xe9, (uint8_t)*s++);
++}
++
++static void
++hp0070_trace(const char *phase, int value)
++{
++    char msg[192];
++    snprintf(msg, sizeof(msg),
++        "HP_I915_0070_TRACE %s=%d\n", phase, value);
++    printf("%s", msg);
++    hp0070_debugcon(msg);
++}
++
++void
++hp_i915_0070_kernel_connector_selftest(void)
++{
++    static struct drm_device fake;
++    static struct drm_connector conn;
++    static struct drm_driver driver = {
++        .name = "hp-i915-0070-qemu-only",
++    };
++    device_t mainbus = device_find_by_xname("mainbus0");
++    bool own_ida = false, no_device_register = false;
++    bool failed_rollback = false, succeeded = false;
++    bool unregistered = false, cleaned = false;
++    int ret, id, calls_after_unregister;
++    char msg[256];
++
++    if (mainbus == NULL) {
++        hp0070_trace("SKIP_NO_MAINBUS", 1);
++        return;
++    }
++    hp0070_trace("START_DRM_CORE_READY", drm_core_init_complete);
++    ret = linux_guarantee_initialized();
++    if (ret != 0) {
++        hp0070_trace("FAIL_LINUX_INIT", ret);
++        return;
++    }
++    if (!drm_core_init_complete) {
++        drm_connector_ida_init();
++        own_ida = true;
++    }
++
++    fake.dev = mainbus;
++    fake.driver = &driver;
++    fake.driver_features = 0;
++    drm_mode_config_init(&fake);
++    hp0070_trace("MODE_CONFIG_CREATED", fake.mode_config.dpms_property != NULL);
++    if (!fake.mode_config.dpms_property) {
++        hp0070_trace("FAIL_MODE_CONFIG_PROPERTIES", 1);
++        goto out_config;
++    }
++
++    ret = drm_connector_init(&fake, &conn, &hp0070_funcs,
++        DRM_MODE_CONNECTOR_VIRTUAL);
++    hp0070_trace("CONNECTOR_INIT", ret);
++    if (ret != 0)
++        goto out_config;
++
++    id = conn.base.id;
++    ret = drm_connector_register(&conn);
++    no_device_register = ret == 0 &&
++        conn.registration_state == DRM_CONNECTOR_INITIALIZING &&
++        hp0070_late_calls == 0;
++
++    fake.registered = true;
++    hp0070_fail_late = true;
++    ret = drm_connector_register(&conn);
++    failed_rollback = ret == -EFAULT &&
++        conn.registration_state == DRM_CONNECTOR_INITIALIZING &&
++        hp0070_late_calls == 1;
++    hp0070_trace("EXPECTED_EFAULT", ret);
++
++    hp0070_fail_late = false;
++    ret = drm_connector_register(&conn);
++    succeeded = ret == 0 &&
++        conn.registration_state == DRM_CONNECTOR_REGISTERED &&
++        hp0070_late_calls == 2 &&
++        idr_find(&fake.mode_config.object_idr, id) == &conn.base;
++    hp0070_trace("SUCCESSFUL_REGISTER", ret);
++
++    drm_connector_unregister(&conn);
++    calls_after_unregister = hp0070_early_calls;
++    drm_connector_unregister(&conn);
++    unregistered = conn.registration_state == DRM_CONNECTOR_UNREGISTERED &&
++        calls_after_unregister == 1 && hp0070_early_calls == 1;
++    drm_connector_cleanup(&conn);
++    cleaned = fake.mode_config.num_connector == 0 &&
++        idr_find(&fake.mode_config.object_idr, id) == NULL;
++    drm_mode_config_cleanup(&fake);
++    if (own_ida)
++        drm_connector_ida_destroy();
++
++    snprintf(msg, sizeof(msg),
++        "HP_I915_0070_DRM_CONNECTOR_%s init=1 no_dev=%d fail=%d success=%d unreg=%d cleanup=%d late=%d early=%d sysfs_stub=1 gpu=0\n",
++        no_device_register && failed_rollback && succeeded &&
++        unregistered && cleaned ? "PASS" : "FAIL",
++        no_device_register, failed_rollback, succeeded,
++        unregistered, cleaned, hp0070_late_calls, hp0070_early_calls);
++    printf("%s", msg);
++    hp0070_debugcon(msg);
++    return;
++
++out_config:
++    drm_mode_config_cleanup(&fake);
++    if (own_ida)
++        drm_connector_ida_destroy();
++    hp0070_trace("FAIL_PRECONDITION", ret);
++}
++#endif
+--- a/netbsd/sys/kern/init_main.c
++++ b/netbsd/sys/kern/init_main.c
+@@ -258,6 +258,7 @@
+ void main(void);
+ /* HP-I915-0069 QEMU scratch-only diagnostic. */
+ void hp_i915_0069_kernel_probe_selftest(void);
++void hp_i915_0070_kernel_connector_selftest(void);
+ 
+ /*
+  * System startup; initialize the world, create process 0, mount root
+@@ -553,6 +554,8 @@
+ 	configure();
+ 	/* HP-I915-0069 QEMU scratch-only kernel-runtime check. */
+ 	hp_i915_0069_kernel_probe_selftest();
++	/* HP-I915-0070 QEMU-only real DRM core connector lifecycle. */
++	hp_i915_0070_kernel_connector_selftest();
+ #ifdef __HAVE_LEGACY_INTRCNT
+ 	evcnt_attach_legacy_intrcnt();
+ #endif
