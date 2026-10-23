@@ -152,7 +152,7 @@ def main():
     canonical = ROOT / "compat/native-drm/drm_cdevsw.c"
     if not staged.is_file() or canonical.read_bytes() != staged.read_bytes():
         raise RuntimeError("GitHub DRM owner source differs from current HP stage")
-    if digest(canonical) != "ae0ddb2629a89a2729fef8b1d6c00c865998d19d59c5a0aebafc7a66e6b0abc7":
+    if digest(canonical) != "1717ce53cb1d903067b87798502d665c8a79f16763c6d433ebf0ef331845bc43":
         raise RuntimeError("DRM source baseline revision changed; review before native compilation")
     prepared = {}
     source_hashes = evidence["native_three_unit_gate"]["status"]["source_sha256"]

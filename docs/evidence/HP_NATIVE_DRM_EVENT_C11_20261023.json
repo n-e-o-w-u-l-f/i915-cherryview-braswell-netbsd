@@ -1,0 +1,376 @@
+{
+  "state": "PASSED",
+  "tested_code_tree": "9895d1ae1edbd0e1586f4f22e149b3abebd5b115",
+  "base_i915": "8a164f10c45c3d66f7648376ccd2177c8dfe81ba",
+  "recovered_original": "1f9124d761bd6e8f0a0897f318f1d34c5a1c81d4",
+  "wrapper": {
+    "state": "PASSED",
+    "started": "2026-10-23T05:48:55.656434+00:00",
+    "host": "hp-tpnw121.fritz.box",
+    "uname": [
+      "NetBSD",
+      "hp-tpnw121.fritz.box",
+      "11.0",
+      "NetBSD 11.0 (RTWN8723BE-F77-LINUX-EFUSE-MAP) #0: Sat Sep 26 19:13:52 CEST 2026  root@hp-tpnw121.fritz.box:/usr/obj/sys/arch/amd64/compile/RTWN8723BE-F77-LINUX-EFUSE-MAP",
+      "amd64",
+      "x86_64"
+    ],
+    "uid": 1004,
+    "repo": "/home/megal/hp-driver-source-stage-20261023/i915-event-a02",
+    "output": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02",
+    "source_sha256": {
+      "compat/native-drm/drm_cdevsw.c": "1717ce53cb1d903067b87798502d665c8a79f16763c6d433ebf0ef331845bc43",
+      "tools/build_hp_native_drm_adapter.py": "3571cfef1bffac34ab16858e3c984c8b2749d3732e493d88cef977cd1b745f4e",
+      "tests/test_native_drm_error_paths.py": "482e473ada33946a06e6780f596635a0c229f3e34424cfb71f55607e1207a83a",
+      "tests/test_native_drm_event_c11.py": "2b770e0fd01eabfd03c942ebad5e7e0cfd19f856e9545a38bf79fcd322c96280",
+      "tests/fixtures/native_drm_event.c": "42ad94436fafdce6d5ade31efc708618ad545b8d2244d37ca107515886988bd7"
+    },
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "tests/test_native_drm_error_paths.py"
+        ],
+        "exit": 0,
+        "log": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/check-1.log",
+        "log_sha256": "feabb4add9e2ca3374e538560634d1ec97dc4f4ce89aab12f3d726e36ea9b2f6"
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "tests/test_hp_native_drm_stage_replay.py"
+        ],
+        "exit": 0,
+        "log": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/check-2.log",
+        "log_sha256": "edd83dd64bd48ce01de91f732cf57603afc07ccf6ca246822ccb5ffabf3af08d"
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "tests/test_hp_native_drm_build_closure_preflight.py"
+        ],
+        "exit": 0,
+        "log": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/check-3.log",
+        "log_sha256": "a191b19a75521206c176977d3e2338b744881805677106466b7f6269862d6714"
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "tests/test_native_drm_event_c11.py",
+          "--native",
+          "--output",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native"
+        ],
+        "exit": 0,
+        "log": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/check-4.log",
+        "log_sha256": "31b98e4f71293f43e4a750d9ff5aa62105270e2581f6ffb37d6ec572c5bf5712"
+      }
+    ],
+    "limitation": "Native source-bound C userland mock; not kernel ABI, physical DRM/KMS or full410 closure.",
+    "finished": "2026-10-23T05:49:01.728527+00:00"
+  },
+  "native": {
+    "state": "PASSED",
+    "started": "2026-10-23T05:48:57.151046+00:00",
+    "hostname": "hp-tpnw121.fritz.box",
+    "system": "NetBSD-11.0-amd64-x86_64-64bit-ELF",
+    "python": "3.14.7",
+    "identity": {
+      "source_sha256": "1717ce53cb1d903067b87798502d665c8a79f16763c6d433ebf0ef331845bc43",
+      "fixture_sha256": "42ad94436fafdce6d5ade31efc708618ad545b8d2244d37ca107515886988bd7",
+      "assembled_sha256": "1949c0114551a26ea32101e244017e5914080a76e8260f3d4c28698fdd6e2bee",
+      "drm_native_error_sha256": "d201b9dd7979636f185647e92dc70596629b034dc96a9b227d1deebc1c2a36db",
+      "drm_native_put_back_sha256": "aad74e979ff09c002b3427f99dce70183ee784b42f264b14282ae7d8cf977c40",
+      "drm_native_read_events_sha256": "95a1494de48169f035e92133d22f501f68c1e003b85dec87a67116bb71de0a9f"
+    },
+    "source_path": "/home/megal/hp-driver-source-stage-20261023/i915-event-a02/compat/native-drm/drm_cdevsw.c",
+    "output": "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native",
+    "limitation": "Native HP C11/UBSan execution of unchanged extracted function bodies with mock uio/list/lock/allocator APIs; not kernel ABI, physical copyout, concurrency, DRM/KMS, or full driver acceptance. Cursor rollback does not undo bytes already copied into user memory. KM_SLEEP ENOMEM and post-progress wait interruption are not reachable source paths.",
+    "checks": [
+      {
+        "name": "actual_functions",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/actual_functions.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/actual_functions"
+        ],
+        "source_sha256": "1949c0114551a26ea32101e244017e5914080a76e8260f3d4c28698fdd6e2bee",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": 0,
+        "run_log_sha256": "de8f1808280ff760f7ceadf477907244923c5c21720d83318dcc82dd5ea5005f",
+        "binary_sha256": "bc4fc5b97d5e45c529450f41f3dbb6653d0b2e50e07bd71162cbd0b8b6d197ce",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation",
+          "zero_iovec_count_no_allocation",
+          "negative_iovec_count_no_allocation",
+          "empty_nonblocking",
+          "initial_lock_restart",
+          "initial_lock_eintr",
+          "empty_wait_restart",
+          "empty_wait_eintr",
+          "wake_then_relock_restart_retains_event",
+          "wake_relock_and_deliver",
+          "undersized_buffer_requeues_without_copy",
+          "first_fault_restores_cursor_and_queue_order",
+          "second_fault_restores_remaining_iovec",
+          "second_fault_crossing_iovecs_restores_both",
+          "two_events_success_free_original_snapshot_size",
+          "all_iovecs_consumed_free_original_snapshot_size",
+          "progress_then_undersized_event_retained",
+          "progress_returns_before_wait_or_eagain"
+        ],
+        "expected": "PASS",
+        "accepted": true
+      },
+      {
+        "name": "remove_both_progress_guards",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/remove_both_progress_guards.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/remove_both_progress_guards"
+        ],
+        "source_sha256": "bfc8a12edf34ee1508cb6017cac3b68fc54301487202bb14e5dac7dc9cf119f1",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": -6,
+        "run_log_sha256": "d198c8543da664209661d7193869646ef8df9c25b607bef98078c8969294fddb",
+        "binary_sha256": "0c25f5dd69ef853a3229110a836929ccfcd9b255f22d9cedb01714669bfcfb0a",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation",
+          "zero_iovec_count_no_allocation",
+          "negative_iovec_count_no_allocation",
+          "empty_nonblocking",
+          "initial_lock_restart",
+          "initial_lock_eintr",
+          "empty_wait_restart",
+          "empty_wait_eintr",
+          "wake_then_relock_restart_retains_event",
+          "wake_relock_and_deliver",
+          "undersized_buffer_requeues_without_copy",
+          "first_fault_restores_cursor_and_queue_order"
+        ],
+        "expected": "SEMANTIC_MUTANT_REJECTED",
+        "expected_assertion": "drm_native_read_events(&ctx.file, &ctx.uio) == 0",
+        "expected_case_prefix_count": 13,
+        "rejection_reason_checks": {
+          "terminated_by_sigabrt": true,
+          "expected_case_prefix": true,
+          "expected_assertion_present": true
+        },
+        "rejection_stderr": "assertion \"drm_native_read_events(&ctx.file, &ctx.uio) == 0\" failed: file \"/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/remove_both_progress_guards.c\", line 550, function \"main\"\n",
+        "accepted": true
+      },
+      {
+        "name": "omit_uio_cursor_restore",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_uio_cursor_restore.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_uio_cursor_restore"
+        ],
+        "source_sha256": "48776bb891eb33c26e125f7477a8e5638ca5cfedc188ca387d853c681187fa5d",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": -6,
+        "run_log_sha256": "7513861b6f7e8c621bd380797636c4346b82703d72bec92ab4535c79bc339899",
+        "binary_sha256": "9e6a9c4d56186d0c99febd08ae7d67a68a55feb06af2dbf27813bd346b71b230",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation",
+          "zero_iovec_count_no_allocation",
+          "negative_iovec_count_no_allocation",
+          "empty_nonblocking",
+          "initial_lock_restart",
+          "initial_lock_eintr",
+          "empty_wait_restart",
+          "empty_wait_eintr",
+          "wake_then_relock_restart_retains_event",
+          "wake_relock_and_deliver",
+          "undersized_buffer_requeues_without_copy"
+        ],
+        "expected": "SEMANTIC_MUTANT_REJECTED",
+        "expected_assertion": "drm_native_read_events(&ctx.file, &ctx.uio) == EFAULT",
+        "expected_case_prefix_count": 12,
+        "rejection_reason_checks": {
+          "terminated_by_sigabrt": true,
+          "expected_case_prefix": true,
+          "expected_assertion_present": true
+        },
+        "rejection_stderr": "assertion \"drm_native_read_events(&ctx.file, &ctx.uio) == EFAULT\" failed: file \"/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_uio_cursor_restore.c\", line 539, function \"main\"\n",
+        "accepted": true
+      },
+      {
+        "name": "omit_iovec_contents_restore",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_iovec_contents_restore.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_iovec_contents_restore"
+        ],
+        "source_sha256": "0ca6b95499c23f1e3faa022def52c2d9d67aa0c5195c02f7e5a88d4c7cb58db2",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": -6,
+        "run_log_sha256": "1cbfee10c84f45db2b890890dc7bb07bf616fe6cde8faf1f44c8334dc8700235",
+        "binary_sha256": "15c772f88654511435ef3126e917b04dc43291aadda287034a32f9012ac9719b",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation",
+          "zero_iovec_count_no_allocation",
+          "negative_iovec_count_no_allocation",
+          "empty_nonblocking",
+          "initial_lock_restart",
+          "initial_lock_eintr",
+          "empty_wait_restart",
+          "empty_wait_eintr",
+          "wake_then_relock_restart_retains_event",
+          "wake_relock_and_deliver",
+          "undersized_buffer_requeues_without_copy"
+        ],
+        "expected": "SEMANTIC_MUTANT_REJECTED",
+        "expected_assertion": "ctx.iov[i].iov_base == ctx.buffers[i]",
+        "expected_case_prefix_count": 12,
+        "rejection_reason_checks": {
+          "terminated_by_sigabrt": true,
+          "expected_case_prefix": true,
+          "expected_assertion_present": true
+        },
+        "rejection_stderr": "assertion \"ctx.iov[i].iov_base == ctx.buffers[i]\" failed: file \"/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_iovec_contents_restore.c\", line 407, function \"assert_initial_uio\"\n",
+        "accepted": true
+      },
+      {
+        "name": "free_using_remaining_iovec_count",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/free_using_remaining_iovec_count.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/free_using_remaining_iovec_count"
+        ],
+        "source_sha256": "5eb64e9245ac76c7c9b1a3b7eaf2f45f877113f6a89c5a6ec763522519fff546",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": -6,
+        "run_log_sha256": "89221ac8a3f94947675eae5a0c1074bb07a45365768d0ece0a60280e8cfdd5e2",
+        "binary_sha256": "b2864de8060e25bc9d7a790326f946ead8d32669819d6cda9e2909c47468156c",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation",
+          "zero_iovec_count_no_allocation",
+          "negative_iovec_count_no_allocation",
+          "empty_nonblocking",
+          "initial_lock_restart",
+          "initial_lock_eintr",
+          "empty_wait_restart",
+          "empty_wait_eintr",
+          "wake_then_relock_restart_retains_event"
+        ],
+        "expected": "SEMANTIC_MUTANT_REJECTED",
+        "expected_assertion": "size == ctx.allocation_size",
+        "expected_case_prefix_count": 10,
+        "rejection_reason_checks": {
+          "terminated_by_sigabrt": true,
+          "expected_case_prefix": true,
+          "expected_assertion_present": true
+        },
+        "rejection_stderr": "assertion \"size == ctx.allocation_size\" failed: file \"/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/free_using_remaining_iovec_count.c\", line 211, function \"kmem_free\"\n",
+        "accepted": true
+      },
+      {
+        "name": "omit_invalid_iovec_count_guard",
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-sign-compare",
+          "-pedantic",
+          "-g",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_invalid_iovec_count_guard.c",
+          "-o",
+          "/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_invalid_iovec_count_guard"
+        ],
+        "source_sha256": "b2a167eb988ef0e1bf78076c31444e18af7a48a8a6c34ae49ed9906f3767aa52",
+        "compile_exit": 0,
+        "compile_log_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631",
+        "run_exit": -6,
+        "run_log_sha256": "257a664814b9d6b8270861f337814fdfe412a0493d363f66b68de7308252e639",
+        "binary_sha256": "06c14bc057db394c25620673d8fad6f8852549b29b5f2c4b760503db6f9f8438",
+        "observed_case_names": [
+          "error_translation",
+          "zero_residual_before_count_validation"
+        ],
+        "expected": "SEMANTIC_MUTANT_REJECTED",
+        "expected_assertion": "size > 0 && size <= sizeof(ctx.iov)",
+        "expected_case_prefix_count": 2,
+        "rejection_reason_checks": {
+          "terminated_by_sigabrt": true,
+          "expected_case_prefix": true,
+          "expected_assertion_present": true
+        },
+        "rejection_stderr": "assertion \"size > 0 && size <= sizeof(ctx.iov)\" failed: file \"/home/megal/hp-driver-source-stage-20261023/event-fixture-a02/native/omit_invalid_iovec_count_guard.c\", line 200, function \"kmem_alloc\"\n",
+        "accepted": true
+      }
+    ],
+    "mutation_note": "Progress mutant removes BOTH equivalent guards; runtime behavior alone does not distinguish the old and centralized guards.",
+    "finished": "2026-10-23T05:49:01.603611+00:00"
+  },
+  "original_failure": "A01 actual19 cases PASS; cursor mutant failed earlier at reader==EFAULT, so strict oracle expected assertion was corrected under fresh A02 PRE. A01 raw failure retained in Agent-Governance.",
+  "source_identity_check": "All five exact Git index blobs match native receipt SHA256. Documentation/evidence added after test only."
+}

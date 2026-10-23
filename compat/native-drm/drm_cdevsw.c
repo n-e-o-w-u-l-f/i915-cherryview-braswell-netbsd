@@ -242,7 +242,7 @@ drm_native_read_events(struct linux_file *file, struct uio *uio)
 	struct drm_device *dev = priv->minor->dev;
 	struct iovec *saved_iov;
 	size_t original_resid = uio->uio_resid;
-	size_t allocation_size = (size_t)uio->uio_iovcnt * sizeof(*saved_iov);
+	size_t allocation_size;
 	int error;
 
 	if (uio->uio_resid == 0)
@@ -250,6 +250,7 @@ drm_native_read_events(struct linux_file *file, struct uio *uio)
 	if (uio->uio_iovcnt <= 0 || (size_t)uio->uio_iovcnt >
 	    SIZE_MAX / sizeof(*saved_iov))
 		return EINVAL;
+	allocation_size = (size_t)uio->uio_iovcnt * sizeof(*saved_iov);
 	saved_iov = kmem_alloc(allocation_size, KM_SLEEP);
 	error = mutex_lock_interruptible(&priv->event_read_lock);
 	if (error != 0)
@@ -307,6 +308,11 @@ drm_native_read_events(struct linux_file *file, struct uio *uio)
 	mutex_unlock(&priv->event_read_lock);
 out:
 	kmem_free(saved_iov, allocation_size);
+	/* A completed whole event is observable even if a later dequeue/copy
+	 * fails. Preserve that progress; the failed event was put back above.
+	 */
+	if (original_resid != uio->uio_resid)
+		return 0;
 	return drm_native_error(error);
 }
 
