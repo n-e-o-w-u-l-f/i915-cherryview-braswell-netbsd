@@ -8,8 +8,11 @@ remain unchanged. The result is a source integration, not API/runtime closure.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
+import platform
 import re
+import socket
 import subprocess
 
 PIN='fd179f8a05be3ccae366b9b96e176b51fbe54aab'
@@ -101,7 +104,52 @@ def legacy_translate(text,mapping):
 
 def sha(data):return hashlib.sha256(data).hexdigest()
 
+def require_native_hp():
+    if (platform.system() != 'NetBSD' or platform.release().split('.', 1)[0] != '11' or
+            socket.gethostname().split('.', 1)[0] != 'hp-tpnw121' or os.geteuid() == 0):
+        raise RuntimeError('native source integration requires the unprivileged hp-tpnw121 / NetBSD 11 owner')
+
+def relative_input(name):
+    from pathlib import PurePosixPath
+    if not isinstance(name, str) or not name:
+        raise RuntimeError('nonempty relative input path required')
+    path = PurePosixPath(name)
+    if (path.is_absolute() or path.as_posix() != name or '\\' in name or ':' in name or
+            '\x00' in name or any(part in ('', '.', '..') for part in name.split('/'))):
+        raise RuntimeError('unsafe relative input path: ' + repr(name))
+    return path
+
+def disjoint(a, b):
+    return a != b and a not in b.parents and b not in a.parents
+
+def new_ledger(path, protected):
+    path = Path(path)
+    if path.exists() or path.is_symlink():
+        raise RuntimeError('preserve existing evidence: ' + str(path))
+    path = path.resolve()
+    if not path.parent.is_dir() or any(not disjoint(path, p) for p in protected):
+        raise RuntimeError('new ledger must have an existing parent outside protected inputs: ' + str(path))
+    return path
+
+def stage_paths(linux, tree, manifest, out, api=None):
+    linux, tree, manifest = [Path(p).resolve(strict=True) for p in (linux, tree, manifest)]
+    if not linux.is_dir() or not tree.is_dir() or not manifest.is_file():
+        raise RuntimeError('explicit Linux, native tree and source manifest required')
+    if not disjoint(linux, tree) or not disjoint(manifest, tree):
+        raise RuntimeError('native output tree must be separate from Linux and source manifest')
+    protected = [linux, tree, manifest]
+    if api is not None:
+        api = Path(api).resolve(strict=True)
+        if not api.is_file():raise RuntimeError('API ledger must be a saved file')
+        protected.append(api)
+    return linux, tree, manifest, new_ledger(out, protected), api
+
+def translation_identity(mapping, include_version=INCLUDE_CONTRACT_VERSION):
+    return {'tokenizer_version': 2, 'include_contract_version': include_version,
+            'mapping_sha256': sha(json.dumps(mapping, sort_keys=True, separators=(',', ':')).encode())}
+
 def integrate(linux,tree,manifest,api,out):
+    linux,tree,manifest,out,api=stage_paths(linux,tree,manifest,out,api)
     mapping=bindings(linux)
     report=json.loads(api.read_text()) if api else {'linux_pin':PIN,'rows':[]}
     if report['linux_pin']!=PIN:raise RuntimeError('wrong API source pin')
@@ -115,12 +163,15 @@ def integrate(linux,tree,manifest,api,out):
     if selected['linux_pin']!=PIN or not selected['linux_head_verified']:raise RuntimeError('unverified full source manifest')
     plans=[];seeds=[]
     def plan(path,old,new,source,kind):
+        if tree not in path.resolve(strict=True).parents:
+            raise RuntimeError('source escapes isolated native tree: '+str(path))
         data=path.read_bytes();old=old.encode();new=new.encode()
         if data not in (old,new):raise RuntimeError('changed source outside owned translation: '+str(path))
         if data!=new:plans.append((path,new))
         return {'path':str(path.relative_to(tree)),'linux_path':source,'frozen_sha256':sha(old),'sha256':sha(new),'state':kind,'changed':old!=new}
     for row in selected['files']:
         rel=row['path']
+        relative_input(rel)
         if not rel.endswith(('.c','.h')):continue
         old=frozen(linux,rel)
         # Existing source-owned patch 0022 only changes this Linux initializer.
@@ -131,14 +182,28 @@ def integrate(linux,tree,manifest,api,out):
         proof['frozen_sha256']=sha(old.encode());seeds.append(proof)
     for row in report['rows']:
         if row['state'] not in ('IMPORTED_API_UNREVIEWED','IMPORTED_API_TRANSLATED_UNREVIEWED'):continue
+        relative_input(row['path']);relative_input(row['linux_path'])
         target=tree/row['path'];old=frozen(linux,row['linux_path'])
         new=translate(adapt_includes(old,row['linux_path']),mapping)
         if sha(target.read_bytes())!=row['sha256']:raise RuntimeError('changed prior API input: '+row['path'])
-        previous=previous_translate(adapt_includes(old,row['linux_path'],prior_includes),prior) if row['state']=='IMPORTED_API_TRANSLATED_UNREVIEWED' else old
+        producer=row.get('translation')
+        if producer is not None:
+            if producer != translation_identity(mapping):
+                raise RuntimeError('unrecognized API import transformation: '+row['path'])
+            previous=translate(adapt_includes(old,row['linux_path']),mapping)
+        elif row['state']=='IMPORTED_API_TRANSLATED_UNREVIEWED':
+            # The original importer translated raw pinned identifiers without
+            # include adaptation or a global namespace ledger. Reconstruct
+            # precisely that producer, never accept arbitrary ledger bytes.
+            previous=(previous_translate(adapt_includes(old,row['linux_path'],prior_includes),prior)
+                      if report.get('compiler_math_namespace') else translate(old,mapping))
+        else:
+            previous=old
         proof=plan(target,previous,new,row['linux_path'],'IMPORTED_API_TRANSLATED_UNREVIEWED')
         if proof['changed']:
             row['frozen_sha256']=sha(old.encode());row['sha256']=proof['sha256'];row['state']=proof['state']
-    if out.exists():raise RuntimeError('preserve existing translation evidence')
+        row['translation']=translation_identity(mapping)
+    if out.exists() or out.is_symlink():raise RuntimeError('preserve existing translation evidence')
     # Validate every input before any mutation; replace each file atomically.
     for path,data in plans:
         temp=path.with_name(path.name+'.compiler-math.tmp')
@@ -155,9 +220,11 @@ def main():
     p.add_argument('--linux-tree',type=Path,required=True);p.add_argument('--netbsd-tree',type=Path,required=True)
     p.add_argument('--manifest',type=Path,required=True);p.add_argument('--api-ledger',type=Path);p.add_argument('--out-ledger',type=Path,required=True)
     a=p.parse_args()
-    tree=a.netbsd_tree.resolve(strict=True)
-    if tree!=Path('/root/hp-driver-port-20261005/netbsd-full-linux'):p.error('expected isolated HP full graph')
-    count,seeds=integrate(a.linux_tree,tree,a.manifest,a.api_ledger,a.out_ledger)
+    try:
+        require_native_hp()
+        count,seeds=integrate(a.linux_tree,a.netbsd_tree,a.manifest,a.api_ledger,a.out_ledger)
+    except (OSError, ValueError, RuntimeError) as error:
+        p.error(str(error))
     print('LINUX_COMPILER_MATH_NAMESPACE',count,'changed files;',seeds,'changed selected inputs')
 
 if __name__=='__main__':main()

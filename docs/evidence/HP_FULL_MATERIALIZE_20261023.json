@@ -1,0 +1,19 @@
+{
+  "state": "DONE",
+  "pid": 2546,
+  "started": "2026-10-23T12:34:26.712321+00:00",
+  "source_head": "9bd2679dc10ce7920c2e4fb9661c7abf683bdac1",
+  "command": [
+    "/usr/pkg/bin/python3",
+    "-B",
+    "/home/megal/hp-driver-source-stage-20261023/full-file-mm-drm-a01/project-source-a01/tools/materialize_linux_i915.py",
+    "--linux-tree",
+    "/home/megal/hp-driver-source-stage-20261023/full-file-mm-drm-a01/linux-reference",
+    "--netbsd-tree",
+    "/home/megal/hp-driver-source-stage-20261023/netbsd-github-a02",
+    "--out",
+    "/home/megal/hp-driver-source-stage-20261023/full-file-mm-drm-a01/full-scope-audit/linux-stage-verified"
+  ],
+  "exit_code": 0,
+  "finished": "2026-10-23T12:35:23.802762+00:00"
+}

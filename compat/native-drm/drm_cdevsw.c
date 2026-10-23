@@ -465,7 +465,10 @@ drm_native_mmap(struct file *native, off_t *offset, size_t length, int prot,
 	error = linux_uvm_mmap(file, *offset, length, prot, *flags, object, &adjusted);
 	if (error == 0) {
 		*offset = adjusted;
-		*maxprot &= linux_uvm_mmap_maxprot(*object);
+		/* fo_mmap is an output producer: sys_mmap has not initialized
+		 * maxprot.  UVM applies its native PaX restrictions afterwards.
+		 */
+		*maxprot = linux_uvm_mmap_maxprot(*object);
 		*advice = UVM_ADV_RANDOM;
 	}
 	linux_task_entry_leave(&task);

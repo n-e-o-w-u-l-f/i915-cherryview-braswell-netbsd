@@ -23,6 +23,9 @@ import tempfile
 from generate_netbsd_i915_filelist import CONFIG, LINUX_PIN
 from materialize_linux_i915 import NETBSD_PIN
 from hp_graph_contract import selected_units
+from namespace_linux_compiler_math import (disjoint, relative_input, require_native_hp,
+                                          integrate)
+from materialize_linux_api_inputs import populate
 
 PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_CC_HAS_INT128="y",
     CONFIG_ARCH_SUPPORTS_INT128="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
@@ -35,6 +38,71 @@ PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_CC_HAS_INT128="y",
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def clean_reference(path, pin):
+    head = subprocess.check_output(["git", "-C", str(path), "rev-parse", "HEAD"], text=True).strip()
+    dirty = subprocess.check_output(["git", "-C", str(path), "status", "--porcelain=v1",
+                                     "--untracked-files=all"], text=True)
+    if head != pin or dirty.strip():
+        raise RuntimeError("clean pinned reference required: " + str(path))
+
+def stage_outputs(work, inputs):
+    """Admit only new, disjoint outputs; inputs may be siblings in work."""
+    names = ("netbsd-full-linux", "full-linux-obj", "full-linux-tools",
+             "full-linux-graph-status.json", "full-linux-graph-status.tmp",
+             "full-linux-compiler-math-seeds.json", "full-linux-api-inputs.json",
+             "full-linux-compiler-math-final.json", "configured-allfiles.txt", "configured-objs.txt")
+    result = {name: work / name for name in names}
+    for path in result.values():
+        if path.exists() or path.is_symlink():
+            raise RuntimeError("preserve existing full-graph output: " + str(path))
+        resolved = path.resolve()
+        if resolved.parent != work or any(not disjoint(resolved, item) for item in inputs):
+            raise RuntimeError("output overlaps an explicit reference: " + str(path))
+    return result
+
+def copy_reference(reference, tree):
+    # Never share the reference's Git index/config/worktree metadata. sys and
+    # common are private copies; remaining source inputs are read-only links.
+    for entry in reference.iterdir():
+        if entry.name in {".git", ".gitignore", ".gitattributes", ".gitmodules"}:
+            continue
+        if entry.name in {"sys", "common"}:
+            shutil.copytree(entry, tree / entry.name, symlinks=True)
+        else:
+            (tree / entry.name).symlink_to(entry, target_is_directory=entry.is_dir())
+
+def configured_graph(rows, tree, allfiles, objects):
+    """Bind required Linux sources to the actual expanded config(5) owners."""
+    owners = {}
+    required = {row["object"] for row in rows}
+    source_root = (tree / "sys").resolve()
+    for token in allfiles.split():
+        # Generated/support units outside the required Linux 410 are not
+        # certified by this gate. Their full native selection is retained in
+        # the receipt; inspect every possible same-basename owner of our set.
+        if Path(token).stem + ".o" not in required:
+            continue
+        # Resolve native source spellings against S, rather than treating
+        # config(5) output as an untrusted Linux-relative manifest name.
+        source = Path(token) if Path(token).is_absolute() else source_root / token
+        source = source.resolve(strict=True)
+        if tree.resolve() not in source.parents:
+            raise RuntimeError("configured source escapes explicit tree: " + token)
+        relative = (source.relative_to(source_root).as_posix() if source_root in source.parents
+                    else "../" + source.relative_to(tree.resolve()).as_posix())
+        if source.suffix in {".c", ".S", ".s"}:
+            owners.setdefault(source.stem + ".o", set()).add(relative)
+    selected = objects.split()
+    if len(selected) != len(set(selected)):
+        raise RuntimeError("duplicate expanded configured objects")
+    selected = set(selected)
+    verified = []
+    for row in rows:
+        if row["object"] not in selected or owners.get(row["object"]) != {row["source"]}:
+            raise RuntimeError("configured graph owner differs: " + row["object"])
+        verified.append(dict(row, source_sha256=digest(tree / "sys" / row["source"])))
+    return verified
 
 def selected(root, directory, variables, direct=()):
     # GNU make expands the actual frozen Makefiles; no compiler is invoked.
@@ -79,19 +147,44 @@ def replace_units(path, units, attribute, additions):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--workspace", type=Path, required=True)
-    p.add_argument("--linux-tree", type=Path, default=Path("/root/linux-rtl8723be-ref-fresh"))
+    p.add_argument("--linux-tree", type=Path, required=True)
+    p.add_argument("--netbsd-reference", type=Path, required=True)
+    p.add_argument("--materialized-tree", type=Path, required=True)
+    p.add_argument("--base-tool-dir", type=Path, default=Path("/usr/tools"))
     a = p.parse_args()
-    if (platform.system() != "NetBSD" or platform.release().split(".", 1)[0] != "11" or
-            socket.gethostname().split(".", 1)[0] != "hp-tpnw121"):
-        p.error("native staging/build probes are authorized only on hp-tpnw121 / NetBSD 11")
-    work = a.workspace.resolve(strict=True)
-    if work != Path("/root/hp-driver-port-20261005"):
-        p.error("expected the isolated HP task workspace")
-    source = work / "full-scope-audit/linux-stage-verified"
+    try:
+        require_native_hp()
+        work, linux, reference, source, base_tools = [item.resolve(strict=True) for item in
+            (a.workspace, a.linux_tree, a.netbsd_reference, a.materialized_tree, a.base_tool_dir)]
+        if not all(item.is_dir() for item in (work, linux, reference, source, base_tools)):
+            raise RuntimeError("explicit workspace and source/tool directories required")
+        if work.stat().st_uid != os.geteuid():
+            raise RuntimeError("workspace must belong to the executing HP owner")
+        if not all(disjoint(left, right) for left, right in
+                   ((linux, reference), (linux, source), (reference, source))):
+            raise RuntimeError("Linux, NetBSD and materialized references must be separate")
+        outputs = stage_outputs(work, (linux, reference, source, base_tools))
+        clean_reference(reference, NETBSD_PIN)
+        clean_reference(linux, LINUX_PIN)
+        for name in ("nbmake-amd64", "nbconfig", "x86_64--netbsd-gcc", "x86_64--netbsd-nm",
+                     "x86_64--netbsd-ld"):
+            if not (base_tools / "bin" / name).is_file() or not os.access(base_tools / "bin" / name, os.X_OK):
+                raise RuntimeError("missing executable native tool: " + name)
+    except (OSError, ValueError, RuntimeError) as error:
+        p.error(str(error))
     manifest = json.loads((source / "PORT-MANIFEST.json").read_text())
     if not manifest.get("linux_head_verified") or manifest.get("linux_pin") != LINUX_PIN or manifest.get("netbsd_pin") != NETBSD_PIN:
         p.error("unverified or different frozen reference")
+    frozen = json.loads((Path(__file__).resolve().parents[1] /
+                         "docs/evidence/HP_I915_REFERENCE_MANIFEST_20261005.json").read_text())
+    observed = {row["path"]: row["sha256"] for row in manifest["files"]}
+    if (len(observed) != len(manifest["files"]) or
+            observed != {row["path"]: row["sha256"] for row in frozen["files"]}):
+        p.error("materialized source membership/hashes differ from reviewed frozen ledger")
     for row in manifest["files"]:
+        relative_input(row["path"])
+        if source not in (source / row["path"]).resolve(strict=True).parents:
+            p.error("materialized source escapes explicit reference: " + row["path"])
         if digest(source / row["path"]) != row["sha256"]:
             p.error("modified materialized reference: " + row["path"])
     groups = {
@@ -106,15 +199,17 @@ def main():
                                     netbsd_pin=manifest.get("netbsd_pin"))
     except (OSError, ValueError) as error:
         p.error(str(error))
-    tree, obj, tools = [work / name for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")]
-    if any(path.exists() for path in (tree, obj, tools)):
-        p.error("full-graph output exists; preserve it and reconcile before another stage")
-    reference = work / "netbsd-reference"
+    tree, obj, tools = [outputs[name] for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")]
     tree.mkdir()
     state = {"state": "STAGING", "host": socket.gethostname(), "linux_pin": LINUX_PIN,
         "netbsd_pin": NETBSD_PIN, "profile": PROFILE, "units": groups,
         "reference_manifest_sha256": digest(source / "PORT-MANIFEST.json"),
-        "started": datetime.datetime.now(datetime.timezone.utc).isoformat(), "commands": []}
+        "started": datetime.datetime.now(datetime.timezone.utc).isoformat(), "commands": [],
+        "paths": {"workspace": str(work), "linux_reference": str(linux), "netbsd_reference": str(reference),
+                  "materialized_reference": str(source), "tree": str(tree), "object_dir": str(obj),
+                  "tool_dir": str(tools), "base_tool_dir": str(base_tools)},
+        "eligible_for_install": False, "eligible_for_boot": False,
+        "modern_bridge_state": "UNREVIEWED; complete file/MM/poll/DRM providers are not supplied by staging"}
     status = work / "full-linux-graph-status.json"
     def save():
         tmp = status.with_suffix(".tmp")
@@ -123,14 +218,16 @@ def main():
     def run(command):
         state["commands"].append(command); save()
         print("RUN", command, flush=True)
-        subprocess.run(command, check=True)
+        env = dict(os.environ)
+        if command[0] == "git":
+            # git apply needs no repository. Do not discover or use a parent
+            # checkout's index/config when this private source has no .git.
+            env["GIT_CEILING_DIRECTORIES"] = str(tree.parent)
+        subprocess.run(command, check=True, env=env)
     save()
     try:
-        for entry in reference.iterdir():
-            if entry.name == "sys":
-                shutil.copytree(entry, tree / "sys", symlinks=True)
-            else:
-                (tree / entry.name).symlink_to(entry, target_is_directory=entry.is_dir())
+        copy_reference(reference, tree)
+        clean_reference(reference, NETBSD_PIN)
         drm = tree / "sys/external/bsd/drm2"
         # Real tristate helpers are needed before any modern DRM header is
         # parsed, matching Linux Kbuild's forced kconfig include. Native
@@ -175,10 +272,15 @@ def main():
         root_callsites = owner / "patches/0022-netbsd-linux-rbtree-call-sites.patch"
         run(["git", "-C", str(tree), "apply", "--check", str(root_callsites)])
         run(["git", "-C", str(tree), "apply", str(root_callsites)])
-        run(["python3", str(owner / "tools/namespace_linux_compiler_math.py"),
-             "--linux-tree", str(a.linux_tree), "--netbsd-tree", str(tree),
-             "--manifest", str(source / "PORT-MANIFEST.json"),
-             "--out-ledger", str(work / "full-linux-compiler-math-seeds.json")])
+        seed_ledger = outputs["full-linux-compiler-math-seeds.json"]
+        api_ledger = outputs["full-linux-api-inputs.json"]
+        final_ledger = outputs["full-linux-compiler-math-final.json"]
+        integrate(linux, tree, source / "PORT-MANIFEST.json", None, seed_ledger)
+        populate(linux, tree, api_ledger, json.loads(seed_ledger.read_text()),
+                 manifest_path=source / "PORT-MANIFEST.json")
+        integrate(linux, tree, source / "PORT-MANIFEST.json", api_ledger, final_ledger)
+        state["source_transform_ledgers"] = {path.name: digest(path)
+            for path in (seed_ledger, api_ledger, final_ledger)}
         # Distinguish NetBSD's module entry from Linux's selected i915_module.c.
         shutil.copyfile(drm / "i915drm/i915_module.c", drm / "i915drm/netbsd_i915_module.c")
         # config(5) otherwise silently selects the old same-basename PCI
@@ -226,19 +328,38 @@ def main():
         replace_units(drm / "ttm/files.ttm",
             [prefix + "dist/drm/ttm/" + name for name in groups["ttm"]], "drmkms_ttm",
             [(prefix + "ttm/ttm_bus_dma.c", "drmkms_ttm")])
-        config = tree / "sys/arch/amd64/conf/HP-FULL-LINUX-20261005"
-        config.write_text('include "arch/amd64/conf/GENERIC"\nident "HP-FULL-LINUX-20261005"\n'
+        config = tree / "sys/arch/amd64/conf/HP-FULL-LINUX-PROBE"
+        config.write_text('include "arch/amd64/conf/GENERIC"\nident "HP-FULL-LINUX-PROBE"\n'
                           'no nouveau*\n')
         obj.mkdir(); tools.mkdir(); (tools / "bin").mkdir()
-        for entry in Path("/usr/tools").iterdir():
+        for entry in base_tools.iterdir():
             if entry.name != "bin": (tools / entry.name).symlink_to(entry, target_is_directory=entry.is_dir())
-        for entry in Path("/usr/tools/bin").iterdir():
+        for entry in (base_tools / "bin").iterdir():
             if entry.name != "nbmake-amd64": (tools / "bin" / entry.name).symlink_to(entry)
-        wrapper = (Path("/usr/tools/bin/nbmake-amd64")).read_text()
-        for old, new in [("/usr/src", tree), ("/usr/obj", obj), ("/usr/tools", tools)]: wrapper = wrapper.replace(old, str(new))
+        wrapper = (base_tools / "bin/nbmake-amd64").read_text()
+        for old, new in [("/usr/src", tree), ("/usr/obj", obj), (str(base_tools), tools)]: wrapper = wrapper.replace(old, str(new))
         (tools / "bin/nbmake-amd64").write_text(wrapper)
         (tools / "bin/nbmake-amd64").chmod(0o755)
         run([str(tools / "bin/nbconfig"), "-s", str(tree / "sys"), "-b", str(obj), str(config)])
+        expanded = {}
+        for variable, filename in (("ALLFILES", "configured-allfiles.txt"), ("OBJS", "configured-objs.txt")):
+            command = [str(tools / "bin/nbmake-amd64"), "-C", str(obj), "-v", variable]
+            state["commands"].append(command); save()
+            value = subprocess.check_output(command, text=True,
+                env=dict(os.environ, PATH=str(tools / "bin") + os.pathsep + os.environ.get("PATH", "")))
+            outputs[filename].write_text(value)
+            expanded[variable] = value
+        state["configured_graph_ownership"] = configured_graph(graph_rows, tree,
+            expanded["ALLFILES"], expanded["OBJS"])
+        native_adapter = drm / "drm/drm_cdevsw.c"
+        canonical = owner / "compat/native-drm/drm_cdevsw.c"
+        state["native_drm_adapter"] = {"path": str(native_adapter), "sha256": digest(native_adapter),
+            "canonical_sha256": digest(canonical), "matches_canonical": native_adapter.read_bytes() == canonical.read_bytes(),
+            "acceptance": "UNREVIEWED; configured source identity is not modern bridge/provider acceptance"}
+        roots = [tree / "sys/external/bsd/common/include", drm / "include", drm / "dist/include"]
+        state["missing_modern_bridge_headers"] = [name for name in
+            ("linux/file_netbsd.h", "linux/mm_netbsd.h", "linux/task_netbsd.h", "drm/drm_file_netbsd.h")
+            if not any((root / name).is_file() for root in roots)]
         state["state"] = "CONFIGURED"
         state["active_linux_units"] = len(graph_rows)
         state["adapter_state"] = "UNREVIEWED; development probe only; installation prohibited"
