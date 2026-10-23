@@ -22,6 +22,7 @@ import tempfile
 
 from generate_netbsd_i915_filelist import CONFIG, LINUX_PIN
 from materialize_linux_i915 import NETBSD_PIN
+from hp_graph_contract import selected_units
 
 PROFILE = dict(CONFIG, CONFIG_64BIT="y", CONFIG_CC_HAS_INT128="y",
     CONFIG_ARCH_SUPPORTS_INT128="y", CONFIG_DRM="y", CONFIG_PCI="y", CONFIG_AGP="y",
@@ -80,14 +81,15 @@ def main():
     p.add_argument("--workspace", type=Path, required=True)
     p.add_argument("--linux-tree", type=Path, default=Path("/root/linux-rtl8723be-ref-fresh"))
     a = p.parse_args()
-    if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
-        p.error("native staging/build probes are authorized only on HP/NetBSD")
+    if (platform.system() != "NetBSD" or platform.release().split(".", 1)[0] != "11" or
+            socket.gethostname().split(".", 1)[0] != "hp-tpnw121"):
+        p.error("native staging/build probes are authorized only on hp-tpnw121 / NetBSD 11")
     work = a.workspace.resolve(strict=True)
     if work != Path("/root/hp-driver-port-20261005"):
         p.error("expected the isolated HP task workspace")
     source = work / "full-scope-audit/linux-stage-verified"
     manifest = json.loads((source / "PORT-MANIFEST.json").read_text())
-    if not manifest.get("linux_head_verified") or manifest["linux_pin"] != LINUX_PIN or manifest["netbsd_pin"] != NETBSD_PIN:
+    if not manifest.get("linux_head_verified") or manifest.get("linux_pin") != LINUX_PIN or manifest.get("netbsd_pin") != NETBSD_PIN:
         p.error("unverified or different frozen reference")
     for row in manifest["files"]:
         if digest(source / row["path"]) != row["sha256"]:
@@ -99,11 +101,11 @@ def main():
         "display": selected(source, "drivers/gpu/drm/display", ["drm_display_helper-y"]),
         "ttm": selected(source, "drivers/gpu/drm/ttm", ["ttm-y"]),
     }
-    if len(groups["i915"]) != 323:
-        p.error("frozen i915 graph changed")
-    linux_names = [Path(name).stem for names in groups.values() for name in names]
-    if len(set(linux_names)) != len(linux_names):
-        p.error("native object-name collision in frozen Linux graph")
+    try:
+        graph_rows = selected_units(groups, linux_pin=manifest.get("linux_pin"),
+                                    netbsd_pin=manifest.get("netbsd_pin"))
+    except (OSError, ValueError) as error:
+        p.error(str(error))
     tree, obj, tools = [work / name for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")]
     if any(path.exists() for path in (tree, obj, tools)):
         p.error("full-graph output exists; preserve it and reconcile before another stage")
@@ -238,7 +240,7 @@ def main():
         (tools / "bin/nbmake-amd64").chmod(0o755)
         run([str(tools / "bin/nbconfig"), "-s", str(tree / "sys"), "-b", str(obj), str(config)])
         state["state"] = "CONFIGURED"
-        state["active_linux_units"] = len(linux_names)
+        state["active_linux_units"] = len(graph_rows)
         state["adapter_state"] = "UNREVIEWED; development probe only; installation prohibited"
         state["manifest_sha256"] = {str(path.relative_to(tree)): digest(path) for path in
             [drm / "i915drm/files.i915drmkms", drm_manifest, drm / "ttm/files.ttm"]}

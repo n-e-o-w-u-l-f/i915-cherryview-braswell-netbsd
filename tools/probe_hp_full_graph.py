@@ -14,31 +14,40 @@ import platform
 import socket
 import subprocess
 import time
+from hp_graph_contract import selected_units
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--workspace", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
-    if platform.system() != "NetBSD" or not socket.gethostname().startswith("hp-tpnw121"):
-        p.error("all compiler execution is authorized only on HP/NetBSD")
+    if (platform.system() != "NetBSD" or platform.release().split(".", 1)[0] != "11" or
+            socket.gethostname().split(".", 1)[0] != "hp-tpnw121"):
+        p.error("all compiler execution is authorized only on hp-tpnw121 / NetBSD 11")
     work = a.workspace.resolve(strict=True)
     output = a.output.resolve()
     if work != Path("/root/hp-driver-port-20261005") or output.parent != work or output.exists():
         p.error("expected a new output directory in the isolated HP workspace")
     staged = json.loads((work / "full-linux-graph-status.json").read_text())
-    if staged["state"] != "CONFIGURED" or len(staged["units"]["i915"]) != 323:
+    if staged.get("state") != "CONFIGURED":
         p.error("complete frozen i915 graph must be configured first")
+    try:
+        graph_rows = selected_units(staged.get("units"),
+                                    linux_pin=staged.get("linux_pin"),
+                                    netbsd_pin=staged.get("netbsd_pin"))
+    except (OSError, ValueError) as error:
+        p.error(str(error))
     tree, obj = work / "netbsd-full-linux", work / "full-linux-obj"
     make = work / "full-linux-tools/bin/nbmake-amd64"
     generated = (obj / "Makefile").read_text()
     units = []
-    for group, names in staged["units"].items():
-        for name in names:
-            relative = "external/bsd/drm2/dist/drm/" + ("" if group == "drm" else group + "/") + name
-            if relative not in generated or not (tree / "sys" / relative).is_file():
-                p.error("configured native graph omits source: " + relative)
-            units.append((group, relative))
+    # This retained presence check is not proof of config(5)/expanded OBJS
+    # ownership. Exact configured-object selection remains a separate gate.
+    for row in graph_rows:
+        relative = row["source"]
+        if relative not in generated or not (tree / "sys" / relative).is_file():
+            p.error("configured native graph omits source: " + relative)
+        units.append((row["group"], relative))
     output.mkdir()
     state = {"state": "RUNNING", "host": socket.gethostname(),
         "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
