@@ -1,0 +1,22 @@
+name: i915 hosted runner diagnostic
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/runner-diagnostic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  runner-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify hosted runner starts
+        run: |
+          echo I915_HOSTED_RUNNER_STARTED
+          python3 --version
+          git --version
+          echo I915_HOSTED_RUNNER_DIAGNOSTIC_PASS
