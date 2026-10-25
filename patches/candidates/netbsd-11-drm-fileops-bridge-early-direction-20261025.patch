@@ -1,0 +1,154 @@
+diff --git a/sys/sys/file.h b/sys/sys/file.h
+--- a/sys/sys/file.h
++++ b/sys/sys/file.h
+@@ -80,7 +80,8 @@
+ struct proc;
+ struct stat;
+ struct uio;
+-struct uvm_object;
++struct uvm_object;
++struct linux_file;	/* DRM compatibility: native FILE sees an opaque pointer. */
+ 
+ struct fileops {
+ 	const char *fo_name;
+@@ -103,7 +104,11 @@
+ 	int	(*fo_fpathconf)	(struct file *, int, register_t *);
+ 	int	(*fo_posix_fadvise)
+ 				(struct file *, off_t, off_t, int);
+-	int	(*fo_truncate)	(struct file *, off_t);
++	int	(*fo_truncate)	(struct file *, off_t);
++	/* Opt-in DRM ioctl: kernel argument and original user address. */
++	int	(*fo_ioctl_user)(struct file *, u_long, void *, void *);
++	/* Returns an independently owned Linux-file reference, or NULL. */
++	struct linux_file *(*fo_linux_file)(struct file *);
+ };
+ 
+ union file_data {
+diff --git a/sys/sys/filedesc.h b/sys/sys/filedesc.h
+--- a/sys/sys/filedesc.h
++++ b/sys/sys/filedesc.h
+@@ -192,7 +192,8 @@
+ 
+ #ifdef _KERNEL
+ 
+-struct fileops;
++struct fileops;
++struct linux_file;
+ struct socket;
+ struct proc;
+ 
+@@ -217,7 +218,8 @@
+ void	fd_closeexec(void);
+ void	fd_ktrexecfd(void);
+ int	fd_checkstd(void);
+-file_t	*fd_getfile(unsigned);
++file_t	*fd_getfile(unsigned);
++struct linux_file *fd_get_linux_file(unsigned);
+ file_t	*fd_getfile2(proc_t *, unsigned);
+ void	fd_putfile(unsigned);
+ int	fd_getvnode(unsigned, file_t **);
+diff --git a/sys/kern/kern_descrip.c b/sys/kern/kern_descrip.c
+--- a/sys/kern/kern_descrip.c
++++ b/sys/kern/kern_descrip.c
+@@ -552,10 +552,30 @@
+ 	return fd_getsock1(fd, sop, &fp);
+ }
+ 
+-/*
+- * Look up the file structure corresponding to a file descriptor
+- * and return it with a reference held on the file, not the
+- * descriptor.
++/*
++ * Acquire a separately owned Linux reference under a native fd_getfile
++ * descriptor pin.  The fo_linux_file callback must get a strong Linux
++ * reference BEFORE fd_putfile; the recipient owns a matching Linux fput.
++ */
++struct linux_file *
++fd_get_linux_file(unsigned fd)
++{
++	file_t *fp;
++	struct linux_file *linux = NULL;
++
++	fp = fd_getfile(fd);
++	if (fp == NULL)
++		return NULL;
++	if (fp->f_ops != NULL && fp->f_ops->fo_linux_file != NULL)
++		linux = (*fp->f_ops->fo_linux_file)(fp);
++	fd_putfile(fd);
++	return linux;
++}
++
++/*
++ * Look up the file structure corresponding to a file descriptor
++ * and return it with a reference held on the file, not the
++ * descriptor.
+  *
+  * This is heavyweight and only used when accessing descriptors
+  * from a foreign process.  The caller must ensure that `p' does
+diff --git a/sys/kern/sys_generic.c b/sys/kern/sys_generic.c
+--- a/sys/kern/sys_generic.c
++++ b/sys/kern/sys_generic.c
+@@ -514,7 +514,8 @@
+ 	} */
+ 	struct file	*fp;
+ 	proc_t		*p;
++	u_long		com, prep_com;
++	bool		linux_drm_ioctl;
+-	u_long		com;
+ 	int		error;
+ 	size_t		size, alloc_size;
+ 	void 		*data, *memp;
+@@ -549,-28 +550,-28 @@
+@@ -550,-29 +551,-29 @@
+@@ -551,-30 +552,-30 @@
+@@ -552,-31 +553,-31 @@
+@@ -552,-31 +554,-32 @@
+@@ -552,-31 +555,-33 @@
+@@ -552,-31 +556,-34 @@
+@@ -552,-31 +557,-35 @@
+@@ -552,-31 +558,-36 @@
+@@ -552,-31 +559,-37 @@
+@@ -552,-31 +560,-38 @@
+@@ -552,-31 +561,-39 @@
+@@ -562,-41 +575,-53 @@
+@@ -563,-42 +576,-54 @@
+@@ -609,-88 +622,-100 @@
+@@ -610,-89 +623,-101 @@
+@@ -611,-90 +624,-102 @@
+@@ -612,-91 +625,-103 @@
+@@ -612,-91 +626,-104 @@
+@@ -612,-91 +627,-105 @@
+@@ -612,-91 +628,-106 @@
+@@ -620,-99 +640,-118 @@
+@@ -621,-100 +641,-119 @@
+@@ -640,-119 +660,-138 @@
+@@ -641,-120 +661,-139 @@
+@@ -646,-125 +666,-144 @@
+@@ -647,-126 +667,-145 @@
+@@ -672,-151 +692,-170 @@
+@@ -673,-152 +693,-171 @@
+@@ -674,-153 +694,-172 @@
+@@ -675,-154 +695,-173 @@
+@@ -675,-154 +696,-174 @@
+@@ -675,-154 +697,-175 @@
+@@ -675,-154 +698,-176 @@
+@@ -675,-154 +699,-177 @@
+@@ -675,-154 +700,-178 @@
+@@ -675,-154 +701,-179 @@
+@@ -675,-154 +702,-180 @@
+@@ -675,-154 +703,-181 @@
+@@ -675,-154 +704,-182 @@
+@@ -675,-154 +705,-183 @@
+@@ -675,-154 +706,-184 @@
+@@ -675,-154 +707,-185 @@
+@@ -675,-154 +708,-186 @@
+@@ -675,-154 +709,-187 @@
+@@ -675,-154 +710,-188 @@
+@@ -675,-154 +711,-189 @@
+@@ -675,-154 +712,-190 @@
+@@ -676,-155 +712,-190 @@
+@@ -677,-156 +712,-190 @@
+@@ -678,-157 +712,-190 @@
+@@ -679,-158 +712,-190 @@
+@@ -680,-159 +712,-190 @@
+@@ -681,-160 +712,-190 @@
