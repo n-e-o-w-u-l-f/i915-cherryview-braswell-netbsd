@@ -87,6 +87,16 @@ class FullPort(unittest.TestCase):
         r=self.report(attestations={'units':{'display/vlv_clock.c':bad}})
         self.assertEqual(r['no_closed_semantics'],2)
 
+    def test_root_level_active_linux_source_is_allowed(self):
+        data=(HEAD+ROWS[0]+'\n'+'i915_pci.c\tEXACT_ACTIVE_DIST\tdist:i915_pci.c\tUNREVIEWED\n'+ROWS[2]+'\n').encode()
+        r=self.report(content=data,blob=gate.git_blob(data))
+        self.assertEqual(r['no_closed_semantics'],3)
+
+    def test_path_traversal_rejected(self):
+        data=(HEAD+ROWS[0]+'\n'+'../bad.c\tEXACT_ACTIVE_DIST\tdist:bad.c\tUNREVIEWED\n'+ROWS[2]+'\n').encode()
+        with self.assertRaisesRegex(ValueError,'unrecognized source'):
+            self.report(content=data,blob=gate.git_blob(data))
+
     def test_cli_exit_refuses_release_without_evidence(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/'source.tsv';p.write_bytes(SRC)
