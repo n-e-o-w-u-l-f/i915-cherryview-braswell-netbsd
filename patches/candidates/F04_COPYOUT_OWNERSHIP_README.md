@@ -1,0 +1,12 @@
+# F04 corrected NetBSD FILE/DRM ioctl candidate — 2026-10-25
+
+**Authoritative candidate in this branch:** `patches/candidates/netbsd-11-drm-fileops-bridge-copyout-owned-20261025.patch`, Git blob `f9e34d0d52cf30cdfdfd12e43ed2e9a1951e9638`.
+
+**Do not integrate** the earlier `patches/candidates/netbsd-11-drm-fileops-bridge-20261025.patch` (F03, blob `9c99357d2ee3ce21267ede4e2caed033e0906694`). It is retained unchanged only for historical test provenance. Its `sys_ioctl` branch re-copyouts an `IOC_OUT` buffer even when `fo_ioctl_user` already performed a DRM-specific `copyout`. The real i915 adapter `compat/native-drm/drm_cdevsw.c` (`9bd2679`, blob `121e5a64b8f765e3ae9362a0c50735da5b616af1`) calls `copyout(data,user_data,out_size)` in `drm_native_ioctl_impl`. F03 could copy `size` again, overriding partial output and returning different errors.
+
+The corrected F04 `sys_ioctl` contract delegates the original user pointer and **all output copyout** to `fo_ioctl_user` if installed. For non-opted-in `fo_ioctl`, the historical `error==0 && IOC_OUT && size` copyout remains unchanged. This fixes double ownership at the source-contract level; it does not prove correct native ABI or the full Linux DRM ioctl/compat32 semantics.
+
+- `tests/test_f04_copyout_contract_min.py`: extracts and compiles the **exact corrected sys_ioctl switch default C source**, using synthetic kernel stubs and GCC C11/-Werror/UBSan, with 3 modeled positive ioctl cases and 3 strict negative mutants (extra outer copyout, lost callback, legacy error copyout). It must emit `F04_EXACT_SOURCE_C11_UBSAN_1_NORMAL_3_MUTANTS_PASS`. **No real NetBSD headers** are involved.
+- `tools/check_f04_fileops_copyout_patch.py`: future **read-only** full clean source tree validator; enforces exact NetBSD `03d918f6d0e81fa05b8f1160eca0628ad39988a6`, exact original four Git blobs, no dirty state, exact F04 patch hash and whitelist, then `git apply --check --whitespace=error` **without applying**. **Not yet executed** against real clean full NetBSD source.
+
+Safe sequence: run source gate on an authorized independent full NetBSD checkout, then build patched `kern_descrip.o`/`sys_generic.o` under the exact kernel configuration in a separate, uninstalled tree. Only then address missing Linux strong-ref `fo_linux_file`, final `fput`/task/module lifetimes and UVM/GEM before full modern 410-object kernel link and physical KMS/WPA2/F77 recovery. No F04 code is a ready-to-install kernel patch.
