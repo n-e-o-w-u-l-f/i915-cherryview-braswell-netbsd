@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "kind": "F13_FROZEN_SOURCE_CLOSURE_SNAPSHOT_NOT_RELEASE",
+  "source": {
+    "i915_repository": "n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd",
+    "i915_active_commit": "9bd2679dc10ce7920c2e4fb9661c7abf683bdac1",
+    "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+    "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "coverage_path": "docs/I915-STRUCTURAL-COVERAGE.tsv",
+    "coverage_git_blob": "011789f5dc3ef916b34019f088abcf53ef20e369",
+    "rtl_repository": "n-e-o-w-u-l-f/rtwn8723be-netbsd",
+    "rtl_source_head": "438931eec65d6cf145f5ea2304e4bf12b9826ddd",
+    "rtl_native_build_source_head": "a06a74eec7ffdeca8f472cc5c9a28d89d4b2cd04"
+  },
+  "counts": {
+    "pinned_linux_active_translation_units": 323,
+    "structural_classes": {
+      "EXACT_ACTIVE_DIST": 136,
+      "UNRESOLVED_NO_BASENAME": 162,
+      "ACTIVE_OVERRIDE_OR_MOVED": 18,
+      "PRESENT_NOT_BUILT": 7
+    },
+    "source_semantic_states": {
+      "UNREVIEWED": 300,
+      "REFERENCE_INAPPLICABLE_CHV_UC_PXP": 23
+    },
+    "units_with_actual_ported_or_adapted_semantic_attestation": 0,
+    "whole_driver_semantic_gate": "BLOCKED",
+    "legacy_combined_50_RTL_plus_5_i915_DRM_native_kernel_link": "HISTORICAL_PARTIAL_ONLY",
+    "modern_full_323_i915_with_RTL_native_kernel_link": "NOT_RUN",
+    "physical_cherryview_KMS": "NOT_RUN",
+    "physical_RTL8723BE_WPA2": "NOT_RUN",
+    "F77_stock_recovery_drill": "NOT_VERIFIED"
+  },
+  "priority_source_rows": [
+    {
+      "linux_source": "display/vlv_clock.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/vlv_sideband.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/i9xx_plane.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "display/i9xx_wm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gt/intel_execlists_submission.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_create.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "gem/i915_gem_ttm.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_ioctl.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_mm.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_mm.c",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "i915_ioc32.c",
+      "structural_class": "PRESENT_NOT_BUILT",
+      "netbsd_evidence": "dist:i915_ioc32.c",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "vlv_iosf_sb.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    },
+    {
+      "linux_source": "vlv_suspend.c",
+      "structural_class": "UNRESOLVED_NO_BASENAME",
+      "netbsd_evidence": "",
+      "semantic_state": "UNREVIEWED"
+    }
+  ],
+  "proof_notes": [
+    "An EXACT_ACTIVE_DIST structural class is not a native semantic parity result.",
+    "300 sources are UNREVIEWED and 23 reference-inapplicable classifications still require an independently pinned semantic decision.",
+    "Native RTL50 plus i915/DRM5 diagnostic kernel link is genuine prior evidence, not a full modern i915 source closure.",
+    "The RTL combined production release gate requires an i915-owned approval artifact and physical KMS/recovery evidence, which are absent.",
+    "F11 early ioctl and F12 size-zero raw-pointer bridge remain private provider/ABI blocked; no kernel install is authorized."
+  ],
+  "release_manifest_generated": false,
+  "full_port_accepted": false
+}
