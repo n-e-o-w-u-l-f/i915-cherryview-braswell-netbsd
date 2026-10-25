@@ -98,57 +98,100 @@ diff --git a/sys/kern/sys_generic.c b/sys/kern/sys_generic.c
  	int		error;
  	size_t		size, alloc_size;
  	void 		*data, *memp;
-@@ -549,-28 +550,-28 @@
-@@ -550,-29 +551,-29 @@
-@@ -551,-30 +552,-30 @@
-@@ -552,-31 +553,-31 @@
-@@ -552,-31 +554,-32 @@
-@@ -552,-31 +555,-33 @@
-@@ -552,-31 +556,-34 @@
-@@ -552,-31 +557,-35 @@
-@@ -552,-31 +558,-36 @@
-@@ -552,-31 +559,-37 @@
-@@ -552,-31 +560,-38 @@
-@@ -552,-31 +561,-39 @@
-@@ -562,-41 +575,-53 @@
-@@ -563,-42 +576,-54 @@
-@@ -609,-88 +622,-100 @@
-@@ -610,-89 +623,-101 @@
-@@ -611,-90 +624,-102 @@
-@@ -612,-91 +625,-103 @@
-@@ -612,-91 +626,-104 @@
-@@ -612,-91 +627,-105 @@
-@@ -612,-91 +628,-106 @@
-@@ -620,-99 +640,-118 @@
-@@ -621,-100 +641,-119 @@
-@@ -640,-119 +660,-138 @@
-@@ -641,-120 +661,-139 @@
-@@ -646,-125 +666,-144 @@
-@@ -647,-126 +667,-145 @@
-@@ -672,-151 +692,-170 @@
-@@ -673,-152 +693,-171 @@
-@@ -674,-153 +694,-172 @@
-@@ -675,-154 +695,-173 @@
-@@ -675,-154 +696,-174 @@
-@@ -675,-154 +697,-175 @@
-@@ -675,-154 +698,-176 @@
-@@ -675,-154 +699,-177 @@
-@@ -675,-154 +700,-178 @@
-@@ -675,-154 +701,-179 @@
-@@ -675,-154 +702,-180 @@
-@@ -675,-154 +703,-181 @@
-@@ -675,-154 +704,-182 @@
-@@ -675,-154 +705,-183 @@
-@@ -675,-154 +706,-184 @@
-@@ -675,-154 +707,-185 @@
-@@ -675,-154 +708,-186 @@
-@@ -675,-154 +709,-187 @@
-@@ -675,-154 +710,-188 @@
-@@ -675,-154 +711,-189 @@
-@@ -675,-154 +712,-190 @@
-@@ -676,-155 +712,-190 @@
-@@ -677,-156 +712,-190 @@
-@@ -678,-157 +712,-190 @@
-@@ -679,-158 +712,-190 @@
-@@ -680,-159 +712,-190 @@
-@@ -681,-160 +712,-190 @@
+@@ -548,6 +549,14 @@
+ 		goto out;
+ 	}
+ 
++	/* Translate Linux DRM ioctl direction bits before any user memory IO. */
++	linux_drm_ioctl = (fp->f_ops != NULL &&
++	    fp->f_ops->fo_ioctl_user != NULL && IOCGROUP(com) == 'd');
++	if (linux_drm_ioctl && (com & IOC_VOID) != 0) {
++		error = ENOTTY;
++		goto out;
++	}
++
+ 	/*
+ 	 * Interpret high order word to find amount of data to be
+ 	 * copied to/from the user's address space.
+@@ -562,7 +571,7 @@
+ 	 * To deal with this, we allocate enough space for the new disklabel
+ 	 * but only copyin/out the smaller amount.
+ 	 */
++	if (IOCGROUP(com) == 'd' && !linux_drm_ioctl) {
+-	if (IOCGROUP(com) == 'd') {
+ #if  __TMPBIGMAXPARTITIONS > MAXPARTITIONS
+ 		u_long ocom = com;
+ #endif
+@@ -609,6 +618,13 @@
+ 		error = ENOTTY;
+ 		goto out;
+ 	}
++	/* Preserve com for dispatch; prep_com controls only user marshalling. */
++	prep_com = com;
++	if (linux_drm_ioctl) {
++		prep_com = (com & ~(IOC_IN | IOC_OUT)) |
++		    ((com & IOC_IN) ? IOC_OUT : 0) |
++		    ((com & IOC_OUT) ? IOC_IN : 0);
++	}
+ 	memp = NULL;
+ 	if ((com >> IOCPARM_SHIFT) == 0)  {
+ 		/* UNIX-style ioctl. */
+@@ -620,7 +636,7 @@
+ 		} else {
+ 			data = (void *)stkbuf;
+ 		}
++		if (prep_com&IOC_IN) {
+-		if (com&IOC_IN) {
+ 			if (size) {
+ 				error = copyin(SCARG(uap, data), data, size);
+ 				if (error) {
+@@ -640,13 +656,13 @@
+ 			} else {
+ 				*(void **)data = SCARG(uap, data);
+ 			}
++		} else if ((prep_com&IOC_OUT) && size) {
+-		} else if ((com&IOC_OUT) && size) {
+ 			/*
+ 			 * Zero the buffer so the user always
+ 			 * gets back something deterministic.
+ 			 */
+ 			memset(data, 0, zero_size(size));
++		} else if (prep_com&IOC_VOID) {
+-		} else if (com&IOC_VOID) {
+ 			*(void **)data = SCARG(uap, data);
+ 		}
+ 	}
+@@ -672,16 +688,23 @@
+ 		break;
+ 
+ 	default:
++		if (fp->f_ops->fo_ioctl_user != NULL) {
++			/*
++			 * The opt-in handler owns all user copyout.  DRM may
++			 * return a partially populated buffer on error; a
++			 * generic IOC_OUT copy would duplicate or overrun it.
++			 */
++			error = (*fp->f_ops->fo_ioctl_user)(fp, com, data,
++			    SCARG(uap, data));
++		} else {
++			error = (*fp->f_ops->fo_ioctl)(fp, com, data);
++			/* Retain the historical success-only copyout. */
++			if (error == 0 && (com & IOC_OUT) && size) {
++				error = copyout(data, SCARG(uap, data),
++				    zero_size(size));
++				ktrgenio(SCARG(uap, fd), UIO_READ,
++				    SCARG(uap, data), size, error);
++			}
+-		error = (*fp->f_ops->fo_ioctl)(fp, com, data);
+-		/*
+-		 * Copy any data to user, size was
+-		 * already set and checked above.
+-		 */
+-		if (error == 0 && (com&IOC_OUT) && size) {
+-			error = copyout(data, SCARG(uap, data),
+-			    zero_size(size));
+-			ktrgenio(SCARG(uap, fd), UIO_READ, SCARG(uap, data),
+-			    size, error);
+ 		}
+ 		break;
+ 	}
