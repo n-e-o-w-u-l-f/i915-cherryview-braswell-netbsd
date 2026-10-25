@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "kind": "F14_CHERRYVIEW_CLOCK_FUNCTION_MAPPING_NOT_KERNEL_RELEASE",
+  "linux": {
+    "commit": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+    "source": "drivers/gpu/drm/i915/display/vlv_clock.c",
+    "git_blob": "a589cdb749033527c94ccdfe94a692d64576d046"
+  },
+  "netbsd": {
+    "commit": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "source_blobs": {
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c": "faff25ecd0a1d57d47f862891810daf5299571a3",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h": "03e7f21e578248e80ae03510715dc97eb855ca6f",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_cdclk.c": "46c6fadc390445bc188095d4eb0d5dc417c7e0bd",
+      "sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c": "1cc6a956b90cc44a85fa153ea1aa9ba58a605eed",
+      "sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h": "ce1919f9d0aff7f7c6b4d4534dbc61b7a6ce37ea",
+      "sys/external/bsd/drm2/dist/drm/i915/i915_reg.h": "a070913dc965ebfb467b99da599e75dd03df61de",
+      "sys/external/bsd/drm2/i915drm/files.i915drmkms": "23d352b64eb1799caf3e9b2770f78795accc8439"
+    }
+  },
+  "functions": [
+    {
+      "linux": "vlv_clock_get_hpll_vco",
+      "netbsd": "vlv_get_hpll_vco",
+      "owner": "display/intel_display.c",
+      "status": "LEGACY_EQUIVALENT_IDENTIFIED_REVIEW_OPEN",
+      "important_difference": "Linux caches hpll_freq in intel_display; NetBSD caches in caller via dev_priv->hpll_freq; sideband must already be acquired at native call site"
+    },
+    {
+      "linux": "vlv_clock_get_cck",
+      "netbsd": "vlv_get_cck_clock",
+      "owner": "display/intel_display.c",
+      "status": "LEGACY_EQUIVALENT_IDENTIFIED_REVIEW_OPEN",
+      "important_difference": "Same divider and DIV_ROUND_CLOSEST(ref_freq<<1, divider+1), but Linux wraps each transaction in vlv_cck_get/put; NetBSD caller holds IOSF transaction"
+    },
+    {
+      "linux": "vlv_clock_get_hrawclk",
+      "netbsd": "vlv_hrawclk",
+      "owner": "display/intel_cdclk.c",
+      "status": "LEGACY_EQUIVALENT_IDENTIFIED_REVIEW_OPEN",
+      "important_difference": "Native uses vlv_get_cck_clock_hpll wrapper, Linux uses vlv_clock_get_cck"
+    },
+    {
+      "linux": "vlv_clock_get_czclk",
+      "netbsd": "intel_update_czclk",
+      "owner": "display/intel_display.c",
+      "status": "LEGACY_EQUIVALENT_IDENTIFIED_REVIEW_OPEN",
+      "important_difference": "Native init-time update of czclk_freq vs Linux lazy first-use cached get"
+    },
+    {
+      "linux": "vlv_clock_get_cdclk",
+      "netbsd": "vlv_get_cdclk",
+      "owner": "display/intel_cdclk.c",
+      "status": "LEGACY_EQUIVALENT_IDENTIFIED_REVIEW_OPEN",
+      "important_difference": "Native caller owns CCK/PUNIT transaction and uses state VCO; validate resume/clock-domain state"
+    },
+    {
+      "linux": "vlv_clock_get_gpll",
+      "netbsd": "vlv_get_gpll_clock",
+      "owner": "display/intel_display.c (F14 candidate only)",
+      "status": "NEW_UNCOMPILED_NATIVE_SOURCE_CANDIDATE",
+      "important_difference": "New F14 GPLL CCK ref getter holds native CCK transaction, fills missing CZCLK/HPLL caches only as needed and reads existing CCK_GPLL_CLOCK_CONTROL 0x67"
+    }
+  ],
+  "candidate": {
+    "path": "patches/candidates/netbsd-11-chv-vlv-gpll-clock-20261026.patch",
+    "git_blob": "8e99fd0bea630d9c8cd75e316dd3a55e94e0f86e",
+    "netbsd_original_source_hunks_verified": "2/2_IN_MEMORY",
+    "actual_native_git_on_original_source": "NOT_RUN",
+    "native_selected_object_compiled": "NOT_RUN",
+    "c11_generic_compiled_new_candidate_function": "PASS_6_TESTS_5_MUTANTS",
+    "symbol_consumer_and_full_modern_driver_link": "NOT_RUN"
+  },
+  "scope": {
+    "legacy_intel_display_cdclk_and_sideband_selected_in_pin": "YES_FROZEN_FILELIST_SOURCE",
+    "original_full_323_structural_class": "UNRESOLVED_NO_BASENAME",
+    "whole_translation_unit_semantic_acceptance": "OPEN",
+    "release_manifest_generated": false,
+    "HP_device_display_test": "NOT_RUN"
+  }
+}
