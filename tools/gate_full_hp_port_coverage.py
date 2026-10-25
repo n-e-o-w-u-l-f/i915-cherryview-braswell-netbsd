@@ -13,7 +13,7 @@ import csv
 import hashlib
 import io
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import sys
 
@@ -63,8 +63,9 @@ def read_reference(data: bytes, *, required_blob: str = ORIGINAL_TSV_BLOB,
         raise ValueError(f'coverage must have {expected_units} units, got {len(rows)}')
     seen = set()
     for row in rows:
-        if (None in row or not row['linux_source'].endswith('.c') or
-                '/' not in row['linux_source'] or
+        path = row['linux_source']
+        if (None in row or not path.endswith('.c') or path.startswith('/') or
+                '..' in PurePosixPath(path).parts or '\\' in path or
                 row['structural_class'] not in STRUCTURAL):
             raise ValueError('unrecognized source/structural coverage entry')
         if row['linux_source'] in seen:
