@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 from pathlib import Path
-import shutil
 import subprocess
 import tempfile
 
@@ -58,8 +57,12 @@ def fnv64(text: str) -> int:
     return result
 
 
-def apply(root: Path, patch: Path) -> None:
+def apply(root: Path, patch: Path, expected_paths: set[Path]) -> None:
     check(patch.is_file(), f"missing patch {patch}")
+    records = subprocess.check_output(["git", "apply", "--numstat", str(patch)],
+                                      text=True).splitlines()
+    paths = {Path(record.split("\\t", 2)[2]) for record in records}
+    check(paths == expected_paths, f"unexpected patch file scope: {paths}")
     for flags in (("--check",), ()):
         subprocess.run(["git", "-C", str(root), "apply",
                         "--whitespace=error", *flags, str(patch)],
@@ -88,8 +91,8 @@ def main() -> None:
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(blob)
 
-        apply(f16_dir, F16)
-        apply(f17_dir, F17)
+        apply(f16_dir, F16, {SIDEBAND_C, SIDEBAND_H})
+        apply(f17_dir, F17, set(ORIGINAL_BLOBS))
 
         for relative in (SIDEBAND_C, SIDEBAND_H):
             check((f16_dir / relative).read_bytes() ==
