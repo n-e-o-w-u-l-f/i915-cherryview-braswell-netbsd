@@ -61,7 +61,7 @@ def apply(root: Path, patch: Path, expected_paths: set[Path]) -> None:
     check(patch.is_file(), f"missing patch {patch}")
     records = subprocess.check_output(["git", "apply", "--numstat", str(patch)],
                                       text=True).splitlines()
-    paths = {Path(record.split("\\t", 2)[2]) for record in records}
+    paths = {Path(record.split("\t", 2)[2]) for record in records}
     check(paths == expected_paths, f"unexpected patch file scope: {paths}")
     for flags in (("--check",), ()):
         subprocess.run(["git", "-C", str(root), "apply",
