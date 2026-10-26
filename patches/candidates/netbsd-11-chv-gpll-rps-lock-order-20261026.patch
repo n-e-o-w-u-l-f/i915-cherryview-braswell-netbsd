@@ -1,0 +1,95 @@
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
+@@ -246,8 +246,31 @@
+ 
+ 	DRM_DEBUG_DRIVER("CZ clock rate: %d kHz\n", dev_priv->czclk_freq);
+ }
+ 
++/*
++ * VLV/CHV GPLL reference clock, adapted from Linux vlv_clock_get_gpll().
++ * Use the native IOSF CCK transaction lock for both clock reads.
++ * The modern CZCLK path caches its value; only bootstrap it when absent.
++ */
++int
++vlv_get_gpll_clock(struct drm_i915_private *dev_priv)
++{
++	int gpll;
++
++	vlv_cck_get(dev_priv);
++	if (dev_priv->czclk_freq == 0) {
++		if (dev_priv->hpll_freq == 0)
++			dev_priv->hpll_freq = vlv_get_hpll_vco(dev_priv);
++		dev_priv->czclk_freq = vlv_get_cck_clock(dev_priv, "czclk",
++		    CCK_CZ_CLOCK_CONTROL, dev_priv->hpll_freq);
++	}
++	gpll = vlv_get_cck_clock(dev_priv, "GPLL ref",
++	    CCK_GPLL_CLOCK_CONTROL, dev_priv->czclk_freq);
++	vlv_cck_put(dev_priv);
++	return gpll;
++}
++
+ static inline u32 /* units of 100MHz */
+ intel_fdi_link_freq(struct drm_i915_private *dev_priv,
+ 		    const struct intel_crtc_state *pipe_config)
+ {
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
+--- a/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
++++ b/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
+@@ -516,8 +516,9 @@
+ int vlv_get_cck_clock(struct drm_i915_private *dev_priv,
+ 		      const char *name, u32 reg, int ref_freq);
+ int vlv_get_cck_clock_hpll(struct drm_i915_private *dev_priv,
+ 			   const char *name, u32 reg);
++int vlv_get_gpll_clock(struct drm_i915_private *dev_priv);
+ void lpt_disable_pch_transcoder(struct drm_i915_private *dev_priv);
+ void lpt_disable_iclkip(struct drm_i915_private *dev_priv);
+ void intel_init_display_hooks(struct drm_i915_private *dev_priv);
+ unsigned int intel_fb_xy_to_linear(int x, int y,
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c b/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
+--- a/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
+@@ -1289,10 +1289,7 @@
+ {
+ 	struct drm_i915_private *i915 = rps_to_i915(rps);
+ 
++	rps->gpll_ref_freq = vlv_get_gpll_clock(i915);
+-	rps->gpll_ref_freq =
+-		vlv_get_cck_clock(i915, "GPLL ref",
+-				  CCK_GPLL_CLOCK_CONTROL,
+-				  i915->czclk_freq);
+ 
+ 	DRM_DEBUG_DRIVER("GPLL reference freq: %d kHz\n", rps->gpll_ref_freq);
+ }
+@@ -1302,13 +1299,13 @@
+ 	struct drm_i915_private *i915 = rps_to_i915(rps);
+ 	u32 val;
+ 
++	vlv_init_gpll_ref_freq(rps);
++
+ 	vlv_iosf_sb_get(i915,
+ 			BIT(VLV_IOSF_SB_PUNIT) |
+ 			BIT(VLV_IOSF_SB_NC) |
+ 			BIT(VLV_IOSF_SB_CCK));
+ 
+-	vlv_init_gpll_ref_freq(rps);
+-
+ 	val = vlv_punit_read(i915, PUNIT_REG_GPU_FREQ_STS);
+ 	switch ((val >> 6) & 3) {
+ 	case 0:
+@@ -1356,13 +1353,13 @@
+ 	struct drm_i915_private *i915 = rps_to_i915(rps);
+ 	u32 val;
+ 
++	vlv_init_gpll_ref_freq(rps);
++
+ 	vlv_iosf_sb_get(i915,
+ 			BIT(VLV_IOSF_SB_PUNIT) |
+ 			BIT(VLV_IOSF_SB_NC) |
+ 			BIT(VLV_IOSF_SB_CCK));
+ 
+-	vlv_init_gpll_ref_freq(rps);
+-
+ 	val = vlv_cck_read(i915, CCK_FUSE_REG);
+ 
+ 	switch ((val >> 2) & 0x7) {
