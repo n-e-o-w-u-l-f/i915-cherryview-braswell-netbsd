@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "step": "HP-I915-F15-RPS-GPLL-LOCK-ORDER-20261026",
+  "status": "NATIVE_SOURCE_CANDIDATE_NOT_KERNEL_COMPILED",
+  "correction_to_F14": "F14 reported GPLL as no confirmed NetBSD counterpart after inspecting display/CDCLK/sideband files. The complete pinned GT RPS source proves GPLL calculation already existed there, inside caller-held IOSF CCK mutex. Therefore the F14 helper alone cannot safely replace that call; both VLV and CHV RPS init sites must move the helper invocation to BEFORE the combined IOSF lock to avoid nonrecursive nested lock.",
+  "pins": {
+    "linux_commit": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+    "linux_intel_rps_blob": "a33b19c04737a7f188df3d504e839ec3f67657f9",
+    "netbsd_commit": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "netbsd_intel_rps_blob": "d3faefcffe985725a0cee09a25f7d2270a35e5ea",
+    "netbsd_intel_display_blob": "faff25ecd0a1d57d47f862891810daf5299571a3",
+    "netbsd_intel_display_header_blob": "03e7f21e578248e80ae03510715dc97eb855ca6f",
+    "netbsd_intel_sideband_blob": "1cc6a956b90cc44a85fa153ea1aa9ba58a605eed"
+  },
+  "linux": "gt/intel_rps.c: vlv_init_gpll_ref_freq(rps) before vlv_iosf_sb_get in vlv_rps_init and chv_rps_init, calling vlv_clock_get_gpll",
+  "netbsd_old": "gt/intel_rps.c: vlv_init_gpll_ref_freq(rps) inside vlv_iosf_sb_get/put; direct vlv_get_cck_clock CCK_GPLL_CLOCK_CONTROL with caller-owned mutex",
+  "new_candidate": {
+    "path": "patches/candidates/netbsd-11-chv-gpll-rps-lock-order-20261026.patch",
+    "git_blob": "620916dac6179e6514852d795a9cc78762a4a467",
+    "changed_original_files": [
+      "display/intel_display.c",
+      "display/intel_display.h",
+      "gt/intel_rps.c"
+    ],
+    "native_full_original_hunk_preimage_verification": "PASS_3_FILES_5_HUNKS_IN_MEMORY",
+    "actual_native_git_full_original_files": "NOT_RUN",
+    "native_git_synthetic_preimages": "PASS",
+    "host_C11_WERROR_UBSAN_actual_extracted_source": "PASS",
+    "local_and_published_Python_tests": "PASS_9_OF_9_6_MUTANTS",
+    "kernel_native_build": "NOT_RUN"
+  },
+  "full_port": {
+    "linux_i915_active_units": 323,
+    "full_semantic_closure": "OPEN",
+    "rtl8723be_combined_native_link": "NOT_RUN",
+    "physical_KMS_WPA2_suspend_recovery": "NOT_RUN",
+    "release_approved": false
+  }
+}
