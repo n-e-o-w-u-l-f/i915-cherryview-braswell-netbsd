@@ -58,12 +58,12 @@ static void vlv_dpio_put(struct drm_i915_private *d) {
 #define DPIO_UNIQ_TRANS_SCALE_SHIFT 16
 #define DPIO_TX_UNIQ_TRANS_SCALE_EN (1u<<27)
 static u32 vlv_dpio_phy_read(struct drm_i915_private *d,enum dpio_phy phy,int reg) {
-    CHECK(d->lock && d->active);CHECK(phy==d->phy);
+    CHECK(d->lock && d->active);CHECK((int)phy==d->phy);
     CHECK(((reg-1000)>>8)==d->ch);d->reads++;
     return 0x00400001u;
 }
 static void vlv_dpio_phy_write(struct drm_i915_private *d,enum dpio_phy phy,int reg,u32 value) {
-    CHECK(d->lock && d->active);CHECK(phy==d->phy);
+    CHECK(d->lock && d->active);CHECK((int)phy==d->phy);
     CHECK(((reg-1000)>>8)==d->ch);(void)value;d->writes++;
 }
 
