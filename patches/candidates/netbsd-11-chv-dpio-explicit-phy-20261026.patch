@@ -1,0 +1,89 @@
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+@@ -235,6 +235,63 @@
+ 			SB_CRWRDA_NP, reg, &val);
+ }
+ 
++/*
++ * Explicit PHY-based DPIO access for VLV/CHV display callers.
++ * Keep the historic pipe-based entry points unchanged.
++ * Reject invalid PHYs and uninitialised IOSF port mappings before MMIO.
++ */
++static int
++vlv_dpio_port_for_phy(struct drm_i915_private *i915, enum dpio_phy phy)
++{
++	int expected = -1;
++
++	if (IS_CHERRYVIEW(i915)) {
++		if (phy == DPIO_PHY0)
++			expected = IOSF_PORT_DPIO_2;
++		else if (phy == DPIO_PHY1)
++			expected = IOSF_PORT_DPIO;
++	} else if (IS_VALLEYVIEW(i915) && phy == DPIO_PHY0) {
++		expected = IOSF_PORT_DPIO;
++	}
++
++	if (expected < 0) {
++		WARN(1, "unsupported DPIO PHY %d\n", phy);
++		return -1;
++	}
++	if (i915->dpio_phy_iosf_port[phy] != expected) {
++		WARN(1, "DPIO PHY %d IOSF port not initialised\n", phy);
++		return -1;
++	}
++	return expected;
++}
++
++u32
++vlv_dpio_phy_read(struct drm_i915_private *i915, enum dpio_phy phy, int reg)
++{
++	int port = vlv_dpio_port_for_phy(i915, phy);
++	u32 val = 0;
++
++	if (port < 0)
++		return 0xffffffff;
++
++	vlv_sideband_rw(i915, DPIO_DEVFN, port, SB_MRD_NP, reg, &val);
++	WARN(val == 0xffffffff, "DPIO PHY%d read reg 0x%x == 0x%x\n",
++	    phy, reg, val);
++	return val;
++}
++
++void
++vlv_dpio_phy_write(struct drm_i915_private *i915, enum dpio_phy phy,
++    int reg, u32 val)
++{
++	int port = vlv_dpio_port_for_phy(i915, phy);
++
++	if (port < 0)
++		return;
++
++	vlv_sideband_rw(i915, DPIO_DEVFN, port, SB_MWR_NP, reg, &val);
++}
++
+ u32 vlv_dpio_read(struct drm_i915_private *i915, enum pipe pipe, int reg)
+ {
+ 	int port = i915->dpio_phy_iosf_port[DPIO_PHY(pipe)];
+diff --git a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
+--- a/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
++++ b/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
+@@ -12,6 +12,7 @@
+ #define	pipe	pipe_drmhack	/* see intel_display.h */
+ 
+ struct drm_i915_private;
++enum dpio_phy;
+ enum pipe;
+ 
+ enum intel_sbi_destination {
+@@ -80,6 +81,10 @@
+ 	vlv_iosf_sb_get(i915, BIT(VLV_IOSF_SB_DPIO));
+ }
+ 
++u32 vlv_dpio_phy_read(struct drm_i915_private *i915, enum dpio_phy phy,
++	int reg);
++void vlv_dpio_phy_write(struct drm_i915_private *i915, enum dpio_phy phy,
++	int reg, u32 val);
+ u32 vlv_dpio_read(struct drm_i915_private *i915, enum pipe pipe, int reg);
+ void vlv_dpio_write(struct drm_i915_private *i915,
+ 		    enum pipe pipe, int reg, u32 val);
