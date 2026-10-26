@@ -53,6 +53,7 @@ jobs:
             sys/external/bsd/drm2/dist/drm/i915/i915_irq.c
             sys/external/bsd/drm2/dist/drm/i915/i915_reg.h
             sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c
+            sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h
             sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h
             sys/external/bsd/drm2/dist/drm/i915/display/intel_display_types.h
             sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c
