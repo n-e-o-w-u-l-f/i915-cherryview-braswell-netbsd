@@ -260,3 +260,22 @@ Logs/native-build-status-v2.json retained on HP. No final i915 kernel
 link, install, new boot, physical KMS or recovery-console verification.
 F77 remains in use with genfb0 and i915 disabled; no out-of-band
 G01–G09 early-console connection demonstrated.
+
+## 2026-10-26 F17 CHV signal-level PHY source gate
+
+On `work/hp-f17-chv-signal-phy-caller-20261026`, the three-file
+F17 candidate keeps F16 explicit DPIO access and migrates only
+`chv_set_phy_signal_level()` from pipe routing to physical
+port routing (B/C -> PHY0, D -> PHY1). All four patch hunks have
+been independently matched against the complete pinned NetBSD
+original files in memory. The F16 provider files agree byte-for-byte;
+nine PHY reads, nine PHY writes and the exact C fixture checksum agree.
+
+A new pinned-tree `git apply` / file-scope / caller-isolation source
+regression was committed and added to the common source runner with
+the existing F16/F17 GCC-model suites. The CI sparse checkout now
+includes `intel_sideband.h`. The **new Python source gate is NOT_RUN**
+in this session (no checked-out pinned NetBSD tree available);
+the independent in-memory hunk comparison is PASS. Hosted CI remains
+quarantined. No native NetBSD object/link, HP KMS, or MMIO test is
+claimed. See `docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
