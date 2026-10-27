@@ -149,7 +149,10 @@ Do not infer that the patch alone makes a bootable kernel.
 
 The standalone source check
 `tests/test_f18_console_handoff_trace_source.py` PASSed on Legion with
-all four original NetBSD Git blobs verified. It executed real
+all four original NetBSD Git blobs verified. A second, stricter run
+used an actual sparse NetBSD/src Git checkout on the exact commit
+`03d918f6d0e81fa05b8f1160eca0628ad39988a6` and also PASSed
+in `--netbsd-tree` mode. It executed real
 `git apply --whitespace=error --check` and `git apply` in an isolated
 temporary tree, then removed only F18 `#ifdef` regions and asserted
 byte-for-byte identity against all four original files, all seven
