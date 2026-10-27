@@ -60,7 +60,9 @@ static void disable_vga(struct drm_device *unused)
     (void)unused;
     vgadisables++;
 }
+#if NVGA > 0
 static void vga_cndetach(void) { vgadetaches++; }
+#endif
 static cfdata_t config_search(device_t dev,
     struct wsemuldisplaydev_attach_args *args, const void *cfargs)
 {
