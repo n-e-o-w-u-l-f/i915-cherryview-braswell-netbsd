@@ -19,7 +19,7 @@ parse_cfg() {
     print "$label"_CONFIG=READABLE_SOURCE_NOT_NECESSARILY_ACTIVE
     # Never execute anything from the configuration. NetBSD menu entries are
     # one-based, and boot.cfg "menu" values use LABEL:COMMANDS.
-    awk -v p="$label" '
+    report=$(awk -v p="$label" '
     BEGIN { n=0; found=0; def="UNKNOWN"; timeout="UNKNOWN" }
     /^default=/ {def=substr($0,9)}
     /^timeout=/ {timeout=substr($0,9)}
@@ -63,8 +63,39 @@ parse_cfg() {
       print p "_DEFAULT=" def
       print p "_TIMEOUT=" timeout
       if(found==0) print p "_MENU5=NOT_PRESENT"
-    }' "$config"
+    }' "$config")
+    printf '%s\n' "$report"
+    # A boot-image path alone is not proof of which ESP boot.cfg was used.
+    # Only in native mode fingerprint a simple root-level NetBSD image name;
+    # never evaluate commands read from boot.cfg or open arbitrary paths.
+    if [ "$native_probe" = 1 ]; then
+        image=$(printf '%s\n' "$report" | awk -F= '$1 ~ /_MENU5_BOOT_IMAGE$/ {print $2; exit}')
+        case "$image" in
+            netbsd_DEFAULT) image=netbsd ;;
+            netbsd*|/netbsd*) ;;
+            '') print "$label"_MENU5_FILE=NO_BOOT_IMAGE ; return ;;
+            *) print "$label"_MENU5_FILE=UNRESOLVED_OR_DEVICE_QUALIFIED ; return ;;
+        esac
+        case "$image" in
+            *:*|*..*|*[!a-zA-Z0-9_./-]*)
+                print "$label"_MENU5_FILE=UNSAFE_OR_DEVICE_QUALIFIED
+                return ;;
+            /*) kernel_file=$image ;;
+            *) kernel_file=/$image ;;
+        esac
+        if [ -f "$kernel_file" ] && [ ! -L "$kernel_file" ]; then
+            print "$label"_MENU5_FILE=REGULAR_FILE
+            if command -v sha256 >/dev/null 2>&1; then
+                digest=$(sha256 -q "$kernel_file" 2>/dev/null) || digest=HASH_FAILED
+                print "$label"_MENU5_KERNEL_SHA256="$digest"
+            fi
+        else
+            print "$label"_MENU5_FILE=ABSENT_OR_SYMLINK
+        fi
+    fi
 }
+
+native_probe=0
 
 case $# in
     0) ;;
@@ -86,6 +117,7 @@ if [ "$(uname -s 2>/dev/null)" != NetBSD ]; then
     print "F18_REFUSED=NOT_NETBSD"
     exit 2
 fi
+native_probe=1
 print "F18_MODE=READ_ONLY_RUNNING_NETBSD"
 print "F18_SCOPE=MENU5_PANIC_TRIAGE_NOT_BOOT_AUTHORIZATION"
 uname -srm 2>/dev/null || :
