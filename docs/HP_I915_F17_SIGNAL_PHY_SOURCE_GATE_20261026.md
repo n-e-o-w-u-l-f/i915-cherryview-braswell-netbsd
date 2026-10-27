@@ -130,3 +130,52 @@ NetBSD native C compilation of affected units, full selected kernel link,
 GitHub-hosted CI (quarantined), an early-console G01–G09 trace and HP
 Cherryview hardware KMS/black-screen validation. F77 boot recovery and
 production firmware/kernel/boot settings were not touched.
+
+## 2026-10-27 follow-up: pinned Git checkout and header/IOSF closure
+
+The earlier NOT_RUN result for both strict Git-checkout modes is now **superseded**.
+On Legion a sparse NetBSD/src checkout was fetched and checked out at the
+actual `03d918f6d0e81fa05b8f1160eca0628ad39988a6` Git HEAD.
+The following tests executed with `--netbsd-tree` and PASSed:
+
+- `test_f17_chv_signal_patch_application.py`: full three-file/four-hunk
+  F17 candidate, literal native C fixture, checksums and unchanged remainder.
+- `test_f15_f17_source_composition.py`: six exact original files,
+  F15/F17 two-order actual `git apply`, F14 supersession.
+- `test_f17_sideband_header_compile.py`: full F17-patched original
+  `intel_sideband.h` plus isolated mock system includes,
+  host GCC and Clang with `-std=gnu99` and `-std=gnu11`,
+  `-Wall -Wextra -Werror`; both physical-PHY enum declaration orders:
+  **8/8 source-header compiler configurations PASS**.
+- `test_f17_dpio_bootstrap_source.py`: actual pinned
+  `i915_drv.c` and `i915_reg.h`, early `intel_init_dpio()`
+  after `sb_lock` setup and before display initialization;
+  CHV PHY0 -> IOSF_PORT_DPIO_2, PHY1 -> IOSF_PORT_DPIO;
+  **four intentionally wrong in-memory variants all rejected**.
+- `test_f17_iosf_patch_composition.py`: the earlier checked-status
+  adapter and modern IOSF guard compose with F17 both as
+  `checked -> modern -> F17` and `F17 -> checked -> modern`;
+  both sequences apply cleanly to complete pinned source files and
+  produce identical output bytes, preserving the native F17 caller.
+
+These new tests are invoked by `tools/run_pinned_i915_source_checks.py`.
+The existing CI workflow already checks out the relevant original
+`i915_drv.c`, `i915_reg.h`, `intel_sideband.c/.h`,
+`intel_dpio_phy.c`, `intel_display.c/.h`, and `gt/intel_rps.c`.
+
+F16/F17 exact C model test suites were rerun GCC and Clang:
+**28/28 tests PASS**. The project Git working tree was clean after
+the test-only checkout update. All new scripts were compiled by
+Python syntax verification as a separate host check.
+
+**Still OPEN / NOT_RUN:** compiling the *actual* modified NetBSD
+C units against NetBSD kernel headers and native compiler flags,
+a fully linked selected NetBSD kernel, and a physically observable
+HP KMS boot/early G01–G09 trace. Legion's installed compilers are
+Linux host GCC/Clang, not a demonstrated NetBSD kernel cross-toolchain.
+Mock-header compilation is not a native kernel object build.
+GitHub Actions hosted execution remains quarantined.
+
+No i915 production source in a NetBSD kernel worktree was committed,
+no HP kernel or bootloader replaced, and the F77 recovery boot target
+was not touched.
