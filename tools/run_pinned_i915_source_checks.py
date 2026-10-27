@@ -100,6 +100,8 @@ def main() -> None:
            "--netbsd-tree", str(netbsd))
     invoke("test_f17_dpio_bootstrap_source.py",
            "--netbsd-tree", str(netbsd))
+    invoke("test_f17_iosf_patch_composition.py",
+           "--netbsd-tree", str(netbsd))
     invoke("test_f15_f17_source_composition.py",
            "--netbsd-tree", str(netbsd))
     invoke("test_chv_pipe_msa_misc_reference.py",
