@@ -279,3 +279,30 @@ in this session (no checked-out pinned NetBSD tree available);
 the independent in-memory hunk comparison is PASS. Hosted CI remains
 quarantined. No native NetBSD object/link, HP KMS, or MMIO test is
 claimed. See `docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
+
+
+## 2026-10-27 executed F16/F17 and F15+F17 integration gates
+
+On Legion, F16 and F17 exact-source C11 -Werror/UBSan model regression
+suites completed under both GCC and Clang: **28/28 PASS** total.
+All three F17 original NetBSD source blobs were verified by Git blob SHA-1;
+native `git apply --check` plus `git apply` passed in isolated scratch
+directories. The published
+`tests/test_f17_chv_signal_patch_application.py` also PASSed in explicit
+`--verified-blob-dir` mode, with no Git HEAD assertion.
+
+A newly published `tests/test_f15_f17_source_composition.py` PASSed
+on all **six exact original NetBSD source blobs**. F15 then F17 and
+F17 then F15 both applied cleanly using actual `git apply` and produced
+byte-identical source results. F15 includes F14's original two display
+hunks and supersedes it; only **F15 + F17**, not F14 + F15 + F17,
+is the proper combined candidate. The common source runner invokes
+both gates and CI's sparse list includes `gt/intel_rps.c`.
+
+This is source-only host verification. Strict pinned-NetBSD-checkout
+test modes and native NetBSD kernel object compilation/link remain
+**NOT_RUN**. GitHub Actions remains quarantined; negative corruption
+replay was blocked by a tool safety check and is **NOT_RUN**.
+HP KMS, live DPIO registers and G01-G09 serial transport are still OPEN.
+No F77 recovery kernel, kernel install, firmware, or boot configuration
+was modified. Details: `docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
