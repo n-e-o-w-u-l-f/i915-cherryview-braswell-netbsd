@@ -104,6 +104,13 @@ def main() -> None:
            "--netbsd-tree", str(netbsd))
     invoke("test_f15_f17_source_composition.py",
            "--netbsd-tree", str(netbsd))
+    invoke("test_hp_boot5_vpanic_readonly.py")
+    invoke("test_f18_console_handoff_trace_source.py",
+           "--netbsd-tree", str(netbsd))
+    invoke("test_f19_drmfb_console_preflight.py",
+           "--netbsd-tree", str(netbsd))
+    invoke("test_f18_f19_console_source_composition.py",
+           "--netbsd-tree", str(netbsd))
     invoke("test_chv_pipe_msa_misc_reference.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p3), *overlay_args)
