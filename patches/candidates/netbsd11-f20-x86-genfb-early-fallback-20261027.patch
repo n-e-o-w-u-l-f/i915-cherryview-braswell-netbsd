@@ -1,0 +1,26 @@
+diff --git a/sys/arch/x86/x86/consinit.c b/sys/arch/x86/x86/consinit.c
+--- a/sys/arch/x86/x86/consinit.c
++++ b/sys/arch/x86/x86/consinit.c
+@@ -220,14 +220,19 @@
+ 			 * use this to set up the device properties for
+ 			 * a PCI display-class device to notify it that
+ 			 * it has been selected as the console.
+ 			 */
+-			if (x86_genfb_cnattach() == -1) {
++			int fb_result = x86_genfb_cnattach();
++
++			if (fb_result == -1) {
+ 				initted = 0;	/* defer */
+ 				return;
+ 			}
+-			genfb_cnattach();
+-			goto dokbd;
++			if (fb_result > 0) {
++				genfb_cnattach();
++				goto dokbd;
++			}
++			/* Initialization failed: try the VGA/text fallback. */
+ 		}
+ 		genfb_disable();
+ #endif
+ #if (NVGA > 0)
