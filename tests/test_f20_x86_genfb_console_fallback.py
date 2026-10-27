@@ -221,7 +221,7 @@ def main() -> None:
                 "if (fb_result > 0)" in after,
                 "F20 must preserve defer and confirm success explicitly")
         require(after.index("if (fb_result > 0)") <
-                after.index("genfb_cnattach();"),
+                after.index("\n\t\t\t\tgenfb_cnattach();"),
                 "F20 must not report failed framebuffer map as success")
         require(after.index("genfb_disable();") >
                 after.index("if (fb_result > 0)"),
