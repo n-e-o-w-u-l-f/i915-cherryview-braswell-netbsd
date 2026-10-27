@@ -1,0 +1,56 @@
+diff --git a/sys/external/bsd/drm2/drm/drmfb.c b/sys/external/bsd/drm2/drm/drmfb.c
+--- a/sys/external/bsd/drm2/drm/drmfb.c
++++ b/sys/external/bsd/drm2/drm/drmfb.c
+@@ -95,6 +95,9 @@
+ 	static const struct genfb_ops zero_genfb_ops;
+ 	struct genfb_ops genfb_ops = zero_genfb_ops;
+ 	bool is_console;
++#if NVGA > 0
++	bool was_vga_console = false;
++#endif
+ 	int error __diagused;
+ 
+ 	/* genfb requires this.  */
+@@ -136,10 +139,41 @@
+ 	 */
+ 	if ((da->da_params->dp_is_vga_console != NULL) &&
+ 	    (*da->da_params->dp_is_vga_console)(dev)) {
++		was_vga_console = true;
++		is_console = true;
++	}
++#endif
++
++	/*
++	 * Check for a display-console child before taking over the VGA
++	 * console, or installing wsdisplay_cons via genfb.  The
++	 * wsemuldisplaydev matcher needs only the console flag.  Without
++	 * a matching child, genfb would set cn_dev to NODEV but its
++	 * config_found() result would be ignored, leaving no /dev/console.
++	 */
++	if (is_console) {
++		struct wsemuldisplaydev_attach_args aa = {
++			.console = 1,
++		};
++		cfdata_t child;
++
++		KERNEL_LOCK(1, NULL);
++		child = config_search(da->da_dev, &aa,
++		    CFARGS(.iattr = "wsemuldisplaydev"));
++		KERNEL_UNLOCK_ONE(NULL);
++		if (child == NULL) {
++			aprint_error_dev(da->da_dev,
++			    "cannot take console: no wsdisplay child configured\n");
++			return ENXIO;
++		}
++	}
++
++#if NVGA > 0
++	/* Keep the old VGA console until the new console is matchable. */
++	if (was_vga_console) {
+ 		vga_cndetach();
+ 		if (da->da_params->dp_disable_vga)
+ 			(*da->da_params->dp_disable_vga)(dev);
+-		is_console = true;
+ 	}
+ #endif
+ 
