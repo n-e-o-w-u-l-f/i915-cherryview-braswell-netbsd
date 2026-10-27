@@ -1,0 +1,20 @@
+diff --git a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+--- a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
++++ b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+@@ -188,8 +188,16 @@
+ 	/* Attach the drm driver.  */
+ 	/* XXX errno Linux->NetBSD */
+ 	error = -i915_driver_probe(&sc->sc_pci_dev, ent);
+ 	if (error) {
++		/*
++		 * The failing probe has not reached driver registration,
++		 * which is where NetBSD's synchronous fbdev setup first
++		 * queues an intelfb attach task.  Restore the task scheduler
++		 * owner before a later detach checks sc_task_thread == NULL.
++		 */
++		KASSERT(SIMPLEQ_EMPTY(&sc->sc_tasks));
++		atomic_store_relaxed(&sc->sc_task_thread, NULL);
+ 		aprint_error_dev(self, "unable to register drm: %d\n", error);
+ 		return;
+ 	}
+ 	sc->sc_drm_dev = pci_get_drvdata(&sc->sc_pci_dev);
