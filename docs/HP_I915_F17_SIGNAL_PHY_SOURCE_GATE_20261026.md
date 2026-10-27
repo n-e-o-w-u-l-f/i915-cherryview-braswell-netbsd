@@ -78,3 +78,55 @@ NetBSD sparse checkout now includes `intel_sideband.h`.
 No production kernel, firmware, bootloader, or device register was modified.
 An actual native build and the G01–G09 early-console trace gate remain
 prerequisites before any new HP hardware-boot attempt.
+
+## 2026-10-27 executed Legion follow-up
+
+The F17 branch sources were freshly checked out on the Legion Linux development
+host in an isolated /tmp directory; branch HEAD was checked against GitHub.
+Host C11, -Werror, UBSan model suites were actually executed:
+
+- F16 provider: GCC 7/7 PASS; Clang 7/7 PASS.
+- F17 signal consumer: GCC 7/7 PASS; Clang 7/7 PASS.
+- Total: 28/28 PASS across four suite/compiler runs.
+
+The complete original C files were separately retrieved from pinned NetBSD
+\`03d918f6d0e81fa05b8f1160eca0628ad39988a6\` and their raw Git blob SHA-1s
+verified before use. The actual \`git apply --check --whitespace=error\` and
+\`git apply --whitespace=error\` operations succeeded for both the F16 and F17
+published patches in disposable directories. F16 and F17 sideband provider
+files were identical; the displayed F17 signal function, fixture and all four
+original hunks matched.
+
+The newly published \`test_f17_chv_signal_patch_application.py\` was
+executed successfully in its **explicit --verified-blob-dir mode**.
+That mode checks exact Git blob identities but does NOT assert the presence
+of the original NetBSD git commit in a checkout. The stricter
+\`--netbsd-tree\` mode remains NOT_RUN this session.
+
+### F14/F15/F17 canonical composition
+
+A new \`tests/test_f15_f17_source_composition.py\` is in the branch and
+wired into the common pinned-source runner. Its verified-blob mode
+was actually run on Legion and PASSed:
+
+- All six original NetBSD Git blobs verified against the pinned revision:
+  \`intel_sideband.c\`, \`intel_sideband.h\`,
+  \`display/intel_dpio_phy.c\`, \`display/intel_display.c\`,
+  \`display/intel_display.h\`, \`gt/intel_rps.c\`.
+- Real \`git apply\` succeeds for F15 then F17 **and** F17 then F15,
+  with byte-identical outputs.
+- F15's two display outputs equal F14's; F15 **supersedes F14**.
+  Do not apply F14 then F15.
+- F15 RPS/GPLL call sites, F17 nine PHY reads/writes and exact
+  signal function were checked in the composed output.
+- The CI sparse checkout now includes \`gt/intel_rps.c\`.
+
+The attempted deliberate source-corruption negative run was not
+executed because its remote execution request was blocked by
+a tool safety check; this is NOT_RUN rather than PASS.
+
+**Remaining gates:** actual pinned-checkout-mode Python tests,
+NetBSD native C compilation of affected units, full selected kernel link,
+GitHub-hosted CI (quarantined), an early-console G01–G09 trace and HP
+Cherryview hardware KMS/black-screen validation. F77 boot recovery and
+production firmware/kernel/boot settings were not touched.
