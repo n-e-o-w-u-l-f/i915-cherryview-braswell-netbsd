@@ -45,6 +45,7 @@ jobs:
             sys/external/bsd/drm2/dist/drm/i915/i915_drv.c
             sys/external/bsd/drm2/dist/drm/i915/i915_pci.c
             sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c
+            sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c
             sys/external/bsd/drm2/dist/drm/i915/gt/intel_gtt.h
             sys/external/bsd/drm2/dist/drm/i915/gt/gen8_ppgtt.c
             sys/external/bsd/drm2/dist/drm/i915/gt/gen6_ppgtt.c
