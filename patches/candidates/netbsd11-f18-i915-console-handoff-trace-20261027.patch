@@ -1,0 +1,93 @@
+diff --git a/sys/dev/wsfb/genfb.c b/sys/dev/wsfb/genfb.c
+--- a/sys/dev/wsfb/genfb.c
++++ b/sys/dev/wsfb/genfb.c
+@@ -395,6 +395,10 @@
+ 		scp->sc_want_clear = 1;
+ 	}
+ 
++#ifdef HP_I915_CONSOLE_TRACE
++	printf("[I915-CN GFB1] %s before cnattach console=%d\n",
++	    device_xname(sc->sc_dev), (int)console);
++#endif
+ 	if (console)
+ 		wsdisplay_cnattach(&scp->sc_defaultscreen_descr, ri, 0, crow,
+ 		    defattr);
+@@ -456,8 +460,19 @@
+ 		SCREEN_DISABLE_DRAWING(&scp->sc_console_screen);
+ #endif
+ 
++#ifdef HP_I915_CONSOLE_TRACE
++	{
++		device_t child;
++		child = config_found(sc->sc_dev, &aa, wsemuldisplaydevprint,
++		    CFARGS(.iattr = "wsemuldisplaydev"));
++		printf("[I915-CN GFB2] %s wsdisplay=%s console=%d\n",
++		    device_xname(sc->sc_dev),
++		    child ? device_xname(child) : "NONE", (int)console);
++	}
++#else
+ 	config_found(sc->sc_dev, &aa, wsemuldisplaydevprint,
+ 	    CFARGS(.iattr = "wsemuldisplaydev"));
++#endif
+ 
+ 	return 0;
+ }
+diff --git a/sys/dev/wscons/wsdisplay.c b/sys/dev/wscons/wsdisplay.c
+--- a/sys/dev/wscons/wsdisplay.c
++++ b/sys/dev/wscons/wsdisplay.c
+@@ -654,6 +654,10 @@
+ 
+ 		cn_tab->cn_dev = makedev(maj, WSDISPLAYMINOR(device_unit(self),
+ 					 0));
++#ifdef HP_I915_CONSOLE_TRACE
++		printf("[I915-CN WSD] %s cn_dev valid after attach\n",
++		    device_xname(self));
++#endif
+ 	}
+ }
+ 
+diff --git a/sys/external/bsd/drm2/drm/drmfb.c b/sys/external/bsd/drm2/drm/drmfb.c
+--- a/sys/external/bsd/drm2/drm/drmfb.c
++++ b/sys/external/bsd/drm2/drm/drmfb.c
+@@ -144,6 +144,11 @@
+ #endif
+ 
+ 	prop_dictionary_set_bool(dict, "is_console", is_console);
++#ifdef HP_I915_CONSOLE_TRACE
++	printf("[I915-CN DRM1] %s console=%d surface=%ux%u\n",
++	    device_xname(da->da_dev), (int)is_console,
++	    (unsigned)sizes->surface_width, (unsigned)sizes->surface_height);
++#endif
+ 
+ 	/* Make the first EDID we find available to wsfb */
+ 	drm_connector_list_iter_begin(da->da_fb_helper->dev, &conn_iter);
+@@ -167,6 +172,10 @@
+ 	KERNEL_LOCK(1, NULL);
+ 	error = genfb_attach(&sc->sc_genfb, &genfb_ops);
+ 	KERNEL_UNLOCK_ONE(NULL);
++#ifdef HP_I915_CONSOLE_TRACE
++	printf("[I915-CN DRM2] %s genfb_attach result=%d\n",
++	    device_xname(da->da_dev), error);
++#endif
+ 	KASSERTMSG(error == 0, "genfb_attach failed, error=%d", error);
+ 
+ 	/* Success!  */
+diff --git a/sys/external/bsd/drm2/i915drm/intelfb.c b/sys/external/bsd/drm2/i915drm/intelfb.c
+--- a/sys/external/bsd/drm2/i915drm/intelfb.c
++++ b/sys/external/bsd/drm2/i915drm/intelfb.c
+@@ -140,7 +140,15 @@
+ 	};
+ 	int error;
+ 
++#ifdef HP_I915_CONSOLE_TRACE
++	printf("[I915-CN IFB1] %s before drmfb_attach\n",
++	    device_xname(sc->sc_dev));
++#endif
+ 	error = drmfb_attach(&sc->sc_drmfb, &da);
++#ifdef HP_I915_CONSOLE_TRACE
++	printf("[I915-CN IFB2] %s drmfb_attach result=%d\n",
++	    device_xname(sc->sc_dev), error);
++#endif
+ 	if (error) {
+ 		aprint_error_dev(sc->sc_dev, "failed to attach drmfb: %d\n",
+ 		    error);
