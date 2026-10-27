@@ -449,3 +449,40 @@ dimensions guard was introduced. Still **NOT_RUN**: compilation of a
 complete drmfb.o against native NetBSD kernel headers, kernel link,
 menu entry 5 image/panic capture and HP hardware boot. F77 remains
 untouched. See docs/HP_F19_DRMFB_CONSOLE_PREFLIGHT_20261027.md.
+
+
+## 2026-10-27 F20 — x86 firmware console return-zero defect and earlier i915 gap
+
+In the exact pinned NetBSD 11 original x86_genfb_cnattach():
+-1 means defer, 0 means unsuccessful GOP framebuffer setup, 1
+means successfully preattached wsdisplay. Original x86 consinit.c
+treated result 0 as success, invoked genfb_cnattach and skipped
+the VGA/text console fallback. The new one-file actual C patch
+candidate F20 handles return 0 by continuing the existing
+fallback; successful and deferred paths are unchanged.
+
+Candidate:
+patches/candidates/netbsd11-f20-x86-genfb-early-fallback-20261027.patch
+
+Executed on Legion against the real pinned NetBSD source: 7
+exact original Git blobs checked; real git apply (check + apply)
+to the entire consinit.c; exact native console branch compiled
+and executed with GCC and Clang GNU99/GNU11, -Werror and UBSan,
+9 cases per build = **36/36 PASS**. The original unfixed code
+and a broadened success-guard mutant both FAILED the same
+executable check as expected. Runner and workflow sparse
+manifest now include F20.
+
+A separate source-proven F19 scope gap remains: UEFI
+wsdisplay_preattach can hold cn_dev=NODEV; NetBSD PCI i915
+priority 6 beats firmware genfb priority 5; deferred
+i915_driver_probe failure can return before intelfb attaches
+a console, so downstream F19 preflight is never executed.
+**F20 does not resolve this i915 probe failure**; further
+console ownership remediation must follow actual HP panic
+image/string and stack evidence.
+
+Docs: docs/HP_F20_UEFI_GOP_CONSOLE_SOURCE_AUDIT_20261027.md.
+Native NetBSD object compile/kernel link/HP boot all NOT_RUN.
+Boot-menu option 5 image/panic reason still unknown. F77 and
+installed kernel/boot configurations remain unmodified.
