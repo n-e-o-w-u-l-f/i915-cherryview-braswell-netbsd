@@ -71,12 +71,18 @@ def apply(root: Path, patch: Path, expected_paths: set[Path]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--netbsd-tree", type=Path, required=True)
+    sources = parser.add_mutually_exclusive_group(required=True)
+    sources.add_argument("--netbsd-tree", type=Path,
+                         help="actual checkout: require pinned NetBSD git HEAD")
+    sources.add_argument("--verified-blob-dir", type=Path,
+                         help="source files only: verify all original Git blobs, "
+                              "without asserting a pinned checkout")
     args = parser.parse_args()
-    tree = args.netbsd_tree.resolve(strict=True)
-    revision = subprocess.check_output(
-        ["git", "-C", str(tree), "rev-parse", "HEAD"], text=True).strip()
-    check(revision == PIN, "NetBSD source checkout is not at pinned commit")
+    tree = (args.netbsd_tree or args.verified_blob_dir).resolve(strict=True)
+    if args.netbsd_tree is not None:
+        revision = subprocess.check_output(
+            ["git", "-C", str(tree), "rev-parse", "HEAD"], text=True).strip()
+        check(revision == PIN, "NetBSD source checkout is not at pinned commit")
 
     with tempfile.TemporaryDirectory(prefix="i915-f17-full-source-") as tmp:
         scratch = Path(tmp)
@@ -129,7 +135,10 @@ def main() -> None:
               updated.count("vlv_dpio_put(dev_priv);") == 1,
               "DPIO lock boundary drift")
 
-    print("F17_PINNED_ORIGINAL_3_FILES_4_HUNKS_GIT_APPLY_AND_EXACT_C_PARITY_PASS")
+    if args.netbsd_tree is not None:
+        print("F17_PINNED_CHECKOUT_3_FILES_4_HUNKS_GIT_APPLY_AND_EXACT_C_PARITY_PASS")
+    else:
+        print("F17_VERIFIED_BLOBS_3_FILES_4_HUNKS_GIT_APPLY_NO_GIT_HEAD_CLAIM_PASS")
 
 
 if __name__ == "__main__":
