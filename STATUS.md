@@ -428,3 +428,24 @@ firmware and boot.cfg are unchanged. Do not boot F19.
 
 Detailed review:
 docs/HP_F19_DRMFB_CONSOLE_PREFLIGHT_20261027.md
+
+
+### 2026-10-27 F19: complete patched native function now host-compiled
+
+The new tests/test_f19_complete_drmfb_attach_host.py applies F19 to
+the entire pinned original NetBSD drmfb.c, extracts the whole genuine
+drmfb_attach() function without modifying its body, mocks only the
+external NetBSD/DRM APIs and compiles/runs the complete extracted function
+with host GCC/Clang, GNU99/GNU11, NVGA=0/1, -Werror and UBSan.
+**256/256 cases PASS**, including positive/negative console ownership,
+fallback firmware/genfb detection, missing-child rejection and
+successful genfb attach with balanced locking. Runner wired. The
+existing 64-case exact preflight-block suite, inversion mutant and
+two-order F18+F19 git-apply composition continue to pass.
+
+Source review additionally confirmed that a drm_fb_helper with
+no CRTC/sizes already fails upstream with -EAGAIN, so no speculative
+dimensions guard was introduced. Still **NOT_RUN**: compilation of a
+complete drmfb.o against native NetBSD kernel headers, kernel link,
+menu entry 5 image/panic capture and HP hardware boot. F77 remains
+untouched. See docs/HP_F19_DRMFB_CONSOLE_PREFLIGHT_20261027.md.
