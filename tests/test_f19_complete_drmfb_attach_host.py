@@ -85,7 +85,7 @@ static void drmfb_genfb_enable_polling(void) {}
 static void drmfb_genfb_disable_polling(void) {}
 static int drmfb_genfb_mode_callback;
 
-#define NVGA_PLACEHOLDER 1
+#define __diagused __attribute__((unused))
 #define CFARGS(...) NULL
 #define CTASSERT(x) typedef char static_assert_local[(x)?1:-1]
 #define KASSERTMSG(expr, ...) assert(expr)
@@ -171,7 +171,7 @@ static cfdata_t config_search(device_t dev,
 }
 static void aprint_error_dev(device_t dev, const char *format, ...)
 {
-    (void)dev;
+    (void)device_xname(dev);
     assert(strstr(format, "no wsdisplay child configured") != NULL);
     error_reports++;
 }
