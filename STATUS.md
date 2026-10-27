@@ -392,3 +392,39 @@ regions PASSed on Legion:
 `tests/test_f18_console_handoff_trace_source.py` now owns this gate.
 No NetBSD object/kernel build or live HP experiment was undertaken.
 F77, firmware, actual boot menu and recovery hashes were not touched.
+
+
+## 2026-10-27 F19 — functional NetBSD DRMFB console preflight candidate
+
+On this separate F19 development branch an actual one-function native
+NetBSD candidate now protects the VGA console from an avoidable takeover:
+drmfb_attach checks for a matching configured wsemuldisplaydev
+console child via config_search under KERNEL_LOCK before calling
+vga_cndetach/disable VGA. If the child is absent, it returns ENXIO,
+and the existing intelfb_attach_task error/unwind path handles it.
+Normal successful VGA/framebuffer ownership order remains unchanged.
+
+New patch:
+patches/candidates/netbsd11-f19-drmfb-wsdisplay-preflight-20261027.patch
+
+Actually executed on Legion with the REAL pinned NetBSD Git checkout:
+- Real git apply --check and git apply to exact original drmfb.c.
+- Source-accurate extracted C compiled/executed with GCC and Clang,
+  GNU99/GNU11, NVGA=0/1, -Werror and UBSan: **64/64 PASS**.
+- Inverted null-check negative mutant failed as required.
+- F18->F19 and F19->F18 full-source patches applied via real
+  git apply and produced byte-identical output (four pinned files).
+- New checks wired into the pinned source runner, with CI sparse
+  checkout additions. GitHub-hosted Actions remains quarantined.
+
+**LIMITS:** Only a missing MATCHING CONSOLE CHILD is checked. A child
+can still fail attach after search; previously preattached console
+state, bad CRTC/eDP/AUX or unrelated panic sites are not fixed.
+Most importantly, the physical HP boot-menu 5 vpanic message,
+backtrace and candidate kernel identity are still UNOBSERVED.
+This patch has not been compiled by the native NetBSD kernel toolchain,
+linked into a kernel or tried on HP. F77, existing kernel images,
+firmware and boot.cfg are unchanged. Do not boot F19.
+
+Detailed review:
+docs/HP_F19_DRMFB_CONSOLE_PREFLIGHT_20261027.md
