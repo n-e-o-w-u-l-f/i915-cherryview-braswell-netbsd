@@ -87,7 +87,35 @@ def main() -> None:
               f"pinned i915 boot original blob drift: {relative}")
         actual[relative] = data.decode("utf-8")
     inspect(actual[DRIVER], actual[REGISTER])
+
+    driver = actual[DRIVER]
+    registers = actual[REGISTER]
+    mutants = [
+        ("wrong_phy0_iosf",
+         driver.replace("DPIO_PHY_IOSF_PORT(DPIO_PHY0) = IOSF_PORT_DPIO_2;",
+                        "DPIO_PHY_IOSF_PORT(DPIO_PHY0) = IOSF_PORT_DPIO;", 1),
+         registers),
+        ("wrong_phy1_iosf",
+         driver.replace("DPIO_PHY_IOSF_PORT(DPIO_PHY1) = IOSF_PORT_DPIO;",
+                        "DPIO_PHY_IOSF_PORT(DPIO_PHY1) = IOSF_PORT_DPIO_2;", 1),
+         registers),
+        ("missing_early_init",
+         driver.replace("\tintel_init_dpio(dev_priv);\n", "\t/* absent */\n", 1),
+         registers),
+        ("wrong_phy_array_index", driver,
+         registers.replace("dev_priv->dpio_phy_iosf_port[phy]",
+                           "dev_priv->dpio_phy_iosf_port[DPIO_PHY(phy)]", 1)),
+    ]
+    for name, changed_driver, changed_regs in mutants:
+        check((changed_driver, changed_regs) != (driver, registers),
+              f"mutation anchor missing: {name}")
+        try:
+            inspect(changed_driver, changed_regs)
+        except AssertionError:
+            continue
+        raise AssertionError(f"F17 bootstrap failed to reject mutation: {name}")
     print("F17_PINNED_I915_DPIO_INITIALIZATION_ORDER_AND_PHY_IOSF_MAPPING_PASS")
+    print("F17_BOOTSTRAP_FOUR_NEGATIVE_MUTANTS_REJECTED")
 
 
 if __name__ == "__main__":
