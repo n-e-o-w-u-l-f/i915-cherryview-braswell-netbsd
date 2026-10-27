@@ -334,3 +334,33 @@ source patch applications do not replace NetBSD kernel compilation.
 The independent G01–G09 trace and HP F77 recovery restrictions remain
 in force. See
 `docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
+
+## 2026-10-27 F18 HP option-5 vpanic — hardware regression triage OPEN
+
+Owner physically attempted boot-menu option 5 and observed a failing kernel
+stopping in vpanic. The literal panic string, DDB trace, selected kernel
+image and live menu config have **not** been retrieved. Do not conflate
+the test kernel with the source-only F17 branch. The last documented
+live F77 boot.cfg on 2026-10-11 and the uninstalled four-mode staging
+do not identify a fifth active menu entry.
+
+NetBSD pinned sys/dev/cons.c shows an established independent failure
+class: cnopen panics when cn_tab exists but cn_dev == NODEV and
+NNULLCONS == 0. Historic F81 and a NetBSD i915 problem report exhibit
+the same console ownership problem; **not yet proved for option 5**.
+The exact panic string and trace decide between a console/DRM handoff,
+actual i915 assertion, UVM fault or unrelated subsystem error.
+
+New tools/hp_boot5_vpanic_readonly.sh (live F77 only or offline
+--config mode) captures literal fifth menu command, safe image identity,
+firmware/mount provenance and surviving crash filenames with no writes.
+tests/test_hp_boot5_vpanic_readonly.py PASSes 6 parser scenarios
+including the dangerous NetBSD boot flags/image order, symlink and
+non-NetBSD refusal (executed with host POSIX sh). Source-level findings
+and DDB read-only evidence instructions are in
+docs/HP_BOOT5_VPANIC_TRIAGE_20261027.md.
+
+**Next action:** obtain option 5 image/menu source and actual
+panic message + first non-panic stack frame from owner evidence.
+No new graphics kernel boot, suppression of cnopen panic, reboot,
+installation or F77 modification is authorized by this result.
