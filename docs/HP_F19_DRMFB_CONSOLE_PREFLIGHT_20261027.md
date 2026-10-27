@@ -96,3 +96,42 @@ NetBSD original console ownership references:
 https://github.com/NetBSD/src/blob/03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/drm2/drm/drmfb.c
 https://github.com/NetBSD/src/blob/03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/wsfb/genfb.c
 https://github.com/NetBSD/src/blob/03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/wscons/wsdisplay.c
+
+
+## 2026-10-27 full-native-function host regression
+
+A stricter independent test was published and actually executed against
+the real pinned NetBSD Git checkout:
+
+tests/test_f19_complete_drmfb_attach_host.py --netbsd-tree <pinned source>
+
+Unlike the earlier F19 precheck-block fixture, it extracts the COMPLETE
+unaltered F19-patched native drmfb_attach() function from the entire
+original NetBSD drmfb.c after real git apply. Only its external system,
+autoconf, DRM, console and property API dependencies are mocked.
+All other bytes of drmfb.c must match the original. The function body
+itself is not rewritten or emulated.
+
+Eight compiler setups ran (GCC/Clang x GNU99/GNU11 x NVGA=0/1),
+all with -Wall -Wextra -Werror and -fsanitize=undefined. In each
+build the actual function was executed across 32 console property,
+legacy VGA, firmware console and child-availability scenarios.
+
+RESULT: F19_REAL_DRMFB_COMPLETE_FUNCTION_256_HOST_CASES_GCC_CLANG_UBSAN_PASS.
+
+The mock invariants assert no genfb initialization or property install
+on the ENXIO rejection path, no removal of an old VGA console on that
+path, proper match search, balanced kernel-lock spans, and unchanged
+successful attach semantics. The same test is now included in the
+project's pinned-source runner.
+
+A separate read of the pinned Linux-imported
+drm_fb_helper_single_fb_probe implementation confirms the no-CRTC/
+no-sizes path returns -EAGAIN before invoking the framebuffer fb_probe
+callback. A second speculative dimension guard was therefore not
+added to F19.
+
+Limits remain unchanged: the C translation unit was NOT compiled with
+real NetBSD kernel headers/ABI; host compilation uses mocks for its
+external dependencies, and no HP image was built/installed/booted.
+The owner's menu-5 vpanic still lacks an actual cause/stack.
