@@ -111,6 +111,8 @@ def main() -> None:
            "--netbsd-tree", str(netbsd))
     invoke("test_f19_complete_drmfb_attach_host.py",
            "--netbsd-tree", str(netbsd))
+    invoke("test_f20_x86_genfb_console_fallback.py",
+           "--netbsd-tree", str(netbsd))
     invoke("test_f18_f19_console_source_composition.py",
            "--netbsd-tree", str(netbsd))
     invoke("test_chv_pipe_msa_misc_reference.py",
