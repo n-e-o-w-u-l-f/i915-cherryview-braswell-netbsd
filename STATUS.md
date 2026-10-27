@@ -306,3 +306,31 @@ replay was blocked by a tool safety check and is **NOT_RUN**.
 HP KMS, live DPIO registers and G01-G09 serial transport are still OPEN.
 No F77 recovery kernel, kernel install, firmware, or boot configuration
 was modified. Details: `docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
+
+
+## 2026-10-27 F17 native-source follow-up — strict checkout gate CLOSED
+
+Legion fetched a real sparse NetBSD/src Git checkout with HEAD
+`03d918f6d0e81fa05b8f1160eca0628ad39988a6`. Both original
+F17 and F15+F17 `--netbsd-tree` test modes now PASS (previous
+NOT_RUN status superseded). Additionally, the actual patched
+`intel_sideband.h` passed host GCC/Clang under GNU99/GNU11
+with both enum declaration orders: 8/8 -Werror compiler configurations.
+The exact original NetBSD `i915_drv.c` and `i915_reg.h` prove the
+Cherryview DPIO IOSF PHY0/PHY1 mappings are initialized in early
+probe after `sb_lock` and before display setup. The new test
+rejected four independent wrong-order/mapping/index mutations.
+
+The previous checked-status native IOSF adapter and modern guard
+also compose with F17 as either checked -> modern -> F17 or
+F17 -> checked -> modern; actual pinned-original git apply
+succeeds and resulting three files are byte-identical. All
+five F17/F15 source gates were added to the common pinned-source
+runner; the F16/F17 host C mutant suites remain GCC/Clang 28/28 PASS.
+
+**Gate distinction:** No native NetBSD C object/kernel compile or
+hardware test was performed. Linux-host mock-header builds and
+source patch applications do not replace NetBSD kernel compilation.
+The independent G01–G09 trace and HP F77 recovery restrictions remain
+in force. See
+`docs/HP_I915_F17_SIGNAL_PHY_SOURCE_GATE_20261026.md`.
