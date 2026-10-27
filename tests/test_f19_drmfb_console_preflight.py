@@ -264,7 +264,7 @@ def main() -> None:
 
         check(snippet.count("if (child == NULL) {") == 1,
               "unable to identify failure precheck for negative test")
-        broken = snippet.replace("if (child == NULL) {", "if (false) {", 1)
+        broken = snippet.replace("if (child == NULL) {", "if (child != NULL) {", 1)
         rc = compile_and_run(PREAMBLE + broken + POSTAMBLE, stage,
                              "gcc", "gnu11", 1, "wrong_null_guard")
         check(rc != 0, "missing-child negative mutant unexpectedly passed")
