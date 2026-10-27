@@ -231,7 +231,6 @@ int main(void)
                     assert(result == (expected_error ? ENXIO : 0));
                     assert(searches == owns_console);
                     assert(searched_console == owns_console);
-                    assert(errors_unused == 0);
                     assert(locks == (owns_console + !expected_error));
                     assert(unlocks == locks && !locked);
                     assert(error_reports == expected_error);
@@ -306,9 +305,6 @@ def main() -> None:
                 for nvga in (0, 1):
                     name = f"{cc}_{dialect}_{nvga}"
                     source = PREAMBLE + new_fn + POSTAMBLE
-                    # Isolate only the mock-runtime global; never replace
-                    # any bytes of the actual extracted drmfb_attach().
-                    source = source.replace("assert(errors_unused == 0);", "")
                     c = stage / (name + ".c")
                     executable = stage / (name + ".out")
                     c.write_text(source)
