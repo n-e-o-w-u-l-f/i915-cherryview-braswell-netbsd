@@ -65,6 +65,11 @@ jobs:
             sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_panel.c
             sys/external/bsd/drm2/dist/drm/i915/display/intel_connector.c
+            sys/arch/x86/x86/consinit.c
+            sys/arch/x86/x86/genfb_machdep.c
+            sys/dev/pci/genfb_pci.c
+            sys/dev/cons.c
+            sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
             sys/dev/wsfb/genfb.c
             sys/dev/wscons/wsdisplay.c
             sys/external/bsd/drm2/i915drm/intelfb.c
