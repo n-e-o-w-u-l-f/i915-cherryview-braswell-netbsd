@@ -96,6 +96,8 @@ def main() -> None:
     invoke("test_f17_chv_signal_phy.py")
     invoke("test_f17_chv_signal_patch_application.py",
            "--netbsd-tree", str(netbsd))
+    invoke("test_f15_f17_source_composition.py",
+           "--netbsd-tree", str(netbsd))
     invoke("test_chv_pipe_msa_misc_reference.py",
            "--netbsd-tree", str(netbsd), "--linux-tree", str(linux),
            "--patch", str(p3), *overlay_args)
