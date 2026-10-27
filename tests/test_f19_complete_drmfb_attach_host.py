@@ -87,7 +87,7 @@ static int drmfb_genfb_mode_callback;
 
 #define __diagused __attribute__((unused))
 #define CFARGS(...) NULL
-#define CTASSERT(x) typedef char static_assert_local[(x)?1:-1]
+#define CTASSERT(x) _Static_assert((x), "CTASSERT")
 #define KASSERTMSG(expr, ...) assert(expr)
 #define KERNEL_LOCK(n,arg) do { \
     assert((n) == 1); assert(!locked); locked=1; locks++; \
