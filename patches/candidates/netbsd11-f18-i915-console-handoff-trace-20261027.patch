@@ -1,17 +1,17 @@
 diff --git a/sys/dev/wsfb/genfb.c b/sys/dev/wsfb/genfb.c
 --- a/sys/dev/wsfb/genfb.c
 +++ b/sys/dev/wsfb/genfb.c
-@@ -395,6 +395,10 @@
- 		scp->sc_want_clear = 1;
+@@ -359,6 +359,10 @@
+ 		    sc->sc_fbsize >> 10);
  	}
  
 +#ifdef HP_I915_CONSOLE_TRACE
-+	printf("[I915-CN GFB1] %s before cnattach console=%d\n",
++	printf("[I915-CN GFB1] %s before console initialization, console=%d\n",
 +	    device_xname(sc->sc_dev), (int)console);
 +#endif
- 	if (console)
- 		wsdisplay_cnattach(&scp->sc_defaultscreen_descr, ri, 0, crow,
- 		    defattr);
+ 	vcons_init(&sc->vd, sc, &scp->sc_defaultscreen_descr,
+ 	    &scp->sc_accessops);
+ 	sc->vd.init_screen = genfb_init_screen;
 @@ -456,8 +460,19 @@
  		SCREEN_DISABLE_DRAWING(&scp->sc_console_screen);
  #endif
