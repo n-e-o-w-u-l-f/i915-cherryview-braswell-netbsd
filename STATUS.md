@@ -364,3 +364,31 @@ docs/HP_BOOT5_VPANIC_TRIAGE_20261027.md.
 panic message + first non-panic stack frame from owner evidence.
 No new graphics kernel boot, suppression of cnopen panic, reboot,
 installation or F77 modification is authorized by this result.
+
+
+## 2026-10-27 F18 genuine NetBSD console-handoff instrumentation
+
+Owner-observed boot entry 5 `vpanic` remains an **OPEN physical failure**:
+exact panic text, DDB trace, loaded image and active UEFI/BIOS menu
+source remain unknown. Further boot attempts are on hold.
+
+Actual pinned NetBSD 11 console-chain audit of `intelfb.c`,
+`drmfb.c`, `genfb.c`, `wsdisplay.c`, and `cons.c`
+identified a specific failure window: `genfb_attach` can invoke
+`wsdisplay_cnattach` (which leaves `cn_dev=NODEV`) without
+checking whether a subsequent `config_found` actually created
+the wsdisplay child which assigns the real console device number.
+If this occurs, a later `cnopen` may panic. **This window is proven
+in pinned code; its reachability for boot entry 5 is unproven.**
+
+New isolated *actual NetBSD C patch candidate*
+`patches/candidates/netbsd11-f18-i915-console-handoff-trace-20261027.patch`
+adds seven compile-time guarded `HP_I915_CONSOLE_TRACE` markers
+covering intelfb → drmfb → genfb → wsdisplay → return. No functional
+changes when the macro is absent. Real scratch `git apply` from
+the four exact pinned original Git blobs and exact reversal of guarded
+regions PASSed on Legion:
+`F18_PINNED_4_NETBSD_FILES_7_TRACE_MARKERS_NO_BEHAVIOR_DIFF_PASS`.
+`tests/test_f18_console_handoff_trace_source.py` now owns this gate.
+No NetBSD object/kernel build or live HP experiment was undertaken.
+F77, firmware, actual boot menu and recovery hashes were not touched.
