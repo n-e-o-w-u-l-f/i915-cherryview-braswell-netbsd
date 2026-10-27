@@ -108,3 +108,60 @@ NetBSD kernel compile or HP device-level fix has been made.
 F77 safe boot, firmware, installed kernels, /netbsd and actual boot
 configuration remain untouched. Root-cause repair must follow the
 captured panic and image identity, not guesses or another model suite.
+
+
+## 2026-10-27 source-based console ownership boundary and F18 patch
+
+New [F18 guarded console-handoff source patch](../patches/candidates/netbsd11-f18-i915-console-handoff-trace-20261027.patch)
+instruments the actual **NetBSD 11** console owners:
+
+1. `[I915-CN IFB1]` — intelfb delayed attach task enters DRM framebuffer setup.
+2. `[I915-CN DRM1]` — drmfb decides console ownership and surface dimensions.
+3. `[I915-CN GFB1]` — genfb begins screen preparation, *before* its
+   explicit don't-print/clear interval.
+4. `[I915-CN WSD]` — wsdisplay installs the real console `cn_dev` identifier.
+5. `[I915-CN GFB2]` — genfb receives the `config_found` child result.
+   `wsdisplay=NONE` means no child was found.
+6. `[I915-CN DRM2]` — generic framebuffer attachment returns to drmfb.
+7. `[I915-CN IFB2]` — i915 intelfb attachment returns.
+
+**Specific source-proven hole:** pinned `genfb.c` installs
+`wsdisplay_cons` in `wsdisplay_cnattach` when `console` is true,
+but leaves its `cn_dev` initialized to `NODEV` until
+`wsdisplay_emul_attach` executes. The following
+`config_found(..., iattr="wsemuldisplaydev")` has its result
+discarded in uninstrumented `genfb_attach` and the function
+unconditionally returns success. When no matching child is attached,
+the console can be left without a real device. That is a source-backed
+failure mechanism, **not evidence that option 5 actually hit it**.
+Source-proven alternatives include an earlier `wsdisplay_cnattach`
+assertion when another console is already fully initialized and
+multiple other unrelated `vpanic` callers.
+
+The patch modifies `genfb.c`, `wsdisplay.c`, `drmfb.c` and
+`intelfb.c`, with *seven* marker sites behind a single
+`HP_I915_CONSOLE_TRACE` compile-time diagnostic macro.
+No macro is enabled by default; the normal C source is unchanged
+after removal of the guarded blocks. It does **not** suppress
+`cnopen`, change console selection, retry failed display init,
+disable checks, override `/boot.cfg` or install another image.
+Do not infer that the patch alone makes a bootable kernel.
+
+The standalone source check
+`tests/test_f18_console_handoff_trace_source.py` PASSed on Legion with
+all four original NetBSD Git blobs verified. It executed real
+`git apply --whitespace=error --check` and `git apply` in an isolated
+temporary tree, then removed only F18 `#ifdef` regions and asserted
+byte-for-byte identity against all four original files, all seven
+unique marker placements and source execution order. The initial
+incomplete final newline in the candidate diff was found by the
+*real git apply parser*, fixed, and the same test then exited 0.
+Result:
+`F18_PINNED_4_NETBSD_FILES_7_TRACE_MARKERS_NO_BEHAVIOR_DIFF_PASS`.
+
+**NOT_RUN:** native NetBSD compiler with this macro enabled, linked
+diagnostic kernel, source-level instrumentation on the HP, panic
+capture and observed symptom recovery. No further experimental boot
+is authorized by this patch. Wait for the full original option-5
+panic text and image identity before deciding whether the first
+remedial patch should target console registration or something else.
