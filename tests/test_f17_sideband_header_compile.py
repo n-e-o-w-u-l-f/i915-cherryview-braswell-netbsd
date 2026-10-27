@@ -19,7 +19,8 @@ PIN = "03d918f6d0e81fa05b8f1160eca0628ad39988a6"
 REL = Path("sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h")
 BLOB = "ce1919f9d0aff7f7c6b4d4534dbc61b7a6ce37ea"
 PATCH = ROOT / "patches/candidates/netbsd-11-chv-dpio-signal-phy-consumer-20261026.patch"
-FLAGS = ("-std=gnu11", "-Wall", "-Wextra", "-Werror", "-fsyntax-only")
+FLAGS = ("-Wall", "-Wextra", "-Werror", "-fsyntax-only")
+STANDARDS = ("gnu99", "gnu11")
 
 
 def assert_equal(a: object, b: object, description: str) -> None:
@@ -100,11 +101,13 @@ def run() -> None:
             file = scratch / (order + ".c")
             file.write_text(source)
             for cc in args.compilers:
-                subprocess.run([cc, *FLAGS, "-I", str(includes), str(file)],
-                               check=True, capture_output=True, text=True)
-                print(f"F17_REAL_PATCHED_SIDEBAND_HEADER_GNU11_PASS_{cc}_{order}")
+                for standard in STANDARDS:
+                    subprocess.run([cc, "-std=" + standard, *FLAGS,
+                                    "-I", str(includes), str(file)],
+                                   check=True, capture_output=True, text=True)
+                    print(f"F17_REAL_PATCHED_SIDEBAND_HEADER_PASS_{cc}_{standard}_{order}")
 
-    print("F17_HEADER_REAL_PATCH_2_ENUM_ORDERS_GCC_CLANG_PASS_HOST_ONLY")
+    print("F17_HEADER_REAL_PATCH_GNU99_GNU11_2_ENUM_ORDERS_GCC_CLANG_PASS_HOST_ONLY")
 
 
 if __name__ == "__main__":
