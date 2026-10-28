@@ -68,7 +68,9 @@ static struct intel_device_info intel_info = {.generation=8};
 static struct pci_device_id pci_id = {.driver_data=(uintptr_t)&intel_info};
 static struct drm_device drm_dev = {.alive=1};
 static int probe_fails, pmf_allowed, probe_calls, pmf_calls;
-static int tasks_executed, owner_clears;
+static int tasks_executed, owner_clears, enqueue_during_probe;
+static struct i915drmkms_task task;
+static void task_cb(struct i915drmkms_task *);
 static int current_lwp;
 static void *curlwp = &current_lwp;
 
@@ -81,6 +83,15 @@ static int i915_driver_probe(struct pci_dev *dev,
                              const struct pci_device_id *id) {
     assert(dev == &sc.sc_pci_dev && id == &pci_id);
     probe_calls++;
+    if (enqueue_during_probe) {
+        /* This is how native synchronous callback scheduling
+         * populates the queue while i915_driver_probe runs. */
+        assert(sc.sc_task_thread == curlwp);
+        assert(sc.sc_tasks.head == NULL);
+        task.ift_fn = task_cb;
+        task.ift_u.next = NULL;
+        sc.sc_tasks.head = &task;
+    }
     return probe_fails ? -7 : 0;
 }
 static struct drm_device *pci_get_drvdata(struct pci_dev *dev) {
@@ -131,10 +142,8 @@ int main(void) {
         probe_calls=pmf_calls=tasks_executed=owner_clears=0;
         probe_fails=fail;
         pmf_allowed=pmf;
-        static struct i915drmkms_task task;
-        task.ift_fn=task_cb;
-        task.ift_u.next=NULL;
-        sc.sc_tasks.head=queued?&task:NULL;
+        enqueue_during_probe=queued;
+        sc.sc_tasks.head=NULL;
 
         switch (scenario) {
         case 0: break;  // successful ordinary preattach
