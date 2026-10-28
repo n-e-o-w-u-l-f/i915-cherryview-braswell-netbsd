@@ -558,3 +558,31 @@ Production patches F21 and F22 unchanged. The entire F21/F22-patched original Ne
 Source/trace: tests/test_f23_i915_attach_real_integration.py and docs/HP_F23_I915_ATTACH_REAL_INTEGRATION_20261028.md.
 
 Still NOT RUN: native NetBSD object/kernel build, physical HP boot and capturing the actual menu-5 panic/stack. F22 is disabled by default. F77 and HP boot files unchanged.
+
+## F24 (2026-10-28) — Native NetBSD-amd64 i915 F22 object + kernel link: PASS
+
+Discovered the existing NetBSD crosscompiler, nbconfig, CTF tools and
+historical RTL staging compile objects outside Legion's regular PATH.
+F21 and F22 applied successfully to pinned original native source
+blobs. The real NetBSD config generator produced both OFF/ON option
+headers and a matching i915 wsemuldisplaydev parent interface.
+The entire actual i915 PCI autoconf driver compiled successfully as
+NetBSD amd64 ELF objects with F22 option OFF and ON, and the
+newly generated NetBSD ioconf.c also compiled successfully.
+
+Two independent isolated kernel re-links succeeded using the freshly
+compiled i915/ioconf objects plus copies of the earlier historical
+RTWN8723BE_STAGE WIP kernel object directory, including native CTF
+convert/merge and debug symbol split. The second pass ran through the
+new reproducible script and returned PASS, with scratch kernel SHA256
+6b0667243905220137e50da5cfb901dc75c24071e9e9de83d9f12b3a1df06a14.
+Timestamp-dependent vers.c changed the hash between link attempts.
+
+Reproducible native gate:
+tools/run_native_f22_netbsd_link_gate.py
+Report: docs/HP_F24_NETBSD_NATIVE_F22_LINK_GATE_20261028.md
+
+**NOT A FULL CLEAN BUILD. NOT BOOT APPROVED.** Other kernel objects
+were reused from a historical partial RTL8723BE compilation-only
+test target. No kernel installed, no HP boot, no change to F77,
+boot.cfg or /netbsd. Missing menu-5 panic line and DDB frames remain.
