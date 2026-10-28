@@ -117,9 +117,9 @@ diff --git a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c b/sys/external/bs
  i915drmkms_attach_real(device_t self)
  {
 @@ -195,8 +282,12 @@
- 	 * callback.  A queued intelfb task must not be discarded
- 	 * or left referencing a detached framebuffer.
- 	 */
+ 		 * callback.  A queued intelfb task must not be discarded
+ 		 * or left referencing a detached framebuffer.
+ 		 */
 -		if (SIMPLEQ_EMPTY(&sc->sc_tasks))
 +		if (SIMPLEQ_EMPTY(&sc->sc_tasks)) {
  			atomic_store_relaxed(&sc->sc_task_thread, NULL);
@@ -133,7 +133,7 @@ diff --git a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c b/sys/external/bs
 diff --git a/sys/external/bsd/drm2/i915drm/files.i915drmkms b/sys/external/bsd/drm2/i915drm/files.i915drmkms
 --- a/sys/external/bsd/drm2/i915drm/files.i915drmkms
 +++ b/sys/external/bsd/drm2/i915drm/files.i915drmkms
-@@ -2,8 +2,10 @@
+@@ -2,6 +2,8 @@
  
  version	20180827
  
