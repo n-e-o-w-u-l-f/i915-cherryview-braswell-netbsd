@@ -111,6 +111,11 @@ def main() -> None:
     baseconf = (stage / "sys/arch/amd64/conf/RTWN8723BE_STAGE").read_text()
     require("Never boot/install" in baseconf,
             "unexpected baseline kernel config; refuse to build")
+    rtl_phy = stage / "sys/dev/pci/rtwn8723be_netbsd.c"
+    rtl_sha = "9542ec44fddf5861fd815cb065af3b3330306726"
+    require(blob_id(rtl_phy.read_bytes()) == rtl_sha,
+            "RTL8723BE PHY native source stage is not the verified df3bc40 pin")
+    print("F25_RTL8723BE_NATIVE_PHY_BLOB_VERIFIED", flush=True)
 
     # Do the read-only SHA source checks before creating new files.
     original = {}
