@@ -486,3 +486,29 @@ Docs: docs/HP_F20_UEFI_GOP_CONSOLE_SOURCE_AUDIT_20261027.md.
 Native NetBSD object compile/kernel link/HP boot all NOT_RUN.
 Boot-menu option 5 image/panic reason still unknown. F77 and
 installed kernel/boot configurations remain unmodified.
+
+
+## 2026-10-28 F21 – i915 deferred probe error-state repair
+
+Source-pinned, functional candidate added in
+`patches/candidates/netbsd11-f21-i915-empty-probe-error-task-owner-20261028.patch`.
+The original deferred i915 probe sets `sc_task_thread = curlwp` and
+returns on probe error without clearing it. F21 clears this stale
+owner **only if** the synchronous task queue is empty; no callback
+is discarded or executed on the nonempty-queue path.
+
+Actual Linux Legion gate: original NetBSD Git blob SHA verified, real
+`git apply --check` and `git apply` pass, byte-identical remaining
+source, source-extracted error branch compiled and executed with GCC
+and Clang in empty/nonempty queue cases:
+`F21_PINNED_GIT_APPLY_TWO_COMPILERS_EMPTY_ONLY_STATE_REPAIR_PASS`.
+New test added to pinned-source runner.
+
+**Not a console restoration:** i915 PCI match priority 6 can
+supersede genfb PCI priority 5; failing deferred i915 probe can
+bypass F19 `drmfb` and leave an early UEFI `wsdisplay` console
+without a valid device. F20 fixes a separate GOP return-value bug.
+The HP menu-5 panic string/image/stack remain missing. Native NetBSD
+kernel compilation, installation and HP boot are NOT_RUN. F77 and
+all on-disk boot states untouched. See
+`docs/HP_F21_I915_PROBE_ERROR_STATE_20261028.md`.
