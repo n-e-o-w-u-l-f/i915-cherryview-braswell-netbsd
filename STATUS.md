@@ -586,3 +586,43 @@ Report: docs/HP_F24_NETBSD_NATIVE_F22_LINK_GATE_20261028.md
 were reused from a historical partial RTL8723BE compilation-only
 test target. No kernel installed, no HP boot, no change to F77,
 boot.cfg or /netbsd. Missing menu-5 panic line and DDB frames remain.
+
+## F25 (2026-10-29) — actual full clean NetBSD kernel build, console F19–F22 + RTL PHY
+
+**Real full kernel compile + link PASS** on Linux Legion using the native
+NetBSD 11 amd64 cross-toolchain. A NEW EMPTY kernel object directory was
+used, NOT the historical F24 object directory. The isolated
+F25_CONSOLE_RTL_TEST WIP config includes the latest available
+RTL8723BE-PHY stage and enables HP_I915_FWFB_FAILOVER solely for
+compilation. All four F19/F20/F21/F22 native NetBSD source patches
+applied cleanly on exact pinned original Git blobs.
+
+The actual NetBSD build.sh -U -m amd64 -j8 kernel run exited 0
+after 207.44 seconds. The resulting fresh tree contained 3,265
+kernel .o files; native consinit.o, drmfb.o, i915_pci_autoconf.o,
+ioconf.o and RTL8723BE PHY objects were independently verified.
+The ELF64 x86-64 kernel is linked and its debug kernel includes
+.SUNW_ctf. First clean artifact SHA-256:
+ed47039ca403bd16658e57b3cb7da02ac9d643e9766ca6d0866a7e6c759adcbd.
+
+A reproducible full clean scratch-only build script is now part of
+the repository:
+tools/run_f25_clean_netbsd_console_kernel.py
+The script enforces a non-existing /tmp output directory, original
+NetBSD blob checks, the verified RTL PHY source hash and copied
+private NetBSD tools. An already-existing output path was
+explicitly rejected in a negative safety test.
+
+Full evidence and limitations:
+docs/HP_F25_FULL_CLEAN_NETBSD_I915_RTL_BUILD_20261029.md.
+
+This is a **full clean build of the stated test configuration**,
+not a completed Cherryview port: separate experimental CHV DPIO
+and GPLL patches must be deduplicated before integration.
+Source-byte comparisons prove the newer DPIO/GPLL versions subsume
+the corresponding old variants' changes on all shared files.
+
+**NEVER INSTALL/BOOT** the resulting kernel. Existing RTL source
+stage remains compilation-only WIP; real menu-5 panic text/stack
+and image identity still unknown. Original F77 rescue, /netbsd,
+boot.cfg, installed HP kernels and firmware all unchanged.
