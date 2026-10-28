@@ -116,14 +116,22 @@ An additional source-only composition audit found that the old
 CHV DPIO "explicit PHY" patch and newer "signal PHY consumer"
 patch have overlapping changes in intel_sideband.c and
 intel_sideband.h. Both apply individually to the original source,
-but not sequentially as a simple concatenation.
+but not sequentially as a simple concatenation. A direct byte-level
+comparison after independently applying each alternative showed that
+both shared sideband source files are **identical** for the older and
+newer DPIO versions; the newer variant additionally modifies
+intel_dpio_phy.c.
 
 The two CHV GPLL patches similarly overlap: the later
 "GPLL RPS lock order" patch contains the clock helper introduced by
 the earlier "VLV GPLL clock" patch, so applying both consecutively
-causes a context mismatch. The candidate patch series requires
-deduplication/variant selection before producing an integrated
-CHV kernel build.
+causes a context mismatch. An independent comparison of
+intel_display.c and intel_display.h after separately applying the
+old and new GPLL patches shows **identical resulting bytes** in
+both files; the newer patch additionally modifies intel_rps.c.
+Consequently, using the newer DPIO and GPLL variants alone exactly
+subsumes the older variants' shared-file changes. These pairs must
+be deduplicated before the next integrated CHV kernel build.
 
 Therefore F25 is a full clean compile **of its stated kernel
 configuration**, not proof of a complete, production-ready
