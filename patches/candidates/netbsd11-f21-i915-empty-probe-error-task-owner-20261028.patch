@@ -1,0 +1,17 @@
+diff --git a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+--- a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
++++ b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+@@ -189,6 +189,13 @@
+ 	error = -i915_driver_probe(&sc->sc_pci_dev, ent);
+ 	if (error) {
+ 		aprint_error_dev(self, "unable to register drm: %d\n", error);
++		/*
++		 * Restore task ownership only when there is no pending
++		 * callback.  A queued intelfb task must not be discarded
++		 * or left referencing a detached framebuffer.
++		 */
++		if (SIMPLEQ_EMPTY(&sc->sc_tasks))
++			atomic_store_relaxed(&sc->sc_task_thread, NULL);
+ 		return;
+ 	}
+ 	sc->sc_drm_dev = pci_get_drvdata(&sc->sc_pci_dev);
