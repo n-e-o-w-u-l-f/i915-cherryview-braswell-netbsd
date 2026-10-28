@@ -608,6 +608,14 @@ ed47039ca403bd16658e57b3cb7da02ac9d643e9766ca6d0866a7e6c759adcbd.
 A reproducible full clean scratch-only build script is now part of
 the repository:
 tools/run_f25_clean_netbsd_console_kernel.py
+It was independently run end-to-end from a SECOND EMPTY kernel
+object directory and returned PASS after approximately 203 seconds,
+again generating 3,265 new .o files and complete ELF/CTF results.
+Second complete kernel SHA-256:
+3b61761ada430b416b10b9345d13f74819a56aa357d3187e41c760f68f5ec92c.
+Both full clean runs exited zero; hashes differ due to NetBSD vers.c.
+Source hashes and the historical RTL PHY kernel digest were verified
+unchanged after both isolated builds.
 The script enforces a non-existing /tmp output directory, original
 NetBSD blob checks, the verified RTL PHY source hash and copied
 private NetBSD tools. An already-existing output path was
