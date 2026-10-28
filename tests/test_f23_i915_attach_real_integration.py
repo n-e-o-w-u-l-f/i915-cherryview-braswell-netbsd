@@ -254,6 +254,7 @@ def main() -> None:
                     c.write_text(code)
                     command=[cc,"-std="+std,"-Wall","-Wextra","-Werror",
                              "-fsanitize=undefined",
+                             "-Wno-unused-function",
                              "-fno-sanitize-recover=all"]
                     if enabled:
                         command+=["-DHP_I915_FWFB_FAILOVER=1"]
