@@ -133,6 +133,15 @@ Consequently, using the newer DPIO and GPLL variants alone exactly
 subsumes the older variants' shared-file changes. These pairs must
 be deduplicated before the next integrated CHV kernel build.
 
+The resulting deduplicated 11-patch series was then tested with
+real git apply --check and git apply --whitespace=error, composed
+together on **17 original native NetBSD source files**: F19/F20/F21/F22
+plus i915 patches 0001, 0002, 0003, 0005, 0006, the newer CHV
+DPIO-signal-PHY consumer candidate, and the newer CHV
+GPLL/RPS-lock-order candidate. **All 11 source patches applied
+without conflict.** This is a SOURCE-ONLY composition test, not a
+native compile or kernel link of the combined CHV variants.
+
 Therefore F25 is a full clean compile **of its stated kernel
 configuration**, not proof of a complete, production-ready
 Cherryview/Braswell graphics port.
