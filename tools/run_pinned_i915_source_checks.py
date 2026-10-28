@@ -117,6 +117,8 @@ def main() -> None:
            "--netbsd-tree", str(netbsd))
     invoke("test_f22_i915_fwfb_failover.py",
            "--netbsd-tree", str(netbsd))
+    invoke("test_f23_i915_attach_real_integration.py",
+           "--netbsd-tree", str(netbsd))
     invoke("test_f18_f19_console_source_composition.py",
            "--netbsd-tree", str(netbsd))
     invoke("test_chv_pipe_msa_misc_reference.py",
