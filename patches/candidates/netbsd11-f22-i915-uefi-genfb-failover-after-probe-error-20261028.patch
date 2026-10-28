@@ -1,0 +1,145 @@
+diff --git a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+--- a/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
++++ b/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c
+@@ -31,6 +31,8 @@
+ #include <sys/cdefs.h>
+ __KERNEL_RCSID(0, "$NetBSD: i915_pci_autoconf.c,v 1.14 2022/10/15 15:20:06 riastradh Exp $");
+ 
++#include "opt_hp_i915_fwfb_failover.h"
++
+ #include <sys/types.h>
+ #include <sys/atomic.h>
+ #include <sys/queue.h>
+@@ -38,6 +40,10 @@
+ #include <sys/systm.h>
+ #include <sys/queue.h>
+ #include <sys/workqueue.h>
++#ifdef HP_I915_FWFB_FAILOVER
++#include <dev/cons.h>
++#include <dev/wsfb/genfbvar.h>
++#endif
+ 
+ #include <drm/drm_ioctl.h>
+ #include <drm/drm_pci.h>
+@@ -50,6 +56,10 @@
+ SIMPLEQ_HEAD(i915drmkms_task_head, i915drmkms_task);
+ 
+ struct i915drmkms_softc {
++#ifdef HP_I915_FWFB_FAILOVER
++	/* Must be first: genfb polling uses device_private(sc_dev). */
++	struct genfb_softc	sc_fw_genfb;
++#endif
+ 	device_t			sc_dev;
+ 	struct pci_attach_args		sc_pa;
+ 	struct lwp			*sc_task_thread;
+@@ -167,6 +177,83 @@
+ 	config_mountroot(self, &i915drmkms_attach_real);
+ }
+ 
++#ifdef HP_I915_FWFB_FAILOVER
++/*
++ * On x86, device_pci_register has already copied the firmware GOP
++ * framebuffer properties to this PCI display device.  If i915 cannot
++ * probe, complete the outstanding early wsdisplay preattach with a
++ * generic text console rather than leaving cn_dev at NODEV.
++ *
++ * This is a deliberately opt-in emergency path, not GPU recovery.
++ */
++static void
++i915drmkms_fwfb_failover(device_t self)
++{
++	struct i915drmkms_softc *const sc = device_private(self);
++	struct genfb_softc *const fb = &sc->sc_fw_genfb;
++	prop_dictionary_t dict = device_properties(self);
++	struct wsemuldisplaydev_attach_args aa = { .console = 1 };
++	struct genfb_ops ops = { 0 };
++	cfdata_t child;
++	uint32_t width, height, depth;
++	uint16_t stride;
++	uint64_t pa, va;
++	bool console = false;
++	int error;
++
++	CTASSERT(offsetof(struct i915drmkms_softc, sc_fw_genfb) == 0);
++
++	if (!prop_dictionary_get_bool(dict, "is_console", &console) ||
++	    !console || cn_tab == NULL || cn_tab->cn_dev != NODEV)
++		return;
++
++	/* No new framebuffer mapping: the UEFI early mapping must exist. */
++	if (!prop_dictionary_get_uint32(dict, "width", &width) ||
++	    !prop_dictionary_get_uint32(dict, "height", &height) ||
++	    !prop_dictionary_get_uint32(dict, "depth", &depth) ||
++	    !prop_dictionary_get_uint16(dict, "linebytes", &stride) ||
++	    !prop_dictionary_get_uint64(dict, "address", &pa) ||
++	    !prop_dictionary_get_uint64(dict, "virtual_address", &va) ||
++	    width < 640 || height < 400 || width > 8192 || height > 8192 ||
++	    depth != 32 || stride < width * 4 || pa == 0 || va == 0) {
++		aprint_error_dev(self,
++		    "no suitable pre-mapped UEFI framebuffer for fallback\n");
++		return;
++	}
++
++	/* Avoid entering genfb_attach with no configured wsdisplay child. */
++	KERNEL_LOCK(1, NULL);
++	child = config_search(self, &aa,
++	    CFARGS(.iattr = "wsemuldisplaydev"));
++	KERNEL_UNLOCK_ONE(NULL);
++	if (child == NULL) {
++		aprint_error_dev(self,
++		    "no wsdisplay child configured for UEFI fallback\n");
++		return;
++	}
++
++	/* Render directly to the existing firmware framebuffer. */
++	if (!prop_dictionary_set_bool(dict, "enable_shadowfb", false))
++		return;
++	fb->sc_dev = self;
++	genfb_init(fb);
++	if (fb->sc_private == NULL || fb->sc_fbaddr == NULL) {
++		aprint_error_dev(self, "UEFI genfb initialization failed\n");
++		return;
++	}
++
++	KERNEL_LOCK(1, NULL);
++	error = genfb_attach(fb, &ops);
++	KERNEL_UNLOCK_ONE(NULL);
++	if (error || cn_tab == NULL || cn_tab->cn_dev == NODEV)
++		aprint_error_dev(self,
++		    "UEFI genfb fallback failed, error=%d\n", error);
++	else
++		aprint_normal_dev(self,
++		    "UEFI framebuffer console active after i915 probe failure\n");
++}
++#endif /* HP_I915_FWFB_FAILOVER */
++
+ static void
+ i915drmkms_attach_real(device_t self)
+ {
+@@ -195,8 +282,12 @@
+ 	 * callback.  A queued intelfb task must not be discarded
+ 	 * or left referencing a detached framebuffer.
+ 	 */
+-		if (SIMPLEQ_EMPTY(&sc->sc_tasks))
++		if (SIMPLEQ_EMPTY(&sc->sc_tasks)) {
+ 			atomic_store_relaxed(&sc->sc_task_thread, NULL);
++#ifdef HP_I915_FWFB_FAILOVER
++			i915drmkms_fwfb_failover(self);
++#endif
++		}
+ 		return;
+ 	}
+ 	sc->sc_drm_dev = pci_get_drvdata(&sc->sc_pci_dev);
+diff --git a/sys/external/bsd/drm2/i915drm/files.i915drmkms b/sys/external/bsd/drm2/i915drm/files.i915drmkms
+--- a/sys/external/bsd/drm2/i915drm/files.i915drmkms
++++ b/sys/external/bsd/drm2/i915drm/files.i915drmkms
+@@ -2,8 +2,10 @@
+ 
+ version	20180827
+ 
++defflag	opt_hp_i915_fwfb_failover.h	HP_I915_FWFB_FAILOVER
++
+ define	intelfbbus	{ }
+-device	i915drmkms: acpivga, drmkms, drmkms_pci, intelfbbus, agp_i810, firmload
++device	i915drmkms: acpivga, drmkms, drmkms_pci, intelfbbus, agp_i810, firmload, wsemuldisplaydev
+ attach	i915drmkms at pci
