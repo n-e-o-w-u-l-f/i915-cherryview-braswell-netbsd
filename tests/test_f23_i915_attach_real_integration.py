@@ -278,6 +278,36 @@ def main() -> None:
                     check("56_CASES_PASS" in run.stdout,
                           name+" PASS marker missing")
                     print("F23_COMPLETE_I915DRMKMS_ATTACH_REAL_PASS",name)
+        # A deliberately inverted queue guard must FAIL the same
+        # integration assertions. Only the negative mutant modifies
+        # the extracted native function body.
+        original_guard = "if (SIMPLEQ_EMPTY(&sc->sc_tasks)) {"
+        check(fn.count(original_guard)==1,
+              "probe-error empty-queue guard has drifted")
+        mutant = fn.replace(
+            original_guard,
+            "if (!SIMPLEQ_EMPTY(&sc->sc_tasks)) {")
+        negative=(stub+EXTRAS+
+                  "#if HP_I915_FWFB_FAILOVER\n"+
+                  helper+"\n#endif\n"+
+                  mutant+"\n"+
+                  "#define F22_BUILD_FLAG 1\n"+MAIN)
+        bad_src=root/"f23_inverted_guard.c"
+        bad_bin=root/"f23_inverted_guard.out"
+        bad_src.write_text(negative)
+        build=subprocess.run(
+            ["gcc","-std=gnu11","-DHP_I915_FWFB_FAILOVER=1",
+             "-Wall","-Wextra","-Werror","-Wno-unused-function",
+             "-fsanitize=undefined","-fno-sanitize-recover=all",
+             str(bad_src),"-o",str(bad_bin)],
+            capture_output=True,text=True)
+        check(build.returncode==0,
+              "negative mutant compile failed: "+build.stderr)
+        mutated_run=subprocess.run([str(bad_bin)],
+                                   capture_output=True,text=True)
+        check(mutated_run.returncode!=0,
+              "inverted native queue guard was not rejected")
+        print("F23_REAL_NATIVE_QUEUE_GUARD_NEGATIVE_MUTANT_REJECTED")
     print("F23_F21_F22_REAL_I915_ATTACH_REAL_448_GCC_CLANG_UBSAN_CASES_PASS")
     print("F23_NOT_NETBSD_NATIVE_KERNEL_OBJECT_OR_HP_BOOT")
 
