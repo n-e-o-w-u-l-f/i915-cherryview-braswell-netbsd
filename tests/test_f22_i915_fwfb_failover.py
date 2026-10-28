@@ -336,6 +336,9 @@ def main() -> None:
                '\t\t\tatomic_store_relaxed(&sc->sc_task_thread, NULL);\n')
         check(off.count(old)==1,"disabled branch unexpectedly altered")
         off=off.replace(old,new)
+        # The removed standalone helper leaves one separator newline.
+        off=off.replace("}\n\n\nstatic void\ni915drmkms_attach_real",
+                        "}\n\nstatic void\ni915drmkms_attach_real")
         check(off==f21,"disabled F22 source differs from F21")
 
         function=source_func(f22)
