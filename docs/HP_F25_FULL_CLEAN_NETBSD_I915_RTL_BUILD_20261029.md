@@ -105,6 +105,28 @@ nonbootable WIP. It makes new scratch source and toolchain overlays
 and calls actual NetBSD build.sh without reusing any precompiled
 kernel object.
 
+**Independently executed replay of this exact published F25 script: PASS.**
+The script completed the entire native source validation, four
+git-apply patch gates, fresh NetBSD config, private tools copy,
+whole-kernel build.sh compile and link, and ELF validation with
+exit code 0 after about 203 seconds. Its markers included
+F25_CLEAN_NETBSD_FULL_KERNEL_COMPILE_AND_LINK_PASS.
+
+Second complete clean kernel SHA-256:
+3b61761ada430b416b10b9345d13f74819a56aa357d3187e41c760f68f5ec92c
+
+The second output independently verified all six key kernel objects,
+3,265 freshly built .o files, generated F22 option header, i915
+wsemuldisplaydev parent attribute, ELF64 x86-64 output, and
+the .SUNW_ctf debug section. The original source blobs remain
+byte-identical, and the historical RTL PHY kernel SHA-256 remains
+78b55fc43e4479fc738d3b8865617a4548cb813c978973c30f22daa094decee1.
+
+The two fresh kernel hashes differ due to NetBSD-generated
+build time and version text; neither is a byte-for-byte reproducibility
+claim. This is a repeatable complete **compile/link success**, not
+runtime or physical hardware validation.
+
 ## Cherryview/Braswell candidate distinction
 
 This F25 build tests that the native kernel baseline can compile
