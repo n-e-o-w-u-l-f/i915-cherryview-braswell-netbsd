@@ -550,3 +550,11 @@ menu-5 panic image/stack confirmation, and NO physical HP test.
 Failed GPU probes can invalidate the old GOP framebuffer and
 genfb_attach itself can still fail. DO NOT enable F22 or install a
 kernel without independent checks. F77 and boot.cfg untouched.
+
+## F23 – i915drmkms_attach_real integration regression (2026-10-28)
+
+Production patches F21 and F22 unchanged. The entire F21/F22-patched original NetBSD i915drmkms_attach_real and F22 failover helper were compiled and executed with host GCC and Clang, GNU99/GNU11, F22 option OFF/ON, UBSan and -Werror (unused external mock stubs exempt in OFF variant). All 448/448 scenarios passed. A deliberately inverted native task-queue guard was rejected. Pending tasks are now simulated during i915_driver_probe rather than before attach. The earlier standalone F22 suite was rerun: 80/80 PASS.
+
+Source/trace: tests/test_f23_i915_attach_real_integration.py and docs/HP_F23_I915_ATTACH_REAL_INTEGRATION_20261028.md.
+
+Still NOT RUN: native NetBSD object/kernel build, physical HP boot and capturing the actual menu-5 panic/stack. F22 is disabled by default. F77 and HP boot files unchanged.
