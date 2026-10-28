@@ -512,3 +512,41 @@ The HP menu-5 panic string/image/stack remain missing. Native NetBSD
 kernel compilation, installation and HP boot are NOT_RUN. F77 and
 all on-disk boot states untouched. See
 `docs/HP_F21_I915_PROBE_ERROR_STATE_20261028.md`.
+
+
+## 2026-10-28 F22 – opt-in native UEFI genfb console fallback after i915 probe error
+
+F22 is a NEW, separately gated functional candidate addressing the early
+UEFI GOP console failure gap left by F19/F20/F21. The patch changes the
+native i915 PCI autoconf driver and device-configuration file, and
+depends on F21's conditional empty-task-queue cleanup.
+
+An explicit NetBSD config defflag declares HP_I915_FWFB_FAILOVER,
+**OFF by default**. Only when enabled AND a deferred i915 probe fails
+with an empty synchronous task queue does F22 attempt to complete
+early wsdisplay preattach via an embedded, persistent genfb_softc
+at offset zero of the i915drmkms device. It requires verified UEFI
+32bpp properties, an existing framebuffer mapping and a matching
+wsdisplay child; no bogus cn_dev is fabricated. Successful i915 probe
+and nonempty queue branch are not changed.
+
+F22 native C patch:
+patches/candidates/netbsd11-f22-i915-uefi-genfb-failover-after-probe-error-20261028.patch
+Test:
+tests/test_f22_i915_fwfb_failover.py
+Full technical review:
+docs/HP_F22_I915_UEFI_GENFB_FAILOVER_20261028.md
+
+Actually executed on Legion: pinned original NetBSD i915 C/config Git
+blob checks; real git apply --whitespace=error --check and git apply
+of F21 then F22; compile-time-disabled F22 C path source-equivalent
+to F21; exact extracted native F22 failover helper compiled/executed
+with GCC+Clang, GNU99+GNU11, -Werror, UBSan, 20 cases each:
+**80/80 PASS**. Pinned source runner includes the F22 test.
+Hosted Actions were NOT run because of ongoing runner quarantine.
+
+**CRITICAL:** No native NetBSD kernel object compile/link, no HP
+menu-5 panic image/stack confirmation, and NO physical HP test.
+Failed GPU probes can invalidate the old GOP framebuffer and
+genfb_attach itself can still fail. DO NOT enable F22 or install a
+kernel without independent checks. F77 and boot.cfg untouched.
