@@ -86,6 +86,13 @@ def overlay(source: Path, target: Path, changes: dict[str, Path]) -> None:
         (target / name).write_bytes(changes[name].read_bytes())
 
 
+def build_timeout(value: str) -> int:
+    seconds = int(value)
+    if not 60 <= seconds <= 86400:
+        raise argparse.ArgumentTypeError("build timeout must be 60..86400 seconds")
+    return seconds
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source-stage", required=True, type=Path,
@@ -95,6 +102,8 @@ def main() -> None:
     p.add_argument("--output", required=True, type=Path,
                    help="MUST be a completely new directory under /tmp")
     p.add_argument("--jobs", default=8, type=int)
+    p.add_argument("--timeout-seconds", default=3400, type=build_timeout,
+                   help="bounded wall-clock budget; use 21600 on the two-core HP")
     args = p.parse_args()
 
     stage = args.source_stage.resolve(strict=True)
@@ -169,7 +178,7 @@ def main() -> None:
     with (output / "kernel-build.log").open("w") as stream:
         result = subprocess.run(command, cwd=output / "src",
                                 stdout=stream, stderr=subprocess.STDOUT,
-                                timeout=3400)
+                                timeout=args.timeout_seconds)
     require(result.returncode == 0,
             f"clean kernel build failed rc={result.returncode}; "
             f"see {output / 'kernel-build.log'}")
