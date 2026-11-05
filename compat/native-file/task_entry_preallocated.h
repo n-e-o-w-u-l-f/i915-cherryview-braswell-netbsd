@@ -26,5 +26,8 @@ struct task_struct;
  */
 void linux_task_entry_enter_preallocated(struct task_struct **,
     struct task_struct **);
+/* Close admission only after an object subsystem has drained; permit its
+ * one retained native worker task to finish actual LWP exit before fini. */
+int linux_task_system_quiesce_retained(struct task_struct *);
 
 #endif /* _LINUX_TASK_ENTRY_PREALLOCATED_H_ */

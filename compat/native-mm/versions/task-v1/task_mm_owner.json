@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "required_prior": "exact compiled task-notifier",
+  "files": {
+    "sys/external/bsd/drm2/linux/linux_task.c": {
+      "before_sha256": "1b435ea0d47726f9de3bc9d49bbec4b5f26bcbf31dc4d217daa4ae00df8d7f2d",
+      "after_sha256": "86709e9bec2377d80a550809119e862c9a0554c7dd26379ac23c18e2aac4cebc"
+    },
+    "sys/external/bsd/drm2/include/linux/task_netbsd.h": {
+      "before_sha256": "fb3c0fd2ddb558868cf8c3ef4b566a9eeced50da236e2fd74b5f86038c0cda8e",
+      "after_sha256": "f22fb9d43736910c5d1135a7325c708233793ccee1a33125b6e7aa3f1cff8582"
+    }
+  },
+  "assets_sha256": {
+    "task_mm_owner.inc": "4e661edb7750a7e5d73ece2bdd74dc4f0e077e89598ec49f804925137a02d3fa",
+    "compat/native-file/task_entry_preallocated.inc": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+  },
+  "patch_sha256": "097c92e056fa9a2a2357b5d44692ca762749a458b510c687459a5646dfbe5d68",
+  "acceptance": "Source preparation only. Native MM identity V4, actual task entry/exec races, teardown and full link remain gates."
+}

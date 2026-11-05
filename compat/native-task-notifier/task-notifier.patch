@@ -1,0 +1,298 @@
+--- a/sys/external/bsd/drm2/linux/linux_task.c
++++ b/sys/external/bsd/drm2/linux/linux_task.c
+@@ -16,6 +16,7 @@
+ #include <sys/sleepq.h>
+ #include <sys/specificdata.h>
+ #include <sys/systm.h>
++#include <sys/workqueue.h>
+ 
+ #include <linux/kthread.h>
+ #include <linux/sched.h>
+@@ -56,18 +57,72 @@
+ }
+ 
+ 
+-/* Per-task notifier: state is published before it is scheduled. The sleep
+- * mutex covers the waiter's condition check and native CV enqueue/release.
+- * A hardware/queue callback only takes lt_lock and schedules this softint.
+- */
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Global non-per-CPU native worker: no per-task notifier allocation. */
++static struct workqueue *task_notify_queue;
++static struct work task_notify_barrier;
++
++/* Called under lt_lock. Pending includes both queued and running work.
++ * The native queue interlock is IPL_HIGH, matching this raw lock. */
+ static void
+-linux_task_notify(void *cookie)
+-{
+-    struct task_struct *task = cookie;
+-
+-    spin_lock(&task->lt_sleep_lock);
+-    cv_signal(&task->lt_sleep_cv);
+-    spin_unlock(&task->lt_sleep_lock);
++linux_task_notify_locked(struct task_struct *task)
++{
++    task->lt_notify_again = true;
++    if (!task->lt_notify_pending) {
++        task->lt_notify_pending = true;
++        workqueue_enqueue(task_notify_queue, &task->lt_notify_work, NULL);
++    }
++}
++
++static void
++linux_task_notify(struct work *work, void *cookie)
++{
++    struct task_struct *task;
++    unsigned long flags;
++
++    (void)cookie;
++    if (work == &task_notify_barrier)
++        return;
++    task = (struct task_struct *)((char *)work -
++        __builtin_offsetof(struct task_struct, lt_notify_work));
++    for (;;) {
++        /* Waiters take sleep_lock before lt_lock. Preserve that order. */
++        spin_lock(&task->lt_sleep_lock);
++        raw_spin_lock_irqsave(&task->lt_lock, flags);
++        KASSERT(task->lt_notify_pending);
++        if (task->lt_refs == 0) {
++            KASSERT(task->lt_lwp == NULL && task->lt_kthread == NULL);
++            task->lt_notify_pending = false;
++            raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++            spin_unlock(&task->lt_sleep_lock);
++            ASSERT_SLEEPABLE();
++            KASSERT(!cv_has_waiters(&task->lt_sleep_cv));
++            cv_destroy(&task->lt_sleep_cv);
++            spin_lock_destroy(&task->lt_sleep_lock);
++            raw_spin_lock_destroy(&task->lt_lock);
++            kmem_free(task, sizeof(*task));
++            /* Keep key/queue resources charged through actual destruction. */
++            linux_task_unreserve();
++            return;
++        }
++        task->lt_notify_again = false;
++        raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++        cv_signal(&task->lt_sleep_cv);
++        spin_unlock(&task->lt_sleep_lock);
++
++        raw_spin_lock_irqsave(&task->lt_lock, flags);
++        if (task->lt_notify_again) {
++            raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++            continue;
++        }
++        task->lt_notify_pending = false;
++        raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++        /* A later wake/last-put may enqueue this work again. Native's single
++         * worker caches its list-next before this callback, permits a running
++         * work to be queued, and never runs two callbacks concurrently. Do
++         * not dereference task after releasing the final lifetime interlock. */
++        return;
++    }
+ }
+ 
+ static void
+@@ -101,6 +156,14 @@
+         raw_spin_lock_destroy(&task_system_lock);
+         return error;
+     }
++    error = workqueue_create(&task_notify_queue, "lnxtask", linux_task_notify,
++        NULL, PRI_NONE, IPL_HIGH, WQ_MPSAFE);
++    if (error != 0) {
++        lwp_specific_key_delete(task_key);
++        task_key = (specificdata_key_t)-1;
++        raw_spin_lock_destroy(&task_system_lock);
++        return error;
++    }
+     linux_task_system_resume();
+     return 0;
+ }
+@@ -135,6 +198,7 @@
+     raw_spin_lock_irqsave(&task_system_lock, flags);
+     KASSERT(task_system_state == TASK_SYSTEM_QUIESCED && task_count == 0);
+     KASSERT(task_key != (specificdata_key_t)-1);
++    KASSERT(task_notify_queue != NULL);
+     task_system_state = TASK_SYSTEM_OPEN;
+     raw_spin_unlock_irqrestore(&task_system_lock, flags);
+ }
+@@ -142,14 +206,32 @@
+ int
+ linux_task_system_fini(void)
+ {
++    unsigned long flags;
++    bool closed;
+     int error;
+ 
++    ASSERT_SLEEPABLE();
++    /* Teardown is externally serialized. If a subsystem has already closed
++     * admission (retained native worker exit), drain its queued final put
++     * before checking zero reservations. Wait outside task/system locks and
++     * outside any code-owner lock needed by worker/owner rundown. */
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    closed = task_system_state == TASK_SYSTEM_QUIESCED;
++    if (closed)
++        workqueue_enqueue(task_notify_queue, &task_notify_barrier, NULL);
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++    if (closed)
++        workqueue_wait(task_notify_queue, &task_notify_barrier);
+     error = linux_task_system_quiesce();
+     if (error != 0)
+         return error;
+     /* Native module/entry owners must separately prevent calls into unmapped
+      * code. Closed admission and zero reservations protect key/task resources.
+      */
++    /* Zero charged tasks means no pending task work; join the
++     * possibly returning final callback before resource/code teardown. */
++    workqueue_destroy(task_notify_queue);
++    task_notify_queue = NULL;
+     lwp_specific_key_delete(task_key);
+     task_key = (specificdata_key_t)-1;
+     raw_spin_lock_destroy(&task_system_lock);
+@@ -169,16 +251,6 @@
+     cv_init(&task->lt_sleep_cv, "lnxtask");
+     task->__state = TASK_RUNNING;
+     task->lt_refs = 1;
+-    task->lt_softint = softint_establish(SOFTINT_CLOCK | SOFTINT_MPSAFE,
+-        linux_task_notify, task);
+-    if (task->lt_softint == NULL) {
+-        cv_destroy(&task->lt_sleep_cv);
+-        spin_lock_destroy(&task->lt_sleep_lock);
+-        raw_spin_lock_destroy(&task->lt_lock);
+-        kmem_free(task, sizeof(*task));
+-        linux_task_unreserve();
+-        return NULL;
+-    }
+     return task;
+ }
+ 
+@@ -188,6 +260,38 @@
+     ASSERT_SLEEPABLE();
+     if (!linux_task_reserve())
+         return NULL;
++    return linux_task_alloc_reserved();
++}
++
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Internal reference cloning, never a reopening of external admission. */
++struct task_struct *
++linux_task_alloc_owner_wait(struct task_struct *parent_spare)
++{
++    unsigned long flags;
++    bool valid;
++
++    ASSERT_SLEEPABLE();
++    if (parent_spare == NULL)
++        panic("linux_task_alloc_owner_wait: missing parent owner");
++    /* Caller retains this exclusively unattached spare throughout the call,
++     * serialized by its owning VMA/object lock. It already pins all resources.
++     * No task lock is held across the sleepable child allocation. */
++    raw_spin_lock_irqsave(&parent_spare->lt_lock, flags);
++    valid = parent_spare->lt_refs == 1 && parent_spare->lt_lwp == NULL &&
++        parent_spare->lt_kthread == NULL && !parent_spare->lt_exited;
++    raw_spin_unlock_irqrestore(&parent_spare->lt_lock, flags);
++    if (!valid)
++        panic("linux_task_alloc_owner_wait: invalid parent spare");
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    if (task_count == 0 || task_count == UINT_MAX ||
++        task_key == (specificdata_key_t)-1 || task_notify_queue == NULL)
++        panic("linux_task_alloc_owner_wait: invalid/overflowed runtime owner");
++    atomic_inc_uint(&task_count);
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++    /* Native KM_SLEEP cannot return an allocation failure; the global queue
++     * was created fallibly before admission opened. No per-task establish. */
+     return linux_task_alloc_reserved();
+ }
+ 
+@@ -311,30 +415,17 @@
+ linux_put_task_struct(struct task_struct *task)
+ {
+     unsigned long flags;
+-    bool last;
+-
+-    raw_spin_lock_irqsave(&task->lt_lock, flags);
+-    KASSERT(task->lt_refs != 0);
+-    last = --task->lt_refs == 0;
+-    if (last) {
+-        KASSERT(task->lt_lwp == NULL);
+-        KASSERT(task->lt_kthread == NULL);
+-    }
+-    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
+-    if (!last)
+-        return;
+-    /* Last release is sleepable: native disestablish drains all CPUs.
+-     * Callback users must release their last external reference later in
+-     * thread context. Broader arbitrary-context task-ref parity is OPEN.
+-     */
+-    ASSERT_SLEEPABLE();
+-    softint_disestablish(task->lt_softint);
+-    KASSERT(!cv_has_waiters(&task->lt_sleep_cv));
+-    cv_destroy(&task->lt_sleep_cv);
+-    spin_lock_destroy(&task->lt_sleep_lock);
+-    raw_spin_lock_destroy(&task->lt_lock);
+-    kmem_free(task, sizeof(*task));
+-    linux_task_unreserve();
++
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    if (task->lt_refs == 0)
++        panic("linux_put_task_struct: reference underflow");
++    if (--task->lt_refs == 0) {
++        KASSERT(task->lt_lwp == NULL && task->lt_kthread == NULL);
++        /* Last put may run under IRQ/RCU locks: no allocation, sleep or free.
++         * The same embedded work coalesces wake and final destruction. */
++        linux_task_notify_locked(task);
++    }
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
+ }
+ 
+ struct lwp *
+@@ -379,7 +470,7 @@
+         task->__state = TASK_RUNNING;
+         membar_sync();
+         /* Holding the raw native lock satisfies kpreempt_disabled(). */
+-        softint_schedule(task->lt_softint);
++        linux_task_notify_locked(task);
+         woke = 1;
+     }
+     raw_spin_unlock_irqrestore(&task->lt_lock, flags);
+@@ -398,7 +489,7 @@
+     if (!task->lt_exited && (task->__state & TASK_NORMAL) != 0) {
+         task->__state = TASK_RUNNING;
+         membar_sync();
+-        softint_schedule(task->lt_softint);
++        linux_task_notify_locked(task);
+         woke = 1;
+     }
+     /* Private backend binding and its teardown share this lifetime lock.
+--- a/sys/external/bsd/drm2/include/linux/task_netbsd.h
++++ b/sys/external/bsd/drm2/include/linux/task_netbsd.h
+@@ -6,6 +6,7 @@
+ #include <sys/param.h>
+ #include <sys/condvar.h>
+ #include <sys/lwp.h>
++#include <sys/workqueue.h>
+ #include <linux/raw_spinlock.h>
+ #include <linux/spinlock.h>
+ 
+@@ -13,7 +14,10 @@
+     raw_spinlock_t lt_lock;
+     spinlock_t lt_sleep_lock;
+     kcondvar_t lt_sleep_cv;
+-    void *lt_softint;
++    struct work lt_notify_work;
++    /* Both flags protected by lt_lock. Pending includes a running callback. */
++    bool lt_notify_pending;
++    bool lt_notify_again;
+     struct lwp *lt_lwp;
+     volatile unsigned int __state;
+     volatile unsigned int lt_refs;
+@@ -32,6 +36,9 @@
+ void linux_task_system_resume(void);
+ int linux_task_system_fini(void);
+ struct task_struct *linux_task_alloc(void);
++/* Sleepable internal owner clone; caller retains an exclusive,
++ * never-attached parent spare, including while admission is closed. */
++struct task_struct *linux_task_alloc_owner_wait(struct task_struct *);
+ void linux_task_attach_current(struct task_struct *);
+ struct task_struct *linux_task_enter_current(void);
+ struct task_struct *linux_current_task(void);

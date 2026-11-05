@@ -1,0 +1,214 @@
+--- a/sys/external/bsd/drm2/linux/linux_task.c
++++ b/sys/external/bsd/drm2/linux/linux_task.c
+@@ -17,6 +17,7 @@
+ #include <sys/specificdata.h>
+ #include <sys/systm.h>
+ #include <sys/workqueue.h>
++#include <linux/mm_identity_netbsd.h>
+ 
+ #include <linux/kthread.h>
+ #include <linux/sched.h>
+@@ -96,6 +97,9 @@
+             raw_spin_unlock_irqrestore(&task->lt_lock, flags);
+             spin_unlock(&task->lt_sleep_lock);
+             ASSERT_SLEEPABLE();
++            if (task->mm != NULL)
++                mmdrop(task->mm);
++            task->mm = NULL;
+             KASSERT(!cv_has_waiters(&task->lt_sleep_cv));
+             cv_destroy(&task->lt_sleep_cv);
+             spin_lock_destroy(&task->lt_sleep_lock);
+@@ -295,6 +299,131 @@
+     return linux_task_alloc_reserved();
+ }
+ 
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Copyright (c) 2026 n-e-o-w-u-l-f */
++/* Actual LWP entry may follow native exec. Refresh only at this sleepable
++ * boundary; unattached allocation reserves no opener process/MM identity. */
++static void
++linux_task_refresh_mm(struct task_struct *task)
++{
++    struct mm_struct *next, *previous;
++    unsigned long flags;
++
++    ASSERT_SLEEPABLE();
++    next = linux_mm_identity_get_current();
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_lwp == NULL || task->lt_lwp == curlwp);
++    KASSERT(task->lt_refs != 0 && !task->lt_exited);
++    previous = task->mm;
++    task->mm = next; /* Transfer the new structure-only reference. */
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    if (previous != NULL)
++        mmdrop(previous);
++}
++
++struct mm_struct *
++linux_get_task_mm(struct task_struct *task)
++{
++    struct mm_struct *mm;
++    unsigned long flags;
++
++    /* mmget_not_zero is atomic-safe: actual IPL_HIGH interlock plus native
++     * vm_refcnt CAS. No adaptive lock or allocation beneath lt_lock. */
++    raw_spin_lock_irqsave(&task->lt_lock, flags);
++    KASSERT(task->lt_refs != 0);
++    mm = task->lt_exited ? NULL : task->mm;
++    if (mm != NULL && !mmget_not_zero(mm))
++        mm = NULL;
++    raw_spin_unlock_irqrestore(&task->lt_lock, flags);
++    return mm;
++}
++
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Copyright (c) 2026 n-e-o-w-u-l-f */
++/* Insert in the same actual task owner as task_entry_preallocated.inc.
++ * Caller has closed its object admission and drained every live object.
++ * retained is borrowed from a still-owned native worker LWP; joining that
++ * worker is the only remaining operation which may release this task.
++ * A nonzero result changes no admission state or resource. */
++int
++linux_task_system_quiesce_retained(struct task_struct *retained)
++{
++    unsigned long flags, taskflags;
++    unsigned int expected = retained == NULL ? 0 : 1;
++    bool valid = true;
++
++    raw_spin_lock_irqsave(&task_system_lock, flags);
++    if (retained != NULL) {
++        raw_spin_lock_irqsave(&retained->lt_lock, taskflags);
++        valid = retained->lt_refs == 1 && retained->lt_lwp != NULL &&
++            retained->lt_kthread == NULL && !retained->lt_exited;
++        raw_spin_unlock_irqrestore(&retained->lt_lock, taskflags);
++    }
++    if (!valid || task_count != expected) {
++        raw_spin_unlock_irqrestore(&task_system_lock, flags);
++        return EBUSY;
++    }
++    task_system_state = TASK_SYSTEM_QUIESCED;
++    raw_spin_unlock_irqrestore(&task_system_lock, flags);
++    return 0;
++}
++
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Copyright (c) 2026 n-e-o-w-u-l-f */
++/*
++ * Include in the actual linux_task.c after linux_task_alloc(), with the
++ * declaration installed in linux/task_netbsd.h or the companion header.
++ * Static task_key and the existing real task reference/attachment functions
++ * are intentional owners. This is not a second task or specificdata runtime.
++ */
++void
++linux_task_entry_enter_preallocated(struct task_struct **handle,
++    struct task_struct **sparep)
++{
++	struct task_struct *spare, *task;
++	unsigned long flags;
++	bool valid;
++
++	ASSERT_SLEEPABLE();
++	if (handle == NULL || *handle != NULL || sparep == NULL ||
++	    (spare = *sparep) == NULL)
++		panic("linux_task_entry_enter_preallocated: invalid handle/spare");
++	/*
++	 * A successfully allocated spare retains its original reservation until
++	 * final put. linux_task_system_quiesce cannot delete the key while this
++	 * reservation exists. Do not introduce a new, fallible admission here.
++	 */
++	if (task_key == (specificdata_key_t)-1)
++		panic("linux_task_entry_enter_preallocated: task key not initialized");
++	raw_spin_lock_irqsave(&spare->lt_lock, flags);
++	valid = spare->lt_refs == 1 && spare->lt_lwp == NULL &&
++	    spare->lt_kthread == NULL && !spare->lt_exited;
++	raw_spin_unlock_irqrestore(&spare->lt_lock, flags);
++	if (!valid)
++		panic("linux_task_entry_enter_preallocated: spare is not exclusively unattached");
++
++	task = lwp_getspecific(task_key);
++	if (task != NULL) {
++		/* Current LWP ownership keeps this task alive through the lookup. */
++		get_task_struct(task);
++		linux_task_refresh_mm(task);
++		*handle = task;
++		*sparep = NULL;
++		put_task_struct(spare);
++		return;
++	}
++
++	/*
++	 * All fallible task/notifier allocation happened before publication.
++	 * attach_current may sleep in native specificdata setup; it cannot
++	 * return an allocation/admission error. It adds the LWP owner reference.
++	 * The spare's original reference becomes this entry's handle reference.
++	 */
++	linux_task_attach_current(spare);
++	*sparep = NULL;
++	*handle = spare;
++}
++
+ void
+ linux_task_attach_current(struct task_struct *task)
+ {
+@@ -306,6 +435,7 @@
+     ASSERT_SLEEPABLE();
+     KASSERT(task_key != (specificdata_key_t)-1);
+     KASSERT(lwp_getspecific(task_key) == NULL);
++    linux_task_refresh_mm(task);
+     raw_spin_lock_irqsave(&task->lt_lock, flags);
+     KASSERT(task->lt_lwp == NULL && !task->lt_exited);
+     KASSERT(task->lt_refs != 0 && task->lt_refs != UINT_MAX);
+@@ -330,6 +460,7 @@
+     task = lwp_getspecific(task_key);
+     if (task != NULL) {
+         linux_task_unreserve();
++        linux_task_refresh_mm(task);
+         return task;
+     }
+     task = linux_task_alloc_reserved();
+@@ -373,6 +504,7 @@
+         /* Reservation keeps the key alive through lookup and reference. */
+         get_task_struct(task);
+         linux_task_unreserve();
++        linux_task_refresh_mm(task);
+     } else {
+         task = linux_task_alloc_reserved();
+         if (task == NULL)
+--- a/sys/external/bsd/drm2/include/linux/task_netbsd.h
++++ b/sys/external/bsd/drm2/include/linux/task_netbsd.h
+@@ -10,6 +10,7 @@
+ #include <linux/raw_spinlock.h>
+ #include <linux/spinlock.h>
+ 
++struct mm_struct;
+ struct task_struct {
+     raw_spinlock_t lt_lock;
+     spinlock_t lt_sleep_lock;
+@@ -19,6 +20,9 @@
+     bool lt_notify_pending;
+     bool lt_notify_again;
+     struct lwp *lt_lwp;
++    /* Structure ref only: no vmspace -> task/VMA -> vmspace cycle.
++     * Pointer replacement/read is protected by lt_lock. */
++    struct mm_struct *mm;
+     volatile unsigned int __state;
+     volatile unsigned int lt_refs;
+     bool lt_exited;
+@@ -33,6 +37,7 @@
+ int linux_task_system_init(void);
+ bool linux_task_system_busy(void);
+ int linux_task_system_quiesce(void);
++int linux_task_system_quiesce_retained(struct task_struct *);
+ void linux_task_system_resume(void);
+ int linux_task_system_fini(void);
+ struct task_struct *linux_task_alloc(void);
+@@ -44,6 +49,9 @@
+ struct task_struct *linux_current_task(void);
+ int linux_task_entry_enter(struct task_struct **);
+ void linux_task_entry_leave(struct task_struct **);
++void linux_task_entry_enter_preallocated(struct task_struct **,
++    struct task_struct **);
++struct mm_struct *linux_get_task_mm(struct task_struct *);
+ void linux_get_task_struct(struct task_struct *);
+ void linux_put_task_struct(struct task_struct *);
+ struct lwp *linux_task_lwp(struct task_struct *);

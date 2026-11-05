@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Sparse's pointer annotation has no C runtime behavior in this model. */
+#define __user
 #define CHECK(expr) do { if (!(expr)) { \
 	fprintf(stderr, "CHECK_FAILED %s\n", #expr); abort(); \
 } } while (0)

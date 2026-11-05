@@ -365,6 +365,9 @@ def main():
         state["adapter_state"] = "UNREVIEWED; development probe only; installation prohibited"
         state["manifest_sha256"] = {str(path.relative_to(tree)): digest(path) for path in
             [drm / "i915drm/files.i915drmkms", drm_manifest, drm / "ttm/files.ttm"]}
+        state["makefile_sha256"] = digest(obj / "Makefile")
+        state["tools_sha256"] = {name: digest(tools / "bin" / name) for name in
+            ("nbmake-amd64", "nbconfig", "x86_64--netbsd-gcc", "x86_64--netbsd-nm", "x86_64--netbsd-ld")}
         save()
     except Exception as exc:
         state["state"] = "FAILED"; state["error"] = str(exc); save(); raise

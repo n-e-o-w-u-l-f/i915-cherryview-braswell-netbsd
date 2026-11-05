@@ -1,0 +1,50 @@
+--- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+@@ -292,11 +292,16 @@
+ shmem_truncate(struct drm_i915_gem_object *obj)
+ {
++	int error;
++
+ 	/*
+ 	 * Our goal here is to return as much of the memory as
+ 	 * is possible back to the system as we are called from OOM.
+ 	 * To do this we must instruct the shmfs to drop all of its
+ 	 * backing pages, *now*.
+ 	 */
+-	shmem_truncate_range(file_inode(obj->base.filp), 0, (loff_t)-1);
++	error = linux_shmem_truncate_range(file_inode(obj->base.filp), 0,
++	    UINT64_MAX);
++	if (error != 0)
++		return -error;
+ 	obj->mm.madv = __I915_MADV_PURGED;
+ 	obj->mm.pages = ERR_PTR(-EFAULT);
+@@ -307,26 +311,7 @@
+ void __shmem_writeback(size_t size, struct address_space *mapping)
+ {
+-	struct writeback_control wbc = {
+-		.sync_mode = WB_SYNC_NONE,
+-		.nr_to_write = SWAP_CLUSTER_MAX,
+-		.range_start = 0,
+-		.range_end = LLONG_MAX,
+-	};
+-	struct folio *folio = NULL;
+-	int error = 0;
+-
+-	/*
+-	 * Leave mmapings intact (GTT will have been revoked on unbinding,
+-	 * leaving only CPU mmapings around) and add those folios to the LRU
+-	 * instead of invoking writeback so they are aged and paged out
+-	 * as normal.
+-	 */
+-	while ((folio = writeback_iter(mapping, &wbc, folio, &error))) {
+-		if (folio_mapped(folio))
+-			folio_redirty_for_writepage(&wbc, folio);
+-		else
+-			error = shmem_write_folio(folio);
+-	}
++	(void)size;
++	linux_shmem_writeback(mapping);
+ }
+ 
+ static void
+

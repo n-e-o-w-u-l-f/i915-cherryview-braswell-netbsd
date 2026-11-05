@@ -1,0 +1,42 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "files": {
+    "sys/uvm/uvm_extern.h": {
+      "before_sha256": "14d6eb1c13d7b6e9f182d8c5043a719df8152858b2b3991120114ccd7867a5bb",
+      "after_sha256": "fb842bc4419de656c5b9f2ba35a21690be3d6f41852c4dda93f25a60b71bc3ed"
+    },
+    "sys/uvm/uvm_pager.h": {
+      "before_sha256": "89d472b83a9249cce27301500ffc1d313f2454c7ad0375abe573a19584d481f4",
+      "after_sha256": "c4d98411f0e34fbac36bcaf6032454456546267ec41386861c2f8f5fa6e95f61"
+    },
+    "sys/uvm/uvm_map.h": {
+      "before_sha256": "a7caf1e149874521e7fbc09483ad17d8ae72fda08b9b366a35c84f3f25c92a3b",
+      "after_sha256": "1bc81d084b12c0353e2fb8541bf969839039294d5f51e4f0a043906b98c87d52"
+    },
+    "sys/uvm/uvm_map.c": {
+      "before_sha256": "4f87e2d28da17fbce3ccada6bd969ec7d1f39a79076df334f7b09014ab4a684b",
+      "after_sha256": "597aee172ef53e4a76db3126292d3953c8d1569d02a89b79f345cf8baa080399"
+    },
+    "sys/uvm/uvm_mmap.c": {
+      "before_sha256": "c1b1c3e16f12a9a30b777eba3f08dfec08f61d3d10c384569c5d67317bc7733d",
+      "after_sha256": "c3cd4d13ec8745c8919236a34aef024797cbaea5a5a2872326526d8fec8d6019"
+    },
+    "sys/uvm/uvm_fault.h": {
+      "before_sha256": "bb7266cd2178412241f66462b04192afba9ab92daea9f5b7a0f8a9903ceb06b4",
+      "after_sha256": "58e30135448bf8812af8bd421e3bb836213e0f4253d4a623fb1e52e8c097bcab"
+    },
+    "sys/uvm/uvm_fault_i.h": {
+      "before_sha256": "666c14b43342fb469f77a9a597598a1d01522d888d3cd008a3ef27617daaa22b",
+      "after_sha256": "530dfc2be13fd61a685dc9f3fae664d2d1f164d349ce8dc5c171a815ce6ee343"
+    },
+    "sys/uvm/uvm_fault.c": {
+      "before_sha256": "712ff2464d1a749b163a5563b772b88cf9d7b3f993807437d7a81512a0381c22",
+      "after_sha256": "f1f7ea85605b3f30a5e8308d815d5eb46fa0f343e1075c73f1d40bb32cec62c5"
+    }
+  },
+  "helper_sha256": "cc2899a3bb607cd174d53c595d7a02c4ff5ef43783f678a26e0f9e0e286e1db0",
+  "patch_sha256": "79c01d4ab5600cd1a78b718b42be3404ffabf0fc2cf7038afb372ce13bff379e",
+  "acceptance": "Source preparation only. Per-entry provider bodies, native compilation, lifecycle/fault/revocation tests and full kernel link remain mandatory.",
+  "version": 5,
+  "mmap_object_helper_sha256": "9f2fc6085c6a18d2d5e4263792f41ab54c373bc48e3aceff1f0c72df364ed82f"
+}

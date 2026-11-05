@@ -1,0 +1,24 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "files": {
+    "sys/uvm/uvm_pager.h": {
+      "before_sha256": "89d472b83a9249cce27301500ffc1d313f2454c7ad0375abe573a19584d481f4",
+      "after_sha256": "30a6d0ef3ad05f092198fc6fb93e87a8d4fae7474d531672cda7a1a6c3964e5f"
+    },
+    "sys/uvm/uvm_map.h": {
+      "before_sha256": "a7caf1e149874521e7fbc09483ad17d8ae72fda08b9b366a35c84f3f25c92a3b",
+      "after_sha256": "c0aad2db15f8c75b302fe5fd727f0aea8e2fda36cf95abb87917de00eafbed1e"
+    },
+    "sys/uvm/uvm_map.c": {
+      "before_sha256": "4f87e2d28da17fbce3ccada6bd969ec7d1f39a79076df334f7b09014ab4a684b",
+      "after_sha256": "0abe7619762dda588bc24882066d23f25cfff32de4bfabcc70c0aa5fceae1674"
+    },
+    "sys/uvm/uvm_mmap.c": {
+      "before_sha256": "c1b1c3e16f12a9a30b777eba3f08dfec08f61d3d10c384569c5d67317bc7733d",
+      "after_sha256": "982ef37623b99db5dbf547643763460b9f86fdd65851e05320358ab14a66998a"
+    }
+  },
+  "helper_sha256": "99ebb80a2e6a5a0ab3fb355848578aee9bd46f53e2e2a6944fac14e50bb97e56",
+  "patch_sha256": "d7f467e53b708e59a07b323fd49cb0a721532031d9edf784da479f67c4a97ff5",
+  "acceptance": "Source preparation only. Per-entry provider bodies, native compilation, lifecycle/fault/revocation tests and full kernel link remain mandatory."
+}

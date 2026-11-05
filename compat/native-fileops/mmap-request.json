@@ -1,0 +1,12 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "prior_patch_sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+  "patch_sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+  "files": {
+    "sys/sys/file.h": {
+      "before_sha256": "e8e947ecc19f5f8c9045a2d62f549965cddd6694859e78e23dc9989a35f71a04",
+      "after_sha256": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521"
+    }
+  },
+  "acceptance": "Source contract only. Requires matching UVM per-mapping-request consumer, actual native compilation and full kernel rebuild."
+}

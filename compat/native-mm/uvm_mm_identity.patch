@@ -1,0 +1,151 @@
+--- a/sys/uvm/uvm_map.h
++++ b/sys/uvm/uvm_map.h
+@@ -214,7 +214,10 @@
+  *					allocations are to be arranged in
+  *					a "top down" manner.
+  */
++struct vmspace;
+ struct vm_map {
++	/* Borrowed identity, set only by actual uvmspace_init. */
++	struct vmspace *vmspace_owner;
+ 	struct pmap *		pmap;		/* Physical map */
+ 	krwlock_t		lock;		/* Non-intrsafe lock */
+ 	struct lwp *		busy;		/* LWP holding map busy */
+--- a/sys/uvm/uvm_extern.h
++++ b/sys/uvm/uvm_extern.h
+@@ -564,9 +564,26 @@
+  * May eventually be merged with vm_map.
+  * Several fields are temporary (text, data stuff).
+  */
++struct vmspace;
++struct uvmspace_runtime_ops {
++	/* Native vm_refcnt is already zero; no new users can enter.
++	 * Called with vm_runtime_lock held, before any native storage
++	 * is freed.  Clear vm_runtime and vm_runtime_ops on return. */
++	void (*uro_release)(struct vmspace *);
++	/* Optional code-owner counter. Native increments before the
++	 * callback can retire its last object, and decrements only
++	 * after callback return, without touching the ops again. */
++	volatile unsigned int *uro_calls;
++};
++
+ struct vmspace {
+ 	struct	vm_map vm_map;	/* VM address map */
+ 	volatile int vm_refcnt;	/* number of references */
++	/* Runtime identity is not copied by vm_startcopy on fork. */
++	kmutex_t vm_runtime_lock;
++	unsigned int vm_runtime_execs;
++	void *vm_runtime;
++	const struct uvmspace_runtime_ops *vm_runtime_ops;
+ 	void *	vm_shm;		/* SYS5 shared memory private data XXX */
+ /* we copy from vm_startcopy to the end of the structure on fork */
+ #define vm_startcopy vm_rssize
+--- a/sys/uvm/uvm_map.c
++++ b/sys/uvm/uvm_map.c
+@@ -4387,6 +4387,7 @@
+ 	UVMHIST_LOG(maphist, "   topdown=%ju)", topdown, 0, 0, 0);
+ 
+ 	memset(vm, 0, sizeof(*vm));
++	mutex_init(&vm->vm_runtime_lock, MUTEX_DEFAULT, IPL_NONE);
+ 	uvm_map_setup(&vm->vm_map, vmin, vmax, VM_MAP_PAGEABLE
+ 	    | (topdown ? VM_MAP_TOPDOWN : 0)
+ 	    );
+@@ -4394,6 +4395,7 @@
+ 		pmap_reference(pmap);
+ 	else
+ 		pmap = pmap_create();
++	vm->vm_map.vmspace_owner = vm;
+ 	vm->vm_map.pmap = pmap;
+ 	vm->vm_refcnt = 1;
+ 	UVMHIST_LOG(maphist,"<- done",0,0,0,0);
+@@ -4456,8 +4458,19 @@
+ 	struct vmspace *nvm, *ovm = p->p_vmspace;
+ 	struct vm_map *map;
+ 	int flags;
++	bool runtime_separate, runtime_switched = false;
+ 
+ 	KASSERT(ovm != NULL);
++	/* Publication of a runtime identity and exec's reuse decision
++	 * share one actual native interlock.  Existing runtime-MM users
++	 * may keep the old address space just as across Linux exec. */
++	mutex_enter(&ovm->vm_runtime_lock);
++	runtime_separate = ovm->vm_runtime_ops != NULL ||
++	    ovm->vm_runtime_execs != 0;
++	if (__predict_false(ovm->vm_runtime_execs == UINT_MAX))
++		panic("vmspace runtime exec counter overflow");
++	ovm->vm_runtime_execs++;
++	mutex_exit(&ovm->vm_runtime_lock);
+ #ifdef __HAVE_CPU_VMSPACE_EXEC
+ 	cpu_vmspace_exec(l, start, end);
+ #endif
+@@ -4469,7 +4482,7 @@
+ 	 * empty first.
+ 	 */
+ 	map = &ovm->vm_map;
+-	if (ovm->vm_refcnt == 1 && map->nentries != 0) {
++	if (!runtime_separate && ovm->vm_refcnt == 1 && map->nentries != 0) {
+ 		/*
+ 		 * SYSV SHM semantics require us to kill all segments on an exec
+ 		 */
+@@ -4503,7 +4516,7 @@
+ 		KASSERT(map->nentries == 0);
+ 	}
+ 
+-	if (ovm->vm_refcnt == 1) {
++	if (!runtime_separate && ovm->vm_refcnt == 1) {
+ 		/*
+ 		 * The vmspace is not shared and is empty (if it
+ 		 * weren't, we would have emptied it above).
+@@ -4535,8 +4548,14 @@
+ 		pmap_activate(l);
+ 		kpreempt_enable();
+ 
++		runtime_switched = true;
++	}
++	mutex_enter(&ovm->vm_runtime_lock);
++	KASSERT(ovm->vm_runtime_execs != 0);
++	ovm->vm_runtime_execs--;
++	mutex_exit(&ovm->vm_runtime_lock);
++	if (runtime_switched)
+ 		uvmspace_free(ovm);
+-	}
+ }
+ 
+ /*
+@@ -4578,6 +4597,20 @@
+ 	 */
+ 
+ 	map->flags |= VM_MAP_DYING;
++	mutex_enter(&vm->vm_runtime_lock);
++	KASSERT(vm->vm_runtime_execs == 0);
++	if (vm->vm_runtime_ops != NULL) {
++		const struct uvmspace_runtime_ops *ops = vm->vm_runtime_ops;
++		volatile unsigned int *calls = ops->uro_calls;
++
++		if (calls != NULL && atomic_inc_uint_nv(calls) == 0)
++			panic("vmspace runtime callback count overflow");
++		(*ops->uro_release)(vm);
++		KASSERT(vm->vm_runtime == NULL && vm->vm_runtime_ops == NULL);
++		if (calls != NULL)
++			atomic_dec_uint(calls);
++	}
++	mutex_exit(&vm->vm_runtime_lock);
+ 	flags = pmap_remove_all(map->pmap) ? UVM_FLAG_VAONLY : 0;
+ 
+ 	/* Get rid of any SYSV shared memory segments. */
+@@ -4599,6 +4632,7 @@
+ 	rw_destroy(&map->lock);
+ 	cv_destroy(&map->cv);
+ 	pmap_destroy(map->pmap);
++	mutex_destroy(&vm->vm_runtime_lock);
+ 	kmem_free(vm, sizeof(*vm));
+ }
+ 
+@@ -5023,6 +5057,7 @@
+ 	map->flags = flags;
+ 	map->first_free = &map->header;
+ 	map->hint = &map->header;
++	map->vmspace_owner = NULL;
+ 	map->timestamp = 0;
+ 	map->busy = NULL;
+ 

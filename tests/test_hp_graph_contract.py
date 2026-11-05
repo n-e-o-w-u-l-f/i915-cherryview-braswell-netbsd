@@ -203,7 +203,8 @@ class EntrypointAdmission(unittest.TestCase):
         manifest = {"linux_head_verified": True, "linux_pin": contract.LINUX_PIN,
                     "netbsd_pin": contract.NETBSD_PIN, "files": []}
         staged = {"state": "CONFIGURED", "linux_pin": contract.LINUX_PIN,
-                  "netbsd_pin": contract.NETBSD_PIN, "units": groups}
+                  "netbsd_pin": contract.NETBSD_PIN, "units": groups,
+                  "paths": {"base_tool_dir": "/usr/tools"}}
         target = manifest if module is prepare else staged
         target.update(stage_changes or {})
         readmap = {work / "full-scope-audit/linux-stage-verified/PORT-MANIFEST.json":
@@ -244,6 +245,9 @@ class EntrypointAdmission(unittest.TestCase):
             def is_symlink(self):
                 return False
 
+            def is_absolute(self):
+                return self.path.is_absolute()
+
             def is_dir(self):
                 return True
 
@@ -278,6 +282,7 @@ class EntrypointAdmission(unittest.TestCase):
             stack.enter_context(patch.object(module.platform, "system", return_value=system))
             stack.enter_context(patch.object(module.platform, "release", return_value=release))
             stack.enter_context(patch.object(module.socket, "gethostname", return_value=hostname))
+            stack.enter_context(patch.object(module.os, "geteuid", return_value=1004, create=True))
             run = stack.enter_context(patch.object(module.subprocess, "run",
                                       side_effect=AssertionError("unexpected external execution")))
             check_output = stack.enter_context(patch.object(module.subprocess, "check_output",
@@ -292,6 +297,11 @@ class EntrypointAdmission(unittest.TestCase):
                     {name: root / name for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")}))
                 stack.enter_context(patch.object(module, "selected", side_effect=
                                     lambda root, directory, *args: groups.get(directories[directory])))
+            else:
+                stack.enter_context(patch.object(module, "stage_identity", return_value={"units": []}))
+                # Positive control stops at the next real native selection
+                # query. Negative contracts must reject before this call.
+                check_output.side_effect = NativeBoundary("native selection query")
             yield reads, writes, run, check_output
 
     def rejected(self, module, groups=None, stage_changes=None, **host):
@@ -355,9 +365,9 @@ class EntrypointAdmission(unittest.TestCase):
             with self.assertRaises(NativeBoundary):
                 probe.main()
             self.assertEqual(writes, [])
-            self.assertEqual(reads[-1], "/root/hp-driver-port-20261005/full-linux-obj/Makefile")
+            self.assertEqual(reads[-1], "/root/hp-driver-port-20261005/full-linux-graph-status.json")
             run.assert_not_called()
-            check_output.assert_not_called()
+            self.assertEqual(check_output.call_count, 1)
 
 
 if __name__ == "__main__":

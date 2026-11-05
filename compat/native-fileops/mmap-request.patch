@@ -1,0 +1,26 @@
+--- a/sys/sys/file.h
++++ b/sys/sys/file.h
+@@ -82,6 +82,7 @@
+ struct stat;
+ struct uio;
+ struct uvm_object;
++struct uvm_mmap_request;
+ 
+ struct fileops {
+ 	const char *fo_name;
+@@ -115,6 +116,15 @@
+ 	 */
+ 	int	(*fo_ioctl_user)(struct file *, u_long, void *, void *);
+ 	struct linux_file *(*fo_linux_file)(struct file *);
++	/* Optional per-mapping preparation. Same native fo_mmap inputs,
++	 * plus one transaction request. On failure the callback unwinds
++	 * and returns NULL object/request outputs. On success the caller
++	 * consumes the object reference and finishes the request once
++	 * after every mapping/hint retry or pre-mapping failure.
++	 * Existing fo_mmap behavior is the NULL-hook fallback. */
++	int	(*fo_mmap_prepare)(struct file *, off_t *, size_t, int,
++		    int *, int *, struct uvm_object **, int *,
++		    struct uvm_mmap_request **);
+ };
+ 
+ union file_data {

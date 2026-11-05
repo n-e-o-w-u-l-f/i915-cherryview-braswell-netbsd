@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "purpose": "Preserved HP-native Werror source chain with mmap transaction finish and internal mapping entry; no lifecycle/runtime/full-kernel acceptance.",
+  "files": [
+    {
+      "path": "uvm_entry_owner.patch",
+      "sha256": "88de7a07d12895248023f06cdbea4feced1fbc9a4b5b5a0ae39f6d0525313ea9"
+    },
+    {
+      "path": "uvm_entry_owner.json",
+      "sha256": "1fb2a7fdfb93be977c80ed245f2c66ea561e13163912073255ea3b9efd0d03eb"
+    },
+    {
+      "path": "uvm_entry_helpers.inc",
+      "sha256": "99ebb80a2e6a5a0ab3fb355848578aee9bd46f53e2e2a6944fac14e50bb97e56"
+    },
+    {
+      "path": "uvm_mmap_object.inc",
+      "sha256": "b635a362ed89bc9e4202e92d6e1389024f045ce4ee19fb6bf9cc93ea6bedf1d8"
+    },
+    {
+      "path": "prepare_uvm_entry_patch.py",
+      "sha256": "2fb903317f72dfa93ce244712a574f3174fb4da41254e86ebe1fe805197fa861"
+    },
+    {
+      "path": "uvm_mm_identity.patch",
+      "sha256": "084755d6afe1fb7b2ec0b0e5d1a068e2b3542f38071f11e57e050882792fa7f5"
+    },
+    {
+      "path": "uvm_mm_identity.json",
+      "sha256": "b4c238fc02f8e64acb7ab63796cabacef5837ef3ad3ab1fa788e201fef585e72"
+    },
+    {
+      "path": "prepare_mm_identity_patch.py",
+      "sha256": "620713e47f1ad2b2891604c7325f9c8957bee152315ef5d62177dbcb5f8a3869"
+    }
+  ]
+}
