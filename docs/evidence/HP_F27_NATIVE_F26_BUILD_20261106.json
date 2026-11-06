@@ -1,0 +1,1808 @@
+{
+  "schema": 1,
+  "step_id": "HP-I915-F27-NATIVE-F26-BUILD-20261106",
+  "attempt_id": "A01",
+  "status": "PASS_NATIVE_F26_COMPILE_LINK_AND_ARTIFACT_VERIFICATION",
+  "build_exit": 0,
+  "verification_exit": 0,
+  "build_elapsed_seconds": 2709,
+  "build_process": 19842,
+  "verifier_process": 14551,
+  "active_execution": false,
+  "verifier_commit": "f1f4fcd5345c91fb2d5dc5fd989866e282f9e3d4",
+  "verifier_git_blob": "903cf7613b627dbcc4ac3bafc44a6b4ba2e9b5d8",
+  "receipt": {
+    "schema": 1,
+    "status": "NATIVE_COMPILE_LINK_ARTIFACT_VERIFIED",
+    "observed_at": "2026-11-06T00:40:43.210938+00:00",
+    "host": "hp-tpnw121.lan",
+    "os": "NetBSD-11.0-amd64-x86_64-64bit-ELF",
+    "build_source_commit": "5c7ac64c8c740701365dfbf3bf9159cc13fcf344",
+    "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "rtl_phy_pin": "df3bc40086d38dcf0e25628c22c06f8c7674fe3d",
+    "kernel_path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd",
+    "kernel_bytes": 29652840,
+    "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+    "elf_header": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 \n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              EXEC (Executable file)\n  Machine:                           Advanced Micro Devices X86-64\n  Version:                           0x1\n  Entry point address:               0xffffffff8020e000\n  Start of program headers:          64 (bytes into file)\n  Start of section headers:          29650664 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           56 (bytes)\n  Number of program headers:         3\n  Size of section headers:           64 (bytes)\n  Number of section headers:         34\n  Section header string table index: 33\n",
+    "configured_object_count": 3264,
+    "driver_object_sha256": {
+      "consinit.o": "4f4a9d8135c7c0315c5ed09b4a41771e2dfb7f692180df1078290b2e4ba91084",
+      "drmfb.o": "a9924720e10119cbb34fbe3d4daefc1edf0e77fcd904049f90e77a8169a35875",
+      "i915_irq.o": "a277a0b18000cf4d02f64246b17ef48fa13261504717450a2e466e494e1843cc",
+      "i915_pci.o": "75b72b949212ade52621660c1935a5fc0d2ce6d15d91627647152dd958d93af7",
+      "i915_pci_autoconf.o": "181019e87265e689cb7d71aa6fa0fdff50fbb36d3767b252e1cb2d3c177112f5",
+      "intel_display.o": "2b119b8aa46010b8b67adf74057b1086d00be2df53a1fe4e5b18830dae689d94",
+      "intel_display_power.o": "e67291f1c410501e852f1765c219ca39a5cfb23feaf8383e311ead6a66c14274",
+      "intel_dp.o": "9ebcbbc44cfc0d2901329d29f9c544bbfa65d40ba6a37fb2758ea978cb95aab4",
+      "intel_dpio_phy.o": "76c75f9cd4ff31f203e0bf8ab6680fefa6ca86c402b12594a7cca818846e3742",
+      "intel_hdmi.o": "e7680635fdceefc2653b6d6970bf3b2cb7f9b2a1d751c7bb09392e15428af5f7",
+      "intel_lrc.o": "9918fc6e3023207a642caf002dee8f4d1f909ede6d172adc8b18e0b847ac1b87",
+      "intel_rps.o": "ed61a047a27385e87be4d3f378d8d6800828669da045283a72abbcae640e16d0",
+      "intel_sideband.o": "7563f6531875591c12eeb9abb424a6f12fcaee60ee2c770699ba099765e5bdff",
+      "ioconf.o": "19688f82636476861f947c316aa84490d57038fd8f899b99c2770be19c81f978",
+      "rtwn8723be_c2h.o": "0e6681939736872b8527a2cde02fb83c1a609f88900100e403271c70772ca9eb",
+      "rtwn8723be_c2h_native.o": "eb359d685d388f533e85d19de3196de7c9f61551cec8dd1dc15ebbf4b8e25c09",
+      "rtwn8723be_datapath.o": "bc3030a301e22ab3afe20c79dc05025e9c026c3e3bd422232c95469ed1547405",
+      "rtwn8723be_f16_1_dma.o": "9c24715725ef399fc04c5d72be916383609585d68651d7d41a0a969346023ee5",
+      "rtwn8723be_fw.o": "de6d95954be504b0754ad5988494c6ef2f714a61e9a04eb7940c18ff97fa3b1f",
+      "rtwn8723be_h2c.o": "866100f24c7a238ca9c8267936bb76e32e5c0966a9da03787a32f5ead73e1045",
+      "rtwn8723be_h2c_native.o": "ecf5f3f7791dcdd6c470b9050e52e0d1ce826e13644c4f34216d994aff5b4af6",
+      "rtwn8723be_linux_state.o": "dc0fb2e73ef850e5892976e6f07cef355d6241bd9d6fffa1251050e5e7926146",
+      "rtwn8723be_native.o": "c85c4a41d1b4659f63672e648b4a03b99c120e760d5554cee972ca311e562259",
+      "rtwn8723be_net80211.o": "0611c68e5d80ea94fe918cdaa2f2a175b9aed30b55d26f1bb62c0112a66fd493",
+      "rtwn8723be_netbsd.o": "6d324a4b52696ac177a98d19f886455b585f8fd4ec9425a88a97002ca550c9cd",
+      "rtwn8723be_oem.o": "08a26a83682ebcad3dbf676404623c8a8ce7444b91745a11e4ee92df1201cfc3",
+      "rtwn8723be_package.o": "a3abe38d016f17826e71e4907e5d4c3b05e64630e5b270c09f7ab6c2a8df20e2",
+      "rtwn8723be_phy_bb_sequence.o": "f2fbd193bcb774d4ddccc7e8e2d8235d9c04faa3789fc3623d0616e075d78f17",
+      "rtwn8723be_phy_exec.o": "88315ec35884a250c9e505e553f5d702122a152263dac2d89c4089db2af7ec1c",
+      "rtwn8723be_pwrseq.o": "01e39329d9e393f4bc49839415085e4d7e954830aec321f8a7d7a3428fe78913",
+      "rtwn8723be_rf_native.o": "b3cf6a1a1bcd3623d666be60385a23a210cd480356164a12c99ad75d577951f9",
+      "rtwn8723be_rf_path.o": "654bf28f3d7da12fc85c15e3fda6cfcbee39687a2236ad1bfa12fe2eeb1ce47f",
+      "rtwn8723be_rf_serial.o": "86ddca4cdb61d9f95153d86c75637d586a000b8c0bf7f7c6652bc8a3834ad217",
+      "rtwn8723be_rx_binding.o": "3409c37c8804670e00bf18581821545c4839e0ad664a13e25ef5811934a211b5",
+      "rtwn8723be_rx_decode.o": "f1709074aec2775070b85d4c3aa5d291bf8f632f3659d4b1bae946dd6bc4d7b6",
+      "rtwn8723be_rx_native.o": "277ad5bc8c0f20120d00653ea6e2ceb84124f182008f6dd039cac172c5501b2a",
+      "rtwn8723be_rx_phy.o": "e788122ce923bd2fdf53f84e51688cb8512c3006c4a0c5d912ec6297449608f9",
+      "rtwn8723be_tx_desc.o": "362c0b3cec9f3e610af5eda7ac18075744d74274f91f7b661ca82e762a88968a",
+      "rtwn8723be_tx_native.o": "7a42fc204169ce789f95e278e3d9f81216d7029fc6998ff2f200a0a90d690a8a"
+    },
+    "modified_source_sha256": {
+      "sys/arch/x86/x86/consinit.c": "b4f814faff08ceff00151bd62253b0ce64eb5b3a3569727a3c0be49d7ea9198d",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c": "bc1dae977ef54aec77096f4c34a6d02479be4c7661e8ee3fb4cfccddef3887c0",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h": "5ea5c412d3f6940a0b5e450d0382f3bbc1f03bb8e643cb5b57e213d323f788c3",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c": "329a0db68ed36f8392413c1d43569da444225c8191c4037cd3fff36b59cd7322",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c": "5939fddd6c6abbab8613c85954ff62d6034f802573b686ea1b8b5e6b2ffc3b65",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_dpio_phy.c": "acfe7e5619f041f37b2165b6a2c3ea0575b216c4986a6acf9bcc5eac738c6e99",
+      "sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c": "03faf3263861a105255cdd589170383b10ffbe4de661dba913351095ea11c35b",
+      "sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c": "c0908e3bce660d17dc8f934189d001203ca169333271142af1f929d69f717756",
+      "sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c": "03fb740c39e32d61f50df43ae6aaf15962e18f9212003b8499db5931b91d91e2",
+      "sys/external/bsd/drm2/dist/drm/i915/i915_irq.c": "10a80b97c17f856170a99c63af35cdb2df7d08537e74d40c0645fb74efd30d10",
+      "sys/external/bsd/drm2/dist/drm/i915/i915_pci.c": "325dd78f47e2054f19ffb4c7229e362770e75757f8e0b5e607fa979510f8475c",
+      "sys/external/bsd/drm2/dist/drm/i915/i915_reg.h": "5917e7744b1602d05e4945e41752d3a010174a11e9d7dc490d37c8591b4c3ce6",
+      "sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c": "58c9ae05ab9a0dcff6992088bed126b86761e442bd0b8d4160d1c74675e2431a",
+      "sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h": "e5bc89415ee8259ea268b38dae1f3c911c0cfbc33641979f2f8c79dee94e60cd",
+      "sys/external/bsd/drm2/drm/drmfb.c": "f88d15ab4d32b1ed936a0d6888d6fad402c4a17fc15cdae1a9d0a3438b87d737",
+      "sys/external/bsd/drm2/i915drm/files.i915drmkms": "2c93c9834b1816544897c3ae6a05422b88a4ca2e278b30f586dbcbf6ce6953be",
+      "sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c": "0f1972b45ed6dd64c8d578a5b34c5efb5a6586782737c5ce7796f4e314766229"
+    },
+    "patches": [
+      {
+        "path": "patches/candidates/netbsd11-f19-drmfb-wsdisplay-preflight-20261027.patch",
+        "git_blob": "d3ae4c62a723363843978f58fd352d1cc69c61cf"
+      },
+      {
+        "path": "patches/candidates/netbsd11-f20-x86-genfb-early-fallback-20261027.patch",
+        "git_blob": "66954d17084b2902e2c091f477b1b0d20a6f8f41"
+      },
+      {
+        "path": "patches/candidates/netbsd11-f21-i915-empty-probe-error-task-owner-20261028.patch",
+        "git_blob": "0b3501a4d4ed1a22f7ee213b5be7176578869677"
+      },
+      {
+        "path": "patches/candidates/netbsd11-f22-i915-uefi-genfb-failover-after-probe-error-20261028.patch",
+        "git_blob": "68b6e0d5d7f0afff2eb4eaf15f890233ece4d628"
+      },
+      {
+        "path": "patches/0001-chv-full-ppgtt-linux-1c8ee8b-netbsd11.patch",
+        "git_blob": "246e31ba0420c317562cfb1e8390942285602933"
+      },
+      {
+        "path": "patches/0002-chv-defer-phy-control-powerwell-linux-1a2466fe-netbsd11.patch",
+        "git_blob": "2d05ef456036954e556b492d818b1bca5831cc13"
+      },
+      {
+        "path": "patches/0003-vlv-chv-pipe-msa-misc-linux-c931ef00-netbsd11.patch",
+        "git_blob": "970dcc521e0da558d8f55a28843ff718e7e2e242"
+      },
+      {
+        "path": "patches/0005-vlv-chv-dp-hdmi-audio-phase-linux-netbsd11.patch",
+        "git_blob": "ced6c4ba9aac61c69e0220cb43add33cf2f0a43c"
+      },
+      {
+        "path": "patches/0006-vlv-chv-display-error-irq-linux-netbsd11.patch",
+        "git_blob": "32f48ec893dc288197a78e120de96265b79a6d1a"
+      },
+      {
+        "path": "patches/candidates/netbsd-11-chv-dpio-signal-phy-consumer-20261026.patch",
+        "git_blob": "690556c27aec65c5814126e99f445d860f55613d"
+      },
+      {
+        "path": "patches/candidates/netbsd-11-chv-gpll-rps-lock-order-20261026.patch",
+        "git_blob": "620916dac6179e6514852d795a9cc78762a4a467"
+      }
+    ],
+    "source_manifest_sha256": "2bb14b83538c207c4da0e2236562f302715d4e5a35841486a5ee6af0d2436945",
+    "build_log_sha256": "5fa538f922eed853a25c4756517a9226f9887202b665ceea6a862146ff9a031e",
+    "runner_log_sha256": "1ef3fd94502cc1ec45509d5263975df284aacc3d9dac698dcf416016ea4e3154",
+    "protected_sha256": {
+      "/netbsd": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde",
+      "/boot.cfg": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df"
+    },
+    "symbol_map_path": "/tmp/hp-i915-f26-build-20261106-a01/f26-artifact-verification.symbols.txt",
+    "physical_test": "NOT_RUN",
+    "installed": false,
+    "booted": false,
+    "modern_410_port": "OPEN",
+    "full_rtl_runtime": "OPEN",
+    "limitations": "F26 older native CHV plus partial RTL PHY only; never boot/install.",
+    "symbol_map_sha256": "26ff11477d5c2e7fb0f325776b8dbaaa6d967247f9de1612d6dc8d62891d243c"
+  },
+  "debug_artifacts": {
+    "schema": 1,
+    "status": "READ_ONLY_ARTIFACT_HASHES_VERIFIED",
+    "artifacts": [
+      {
+        "name": "netbsd",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd",
+        "bytes": 29652840,
+        "sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2"
+      },
+      {
+        "name": "netbsd-F26_CHV_FULL_RTL_TEST.debug",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd-F26_CHV_FULL_RTL_TEST.debug",
+        "bytes": 92916376,
+        "sha256": "d2cbec65f93ed8c707d51057e76a6fe67a5fd7044494f6b829e8c773293ee75f"
+      },
+      {
+        "name": "netbsd.gdb",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.gdb",
+        "bytes": 189362736,
+        "sha256": "3e49982536568de23e580eee6439f73701b8d3f6a1624a83821e76ae5cdbdabd"
+      },
+      {
+        "name": "netbsd.ldscript",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.ldscript",
+        "bytes": 1142,
+        "sha256": "e5e791c40fd5ba3c51faf95f87875ae7fa9fba88255e777284b3fae01f6a5892"
+      },
+      {
+        "name": "netbsd.map",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.map",
+        "bytes": 13198053,
+        "sha256": "9c3ef10aa99eaab8386dfedcf6510b58a0a3e580359cdc1a0663c3d35f246c1b"
+      },
+      {
+        "name": "netbsd32_acl.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_acl.d",
+        "bytes": 11412,
+        "sha256": "d7cb6254617dec2cd14b2602c2d3f9dd23be5769e781353c2325cae2306ca4e0"
+      },
+      {
+        "name": "netbsd32_acl.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_acl.o",
+        "bytes": 159368,
+        "sha256": "5bbe62fa17ac6c740a85623e7f2babe0692c928cf02dd6562c795efb1c381390"
+      },
+      {
+        "name": "netbsd32_acl.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_acl.su",
+        "bytes": 1384,
+        "sha256": "ef683f5c6d592c8e4242b3356da35b6460885834bf4f15b3868618a3f4a9ccd0"
+      },
+      {
+        "name": "netbsd32_compat_100.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_100.d",
+        "bytes": 11423,
+        "sha256": "cc166c08a1436adb7c57ae75c3a5640c37367ce66dd817a6e311fa319dbd155b"
+      },
+      {
+        "name": "netbsd32_compat_100.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_100.o",
+        "bytes": 112296,
+        "sha256": "681c92fc01d3cac333c488dec563022c18c3ecf314470ff33c95a17281a3d49a"
+      },
+      {
+        "name": "netbsd32_compat_100.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_100.su",
+        "bytes": 647,
+        "sha256": "d5b10e92a39b3d61948794b016122604bf55b10755af4f6f82236b4a14ae1c2c"
+      },
+      {
+        "name": "netbsd32_compat_110.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_110.d",
+        "bytes": 10585,
+        "sha256": "50dc8d5f4e7d13d42a547b156bec813f2890e876fa52bacdb2756f0b8bf93565"
+      },
+      {
+        "name": "netbsd32_compat_110.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_110.o",
+        "bytes": 94152,
+        "sha256": "8ef0efef6058f8d696549edc41a5cf152930fdb23cf1dcb3c97d86da5bd6e877"
+      },
+      {
+        "name": "netbsd32_compat_110.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_110.su",
+        "bytes": 123,
+        "sha256": "847a37ebe98f5eb9bfa0398e2b52325ec1dcb75b2127511dc5a65fa1fde4a3da"
+      },
+      {
+        "name": "netbsd32_compat_16.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_16.d",
+        "bytes": 11275,
+        "sha256": "af754fbb6390f300ff849f7b27632a0cde14e2a083b2df89dab947dce027d6ff"
+      },
+      {
+        "name": "netbsd32_compat_16.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_16.o",
+        "bytes": 105984,
+        "sha256": "76dc84f4474495e2ec4e45417b06ef8d870cca057905b348aec4a57a167c9000"
+      },
+      {
+        "name": "netbsd32_compat_16.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_16.su",
+        "bytes": 123,
+        "sha256": "a548f511a9afa5e7d6f8eadff315f07be53837c480db0f15feed39cc3fe12af2"
+      },
+      {
+        "name": "netbsd32_compat_20.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_20.d",
+        "bytes": 11703,
+        "sha256": "675526abe35a04601ef6afddfbcf3b717879eb2d3af68f6d3a2e7b10dc97ad7e"
+      },
+      {
+        "name": "netbsd32_compat_20.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_20.o",
+        "bytes": 150816,
+        "sha256": "01b28ca48fae0e53d612bc2f7cd6ca7d5483a05ff71a317d91dc816a5d7b30a5"
+      },
+      {
+        "name": "netbsd32_compat_20.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_20.su",
+        "bytes": 622,
+        "sha256": "ad08a32aa02a0e05330284f742f70633a03a200472c02007632aa59bf11ed3e9"
+      },
+      {
+        "name": "netbsd32_compat_30.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_30.d",
+        "bytes": 13195,
+        "sha256": "f8ce8fb9a90f39cbd9f203948059a629904462754c8e9b0ce8388a963d974f66"
+      },
+      {
+        "name": "netbsd32_compat_30.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_30.o",
+        "bytes": 210192,
+        "sha256": "7e58c343b908e91f55571b6d6247b40d8f88c684ca38222a4f906fcc109b00d6"
+      },
+      {
+        "name": "netbsd32_compat_30.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_30.su",
+        "bytes": 1632,
+        "sha256": "6707331f8b68c4b63d147f5810d44c7fb2705b031e639d2f83a97d337707d3cb"
+      },
+      {
+        "name": "netbsd32_compat_40.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_40.d",
+        "bytes": 11214,
+        "sha256": "ca57c20378c9c6064a276fe93e57eec39ce34075f462ea6818eab589c7abd84d"
+      },
+      {
+        "name": "netbsd32_compat_40.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_40.o",
+        "bytes": 99712,
+        "sha256": "4340421b6d7dc54146e0767373aaf3e526b3fcedeb2ca34962eafc130ecb0995"
+      },
+      {
+        "name": "netbsd32_compat_40.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_40.su",
+        "bytes": 242,
+        "sha256": "c162bc509fb2d328ee9c9038d0c1f1cb1177a9bcabaacd131248e73e4c7ad791"
+      },
+      {
+        "name": "netbsd32_compat_43.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_43.d",
+        "bytes": 12556,
+        "sha256": "84f8b0e59ec6e6c63434dfdbae0c4ac3e2892c17ee3034ccdf1fccd267a764d3"
+      },
+      {
+        "name": "netbsd32_compat_43.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_43.o",
+        "bytes": 199296,
+        "sha256": "885bf90673964dcdccd6925f9924d6b012c180078820939a808c0aa18487e53d"
+      },
+      {
+        "name": "netbsd32_compat_43.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_43.su",
+        "bytes": 3759,
+        "sha256": "d75306557c82ac9573a55ee7ff6c9aba408f45baad5b66fb224c687bc836c158"
+      },
+      {
+        "name": "netbsd32_compat_50.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50.d",
+        "bytes": 13727,
+        "sha256": "29a5d4adb06c81b12ad599c3f0e30fc28f4bd5ee197afa8b32228f5ac584aae7"
+      },
+      {
+        "name": "netbsd32_compat_50.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50.o",
+        "bytes": 313280,
+        "sha256": "2bb51151ed88c1bd4b72e0b544950816ae22a495d615b907bc5fe7bc0cd8c8b6"
+      },
+      {
+        "name": "netbsd32_compat_50.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50.su",
+        "bytes": 4225,
+        "sha256": "3ae499a3cebc7967f250896b8d1932533599cc84a8bd2190f3cfcf3e6e3cffa4"
+      },
+      {
+        "name": "netbsd32_compat_50_quota.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_quota.d",
+        "bytes": 10607,
+        "sha256": "9058e01276d44c99e5caa420a54cdd56f38d4a7ca0eb1a8947027eb7576d1147"
+      },
+      {
+        "name": "netbsd32_compat_50_quota.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_quota.o",
+        "bytes": 99664,
+        "sha256": "341e66423d2a5b9f398fc8e994c69e9185db73954653138ac1453ac572595b5e"
+      },
+      {
+        "name": "netbsd32_compat_50_quota.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_quota.su",
+        "bytes": 263,
+        "sha256": "cb9b94cc21c38647a91e3979f3a6cb09eddecce75222caf0ad418a698098e1b4"
+      },
+      {
+        "name": "netbsd32_compat_50_sysv.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_sysv.d",
+        "bytes": 11241,
+        "sha256": "25ee1d41ff5e14833b85c38acc2e079b45a50156de63d3100a61386955f5920d"
+      },
+      {
+        "name": "netbsd32_compat_50_sysv.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_sysv.o",
+        "bytes": 122648,
+        "sha256": "9ea43c0aca3059643cc177e86520856c886920fd614faad5ac58e4140c085b4e"
+      },
+      {
+        "name": "netbsd32_compat_50_sysv.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_50_sysv.su",
+        "bytes": 656,
+        "sha256": "e5de5b8cbfc4d3258eafcd9c0d797c933d0054b6f5d6a26b68bccbf3d3acbeac"
+      },
+      {
+        "name": "netbsd32_compat_60.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_60.d",
+        "bytes": 11214,
+        "sha256": "64e0d586b5eaf18b889b422d040f640464259cad9b6d801a270c930e476193df"
+      },
+      {
+        "name": "netbsd32_compat_60.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_60.o",
+        "bytes": 99792,
+        "sha256": "187ab71d7204e7c966eba87edf189cee70f03141e47981e8fd4d584e347bd198"
+      },
+      {
+        "name": "netbsd32_compat_60.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_60.su",
+        "bytes": 246,
+        "sha256": "0e37e045ce9d52f7376a2f997c8cacc24971d536720a338f7469f9d5d1cf8076"
+      },
+      {
+        "name": "netbsd32_compat_80.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_80.d",
+        "bytes": 11418,
+        "sha256": "d66c65c6254272527c7a40fa497312d942871214a99ceb00a7cbfa44a265869a"
+      },
+      {
+        "name": "netbsd32_compat_80.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_80.o",
+        "bytes": 119520,
+        "sha256": "27ebc2416d8dd422a93d74d3f3e9b188ccc321915c31e86f98e02f57c2975648"
+      },
+      {
+        "name": "netbsd32_compat_80.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_80.su",
+        "bytes": 240,
+        "sha256": "9b1ee39494e9c375ead3c429c0ee13c88ce2e61a03132e71f0ea9a2f93810cdd"
+      },
+      {
+        "name": "netbsd32_compat_90.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_90.d",
+        "bytes": 11339,
+        "sha256": "2779e2886775b84eb17ce8672d8b0dc49d7df096e5b34d351a5e4811daa9db54"
+      },
+      {
+        "name": "netbsd32_compat_90.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_90.o",
+        "bytes": 117024,
+        "sha256": "f46a52c863260880a79f0c63e57de3f93cbf113b4284e831d45a66f6eaccb14d"
+      },
+      {
+        "name": "netbsd32_compat_90.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_compat_90.su",
+        "bytes": 747,
+        "sha256": "bb0b317871b44529729265a6333413d69eba1f6ad7932dcc4d4d4ec416e60361"
+      },
+      {
+        "name": "netbsd32_core.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_core.d",
+        "bytes": 11004,
+        "sha256": "11b531a00ee7d16c24c88936de6bb49d0a8f07d424e176a37f45074ad3280a0a"
+      },
+      {
+        "name": "netbsd32_core.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_core.o",
+        "bytes": 130536,
+        "sha256": "a076031aeee05ca72e664a1f9eff87d2e583e00f3838ac40e078ec7cf5547112"
+      },
+      {
+        "name": "netbsd32_core.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_core.su",
+        "bytes": 376,
+        "sha256": "01074554d8c7e8ac0e5090abd370c4e0cef56952639ec53e2274ce49310e8d76"
+      },
+      {
+        "name": "netbsd32_epoll.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_epoll.d",
+        "bytes": 11069,
+        "sha256": "ad3ef0a57ab6c0a707cb58269c46756833d04cca0b74a6386e490f3adaa6b849"
+      },
+      {
+        "name": "netbsd32_epoll.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_epoll.o",
+        "bytes": 104744,
+        "sha256": "c90dc3d7cbf111b6efe7734e01c48237864de56b42d150cd01150b8343f073e2"
+      },
+      {
+        "name": "netbsd32_epoll.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_epoll.su",
+        "bytes": 341,
+        "sha256": "97dc064ecde1e29bf71a1101a5a8bb98d4b9b83e68d966f21e48a5addbd1ece1"
+      },
+      {
+        "name": "netbsd32_event.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_event.d",
+        "bytes": 11451,
+        "sha256": "cadcac6ae4e8d0b602bf986570ca5616d1cd38d3391dad0a7f5860e7ba558373"
+      },
+      {
+        "name": "netbsd32_event.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_event.o",
+        "bytes": 124128,
+        "sha256": "51a36c4c0fd7bfbf5183f4ca9d34af01ef5dbf4b45915edffde6a80a20498a63"
+      },
+      {
+        "name": "netbsd32_event.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_event.su",
+        "bytes": 587,
+        "sha256": "0ce39ad7570c9ab315a13433bda3d734d25687a0fcc1525e2d462ccda79abfb2"
+      },
+      {
+        "name": "netbsd32_exec_aout.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_aout.d",
+        "bytes": 10769,
+        "sha256": "35cba5d836c0275a7b9b836904859fe75e861fda93321f4e328e497b63f4213f"
+      },
+      {
+        "name": "netbsd32_exec_aout.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_aout.o",
+        "bytes": 124784,
+        "sha256": "3811a6a72d2ebd3b43da66aa77e3d4d649455915c4fb5f4525abd75fa9ee65f1"
+      },
+      {
+        "name": "netbsd32_exec_aout.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_aout.su",
+        "bytes": 503,
+        "sha256": "5556083dd0ba0719dcbbd544bff1033267159832df1bf31c534ae0d0421047c3"
+      },
+      {
+        "name": "netbsd32_exec_elf32.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_elf32.d",
+        "bytes": 10934,
+        "sha256": "74b316b485c10b767af42b1c4cb20443e5cd1c8ffbf44091ba86024057620d73"
+      },
+      {
+        "name": "netbsd32_exec_elf32.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_elf32.o",
+        "bytes": 129240,
+        "sha256": "0fe7a8b4e48c3b29fbdba461e894936b8afd73ab121c9b9233a554984f4fd4db"
+      },
+      {
+        "name": "netbsd32_exec_elf32.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_exec_elf32.su",
+        "bytes": 369,
+        "sha256": "eb9f885350b674eecba3c8da60c1dc33a023932f237fc493b4b34bb90f0441b3"
+      },
+      {
+        "name": "netbsd32_execve.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_execve.d",
+        "bytes": 11043,
+        "sha256": "a36f7b0b780f03b6bf96427eb59c1ecdf282807a1fedc2b18f75e86ee06ec15d"
+      },
+      {
+        "name": "netbsd32_execve.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_execve.o",
+        "bytes": 155480,
+        "sha256": "60e7c34d6c56be6208ded1e1e1f56fafe0e15c7d8210e633ae8fbd078186f74c"
+      },
+      {
+        "name": "netbsd32_execve.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_execve.su",
+        "bytes": 458,
+        "sha256": "0b0099deb397509ea52dc56b3dae54bae6a732a2a9ac346f31f2f06989da8b3a"
+      },
+      {
+        "name": "netbsd32_fd.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fd.d",
+        "bytes": 11440,
+        "sha256": "fb65c09e7ef8d743348855f61d877d0655087e7ef373fee408f06dc5aade7105"
+      },
+      {
+        "name": "netbsd32_fd.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fd.o",
+        "bytes": 128624,
+        "sha256": "8d4186be7e48ab33b89eebcd0d97f3ce0aca72c99bbc825754ac9dd85eaaffae"
+      },
+      {
+        "name": "netbsd32_fd.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fd.su",
+        "bytes": 214,
+        "sha256": "ffec47c0e0d89a4536f792451ef088364f898228c98f2f171916acd0f779e3bc"
+      },
+      {
+        "name": "netbsd32_fs.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fs.d",
+        "bytes": 13705,
+        "sha256": "c4baa37ccb8c66409ac1324b4c2bc35220227d86c1fe6aacbf708a79b6a69185"
+      },
+      {
+        "name": "netbsd32_fs.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fs.o",
+        "bytes": 318400,
+        "sha256": "7f642f327e1634cdc7457cd9e2af4143b3b6afd59c3b7267588101e5fc365fcf"
+      },
+      {
+        "name": "netbsd32_fs.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_fs.su",
+        "bytes": 4153,
+        "sha256": "de901052d103c6cc6e7ad78746a83991a79c2210cc6e23abee59bd1916cd6582"
+      },
+      {
+        "name": "netbsd32_futex.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_futex.d",
+        "bytes": 11046,
+        "sha256": "8bf9c1b51f47dd5ac2967cb30c622328a3f7068ff2627cf7a539efb039131a2e"
+      },
+      {
+        "name": "netbsd32_futex.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_futex.o",
+        "bytes": 100728,
+        "sha256": "1cfcac11aeee78b22567ee69052690438c4746b721d874b2271cdbd21938a949"
+      },
+      {
+        "name": "netbsd32_futex.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_futex.su",
+        "bytes": 359,
+        "sha256": "7694eae2a5517b4a1680bff0cac530c02e9aa7398d89ae01ee772b37bbfd63c1"
+      },
+      {
+        "name": "netbsd32_ioctl.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.d",
+        "bytes": 17395,
+        "sha256": "13eff355504a2239e713942fb199064cad20bca4541ae321ca00748b21f5f4d9"
+      },
+      {
+        "name": "netbsd32_ioctl.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.o",
+        "bytes": 373464,
+        "sha256": "f32d91e54aa9f10a6c38da521fbb6d92bdfa1a7712173887e93970faba8923ff"
+      },
+      {
+        "name": "netbsd32_ioctl.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.su",
+        "bytes": 110,
+        "sha256": "315d6c13456d9e51a3567c8f151e3714bb6a85ad930ab0f6044a2e4cf26e121f"
+      },
+      {
+        "name": "netbsd32_ipc.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ipc.d",
+        "bytes": 11213,
+        "sha256": "af6028c48fc86fc6f8f46c05015ea551ed165f36579c680d1b1306c0d6bd1a1c"
+      },
+      {
+        "name": "netbsd32_ipc.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ipc.o",
+        "bytes": 154272,
+        "sha256": "f0cdd2a535724ec6b08902232f9d612377af75eadac8848aeaa6eab035549518"
+      },
+      {
+        "name": "netbsd32_ipc.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ipc.su",
+        "bytes": 1874,
+        "sha256": "c79a6b06afde9b0be119714d5d5dcf4d458f83e6a44238078a4a8d711c0d2023"
+      },
+      {
+        "name": "netbsd32_kern_proc.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_kern_proc.d",
+        "bytes": 12840,
+        "sha256": "e19d381425e5a5e3e7cadcc1fc0774c9252711f2a3db9059121eef7c1ef88358"
+      },
+      {
+        "name": "netbsd32_kern_proc.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_kern_proc.o",
+        "bytes": 122896,
+        "sha256": "ca6dbc576085de79ada786e046df940334bc0538bcc31dd21765da6c96827ea2"
+      },
+      {
+        "name": "netbsd32_kern_proc.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_kern_proc.su",
+        "bytes": 472,
+        "sha256": "9eac6977fab122c87c809f523a49b34198598e81445774780d452a8ee2964c2e"
+      },
+      {
+        "name": "netbsd32_lwp.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_lwp.d",
+        "bytes": 11046,
+        "sha256": "31ba567537080a02aa10e6ae377593d87d31ba525ff07a607360fe3f8f3bb748"
+      },
+      {
+        "name": "netbsd32_lwp.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_lwp.o",
+        "bytes": 133808,
+        "sha256": "c1b543e5b81c94abb6461a478e27847e83833f09c3452ca158e09f48caf6fb38"
+      },
+      {
+        "name": "netbsd32_lwp.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_lwp.su",
+        "bytes": 1574,
+        "sha256": "00310c121d6b14082584f56ea427757d1df62ab2723688dc384635d50bb2985d"
+      },
+      {
+        "name": "netbsd32_machdep.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep.d",
+        "bytes": 11656,
+        "sha256": "9c347b349c6d3d15520ab5abd295524895457ba2b949063c7af7363b50a64825"
+      },
+      {
+        "name": "netbsd32_machdep.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep.o",
+        "bytes": 214816,
+        "sha256": "d6fa7a0b62357adc4f58fb06090f7a24eafd3e9997125334a6eb3758d9dc7466"
+      },
+      {
+        "name": "netbsd32_machdep.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep.su",
+        "bytes": 3009,
+        "sha256": "a502fb1dbf4a725ab08267457742e3235388f3b91e07e03938813c2f2013b5b8"
+      },
+      {
+        "name": "netbsd32_machdep_16.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep_16.d",
+        "bytes": 11450,
+        "sha256": "0500ec9163c6ec1133ed69143fbcfef195600edad35b5ca39bcdd069aaf66423"
+      },
+      {
+        "name": "netbsd32_machdep_16.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep_16.o",
+        "bytes": 130768,
+        "sha256": "800ab17a8ccdc9573459ad66f0bfd74491e3c8ad819d14f233d851e207bca22e"
+      },
+      {
+        "name": "netbsd32_machdep_16.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_machdep_16.su",
+        "bytes": 513,
+        "sha256": "fe5462d602896b766e530d11fd625a26f3ba4da744927061f53f2cf728c0874d"
+      },
+      {
+        "name": "netbsd32_mod.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mod.d",
+        "bytes": 10959,
+        "sha256": "4654f7b269c3e14b94b012af579d9f7bed986060b4c2533c1ce2aedfb9672b8b"
+      },
+      {
+        "name": "netbsd32_mod.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mod.o",
+        "bytes": 112280,
+        "sha256": "6be02578ca2200794d5f58e35e54947e6284179359626e43f819f5f29d8153d3"
+      },
+      {
+        "name": "netbsd32_mod.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mod.su",
+        "bytes": 338,
+        "sha256": "7ceb8a1fdd02abcd06ab8b6305e8cd993b19192a6e2597f3c0e4ccd069c779ab"
+      },
+      {
+        "name": "netbsd32_module.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_module.d",
+        "bytes": 11345,
+        "sha256": "887edf1c5cb60767ce16cc5752bb4ea6cb31aef758bf70def5e35f0ae59eb965"
+      },
+      {
+        "name": "netbsd32_module.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_module.o",
+        "bytes": 125200,
+        "sha256": "0c4eb65f494a286af412be8c7d91936ddb1ac12c8cccf9cbfa4f37be7abd4230"
+      },
+      {
+        "name": "netbsd32_module.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_module.su",
+        "bytes": 235,
+        "sha256": "80619753a39b5a3cd16ec974cde6c3995395e28ec3765af26ed64529b9049a6f"
+      },
+      {
+        "name": "netbsd32_mqueue.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mqueue.d",
+        "bytes": 11273,
+        "sha256": "e281f6d2ec79da97a2a664ffd96d495542c9c0ef158dc59e828fbd70f1d9d107"
+      },
+      {
+        "name": "netbsd32_mqueue.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mqueue.o",
+        "bytes": 142816,
+        "sha256": "68c8689b76f72e13933579447be61375344e26a85641a17ec6b97bd6148115e4"
+      },
+      {
+        "name": "netbsd32_mqueue.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_mqueue.su",
+        "bytes": 1519,
+        "sha256": "bb04a32f7c3ca0599b371eea9eb277f5769a4a0d2f0c63c34bf0923256efd453"
+      },
+      {
+        "name": "netbsd32_netbsd.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_netbsd.d",
+        "bytes": 13821,
+        "sha256": "c7af674498f92a6a3ba28370b8d3bdb7f6a0e0e9a78ad59a713c95933652aeb9"
+      },
+      {
+        "name": "netbsd32_netbsd.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_netbsd.o",
+        "bytes": 557264,
+        "sha256": "7c4862e46aeea056ad8d59655eee71e6aef8713c2bd5866cdaee72f4b73b9f73"
+      },
+      {
+        "name": "netbsd32_netbsd.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_netbsd.su",
+        "bytes": 17250,
+        "sha256": "7fd34d7d9220d0e5bc47cd025a7612f6046a35db9ae79b585ad45369e1c12bb4"
+      },
+      {
+        "name": "netbsd32_nfssvc.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_nfssvc.d",
+        "bytes": 12837,
+        "sha256": "845938374ea131a96f287a238b3d99b03ca06b30ebe96ba70225a884580e2e65"
+      },
+      {
+        "name": "netbsd32_nfssvc.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_nfssvc.o",
+        "bytes": 150288,
+        "sha256": "453c7d142600bb6ed9d3077bbeb73cb330f9d6385e7faf6e8828d5df29e6513f"
+      },
+      {
+        "name": "netbsd32_nfssvc.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_nfssvc.su",
+        "bytes": 794,
+        "sha256": "bfeca3d3e89cee94bbb40e43de739a226302ba79cae206a56e1f455d93ff9581"
+      },
+      {
+        "name": "netbsd32_ptrace.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ptrace.d",
+        "bytes": 11224,
+        "sha256": "122e654a61e5bc7928d73c9a3c679d7be646a34ff5c07194273e731fb88eaf59"
+      },
+      {
+        "name": "netbsd32_ptrace.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ptrace.o",
+        "bytes": 125352,
+        "sha256": "2f048815a066230f6a9635d41c81e08835c768d80317b3a21a1d893c31c0942a"
+      },
+      {
+        "name": "netbsd32_ptrace.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ptrace.su",
+        "bytes": 1277,
+        "sha256": "5dbbb075cc217ff1cf1c607e7b4ddec5254f97562aeb0e0a309719045e4e4411"
+      },
+      {
+        "name": "netbsd32_quota.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_quota.d",
+        "bytes": 10712,
+        "sha256": "33988dc66bdae798b75fa6f0e247632d4add990150744eaa49024264882cd86e"
+      },
+      {
+        "name": "netbsd32_quota.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_quota.o",
+        "bytes": 106312,
+        "sha256": "c8b4dff34d93a63f89b1407c7286891038de1d292c4f5cdd005d12e11777651c"
+      },
+      {
+        "name": "netbsd32_quota.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_quota.su",
+        "bytes": 234,
+        "sha256": "0ba7ddf47d12011226a42a4fb182d791d3f70ef867d32260c93180b56374a941"
+      },
+      {
+        "name": "netbsd32_rlimit.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rlimit.d",
+        "bytes": 11123,
+        "sha256": "d4ab327c1aaba10f6fe129dd37442acde85741463d8827fab88f5fba11ed5f28"
+      },
+      {
+        "name": "netbsd32_rlimit.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rlimit.o",
+        "bytes": 104112,
+        "sha256": "ec12b65b59bf6530c9bc11a7eb7de836552822b316b30058e20d41f293d74d72"
+      },
+      {
+        "name": "netbsd32_rlimit.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rlimit.su",
+        "bytes": 341,
+        "sha256": "50b11fd00ec397c77a7696c634cf3f271b8fbcbef68fd8fcb0440df4c6672dd0"
+      },
+      {
+        "name": "netbsd32_rndpseudo_50.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rndpseudo_50.d",
+        "bytes": 10576,
+        "sha256": "2a5e7b93179a1024ef42ccb3c2c259c736c74aca734a18afada0da034da1944f"
+      },
+      {
+        "name": "netbsd32_rndpseudo_50.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rndpseudo_50.o",
+        "bytes": 107800,
+        "sha256": "f7ef202d52f593fd9b8b198608e7fa3a978efe0b47555dbdd38b3b6c0c2f508b"
+      },
+      {
+        "name": "netbsd32_rndpseudo_50.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_rndpseudo_50.su",
+        "bytes": 122,
+        "sha256": "45fc0e7a86afc482f38e5f696fc0ae0331bedb9822b172877fffad7cd6226cf5"
+      },
+      {
+        "name": "netbsd32_select.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_select.d",
+        "bytes": 12606,
+        "sha256": "677d1cf919121b60b160e6d4487dedc6975dc569bee2ae010d67f111b16de0be"
+      },
+      {
+        "name": "netbsd32_select.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_select.o",
+        "bytes": 138720,
+        "sha256": "3b7c5381ec8a41807c30869e60b61214c003dd77a829c79bce26a4e10ebef8ae"
+      },
+      {
+        "name": "netbsd32_select.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_select.su",
+        "bytes": 342,
+        "sha256": "f57eb05a853de509776b491dfcb8212e0c6c526a4ec4e03b0280203fbe62be81"
+      },
+      {
+        "name": "netbsd32_sem.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sem.d",
+        "bytes": 11044,
+        "sha256": "4fb7887370a751743b3aeabc2cbe224f2551591c6c656a81b993d1000ee53e6a"
+      },
+      {
+        "name": "netbsd32_sem.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sem.o",
+        "bytes": 113160,
+        "sha256": "65a3ff80f367d80a6974fbce0bb79d6ded3f0b228601fb2b675054da018d6e87"
+      },
+      {
+        "name": "netbsd32_sem.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sem.su",
+        "bytes": 1346,
+        "sha256": "b0db846f902cd089cdede9a6a13c45c72da99ec468610a07a718a091e5aada3e"
+      },
+      {
+        "name": "netbsd32_sigcode.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sigcode.d",
+        "bytes": 189,
+        "sha256": "5e0e458e032cda077839e96bf99b22fa9e4cd8587f474369bbc62f0efcbbf618"
+      },
+      {
+        "name": "netbsd32_sigcode.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sigcode.o",
+        "bytes": 736,
+        "sha256": "c2425b93321872286f9ee0c52fcc37fd25bf94fc0ebbaccab477b5b25b97f34b"
+      },
+      {
+        "name": "netbsd32_signal.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_signal.d",
+        "bytes": 11469,
+        "sha256": "79df3f23857fbc23b35894231e133b32d15c91315a585d87d526672eae646d9a"
+      },
+      {
+        "name": "netbsd32_signal.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_signal.o",
+        "bytes": 149296,
+        "sha256": "239dc53fd1aff2c963d60c04c5f4fcab5c86e573cfe90d4e63e6978d324043da"
+      },
+      {
+        "name": "netbsd32_signal.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_signal.su",
+        "bytes": 1996,
+        "sha256": "3b2acd1767e51fde276dd57abb431a429594c83185a9a4f8c17db17a8e380b3a"
+      },
+      {
+        "name": "netbsd32_socket.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_socket.d",
+        "bytes": 12593,
+        "sha256": "d66bab71bdb94810304c24382085a911f36d02733f79edb2f056c852f245fce6"
+      },
+      {
+        "name": "netbsd32_socket.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_socket.o",
+        "bytes": 196416,
+        "sha256": "81ab482ee0427ebf13fb58b3b9efe671e8652f81284339c5dde87f94d6d8cb3b"
+      },
+      {
+        "name": "netbsd32_socket.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_socket.su",
+        "bytes": 1022,
+        "sha256": "e8ea4b281154cf4548fcef383e3ba85104ba426b438cbd3068ee58d0c43f9231"
+      },
+      {
+        "name": "netbsd32_syscall.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscall.d",
+        "bytes": 8693,
+        "sha256": "15ea3c9289fbd5c885d9d8f67cdcf8267182bd212d0aed3ef814e93d5c69f85b"
+      },
+      {
+        "name": "netbsd32_syscall.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscall.o",
+        "bytes": 88512,
+        "sha256": "b1e576eb7366566a47bb43a2161c890f616c0d7c961c15e454d1cc6173d1157d"
+      },
+      {
+        "name": "netbsd32_syscall.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscall.su",
+        "bytes": 231,
+        "sha256": "86d6b48ef06f4d99a627f467c8adc84f22351617be7dc02c64b19dec671b935d"
+      },
+      {
+        "name": "netbsd32_syscalls.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscalls.d",
+        "bytes": 10403,
+        "sha256": "1aee5cf2d8181f1f2b0249b2f25072c31c030e9fafef0cef2c9b2f3cf8906060"
+      },
+      {
+        "name": "netbsd32_syscalls.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscalls.o",
+        "bytes": 51120,
+        "sha256": "9be23134e8b2750d13983b9e8971ae921f399b58af9ab23df045be297ad6b9dc"
+      },
+      {
+        "name": "netbsd32_syscalls.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_syscalls.su",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "netbsd32_sysctl.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysctl.d",
+        "bytes": 11521,
+        "sha256": "1a30c05d9032d58c9c9ee3b9497d4ded91dcb32337cc8a4994ada16b8872eb6d"
+      },
+      {
+        "name": "netbsd32_sysctl.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysctl.o",
+        "bytes": 133144,
+        "sha256": "31b3a4a0aeffdc26adeeeea47257c18c94b61d29e164d58c53932fe0ce2ebd6c"
+      },
+      {
+        "name": "netbsd32_sysctl.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysctl.su",
+        "bytes": 714,
+        "sha256": "fd9c6e4f137e8555da8cdabb8bf8535319c6d80cf64a4d3995f2273db3ebeace"
+      },
+      {
+        "name": "netbsd32_sysent.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysent.d",
+        "bytes": 10399,
+        "sha256": "864293ff36c77238ee2983b7092cfcb19a712001a5448a98575af0f32bdc289b"
+      },
+      {
+        "name": "netbsd32_sysent.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysent.o",
+        "bytes": 369360,
+        "sha256": "6b2870437e5638ebd4396df92839efb97b869f7779651b8a46f5ef0d83d669c6"
+      },
+      {
+        "name": "netbsd32_sysent.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_sysent.su",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "netbsd32_time.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_time.d",
+        "bytes": 11121,
+        "sha256": "9eb6d0b68659040a82d649bfae33fe56112ed791eba36855e83aebb4ba8993ff"
+      },
+      {
+        "name": "netbsd32_time.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_time.o",
+        "bytes": 173696,
+        "sha256": "af3386ed926db184422724b7e8d36dbb0656787d5946f8e27480cc4227d224da"
+      },
+      {
+        "name": "netbsd32_time.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_time.su",
+        "bytes": 2575,
+        "sha256": "9b97e8599222462eabd3007d7e540f6fc7fbd8afce8cd98012aefe668463135b"
+      },
+      {
+        "name": "netbsd32_vm.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_vm.d",
+        "bytes": 11308,
+        "sha256": "2356e2702f0305c31274b0483e49caff042dbd3ef1ac47e16f37aadec73a4312"
+      },
+      {
+        "name": "netbsd32_vm.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_vm.o",
+        "bytes": 101432,
+        "sha256": "fe2b7dbc51f8a38c80434992f95f29398556a50359b98fb1f0900d9cba23a308"
+      },
+      {
+        "name": "netbsd32_vm.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_vm.su",
+        "bytes": 103,
+        "sha256": "bdee2daa6c7ff22527b97861760b4fc1b623feb6eb7f9c0644217f010684e3fb"
+      },
+      {
+        "name": "netbsd32_wait.d",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_wait.d",
+        "bytes": 11289,
+        "sha256": "aaabc4de5331535c69bfe3a924c9a1bf35d399a776f6875aecc3337248a96fa0"
+      },
+      {
+        "name": "netbsd32_wait.o",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_wait.o",
+        "bytes": 132160,
+        "sha256": "100cfa042cd3cc271a1fb9e8a5f7fb85f50ef3d935939d0dc0dfd2fc351790c5"
+      },
+      {
+        "name": "netbsd32_wait.su",
+        "path": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_wait.su",
+        "bytes": 334,
+        "sha256": "ed2655b31c9d83f727ffeb120c04f0158e22a5904a5ac41b9c6af5ed81fffd88"
+      }
+    ],
+    "elf_notes": "\nDisplaying notes found in: .note.Xen\n  Owner                Data size \tDescription\n  Xen                  0x00000007\tUnknown note type: (0x00000006)\n   description data: 4e 65 74 42 53 44 00 \n  Xen                  0x00000005\tUnknown note type: (0x00000007)\n   description data: 34 2e 39 39 00 \n  Xen                  0x00000008\tUnknown note type: (0x00000005)\n   description data: 78 65 6e 2d 33 2e 30 00 \n  Xen                  0x00000008\tUnknown note type: (0x00000003)\n   description data: 00 00 00 80 ff ff ff ff \n  Xen                  0x00000008\tGO BUILDID\n   description data: 00 00 00 00 00 00 00 00 \n  Xen                  0x00000004\tUnknown note type: (0x00000012)\n   description data: 70 e4 20 00 \n  Xen                  0x00000008\tNT_ARCH (architecture)\n   description data: 00 f0 20 80 ff ff ff ff \n  Xen                  0x00000008\tUnknown note type: (0x0000000c)\n   description data: 00 00 00 00 00 80 ff ff \n  Xen                  0x0000005e\tUnknown note type: (0x0000000a)\n   description data: 77 72 69 74 61 62 6c 65 5f 64 65 73 63 72 69 70 74 6f 72 5f 74 61 62 6c 65 73 7c 61 75 74 6f 5f 74 72 61 6e 73 6c 61 74 65 64 5f 70 68 79 73 6d 61 70 7c 73 75 70 65 72 76 69 73 6f 72 5f 6d 6f 64 65 5f 6b 65 72 6e 65 6c 7c 68 76 6d 5f 63 61 6c 6c 62 61 63 6b 5f 76 65 63 74 6f 72 00 \n  Xen                  0x00000004\tUnknown note type: (0x00000009)\n   description data: 79 65 73 00 \n  Xen                  0x00000008\tUnknown note type: (0x0000000d)\n   description data: 01 00 00 00 01 00 00 00 \n  Xen                  0x00000008\tUnknown note type: (0x00000008)\n   description data: 67 65 6e 65 72 69 63 00 \n  Xen                  0x00000004\tUnknown note type: (0x0000000e)\n   description data: 00 00 00 00 \n  Xen                  0x00000004\tUnknown note type: (0x0000000b)\n   description data: 79 65 73 00 \n\nDisplaying notes found in: .note.netbsd.ident\n  Owner                Data size \tDescription\n  NetBSD\t\t0x00000004\tIDENT 1100000000 (11.0.0)\n",
+    "receipt_sha256": "327c787aa73e3a15caa99beb0f659e535d01b2d7bbf6073b8b17b6318356d61a",
+    "build_exit": 0,
+    "verification_exit": 0
+  },
+  "source_manifest": {
+    "netbsd_archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+    "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "i915_pin": "b863e1ef62adf5d9793a84aaa3255c13c5030434",
+    "rtl_pin": "df3bc40086d38dcf0e25628c22c06f8c7674fe3d",
+    "rtl_files": [
+      {
+        "path": "sys/dev/pci/rtwn8723be_oem.h",
+        "blob": "b95a72c40dbc4709e8f70e1b63eb0ea2c226267a",
+        "sha256": "fc30a52647c9f242a3ea0f5602a10f7bdf7d1713377074b0088cbc97b57f9592"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_fw.h",
+        "blob": "c07192e5ab93b590c72dd6976d38c85420d2e185",
+        "sha256": "cd52427030cecd3c7158811deef59a3d6c859117b78ca35e62fbdc87cdfb7093"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_tx_desc.c",
+        "blob": "33c3f4933815d966b0240f13befd711a64cabecf",
+        "sha256": "6a0278cbce08cfabe9bc33afdc7ab8d2ce2c48a1024851722f685fa31d3dbd43"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_os_compat.h",
+        "blob": "54b3f1110e8592012e36c4647bb3f2a579d72144",
+        "sha256": "9475ce32010944aca36c07d2ac4a5e4eef0b40016898c736347ca84a14a3a240"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_h2c_native.c",
+        "blob": "6671e856ec645ca7451f4e3c9f59c4cd9efeb1dc",
+        "sha256": "23e1f8eff527e98aa97e96bf2e7bf9c85947deee7245810ccaa68aee4fba68bd"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_f16_1_dma.c",
+        "blob": "54552325ad85c5b5e06d3b98b97633cb402f4876",
+        "sha256": "2216178b4e5bb4d80f17035df75b7dda039442657331282089e497e7cf12ec40"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_net80211.c",
+        "blob": "6b2c0d08d29c56c763b31bf25d81450f15736345",
+        "sha256": "ce716b70a58b6ec797dedc59f49f099e08975956be832df3afe10731c8fcabb4"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_native.h",
+        "blob": "f0a3fc415e6461dbcd32a1c30328f7dcfefef15e",
+        "sha256": "a3a1af7430c554a1f177662106caf265e51f16b9babf541bcac55e1ea9f0d53e"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_pwrseq_data.h",
+        "blob": "fc817a0f4c7efa5b5d72cb64951b0879ab7fd6ee",
+        "sha256": "fffc2fbbdcd77bd1eb739e7e8840d58ad8279081bb6e103f59d43cc5b4f1a663"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be.c",
+        "blob": "f7dbedd5f1dd38692d3c31fbe0e30e08a705a985",
+        "sha256": "397d987490a88821d3de101298e43465aa8744a912b5e160a10c8a22a58b7ef6"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_txpwr_pg.c",
+        "blob": "da0d2d530c858b4a7827191bd12153acadb94ce2",
+        "sha256": "5d6fb82345e375486aecf1cac52e35681a8c86ad000cdbaad0b6fbd16ad49cce"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_package.h",
+        "blob": "514114ef95cabb739e35b00786ad6a021dd9ce60",
+        "sha256": "a7e58587024929d3525d29ac34f51e1d3d1441aca2b28e5df49323a85bcd7c19"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_package.c",
+        "blob": "34a048b99161a01094df83f3fc575203281242e6",
+        "sha256": "519196eb90152bb1edd7cae05798738281f53aca86e54f51bc6cf18ecc291bff"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_phy.c",
+        "blob": "a64668a4e1bd33ec912a0c0c633aeafb4f027d32",
+        "sha256": "f9ac468be59bc99db68615a86d43b781cd6385bde82810f956b3ad2ffe78fbd5"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_serial.h",
+        "blob": "819d8ac4df4cb12f9c2d5f373ea28a5615355992",
+        "sha256": "a60f951b56f733e4d0a45d709c7a3c154a7538b9b7971b4d12e7a3082a713da9"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_pwrseq.c",
+        "blob": "0c2e3d800ad24acd614540ae0fedfb2c983fcd41",
+        "sha256": "95c9118c19903333978d384fcd512c34c5d0cc609a46e5049c5abb41a890eddf"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_datapath.c",
+        "blob": "235d2578e23198f0ea5f90c2ab3799abf0c23ed7",
+        "sha256": "64e4b31de5fecc75c20cf3487f9bed65368249c77e170c12f095371bf95a2805"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_binding.c",
+        "blob": "764cce7e137999085ebae5e0d0de408e627bac43",
+        "sha256": "4b850ebe04e8a7291621044c599bcf8157f4edbd5f9254fa777fb4cf0ca6081f"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_path.h",
+        "blob": "745972b76c51bd40e6eceb1d56c786efcbde7fb2",
+        "sha256": "bdae3855c9bf5f9f950d6a5f5a3ed43028ced11f0bd51f7132347a3f564a265c"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_netbsd.h",
+        "blob": "1023ed8ab01badf865d92a130622c8e8fa8172cf",
+        "sha256": "0d611de597df78c6884f606b83e18fa389e04d098662ddf7457038d74bbf10b6"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_f16_1.h",
+        "blob": "1af2911d891ae007cdd90c739e588cba8e8e42e2",
+        "sha256": "d99c4d4cf76ffcee7c78161c8ed3210ef94bb6593c3e677ce439e0f337bf27d9"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_txpwr_pg.h",
+        "blob": "027c10d3b004677655c673b6f41446d6129640ed",
+        "sha256": "d428d962aacd36e32d72dcccd1d7520be553ece33b26474c6b9ae5fa3ae31d78"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_datapath.h",
+        "blob": "f1eac9dcf7d25f3162894ba2f086b848a473be6b",
+        "sha256": "8e28a2e8e6ed182ec3d512c023ce5e8e118180e7ccca3bfd07f0c64cc8f3a5a4"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_decode.c",
+        "blob": "3a0bd532a515707e8c6101d15c20b9168d2b4ba8",
+        "sha256": "9db1a9cb1ac6db48b39241d617ab690d80f088195f39f3d496217c65bbd616ba"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_native.c",
+        "blob": "4c6c2c85281174c95769fa4b7cca4f3b480bf8f4",
+        "sha256": "8f1f84cf16f1cdbfd41fda88248afb454cb67024539c191a61d2dfce45c05328"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_c2h_native.c",
+        "blob": "20d7a9deeb788d6bfdbed5d4ab25d903f6c17dca",
+        "sha256": "02d47f7e58d93731818e8482c78c6b360583b78c471db5fa35f4dc6eb372d562"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_linux_state.c",
+        "blob": "b775418c230f74c549f9cb78aec1ce911a5338d1",
+        "sha256": "6529af6dc3c285560887f79d0a13d9cd449f107d3b1f2673de5accf8e5497327"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_path.c",
+        "blob": "ac26bf7d60f4d4e7ca64f8f944f1a43fb34e2190",
+        "sha256": "fe4607be089bd4badd7eff805b69e472dd461f7bc0ab6dc1974bf9443b01bb43"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_h2c_native.h",
+        "blob": "ea336726de65265f00bf62cdd00df268b692a17e",
+        "sha256": "485c29fa86ba34e68f73007f25032d7f91d8bd8b6b9fa7105b05d4824c07197f"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_h2c.c",
+        "blob": "cccd5dc932133577fd28236a0bb5b4dc272ad550",
+        "sha256": "7c26bd58d6c23f5e2e249a03cdc608ae611fe84fb0ac97f98c08f41ec79a1ad0"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_c2h_native.h",
+        "blob": "fbb75b410fa51729e336fb72a4ce69924fe5bd42",
+        "sha256": "7b1f1735992eb515f6c1917b42cc0d921155c721fe8556081739902ee450cef5"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_netbsd.c",
+        "blob": "9542ec44fddf5861fd815cb065af3b3330306726",
+        "sha256": "d8f759ce837524faeab3981426242cba7f26d22d4f218b392d48992b6f28f953"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_tx_desc.h",
+        "blob": "c999966e0af17f584370318cd94b2b515b8417e9",
+        "sha256": "4bdb707163de6ae4dd9e0fb69ff1f87c29273d865989ac1a1d7c870ca8e6cb05"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_phy_bb_sequence.c",
+        "blob": "2a372664ecd7cd08ba85709210b9593ed4e6a2ff",
+        "sha256": "57bb375edc0a6f5dda32c8043ec2a82d3f919207d3c9712c11e4450c874d318c"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_net80211.h",
+        "blob": "bda97593527614ecbbd143cc7d92f230670be992",
+        "sha256": "62e4426510ca5bdde0ba8ccb6a292ddca41e61233b4c4f213a055e328255e03c"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_native.h",
+        "blob": "95b5991d333cc8bc6c75ff5c7e18e095b2076ec2",
+        "sha256": "a03fecf5958e94ba3115f85ff2d16889db8439ef0fb771b4a3aed275dcba05ae"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_phy_exec.h",
+        "blob": "2c00712efd9a1cb8e5ac7a498f94fab8dca3f7c5",
+        "sha256": "4667e875e40698149d84012e90239b2ec1dd87fb6fee79d120af1d87ba18462a"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_native.c",
+        "blob": "1a449bf9b3071ff0e2ea430dc2d9fa6451025026",
+        "sha256": "9a7459d88bc7c19e55eb0235996dfd311994a2ae80e24c63f4c215476fc95b34"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_c2h.c",
+        "blob": "e18433f463212fb1f419d8769621e267bfaee8e9",
+        "sha256": "dea82f7618a8b97c7b1922813c9af81b6b730d8522bfd66a3ca81efaf88fea9a"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_tx_native.h",
+        "blob": "18810f839314845768d4098c92e2cb6fd60ad554",
+        "sha256": "1da0262d44d875d3c5cd8d4bc52eae94fd627cb45da21df36518490bf13fa468"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_oem.c",
+        "blob": "cf5e054c5c59d71d670e6d442d2bfad615383afa",
+        "sha256": "fd0dfd745c1f376dbfd8264e5213b13bfb6da9665836b44564f01d73e09b0d0b"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_native.c",
+        "blob": "c8cd256913f1a0de436453b0430101700f3271a5",
+        "sha256": "911b165b8de22ff056abbaf6eee14efb31a3bf62969a44c643ecf46e72b00dac"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_h2c.h",
+        "blob": "780d7a3bf065323452c42a957ec318779ee1754a",
+        "sha256": "562d4721c80b1fa306e76338d1285a26b81b2fa562fded961e80300b088b70d1"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_pwrseq_plan.h",
+        "blob": "680f7e99a6c32764ee7ce09d683cd8fbf5341867",
+        "sha256": "f93dc315cd5036cf7ec8ce98d5b13031729ade995afa6dbf359733de63ee2c44"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_linux_state.h",
+        "blob": "1e6b5d65cfe1f25dcaefce7c9ec827db9f27d591",
+        "sha256": "962cce3d341d65b4b7955bc4e0870fbb465674edccd3447290c14655b2eac63e"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_decode.h",
+        "blob": "0de8611a32334922e2147715de178e1d84d22de1",
+        "sha256": "6affc0dadb2887b78ba798f509e032dd32aec67d3757b171e0aa3b0ad97c9ec9"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_fw.c",
+        "blob": "22d22223c6dfa62eabfd5d33cea8e2bd3f560149",
+        "sha256": "e881341e60e2887830a8c13accf008424c28d83e0205cfa520dfc43a773cba15"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_phy_bb_sequence.h",
+        "blob": "d3a4155b506ecb0d7a6dd70b8f65c2904727cd22",
+        "sha256": "42d655960a58cc52ef84c1b54eaf13aa37d9896f4e26e78b40b78af83bee331f"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_binding.h",
+        "blob": "eb405a3722447563796ffb7d02c9a7b4708bcd5e",
+        "sha256": "70ecf9591e210b1007f45d26edcccc2cd28e4706149439c18f444ef6501ca22f"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rx_phy.h",
+        "blob": "f3b410ed5289bd9f7f13ee9cdca5f225796899b6",
+        "sha256": "8f7d59bdb49460739f50bad3829564db7e988376a7419edcf255e2c2950678ac"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_c2h.h",
+        "blob": "c17a65f4d227bb12777b05d1c69fa01f4dbb1c20",
+        "sha256": "1f2edcd9f0b78dc0009e815a974558c6079d19257f357c53785f95426fb7ef51"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_phy_tables.h",
+        "blob": "695c43b2da030cb031836c241ce8cd7a924d133c",
+        "sha256": "31cdb6d1063f65c337ddcaa3087df89d8b93cb38a69e148cdae1b0cd718031e0"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_rf_serial.c",
+        "blob": "3efc7aad94e5d35d2899b7b36c9f1c681de3def7",
+        "sha256": "86189e2d29df750fb34cc7224f7f72eed344bef6f2061b37a2805879098ff8ae"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_phy_exec.c",
+        "blob": "739dadd9c9f6c89e2887ebd3eee5656e49589b87",
+        "sha256": "931ba3570809642a012414d84a9990843d1b62525712a911448b008a2082a628"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_tx_native.c",
+        "blob": "84b1d55719a8b349330d6a925fbf23bf5aa0e78f",
+        "sha256": "cee9bba23a1697c4bac05ab2183015724bbb996b28383e0f97d1e94dfd6d82d0"
+      },
+      {
+        "path": "sys/dev/pci/rtwn8723be_mac_table.h",
+        "blob": "d5967fc01fc968e76b301c8aed3ca4c7b2fb8667",
+        "sha256": "b76c5ca6be6678c45dbde2cb74588b33b4dad3039fba43451180154eab3623b4"
+      }
+    ],
+    "files_pci_original": "a7ac4014311206fdd2e5f5c446a0d72651475fd7",
+    "files_pci_stage": "fc2da379bccb4b767eee6ad13a88ddc1dadb31f9",
+    "config_blob": "5c0a35bca4b340f556db4b8dc555ee594283c1cb",
+    "scope": "Native F26 eleven-patch compile-only old-RTL-PHY stage; modern bridge and full RTL lifecycle are separate open work."
+  },
+  "durable_artifacts": {
+    "schema": 1,
+    "status": "DURABLE_ARTIFACT_COPIES_HASH_VERIFIED",
+    "observed_at": "2026-11-06T00:45:46.622677+00:00",
+    "directory": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01",
+    "files": [
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/kernel/netbsd",
+        "bytes": 29652840,
+        "sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.gdb",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/kernel/netbsd.gdb",
+        "bytes": 189362736,
+        "sha256": "3e49982536568de23e580eee6439f73701b8d3f6a1624a83821e76ae5cdbdabd"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd-F26_CHV_FULL_RTL_TEST.debug",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/kernel/netbsd-F26_CHV_FULL_RTL_TEST.debug",
+        "bytes": 92916376,
+        "sha256": "d2cbec65f93ed8c707d51057e76a6fe67a5fd7044494f6b829e8c773293ee75f"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.map",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/kernel/netbsd.map",
+        "bytes": 13198053,
+        "sha256": "9c3ef10aa99eaab8386dfedcf6510b58a0a3e580359cdc1a0663c3d35f246c1b"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd.ldscript",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/kernel/netbsd.ldscript",
+        "bytes": 1142,
+        "sha256": "e5e791c40fd5ba3c51faf95f87875ae7fa9fba88255e777284b3fae01f6a5892"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/f26-artifact-verification.json",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/f26-artifact-verification.json",
+        "bytes": 10202,
+        "sha256": "327c787aa73e3a15caa99beb0f659e535d01b2d7bbf6073b8b17b6318356d61a"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/f26-artifact-verification.symbols.txt",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/f26-artifact-verification.symbols.txt",
+        "bytes": 2272866,
+        "sha256": "26ff11477d5c2e7fb0f325776b8dbaaa6d967247f9de1612d6dc8d62891d243c"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/f26-debug-artifacts.json",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/f26-debug-artifacts.json",
+        "bytes": 44571,
+        "sha256": "9f329ad913b79ff94e329a9920e754d36b8a75d0e425a27774aba5bf87214511"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/kernel-build.log",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/kernel-build.log",
+        "bytes": 21589327,
+        "sha256": "5fa538f922eed853a25c4756517a9226f9887202b665ceea6a862146ff9a031e"
+      },
+      {
+        "source": "/home/andreas/projects/hp-i915-f26-20261106/source-manifest.json",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/source-manifest.json",
+        "bytes": 12080,
+        "sha256": "2bb14b83538c207c4da0e2236562f302715d4e5a35841486a5ee6af0d2436945"
+      },
+      {
+        "source": "/home/andreas/projects/hp-i915-f26-20261106/native-build-runner.log",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/native-build-runner.log",
+        "bytes": 2100,
+        "sha256": "1ef3fd94502cc1ec45509d5263975df284aacc3d9dac698dcf416016ea4e3154"
+      },
+      {
+        "source": "/home/andreas/projects/hp-i915-f26-20261106/native-build.exit",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/native-build.exit",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "source": "/home/andreas/projects/hp-i915-f26-20261106/native-verification.log",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/native-verification.log",
+        "bytes": 10202,
+        "sha256": "327c787aa73e3a15caa99beb0f659e535d01b2d7bbf6073b8b17b6318356d61a"
+      },
+      {
+        "source": "/home/andreas/projects/hp-i915-f26-20261106/native-verification.exit",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/evidence/native-verification.exit",
+        "bytes": 2,
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/consinit.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/consinit.o",
+        "bytes": 31296,
+        "sha256": "4f4a9d8135c7c0315c5ed09b4a41771e2dfb7f692180df1078290b2e4ba91084"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/drmfb.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/drmfb.o",
+        "bytes": 211872,
+        "sha256": "a9924720e10119cbb34fbe3d4daefc1edf0e77fcd904049f90e77a8169a35875"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/i915_irq.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/i915_irq.o",
+        "bytes": 1004512,
+        "sha256": "a277a0b18000cf4d02f64246b17ef48fa13261504717450a2e466e494e1843cc"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/i915_pci.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/i915_pci.o",
+        "bytes": 53856,
+        "sha256": "75b72b949212ade52621660c1935a5fc0d2ce6d15d91627647152dd958d93af7"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/i915_pci_autoconf.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/i915_pci_autoconf.o",
+        "bytes": 466944,
+        "sha256": "181019e87265e689cb7d71aa6fa0fdff50fbb36d3767b252e1cb2d3c177112f5"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_display.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_display.o",
+        "bytes": 2562728,
+        "sha256": "2b119b8aa46010b8b67adf74057b1086d00be2df53a1fe4e5b18830dae689d94"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_display_power.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_display_power.o",
+        "bytes": 984352,
+        "sha256": "e67291f1c410501e852f1765c219ca39a5cfb23feaf8383e311ead6a66c14274"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_dp.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_dp.o",
+        "bytes": 1712640,
+        "sha256": "9ebcbbc44cfc0d2901329d29f9c544bbfa65d40ba6a37fb2758ea978cb95aab4"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_dpio_phy.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_dpio_phy.o",
+        "bytes": 610584,
+        "sha256": "76c75f9cd4ff31f203e0bf8ab6680fefa6ca86c402b12594a7cca818846e3742"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_hdmi.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_hdmi.o",
+        "bytes": 869872,
+        "sha256": "e7680635fdceefc2653b6d6970bf3b2cb7f9b2a1d751c7bb09392e15428af5f7"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_lrc.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_lrc.o",
+        "bytes": 1102400,
+        "sha256": "9918fc6e3023207a642caf002dee8f4d1f909ede6d172adc8b18e0b847ac1b87"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_rps.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_rps.o",
+        "bytes": 726376,
+        "sha256": "ed61a047a27385e87be4d3f378d8d6800828669da045283a72abbcae640e16d0"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/intel_sideband.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/intel_sideband.o",
+        "bytes": 477368,
+        "sha256": "7563f6531875591c12eeb9abb424a6f12fcaee60ee2c770699ba099765e5bdff"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/ioconf.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/ioconf.o",
+        "bytes": 491248,
+        "sha256": "19688f82636476861f947c316aa84490d57038fd8f899b99c2770be19c81f978"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_c2h.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_c2h.o",
+        "bytes": 11424,
+        "sha256": "0e6681939736872b8527a2cde02fb83c1a609f88900100e403271c70772ca9eb"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_c2h_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_c2h_native.o",
+        "bytes": 13040,
+        "sha256": "eb359d685d388f533e85d19de3196de7c9f61551cec8dd1dc15ebbf4b8e25c09"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_datapath.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_datapath.o",
+        "bytes": 106816,
+        "sha256": "bc3030a301e22ab3afe20c79dc05025e9c026c3e3bd422232c95469ed1547405"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_f16_1_dma.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_f16_1_dma.o",
+        "bytes": 117760,
+        "sha256": "9c24715725ef399fc04c5d72be916383609585d68651d7d41a0a969346023ee5"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_fw.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_fw.o",
+        "bytes": 37152,
+        "sha256": "de6d95954be504b0754ad5988494c6ef2f714a61e9a04eb7940c18ff97fa3b1f"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_h2c.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_h2c.o",
+        "bytes": 14112,
+        "sha256": "866100f24c7a238ca9c8267936bb76e32e5c0966a9da03787a32f5ead73e1045"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_h2c_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_h2c_native.o",
+        "bytes": 109320,
+        "sha256": "ecf5f3f7791dcdd6c470b9050e52e0d1ce826e13644c4f34216d994aff5b4af6"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_linux_state.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_linux_state.o",
+        "bytes": 33736,
+        "sha256": "dc0fb2e73ef850e5892976e6f07cef355d6241bd9d6fffa1251050e5e7926146"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_native.o",
+        "bytes": 110200,
+        "sha256": "c85c4a41d1b4659f63672e648b4a03b99c120e760d5554cee972ca311e562259"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_net80211.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_net80211.o",
+        "bytes": 115784,
+        "sha256": "0611c68e5d80ea94fe918cdaa2f2a175b9aed30b55d26f1bb62c0112a66fd493"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_netbsd.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_netbsd.o",
+        "bytes": 320296,
+        "sha256": "6d324a4b52696ac177a98d19f886455b585f8fd4ec9425a88a97002ca550c9cd"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_oem.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_oem.o",
+        "bytes": 6456,
+        "sha256": "08a26a83682ebcad3dbf676404623c8a8ce7444b91745a11e4ee92df1201cfc3"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_package.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_package.o",
+        "bytes": 10576,
+        "sha256": "a3abe38d016f17826e71e4907e5d4c3b05e64630e5b270c09f7ab6c2a8df20e2"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_phy_bb_sequence.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_phy_bb_sequence.o",
+        "bytes": 11248,
+        "sha256": "f2fbd193bcb774d4ddccc7e8e2d8235d9c04faa3789fc3623d0616e075d78f17"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_phy_exec.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_phy_exec.o",
+        "bytes": 24336,
+        "sha256": "88315ec35884a250c9e505e553f5d702122a152263dac2d89c4089db2af7ec1c"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_pwrseq.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_pwrseq.o",
+        "bytes": 38136,
+        "sha256": "01e39329d9e393f4bc49839415085e4d7e954830aec321f8a7d7a3428fe78913"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rf_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rf_native.o",
+        "bytes": 101608,
+        "sha256": "b3cf6a1a1bcd3623d666be60385a23a210cd480356164a12c99ad75d577951f9"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rf_path.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rf_path.o",
+        "bytes": 12960,
+        "sha256": "654bf28f3d7da12fc85c15e3fda6cfcbee39687a2236ad1bfa12fe2eeb1ce47f"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rf_serial.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rf_serial.o",
+        "bytes": 23888,
+        "sha256": "86ddca4cdb61d9f95153d86c75637d586a000b8c0bf7f7c6652bc8a3834ad217"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rx_binding.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rx_binding.o",
+        "bytes": 98648,
+        "sha256": "3409c37c8804670e00bf18581821545c4839e0ad664a13e25ef5811934a211b5"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rx_decode.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rx_decode.o",
+        "bytes": 11832,
+        "sha256": "f1709074aec2775070b85d4c3aa5d291bf8f632f3659d4b1bae946dd6bc4d7b6"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rx_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rx_native.o",
+        "bytes": 102472,
+        "sha256": "277ad5bc8c0f20120d00653ea6e2ceb84124f182008f6dd039cac172c5501b2a"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_rx_phy.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_rx_phy.o",
+        "bytes": 11888,
+        "sha256": "e788122ce923bd2fdf53f84e51688cb8512c3006c4a0c5d912ec6297449608f9"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_tx_desc.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_tx_desc.o",
+        "bytes": 14728,
+        "sha256": "362c0b3cec9f3e610af5eda7ac18075744d74274f91f7b661ca82e762a88968a"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/rtwn8723be_tx_native.o",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/objects/rtwn8723be_tx_native.o",
+        "bytes": 105424,
+        "sha256": "7a42fc204169ce789f95e278e3d9f81216d7029fc6998ff2f200a0a90d690a8a"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/arch/x86/x86/consinit.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/arch/x86/x86/consinit.c",
+        "bytes": 7545,
+        "sha256": "b4f814faff08ceff00151bd62253b0ce64eb5b3a3569727a3c0be49d7ea9198d"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.c",
+        "bytes": 543899,
+        "sha256": "bc1dae977ef54aec77096f4c34a6d02479be4c7661e8ee3fb4cfccddef3887c0"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_display.h",
+        "bytes": 22702,
+        "sha256": "5ea5c412d3f6940a0b5e450d0382f3bbc1f03bb8e643cb5b57e213d323f788c3"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_display_power.c",
+        "bytes": 157856,
+        "sha256": "329a0db68ed36f8392413c1d43569da444225c8191c4037cd3fff36b59cd7322"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_dp.c",
+        "bytes": 220782,
+        "sha256": "5939fddd6c6abbab8613c85954ff62d6034f802573b686ea1b8b5e6b2ffc3b65"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_dpio_phy.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_dpio_phy.c",
+        "bytes": 32805,
+        "sha256": "acfe7e5619f041f37b2165b6a2c3ea0575b216c4986a6acf9bcc5eac738c6e99"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/display/intel_hdmi.c",
+        "bytes": 98224,
+        "sha256": "03faf3263861a105255cdd589170383b10ffbe4de661dba913351095ea11c35b"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/gt/intel_lrc.c",
+        "bytes": 151227,
+        "sha256": "c0908e3bce660d17dc8f934189d001203ca169333271142af1f929d69f717756"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/gt/intel_rps.c",
+        "bytes": 48234,
+        "sha256": "03fb740c39e32d61f50df43ae6aaf15962e18f9212003b8499db5931b91d91e2"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/i915_irq.c",
+        "bytes": 123381,
+        "sha256": "10a80b97c17f856170a99c63af35cdb2df7d08537e74d40c0645fb74efd30d10"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/i915_pci.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/i915_pci.c",
+        "bytes": 26910,
+        "sha256": "325dd78f47e2054f19ffb4c7229e362770e75757f8e0b5e607fa979510f8475c"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/i915_reg.h",
+        "bytes": 491025,
+        "sha256": "5917e7744b1602d05e4945e41752d3a010174a11e9d7dc490d37c8591b4c3ce6"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.c",
+        "bytes": 16033,
+        "sha256": "58c9ae05ab9a0dcff6992088bed126b86761e442bd0b8d4160d1c74675e2431a"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/dist/drm/i915/intel_sideband.h",
+        "bytes": 4291,
+        "sha256": "e5bc89415ee8259ea268b38dae1f3c911c0cfbc33641979f2f8c79dee94e60cd"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/drm/drmfb.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/drm/drmfb.c",
+        "bytes": 9976,
+        "sha256": "f88d15ab4d32b1ed936a0d6888d6fad402c4a17fc15cdae1a9d0a3438b87d737"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/i915drm/files.i915drmkms",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/i915drm/files.i915drmkms",
+        "bytes": 17620,
+        "sha256": "2c93c9834b1816544897c3ae6a05422b88a4ca2e278b30f586dbcbf6ce6953be"
+      },
+      {
+        "source": "/tmp/hp-i915-f26-build-20261106-a01/pinned/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c",
+        "saved_path": "/home/andreas/projects/hp-i915-f26-20261106/artifacts-f26-a01/patched-source/sys/external/bsd/drm2/i915drm/i915_pci_autoconf.c",
+        "bytes": 12004,
+        "sha256": "0f1972b45ed6dd64c8d578a5b34c5efb5a6586782737c5ce7796f4e314766229"
+      }
+    ],
+    "installed": false,
+    "booted": false,
+    "scope": "F26 older native CHV plus partial RTL PHY only; never boot/install."
+  },
+  "cleanup": "NOT_PERFORMED_PHYSICAL_DRIVER_TEST_NOT_RUN"
+}
