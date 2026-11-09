@@ -1,0 +1,893 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "host": "BMAX-B6",
+  "base_commit": "c1d62b8b62adde1c97be8998f61c1f665906e337",
+  "status": "RECOVERED_UNINTEGRATED_WIP",
+  "source_files": [
+    {
+      "status": " M",
+      "path": "compat/native-drm/drm_cdevsw.c",
+      "size": 14290,
+      "blob": "f063778e00ec611a27fb67fc4e7b80f4949e16bf"
+    },
+    {
+      "status": " M",
+      "path": "compat/native-drm/test_ioctl_kernel_data.c",
+      "size": 13563,
+      "blob": "3101719bd3a2f42f52f38c583b03dd0c0d8adf83"
+    },
+    {
+      "status": " M",
+      "path": "compat/native-file/task_entry_preallocated.h",
+      "size": 1620,
+      "blob": "5640bbce24132df3e1e6382aaffd5381c92c95d9"
+    },
+    {
+      "status": " M",
+      "path": "tests/test_hp_graph_contract.py",
+      "size": 18421,
+      "blob": "b400fb47da40c828bd4fd604e2c76db6827324cf"
+    },
+    {
+      "status": " M",
+      "path": "tools/namespace_linux_compiler_math.py",
+      "size": 21968,
+      "blob": "9e2516d792af1bd4dda2dd965a04b32928363ded"
+    },
+    {
+      "status": " M",
+      "path": "tools/prepare_hp_full_graph.py",
+      "size": 23256,
+      "blob": "da4d251065ea3d0604c8697a9bb0d544d9c712e3"
+    },
+    {
+      "status": " M",
+      "path": "tools/probe_hp_full_graph.py",
+      "size": 14322,
+      "blob": "f4325d34223bdf2defa30ec577b07936a6d84e19"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file-model/README.md",
+      "size": 3086,
+      "blob": "43acbe048d4d88b081a397793a37d2451e541549"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file-model/run_native_model.py",
+      "size": 7449,
+      "blob": "fc1d64a8d5912d3ffa9a6337231efbef2d1175f4"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file-model/test_file_lifecycle.c",
+      "size": 12871,
+      "blob": "bf2f43b5c39a0804c2f22ccb4a5da835651ef3c6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file-model/test_model.h",
+      "size": 15386,
+      "blob": "6b3d572cc24559b7f0a6f92faf8a5ff1f3cf354a"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/README.md",
+      "size": 5271,
+      "blob": "ea1be06af5e6f0c4af4d74dc9283f0a011a2b0a0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/i915-shmem-native-owner.patch",
+      "size": 1454,
+      "blob": "01b6913d1cb793bd245001ce50138e0caebeeb35"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/anon_inodes_netbsd.h",
+      "size": 500,
+      "blob": "553f337dd528cbdb5a362a8a1171fd38a8f040b7"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/file_api_netbsd.h",
+      "size": 1318,
+      "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/file_netbsd.h",
+      "size": 1614,
+      "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/file_ref_netbsd.h",
+      "size": 2966,
+      "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/fs_netbsd.h",
+      "size": 8568,
+      "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/pagemap_netbsd.h",
+      "size": 4324,
+      "blob": "50f0e56ddea3edba091fe5fcaffc338674b0cef9"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/poll_netbsd.h",
+      "size": 2055,
+      "blob": "f983baa3696e82a5e05822afd8a9706c80b284f0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/include/linux/shmem_fs_netbsd.h",
+      "size": 1803,
+      "blob": "ccee8334afea5b7d6877a20e250ff4531250fe80"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_anon.c",
+      "size": 3988,
+      "blob": "2eb1210045024fca9c2d90fdb666847bd65f4444"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_fd.c",
+      "size": 5202,
+      "blob": "2dc8720c9a33355e930e280cc98d4e8016002cb0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_file.c",
+      "size": 13378,
+      "blob": "d523ef775724bb6dcefc64ce2d7f7db4cbb0748f"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_inode.c",
+      "size": 8124,
+      "blob": "90e999a4aa350e114e43f238a24b89451479e8b8"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_native_fileops.c",
+      "size": 8457,
+      "blob": "20263438dd5fa3cc06fdbcb8d4b10ab04cc9acc9"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_page.c",
+      "size": 22891,
+      "blob": "c657ed71fb5dbe4e40db33e997068d69c6bbea3f"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_poll.c",
+      "size": 11969,
+      "blob": "45e046a46ed9c08fd6ffd25b0e68ae577d9b9a31"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_shmem.c",
+      "size": 15960,
+      "blob": "d27d0c31df1e11eee59a40ffe29cb80e2bc7e533"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/linux_shmem_commit.c",
+      "size": 3039,
+      "blob": "beb01c5f30bb8ed7b390cb426b96e5d7b48a025b"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/native_aobj_grow.inc",
+      "size": 4198,
+      "blob": "6ae5269d2a8ce8e9a65f7823cfc4f663c09909fd"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-file/task_quiesce_retained.inc",
+      "size": 1228,
+      "blob": "2baa526b613ab171303c623a4bde64f68026dedf"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/aobj-owner.json",
+      "size": 824,
+      "blob": "35b938a4f2acfc15e73519680e5d472a29143f93"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/aobj-owner.patch",
+      "size": 4823,
+      "blob": "14f5c15098317261a905edb67e2c64f123e783e0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/dispatch.json",
+      "size": 1118,
+      "blob": "b73fc0c7da83eeced76f3e28b3681dd659bd89e0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/dispatch.patch",
+      "size": 2659,
+      "blob": "710e7a60941a5ffc461fcd7c6213ca07c5c55631"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/mmap-request.json",
+      "size": 613,
+      "blob": "67b4274fdab918a0f639fcf480e2c2f44b8362af"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/mmap-request.patch",
+      "size": 881,
+      "blob": "3440130d1d46180367f3ddadf4abed7d98120e14"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/prepare.py",
+      "size": 4623,
+      "blob": "ee9a8b28a2d4f35ff9191016bcaaab762390af22"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-fileops/prepare_aobj.py",
+      "size": 2687,
+      "blob": "84b565a8b3e3d280cd0bbb4a8ffae5c0f76ed84c"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/README.md",
+      "size": 2303,
+      "blob": "c4d1a8618896e6f6b7a02da5895a59594d91bdc8"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/include/linux/folio_batch_netbsd.h",
+      "size": 1878,
+      "blob": "d198bfd9ce562b6fa58810b77b07ddc86ed0852c"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/linux_folio_batch.c",
+      "size": 1698,
+      "blob": "0d3b91db345dcf3c09ebfc5f2328cbd2e943e77c"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/run_native_model.py",
+      "size": 4898,
+      "blob": "da6711d3f6e0a37cbe3f4c286ee78c6c7813f326"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/test_folio_batch.c",
+      "size": 3414,
+      "blob": "e9a5ff8d5f101d3134c231e1be4390629901c18e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-folio-batch/test_model.h",
+      "size": 1075,
+      "blob": "3ff88b285d5c1de38dcbe73540b9c508480b8a9e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/mapping_netbsd.h",
+      "size": 3763,
+      "blob": "8780194c46a422d620cd81a437bdda78762144e2"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+      "size": 356,
+      "blob": "034e1034ba925299a14bf85f6defd37998023bf3"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/mm_identity_netbsd.h",
+      "size": 1751,
+      "blob": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/mm_netbsd.h",
+      "size": 965,
+      "blob": "3ac8604602f9c0d14615e30cde124a979eba9ecd"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/mmap_lock_netbsd.h",
+      "size": 501,
+      "blob": "3d2daa06dc077d886008446e597fbf3997b690f1"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/modern_mm_types_netbsd.h",
+      "size": 340,
+      "blob": "5a009724e14f6a20d540f212c3149f23e6fdd993"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/include/linux/vma_netbsd.h",
+      "size": 8236,
+      "blob": "a4b15106f2df86befb7fbc287bf065008fe9321d"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_mapping.c",
+      "size": 13261,
+      "blob": "8f633db9e9934665ed8fa5afb7b399a2787779d6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_mm_identity.c",
+      "size": 10115,
+      "blob": "c13a2545b2f0f9bf37c2c92c4dcc6b52e89f9b75"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_mmap.c",
+      "size": 20247,
+      "blob": "3ae411b6413ea0713afe75511082ddf2a07908a3"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_pfn_map.c",
+      "size": 2988,
+      "blob": "4f80b8d1bd7bab048020e77a62b1f766f4d1a8ac"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_pfn_pager.c",
+      "size": 3825,
+      "blob": "bfa53c2c0f9f0dbf1d6ca75834c3d32d6081fa5e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_vma_internal.h",
+      "size": 1382,
+      "blob": "048c415276d55d311fbd4ac5820aa74c6286284f"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/linux_vma_primitives.c",
+      "size": 2100,
+      "blob": "aa668fb949f011b152186d4c1ee170d373fbde50"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/prepare_mm_identity_patch.py",
+      "size": 8153,
+      "blob": "78b144bc0b474d9086a5e6902b78fcfb55a5afba"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/prepare_task_mm_patch.py",
+      "size": 5693,
+      "blob": "a7cf4d800c10d222424684e2da6ac1d3527f2aba"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/prepare_uvm_entry_patch.py",
+      "size": 26211,
+      "blob": "cf321bd79af85cbbd6ee5e5f2c6854dbaa727eaa"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/task_mm_owner.inc",
+      "size": 1327,
+      "blob": "170982606be76c409694e1c63255164d011b2a83"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/task_mm_owner.json",
+      "size": 1151,
+      "blob": "1cb890ea89506e2973e283cbc09eb11b597b9cea"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/task_mm_owner.patch",
+      "size": 7847,
+      "blob": "e2f07549fbde653cfeb7b95d034bb7c775a2d3a3"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_entry_helpers.inc",
+      "size": 2757,
+      "blob": "898f280688a776e6900aa141669275e9e2748716"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_entry_owner.json",
+      "size": 2257,
+      "blob": "69ee29eaebcd11df1b8d1d52da4d84f8dfd245a6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_entry_owner.patch",
+      "size": 28111,
+      "blob": "9dcff70726c33c5abace7f9f3ae2347577c33c6a"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_mm_identity.json",
+      "size": 1122,
+      "blob": "83916b9e81871f14f26482091edc25626cdbf2c8"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_mm_identity.patch",
+      "size": 4718,
+      "blob": "2acf4351703d680ac2bcfb33d59111fcc37de3d4"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/uvm_mmap_object.inc",
+      "size": 3000,
+      "blob": "9ebb6d91fccae48afeafe09a83a6c94cb077e0f2"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/task-v1/prepare_task_mm_patch.py",
+      "size": 5250,
+      "blob": "01bbb30e78c71db9a1bc52d65618d771efba2ce8"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/task-v1/task_mm_owner.inc",
+      "size": 1327,
+      "blob": "170982606be76c409694e1c63255164d011b2a83"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/task-v1/task_mm_owner.json",
+      "size": 1031,
+      "blob": "4e58c992033891560c4a37a956ffbf2678d82dd0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/task-v1/task_mm_owner.patch",
+      "size": 6280,
+      "blob": "00443ad98fb3fb59228c1a8dfca97f7509517a69"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/MANIFEST.json",
+      "size": 1128,
+      "blob": "36d6a12dc73a826e7974e1a2ea090ca506b82e50"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/prepare_mm_identity_patch.py",
+      "size": 6904,
+      "blob": "4aaa0dc3d4d4a9fbdc6cd909a680799f7f7449c9"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/prepare_uvm_entry_patch.py",
+      "size": 12609,
+      "blob": "b915ea0eb19b198a35c241bc7f2650e0621884be"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/uvm_entry_helpers.inc",
+      "size": 2569,
+      "blob": "db7b4d9b6c09c1d51a7d5d917a8f00298de0b358"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/uvm_entry_owner.json",
+      "size": 1275,
+      "blob": "99d7062f4e4ffaf29934d13e8eb07b886c5cce59"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/uvm_entry_owner.patch",
+      "size": 13020,
+      "blob": "d682291bfa359f9e76b0793cc1371952f94da2f1"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/uvm_mm_identity.json",
+      "size": 892,
+      "blob": "9abe9433049ca66df0e5f78741657fa8543ebf36"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v1/uvm_mm_identity.patch",
+      "size": 3443,
+      "blob": "d5671e2328d343c5bc9f9401eda733579a831613"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/MANIFEST.json",
+      "size": 1282,
+      "blob": "dac9c1a32a8d5c659ba4336848381fe25e332f72"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/prepare_mm_identity_patch.py",
+      "size": 6945,
+      "blob": "6f839172fd976ab8c1f9bf8428aa2a26a44f2337"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/prepare_uvm_entry_patch.py",
+      "size": 14528,
+      "blob": "5265f10c0ac3e090bb64982095de5629153a321a"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_entry_helpers.inc",
+      "size": 2569,
+      "blob": "db7b4d9b6c09c1d51a7d5d917a8f00298de0b358"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_entry_owner.json",
+      "size": 1607,
+      "blob": "78d88c54f7adf5ae1b3e996f77c45f4b427c82b6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_entry_owner.patch",
+      "size": 17232,
+      "blob": "a228993253bbda723ea6d4adce8448f8424007fe"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_mm_identity.json",
+      "size": 908,
+      "blob": "d680e6d794f881cdfeefde61389f63ad10dbaf1e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_mm_identity.patch",
+      "size": 3443,
+      "blob": "d5671e2328d343c5bc9f9401eda733579a831613"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v2/uvm_mmap_object.inc",
+      "size": 2891,
+      "blob": "baf2c2b339dfed5c50920699a1db29e5aa91c134"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/MANIFEST.json",
+      "size": 1586,
+      "blob": "2c2ccbb2e17cb36f5bffb52d39a24c7c5c8a8a6e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/include/linux/mm_identity_netbsd.h",
+      "size": 1616,
+      "blob": "ad2df162984b24e3c4305cf07f7b1a80cea9fcbd"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/linux_mm_identity.c",
+      "size": 7163,
+      "blob": "50d7846add75f0623db97d300b2ea07eabb320bc"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/prepare_mm_identity_patch.py",
+      "size": 6945,
+      "blob": "5e78a81e398a3e49580b72d23e34031646f4cfe3"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/prepare_uvm_entry_patch.py",
+      "size": 20397,
+      "blob": "d27ba49add07c6798caf4768d2726cab8ffbe273"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_entry_helpers.inc",
+      "size": 2711,
+      "blob": "18e6ef4cb00a617edf50de8f0cc7b0923fa34ef4"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_entry_owner.json",
+      "size": 1607,
+      "blob": "524d8c576f126951b7b5bdcd24b0f8571910cb71"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_entry_owner.patch",
+      "size": 23357,
+      "blob": "bae49054f7a18347cc6259f58ac3297bc5ef670f"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_mm_identity.json",
+      "size": 908,
+      "blob": "b78bcececfc57963893ce3309cfe2373659b5b81"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_mm_identity.patch",
+      "size": 3443,
+      "blob": "6a91c88d69dac0c6dfa4c7878c73eca60ab41835"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v3/uvm_mmap_object.inc",
+      "size": 3000,
+      "blob": "9ebb6d91fccae48afeafe09a83a6c94cb077e0f2"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/MANIFEST.json",
+      "size": 1611,
+      "blob": "c51fe170b1b7cb49fe137ea85225de95ca7ef4aa"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/include/linux/mm_identity_netbsd.h",
+      "size": 1751,
+      "blob": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/linux_mm_identity.c",
+      "size": 10115,
+      "blob": "c13a2545b2f0f9bf37c2c92c4dcc6b52e89f9b75"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/prepare_mm_identity_patch.py",
+      "size": 7549,
+      "blob": "a0e1e5ddbe0b0a26fa15bd331c258675fbb2cfe6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/prepare_uvm_entry_patch.py",
+      "size": 24990,
+      "blob": "dc4a5616df3cce201d822f2894a81c14f4bf4ff4"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_entry_helpers.inc",
+      "size": 2711,
+      "blob": "18e6ef4cb00a617edf50de8f0cc7b0923fa34ef4"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_entry_owner.json",
+      "size": 2257,
+      "blob": "ee7f6a38b4b21f498751fb80d1ce325e1f19b11c"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_entry_owner.patch",
+      "size": 27080,
+      "blob": "0f0aba3d09c2b5d0d277eceb8784271dc32ad471"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_mm_identity.json",
+      "size": 908,
+      "blob": "f403dbbf1a0570f2a077184f53c24752d043ae99"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_mm_identity.patch",
+      "size": 3928,
+      "blob": "b853daf0ac7d5a304cab4fbc477ad91957c37c65"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-mm/versions/v4/uvm_mmap_object.inc",
+      "size": 3000,
+      "blob": "9ebb6d91fccae48afeafe09a83a6c94cb077e0f2"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-runtime-owner/include/linux/native_runtime_owner_netbsd.h",
+      "size": 430,
+      "blob": "635c9844565ee66316d16882e541dc2245dcf774"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-runtime-owner/prepare.py",
+      "size": 5373,
+      "blob": "3696f5b2d179df137a54fe8d8e2fa20b47fd2c13"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-runtime-owner/runtime-owner.json",
+      "size": 835,
+      "blob": "db5d5c75683e9f599316a0473b30969acd863d69"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-runtime-owner/runtime-owner.patch",
+      "size": 2895,
+      "blob": "be28632ddebfbd1bc03503368968490d90ef89b0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-sg/DESIGN.md",
+      "size": 6913,
+      "blob": "a4ad992fdfa07a364133c0399009e57581000f99"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/README.md",
+      "size": 5558,
+      "blob": "e9b7b69bc768e0bd271a5e36c849bc6f06b7cdba"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/expected-source.json",
+      "size": 1188,
+      "blob": "8818a13d2cc49d72ac054abee803fa209925ab8d"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/generate.py",
+      "size": 8393,
+      "blob": "baffa5c85c2d0b92a935c00fac2a86a67a4ba1c6"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/notifier.inc",
+      "size": 2629,
+      "blob": "0b2187a47431a6785419b8c13146e99585a5345c"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/owner_wait.inc",
+      "size": 1494,
+      "blob": "210a314a6bb07f0ea67e0e89c65735ae2c89759d"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/run_native_model.py",
+      "size": 7181,
+      "blob": "bb56dc94cbf05f2667f3b9c924007e742068ce54"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/task-notifier.patch",
+      "size": 11214,
+      "blob": "b636eaeaf2ebc71517eaf739b64509d78439e22d"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/test_model.h",
+      "size": 10285,
+      "blob": "4f199458ccd8da6f1a77b13316aeb1d16c94abf7"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-task-notifier/test_task_notifier.c",
+      "size": 8954,
+      "blob": "fe00f5172bbf7f1717faa4340f3b043f85568145"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/README.md",
+      "size": 4449,
+      "blob": "31db65acad998cab7810748076e0c7cb0528d95a"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/include/linux/kiocb_netbsd.h",
+      "size": 1349,
+      "blob": "e54e8be249a3975c91fd5710ea024da817571df9"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/include/linux/uio_netbsd.h",
+      "size": 2417,
+      "blob": "1af3764605fee44ffb79b2b59736101d8d2c826e"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/linux_uio.c",
+      "size": 9010,
+      "blob": "3bf7bba280f2ed97a6abcecf164b5fc1d1777594"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/reference-source.json",
+      "size": 1329,
+      "blob": "b1fe43a67f6f8b5234148428f494d4d6604643c1"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/run_native_model.py",
+      "size": 5129,
+      "blob": "da193d30dea4848ccfc2c7799102fce4ba611432"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/test_model.h",
+      "size": 4645,
+      "blob": "1a4f632d760d56079924cce36b8e5298641869b0"
+    },
+    {
+      "status": "??",
+      "path": "compat/native-uio/test_uio.c",
+      "size": 7473,
+      "blob": "344c2a18cb7a6c2c9c81a084856d695bc2f6a58a"
+    },
+    {
+      "status": "??",
+      "path": "tests/fixtures/linux_minmax_fd179f8.h",
+      "size": 10206,
+      "blob": "a0158db54a04117d2ce8a72f22dafc4df8299c3a"
+    },
+    {
+      "status": "??",
+      "path": "tests/test_hp_full_graph_probe.py",
+      "size": 5461,
+      "blob": "2fc00b596ccedb85d6250a70309f10c62d1c6dea"
+    },
+    {
+      "status": "??",
+      "path": "tests/test_linux_fs_tag_namespace.py",
+      "size": 14834,
+      "blob": "f90d77e65d2785b81e3781e63908b9d1757e915e"
+    },
+    {
+      "status": "??",
+      "path": "tests/test_linux_minmax_namespace.py",
+      "size": 11534,
+      "blob": "267172dc99056238af0eae7039eae70452985d22"
+    },
+    {
+      "status": "??",
+      "path": "tests/test_native_core_patch_chain.py",
+      "size": 3924,
+      "blob": "9afb25740c0bce23fae2120038b0b2a11c59e540"
+    },
+    {
+      "status": "??",
+      "path": "tests/test_native_task_notifier_source.py",
+      "size": 4342,
+      "blob": "ad920612d2abede8cc008f6cec3d96a57784d232"
+    },
+    {
+      "status": "??",
+      "path": "tools/build_hp_native_core_patch.py",
+      "size": 9735,
+      "blob": "38686b60e8de3ac6ebb9ff0c3a3e03846d54b4a3"
+    },
+    {
+      "status": "??",
+      "path": "tools/build_hp_native_provider.py",
+      "size": 6718,
+      "blob": "e0ca8a7eb40c66da280eae45af2b081a5d457203"
+    },
+    {
+      "status": "??",
+      "path": "tools/namespace_linux_fs_tags.py",
+      "size": 13606,
+      "blob": "be2769bcb3fbf78ecefd461f88935fbc2de29a62"
+    }
+  ],
+  "checks": {
+    "raw_blobs": 146,
+    "python_ast": 32,
+    "credential_pattern_scan": "PASS",
+    "native_compile": "NOT_RUN"
+  },
+  "original_worktree_preserved": true,
+  "active_F26_source": "b863e1ef62adf5d9793a84aaa3255c13c5030434"
+}

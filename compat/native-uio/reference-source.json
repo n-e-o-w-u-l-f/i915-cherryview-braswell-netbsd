@@ -1,0 +1,18 @@
+{
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "reviewed_primary_sha256": {
+    "linux/include/linux/uio.h": "69655feacd008e422219f632cd243d0b7a1b4f69f6c7a8bb0a62aa8015d60619",
+    "linux/lib/iov_iter.c": "320c88cf1e4c6274f2b531cb77880685879676de06a25d39d81ee48148746e12",
+    "linux/include/linux/fs.h": "19f9721ce67b1170c32008e702087856a838ee06e4adfd100e8d6711de8d3f8e",
+    "linux/include/uapi/linux/fs.h": "61cba8d5bc676e54710ded3d31d4108573ef2146ba1a9bbc763677847db6cb7b",
+    "linux/fs/read_write.c": "e4ec5a66e2ec46954340195d9d90daa97fe292f84133977d0ddc84a8aaadbb05",
+    "linux/drivers/gpu/drm/i915/gem/i915_gem_shmem.c": "8de6348288e8c71d540aac4d2e261cdf113cc727f52150e05d09d842c66b685b",
+    "sys/sys/uio.h": "c898602e50b402568bce7064444f8e5485617bdeefcfa26acbe4d970b0257b6d",
+    "sys/sys/systm.h": "78ab1169256f595aec8d003d6b35f9ef13cc107287d01aa0e9c14cc5778bd63a",
+    "sys/sys/fcntl.h": "4dde740c500b7f1a7da5ce6b2c3430c306586646487ac97db1812727670d282c",
+    "sys/arch/amd64/include/vmparam.h": "7d66ba15a8deca5310d6a1e4f6dc32ea5de48b4e9685ce7edc661f1f1c25dcd6",
+    "sys/kern/subr_copy.c": "18d62e64fa461dfe9ed908f4676f580ada4bdb450b28b8614c720d1313e05338"
+  },
+  "scope": "Synchronous UBUF/KVEC source adapter; native acceptance OPEN"
+}

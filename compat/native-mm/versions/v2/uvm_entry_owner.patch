@@ -1,0 +1,580 @@
+--- a/sys/uvm/uvm_extern.h
++++ b/sys/uvm/uvm_extern.h
+@@ -761,6 +761,9 @@
+ int			uvm_mmap_dev(struct proc *, void **, size_t, dev_t,
+ 			    off_t);
+ int			uvm_mmap_anon(struct proc *, void **, size_t);
++int			uvm_mmap_object(struct proc *, vaddr_t *, vsize_t,
++			    vm_prot_t, vm_prot_t, int, int, struct uvm_object *,
++			    voff_t);
+ vaddr_t			uvm_default_mapaddr(struct proc *, vaddr_t, vsize_t,
+ 			    int);
+ 
+--- a/sys/uvm/uvm_pager.h
++++ b/sys/uvm/uvm_pager.h
+@@ -109,6 +109,8 @@
+ 
+ struct uvm_faultinfo;
+ struct uvm_object;
++struct vm_map;
++struct vm_map_entry;
+ 
+ /*
+  * pager ops
+@@ -138,6 +140,30 @@
+ 
+ 	/* mark object dirty */
+ 	void	(*pgo_markdirty)(struct uvm_object *);
++
++	/* Optional per-map-entry ownership, separate from object refs.
++	 * prepare runs with the actual selected range before publication;
++	 * failure leaves cleanup to entry_detach after map unlock.
++	 * copy is infallible and creates a distinct owner for a final
++	 * fork/split/extract interval.  update/link/unlink run with the
++	 * native map write locked, or on an exclusively owned unpublished
++	 * child map during fork. Copy may prepare an inactive extraction
++	 * owner before the destination map is locked. Unlink precedes PTE
++	 * removal and may
++	 * also be called again before tree removal (idempotent).
++	 * detach runs with maps unlocked and clears uobj_private.
++	 */
++	int	(*pgo_entry_prepare)(struct vm_map *, struct vm_map_entry *);
++	void	(*pgo_entry_copy)(struct vm_map *,
++		    const struct vm_map_entry *, struct vm_map_entry *);
++	void	(*pgo_entry_update)(struct vm_map *, struct vm_map_entry *);
++	void	(*pgo_entry_link)(struct vm_map *, struct vm_map_entry *);
++	void	(*pgo_entry_unlink)(struct vm_map *, struct vm_map_entry *);
++	void	(*pgo_entry_detach)(struct vm_map_entry *);
++	/* Complete one original mmap transaction after all hint retries.
++	 * The caller keeps an extra object reference until this returns.
++	 * May drop preparation-only file/code references; must not fail. */
++	void	(*pgo_mmap_finish)(struct uvm_object *);
+ };
+ 
+ /* pager flags [mostly for flush] */
+--- a/sys/uvm/uvm_map.h
++++ b/sys/uvm/uvm_map.h
+@@ -152,6 +152,7 @@
+ 	vm_inherit_t		inheritance;	/* inheritance */
+ 	int			wired_count;	/* can be paged if == 0 */
+ 	struct vm_aref		aref;		/* anonymous overlay */
++	void			*uobj_private; /* per-entry pager owner */
+ };
+ 
+ /* flags */
+--- a/sys/uvm/uvm_map.c
++++ b/sys/uvm/uvm_map.c
+@@ -97,6 +97,98 @@
+ #include <uvm/uvm.h>
+ #include <uvm/uvm_readahead.h>
+ 
++/* SPDX-License-Identifier: BSD-2-Clause */
++/* Copyright (c) 2026 n-e-o-w-u-l-f */
++/* Optional per-map-entry pager ownership.  No Linux types enter UVM. */
++static const struct uvm_pagerops *
++uvm_entry_pager(const struct vm_map_entry *entry)
++{
++	if (!UVM_ET_ISOBJ(entry) || entry->object.uvm_obj == NULL)
++		return NULL;
++	return entry->object.uvm_obj->pgops;
++}
++
++static void
++uvm_entry_pager_copy(struct vm_map *map, const struct vm_map_entry *source,
++    struct vm_map_entry *entry)
++{
++	const struct uvm_pagerops *ops = uvm_entry_pager(source);
++
++	KASSERT(entry->uobj_private == NULL);
++	if (source->uobj_private != NULL) {
++		KASSERT(ops != NULL && ops->pgo_entry_copy != NULL);
++		(*ops->pgo_entry_copy)(map, source, entry);
++		KASSERT(entry->uobj_private != NULL);
++		entry->flags |= UVM_MAP_NOMERGE;
++	}
++}
++
++static void
++uvm_entry_pager_update(struct vm_map *map, struct vm_map_entry *entry)
++{
++	const struct uvm_pagerops *ops = uvm_entry_pager(entry);
++
++	if (entry->uobj_private != NULL) {
++		KASSERT(ops != NULL && ops->pgo_entry_update != NULL);
++		(*ops->pgo_entry_update)(map, entry);
++	}
++}
++
++static void
++uvm_entry_pager_link(struct vm_map *map, struct vm_map_entry *entry)
++{
++	const struct uvm_pagerops *ops = uvm_entry_pager(entry);
++
++	if (entry->uobj_private != NULL) {
++		KASSERT(ops != NULL && ops->pgo_entry_link != NULL);
++		(*ops->pgo_entry_link)(map, entry);
++	}
++}
++
++static void
++uvm_entry_pager_unlink(struct vm_map *map, struct vm_map_entry *entry)
++{
++	const struct uvm_pagerops *ops = uvm_entry_pager(entry);
++
++	if (entry->uobj_private != NULL) {
++		KASSERT(ops != NULL && ops->pgo_entry_unlink != NULL);
++		(*ops->pgo_entry_unlink)(map, entry);
++	}
++}
++
++static void
++uvm_entry_pager_detach(struct vm_map_entry *entry)
++{
++	const struct uvm_pagerops *ops = uvm_entry_pager(entry);
++
++	if (entry->uobj_private != NULL) {
++		KASSERT(ops != NULL && ops->pgo_entry_detach != NULL);
++		(*ops->pgo_entry_detach)(entry);
++		KASSERT(entry->uobj_private == NULL);
++	}
++}
++
++static void
++uvm_entry_pager_abort(struct vm_map *map, struct vm_map_entry *entry)
++{
++	if (entry->uobj_private == NULL)
++		return;
++	/* Preparation owns the reserved range while this map is write locked.
++	 * Quiesce producers and revoke even a partially installed range before
++	 * unlocking; delayed detach must not remove a later unrelated mapping.
++	 */
++	uvm_entry_pager_unlink(map, entry);
++#ifdef __HAVE_UNLOCKED_PMAP
++	uvm_map_lock_entry(entry, RW_WRITER);
++#else
++	uvm_map_lock_entry(entry, RW_READER);
++#endif
++	pmap_remove(vm_map_pmap(map), entry->start, entry->end);
++	pmap_update(vm_map_pmap(map));
++	uvm_map_unlock_entry(entry);
++}
++
++
+ #if defined(DDB) || defined(DEBUGPRINT)
+ #include <uvm/uvm_ddb.h>
+ #endif
+@@ -221,6 +313,7 @@
+ 	(entry)->prev->next = (entry); \
+ 	(entry)->next->prev = (entry); \
+ 	uvm_rb_insert((map), (entry)); \
++	uvm_entry_pager_link((map), (entry)); \
+ } while (/*CONSTCOND*/ 0)
+ 
+ /*
+@@ -232,6 +325,7 @@
+ 	KASSERT((entry) != (map)->first_free); \
+ 	KASSERT((entry) != (map)->hint); \
+ 	uvm_mapent_check(entry); \
++	uvm_entry_pager_unlink((map), (entry)); \
+ 	(map)->nentries--; \
+ 	(entry)->next->prev = (entry)->prev; \
+ 	(entry)->prev->next = (entry)->next; \
+@@ -795,6 +889,10 @@
+ 		return NULL;
+ 	}
+ 	me->flags = 0;
++	me->etype = 0;
++	me->object.uvm_obj = NULL;
++	me->aref.ar_amap = NULL;
++	me->uobj_private = NULL;
+ 
+ 	UVMHIST_LOG(maphist, "<- new entry=%#jx [kentry=%jd]", (uintptr_t)me,
+ 	    (map == kernel_map), 0, 0);
+@@ -811,6 +909,7 @@
+ 	UVMHIST_FUNC(__func__);
+ 	UVMHIST_CALLARGS(maphist,"<- freeing map entry=%#jx [flags=%#jx]",
+ 		(uintptr_t)me, me->flags, 0, 0);
++	KASSERT(me->uobj_private == NULL);
+ 	pool_cache_put(&uvm_map_entry_cache, me);
+ }
+ 
+@@ -824,6 +923,8 @@
+ 
+ 	memcpy(dst, src, sizeof(*dst));
+ 	dst->flags = 0;
++	/* A copied pointer is not a second VMA owner. */
++	dst->uobj_private = NULL;
+ }
+ 
+ #if defined(DEBUG)
+@@ -1003,7 +1104,11 @@
+ 	new_entry = uvm_mapent_alloc(map, 0);
+ 	uvm_mapent_copy(entry, new_entry); /* entry -> new_entry */
+ 	uvm_mapent_splitadj(new_entry, entry, start);
++	uvm_entry_pager_copy(map, entry, new_entry);
+ 	uvm_map_entry_link(map, entry->prev, new_entry);
++	/* Keep the old registry interval covering both halves until
++	 * the new half is active; revocation must never see a gap. */
++	uvm_entry_pager_update(map, entry);
+ 
+ 	uvm_map_check(map, "clip_start leave");
+ }
+@@ -1032,7 +1137,9 @@
+ 	new_entry = uvm_mapent_alloc(map, 0);
+ 	uvm_mapent_copy(entry, new_entry); /* entry -> new_entry */
+ 	uvm_mapent_splitadj(entry, new_entry, end);
++	uvm_entry_pager_copy(map, entry, new_entry);
+ 	uvm_map_entry_link(map, entry, new_entry);
++	uvm_entry_pager_update(map, entry);
+ 
+ 	uvm_map_check(map, "clip_end leave");
+ }
+@@ -1252,6 +1359,9 @@
+ 		}
+ 	}
+ 
++	if (uobj != NULL && uobj->pgops != NULL &&
++	    uobj->pgops->pgo_entry_prepare != NULL)
++		flags |= UVM_FLAG_NOMERGE;
+ 	args->uma_flags = flags;
+ 	args->uma_prev = prev_entry;
+ 	args->uma_start = start;
+@@ -1594,6 +1704,19 @@
+ 			new_entry->aref.ar_pageoff = 0;
+ 			new_entry->aref.ar_amap = NULL;
+ 		}
++		if (uobj != NULL && uobj->pgops != NULL &&
++		    uobj->pgops->pgo_entry_prepare != NULL) {
++			error = (*uobj->pgops->pgo_entry_prepare)(map, new_entry);
++			if (error != 0)
++				goto done;
++			/* Native descriptor/PaX maxima remain authoritative. */
++			new_entry->max_protection &= maxprot;
++			if (new_entry->protection != prot ||
++			    (prot & new_entry->max_protection) != prot) {
++				error = EACCES;
++				goto done;
++			}
++		}
+ 		uvm_map_entry_link(map, prev_entry, new_entry);
+ 
+ 		/*
+@@ -1614,9 +1737,14 @@
+ 	error = 0;
+ 
+ done:
++	if (error != 0 && new_entry != NULL)
++		uvm_entry_pager_abort(map, new_entry);
+ 	vm_map_unlock(map);
+ 
+ 	if (new_entry) {
++		uvm_entry_pager_detach(new_entry);
++		if (new_entry->aref.ar_amap != NULL)
++			uvm_map_unreference_amap(new_entry, 0);
+ 		uvm_mapent_free(new_entry);
+ 	}
+ 	if (dead) {
+@@ -2379,6 +2507,7 @@
+ 		UVM_MAP_CLIP_END(map, entry, end);
+ 		next = entry->next;
+ 		len = entry->end - entry->start;
++		uvm_entry_pager_unlink(map, entry);
+ 
+ 		/*
+ 		 * unwire before removing addresses from the pmap; otherwise
+@@ -2521,6 +2650,7 @@
+ 		 * drop reference to amap, if we've got one
+ 		 */
+ 
++		uvm_entry_pager_detach(first_entry);
+ 		if (first_entry->aref.ar_amap)
+ 			uvm_map_unreference_amap(first_entry, flags);
+ 
+@@ -2695,6 +2825,7 @@
+ 			tmp = newents;
+ 			for (i = 0; i < nnewents && tmp; i++) {
+ 				uvm_rb_insert(map, tmp);
++				uvm_entry_pager_link(map, tmp);
+ 				tmp = tmp->next;
+ 			}
+ 		}
+@@ -2912,6 +3043,8 @@
+ 			newentry->flags |= UVM_MAP_NOMERGE;
+ 		}
+ 
++		uvm_entry_pager_copy(dstmap, entry, newentry);
++
+ 		/* now link it on the chain */
+ 		nchain++;
+ 		nsize += newentry->end - newentry->start;
+@@ -2994,6 +3127,7 @@
+ 
+ 			/* we advance "entry" in the following if statement */
+ 			if (flags & UVM_EXTRACT_REMOVE) {
++				uvm_entry_pager_unlink(srcmap, entry);
+ #ifdef __HAVE_UNLOCKED_PMAP /* XXX temporary */
+ 				uvm_map_lock_entry(entry, RW_WRITER);
+ #else
+@@ -3222,6 +3356,7 @@
+ 			    (current->max_protection = new_prot) & old_prot;
+ 		else
+ 			current->protection = new_prot;
++		uvm_entry_pager_update(map, current);
+ 
+ 		/*
+ 		 * update physical map if necessary.  worry about copy-on-write
+@@ -4416,7 +4551,7 @@
+ 
+ static struct vm_map_entry *
+ uvm_mapent_clone(struct vm_map *new_map, struct vm_map_entry *old_entry,
+-    int flags)
++    int flags, bool copy_pager)
+ {
+ 	struct vm_map_entry *new_entry;
+ 
+@@ -4439,6 +4574,9 @@
+ 	    new_entry->object.uvm_obj->pgops->pgo_reference)
+ 		new_entry->object.uvm_obj->pgops->pgo_reference(
+ 			new_entry->object.uvm_obj);
++
++	if (copy_pager)
++		uvm_entry_pager_copy(new_map, old_entry, new_entry);
+ 
+ 	/* insert entry at end of new_map's entry list */
+ 	uvm_map_entry_link(new_map, new_map->header.prev,
+@@ -4469,7 +4607,7 @@
+ 		/* XXXCDC: WAITOK??? */
+ 	}
+ 
+-	uvm_mapent_clone(new_map, old_entry, AMAP_SHARED);
++	uvm_mapent_clone(new_map, old_entry, AMAP_SHARED, true);
+ }
+ 
+ 
+@@ -4487,7 +4625,7 @@
+ 	 * (note that new references are read-only).
+ 	 */
+ 
+-	new_entry = uvm_mapent_clone(new_map, old_entry, 0);
++	new_entry = uvm_mapent_clone(new_map, old_entry, 0, true);
+ 
+ 	new_entry->etype |=
+ 	    (UVM_ET_COPYONWRITE|UVM_ET_NEEDSCOPY);
+@@ -4591,7 +4729,7 @@
+ {
+ 	struct vm_map_entry *new_entry;
+ 
+-	new_entry = uvm_mapent_clone(new_map, old_entry, 0);
++	new_entry = uvm_mapent_clone(new_map, old_entry, 0, false);
+ 
+ 	new_entry->etype |=
+ 	    (UVM_ET_COPYONWRITE|UVM_ET_NEEDSCOPY);
+--- a/sys/uvm/uvm_mmap.c
++++ b/sys/uvm/uvm_mmap.c
+@@ -305,7 +305,9 @@
+ 	vaddr_t defaddr = 0;	/* XXXGCC */
+ 	bool addrhint = false;
+ 	struct file *fp = NULL;
+-	struct uvm_object *uobj;
++	struct uvm_object *uobj = NULL;
++	struct uvm_object *mmap_transaction = NULL;
++	bool uobj_owned = false;
+ 	int error;
+ 	vaddr_t orig_addr;
+ 
+@@ -403,6 +405,12 @@
+ 		if (error) {
+ 			goto out;
+ 		}
++		uobj_owned = (uobj != NULL);
++		if (uobj != NULL && uobj->pgops->pgo_mmap_finish != NULL) {
++			KASSERT(uobj->pgops->pgo_reference != NULL);
++			(*uobj->pgops->pgo_reference)(uobj);
++			mmap_transaction = uobj;
++		}
+ 		if (uobj == NULL) {
+ 			flags |= MAP_ANON;
+ 			fd_putfile(fd);
+@@ -443,6 +451,7 @@
+ 		if (uobj)
+ 			(*uobj->pgops->pgo_reference)(uobj);
+ 	}
++	uobj_owned = false; /* uvm_mmap consumes the original on every exit */
+ 	error = uvm_mmap(&p->p_vmspace->vm_map, &addr, size, prot, maxprot,
+ 	    flags, advice, uobj, pos, p->p_rlimit[RLIMIT_MEMLOCK].rlim_cur);
+ 	if (addrhint) {
+@@ -462,6 +471,12 @@
+ 	*retval = (register_t)(addr + pageoff);
+ 
+  out:
++	if (uobj_owned)
++		(*uobj->pgops->pgo_detach)(uobj);
++	if (mmap_transaction != NULL) {
++		(*mmap_transaction->pgops->pgo_mmap_finish)(mmap_transaction);
++		(*mmap_transaction->pgops->pgo_detach)(mmap_transaction);
++	}
+ 	if (fp != NULL)
+ 		fd_putfile(fd);
+ 
+@@ -872,8 +887,8 @@
+  * - uobj is a struct uvm_object pointer or NULL for MAP_ANON
+  * - caller must page-align the file offset
+  *
+- * XXX This appears to leak the uobj in various error branches?  Need
+- * to clean up the contract around uobj reference.
++ * Consumes the caller's uobj reference on every exit.  After a
++ * successful uvm_map, ownership belongs to the published map entry.
+  */
+ 
+ static int
+@@ -890,11 +905,11 @@
+ 	 */
+ 
+ 	if (size == 0)
+-		return 0;
++		{ error = 0; goto drop_object; }
+ 	if (foff & PAGE_MASK)
+-		return EINVAL;
++		{ error = EINVAL; goto drop_object; }
+ 	if ((prot & maxprot) != prot)
+-		return EINVAL;
++		{ error = EINVAL; goto drop_object; }
+ 
+ 	/*
+ 	 * for non-fixed mappings, round off the suggested address.
+@@ -905,7 +920,7 @@
+ 		*addr = round_page(*addr);
+ 	} else {
+ 		if (*addr & PAGE_MASK)
+-			return EINVAL;
++			{ error = EINVAL; goto drop_object; }
+ 		uvmflag |= UVM_FLAG_FIXED | UVM_FLAG_UNMAP;
+ 	}
+ 
+@@ -920,15 +935,15 @@
+ 	align = (flags & MAP_ALIGNMENT_MASK) >> MAP_ALIGNMENT_SHIFT;
+ 	if (align) {
+ 		if (align >= sizeof(vaddr_t) * NBBY)
+-			return EINVAL;
++			{ error = EINVAL; goto drop_object; }
+ 		align = 1UL << align;
+ 		if (align < PAGE_SIZE)
+-			return EINVAL;
++			{ error = EINVAL; goto drop_object; }
+ 		if (align >= vm_map_max(map))
+-			return ENOMEM;
++			{ error = ENOMEM; goto drop_object; }
+ 		if (flags & MAP_FIXED) {
+ 			if ((*addr & (align-1)) != 0)
+-				return EINVAL;
++				{ error = EINVAL; goto drop_object; }
+ 			align = 0;
+ 		}
+ 	}
+@@ -940,7 +955,7 @@
+ 	if (!VM_MAP_IS_KERNEL(map) &&
+ 	    (((rlim_t)curproc->p_vmspace->vm_map.size + (rlim_t)size) >
+ 	    curproc->p_rlimit[RLIMIT_AS].rlim_cur))
+-		return ENOMEM;
++		{ error = ENOMEM; goto drop_object; }
+ 
+ 	/*
+ 	 * handle anon vs. non-anon mappings.   for non-anon mappings attach
+@@ -1013,6 +1028,97 @@
+ 		return 0;
+ 	}
+ 	return 0;
++
++drop_object:
++	if (uobj != NULL)
++		(*uobj->pgops->pgo_detach)(uobj);
++	return error;
++}
++
++/* Native object-mapping entry derived from the enclosing NetBSD uvm_mmap.c.
++ * The enclosing source's copyright notices and license remain authoritative.
++ * Copyright (c) 2026 n-e-o-w-u-l-f (runtime transaction integration).
++ */
++int
++uvm_mmap_object(struct proc *p, vaddr_t *address, vsize_t length,
++    vm_prot_t protection, vm_prot_t maximum, int flags, int advice,
++    struct uvm_object *object, voff_t offset)
++{
++	struct uvm_object *transaction = NULL;
++	struct vm_map *map;
++	vaddr_t original, fallback = 0;
++	bool owned = true, hint = false;
++	int error;
++
++	/* Like sys_mmap, consume the supplied object reference on every exit. */
++	if (object != NULL && object->pgops->pgo_mmap_finish != NULL) {
++		KASSERT(object->pgops->pgo_reference != NULL);
++		(*object->pgops->pgo_reference)(object);
++		transaction = object;
++	}
++	if (p != curproc || address == NULL || length == 0 ||
++	    (protection & ~VM_PROT_ALL) != 0 ||
++	    ((flags & (MAP_SHARED | MAP_PRIVATE)) == (MAP_SHARED | MAP_PRIVATE)) ||
++	    ((flags & MAP_ANON) != 0 ? object != NULL : object == NULL) ||
++	    (offset & (PAGE_SIZE - 1)) != 0 ||
++	    length > __type_max(vsize_t) - PAGE_SIZE + 1) {
++		error = EINVAL;
++		goto out;
++	}
++	map = &p->p_vmspace->vm_map;
++	length = round_page(length);
++	original = *address;
++	if (flags & MAP_FIXED) {
++		if ((*address & (PAGE_SIZE - 1)) != 0) {
++			error = EINVAL;
++			goto out;
++		}
++		error = range_test(map, *address, length, true);
++		if (error != 0)
++			goto out;
++	} else if (*address == 0 || !(flags & MAP_TRYFIXED)) {
++		fallback = p->p_emul->e_vm_default_addr(p,
++		    (vaddr_t)p->p_vmspace->vm_daddr, length,
++		    map->flags & VM_MAP_TOPDOWN);
++		if (*address == 0 || !(map->flags & VM_MAP_TOPDOWN))
++			*address = MAX(*address, fallback);
++		else
++			*address = MIN(*address, fallback);
++		hint = *address != 0 && *address != fallback;
++	}
++	maximum = PAX_MPROTECT_MAXPROTECT(curlwp, protection, 0, maximum);
++	if ((protection & maximum) != protection) {
++		error = EACCES;
++		goto out;
++	}
++	error = PAX_MPROTECT_VALIDATE(curlwp, protection);
++	if (error != 0)
++		goto out;
++	pax_aslr_mmap(curlwp, address, original, flags);
++	if (hint && object != NULL)
++		(*object->pgops->pgo_reference)(object);
++	owned = false;
++	error = uvm_mmap(map, address, length, protection, maximum, flags,
++	    advice, object, offset, p->p_rlimit[RLIMIT_MEMLOCK].rlim_cur);
++	if (hint) {
++		if (error != 0) {
++			*address = fallback;
++			pax_aslr_mmap(curlwp, address, original, flags);
++			error = uvm_mmap(map, address, length, protection, maximum,
++			    flags, advice, object, offset,
++			    p->p_rlimit[RLIMIT_MEMLOCK].rlim_cur);
++		} else if (object != NULL) {
++			(*object->pgops->pgo_detach)(object);
++		}
++	}
++out:
++	if (owned && object != NULL)
++		(*object->pgops->pgo_detach)(object);
++	if (transaction != NULL) {
++		(*transaction->pgops->pgo_mmap_finish)(transaction);
++		(*transaction->pgops->pgo_detach)(transaction);
++	}
++	return error;
+ }
+ 
+ vaddr_t

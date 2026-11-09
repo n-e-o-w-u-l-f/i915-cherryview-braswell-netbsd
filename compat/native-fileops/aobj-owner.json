@@ -1,0 +1,16 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "patch_sha256": "6b4c4fa33b6fd95c8d15d7cb2e1369cfeffdfdc1f2654cbb26c0f0955dfb0cd5",
+  "helper_sha256": "015829172af611e8ea49ad305c3aba81f9760bf17b6628b88d53805a66a89cdd",
+  "files": {
+    "sys/uvm/uvm_aobj.c": {
+      "before_sha256": "a9d8131479e979841214c57a77a89dfba2351730871bd6648c6502f469f7d39d",
+      "after_sha256": "578f3183c9d4ac6a1d8c763485cf4a05d3ee6828c53e268c3280e57647f56b00"
+    },
+    "sys/uvm/uvm_aobj.h": {
+      "before_sha256": "5db0f17b73b1495a1dd097737995cc9efa5f1eddfbfb720baeee0f571ab66ace",
+      "after_sha256": "f68dfb1d3527b3eaf91961ec181281f3601dadc5a8f535837070584b276dd33f"
+    }
+  },
+  "acceptance": "Actual UAO source owner only; native compilation/lifetime tests and complete kernel link remain separate."
+}

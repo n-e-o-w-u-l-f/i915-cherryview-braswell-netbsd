@@ -1,0 +1,93 @@
+--- a/sys/external/bsd/drm2/dist/drm/drm_ioctl.c
++++ b/sys/external/bsd/drm2/dist/drm/drm_ioctl.c
+@@ -37,6 +37,9 @@
+ #include <drm/drm_crtc.h>
+ #include <drm/drm_drv.h>
+ #include <drm/drm_file.h>
++#ifdef __NetBSD__
++#include <drm/drm_file_netbsd.h>
++#endif
+ #include <drm/drm_ioctl.h>
+ #include <drm/drm_print.h>
+ 
+@@ -831,8 +834,9 @@
+  * Returns:
+  * Zero on success, negative error code on failure.
+  */
+-long drm_ioctl(struct file *filp,
+-	      unsigned int cmd, unsigned long arg)
++static long drm_ioctl_dispatch(struct file *filp, unsigned int cmd,
++			       unsigned long arg, void *native_data,
++			       unsigned int *native_out_size)
+ {
+ 	struct drm_file *file_priv = filp->private_data;
+ 	struct drm_device *dev;
+@@ -845,6 +849,9 @@
+ 	unsigned int in_size, out_size, drv_size, ksize;
+ 	bool is_driver_ioctl;
+ 
++	if (native_out_size)
++		*native_out_size = 0;
++
+ 	dev = file_priv->minor->dev;
+ 
+ 	if (drm_dev_is_unplugged(dev))
+@@ -903,7 +910,10 @@
+ 		}
+ 	}
+ 
+-	if (copy_from_user(kdata, (void __user *)arg, in_size) != 0) {
++	if (native_out_size) {
++		if (in_size)
++			memcpy(kdata, native_data, in_size);
++	} else if (copy_from_user(kdata, (void __user *)arg, in_size) != 0) {
+ 		retcode = -EFAULT;
+ 		goto err_i1;
+ 	}
+@@ -912,8 +922,13 @@
+ 		memset(kdata + in_size, 0, ksize - in_size);
+ 
+ 	retcode = drm_ioctl_kernel(filp, func, kdata, ioctl->flags);
+-	if (copy_to_user((void __user *)arg, kdata, out_size) != 0)
++	if (native_out_size) {
++		if (out_size)
++			memcpy(native_data, kdata, out_size);
++		*native_out_size = out_size;
++	} else if (copy_to_user((void __user *)arg, kdata, out_size) != 0) {
+ 		retcode = -EFAULT;
++	}
+ 
+       err_i1:
+ 	if (!ioctl)
+@@ -930,7 +945,31 @@
+ 			     current->comm, task_pid_nr(current), retcode);
+ 	return retcode;
+ }
++
++long drm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++{
++	return drm_ioctl_dispatch(filp, cmd, arg, NULL, NULL);
++}
+ EXPORT_SYMBOL(drm_ioctl);
++
++#ifdef __NetBSD__
++/* The native boundary owns exactly _IOC_SIZE(cmd) bytes.  Never
++ * dispatch directly into that buffer: the canonical driver ABI
++ * may be larger.  The shared dispatcher retains all frozen lookup,
++ * permission, unplug, zero-extension and output-on-error rules.
++ */
++long drm_ioctl_kernel_data(struct file *filp, unsigned int cmd,
++			   void *data, unsigned int *out_size)
++{
++	if (!out_size)
++		return -EINVAL;
++	*out_size = 0;
++	if (_IOC_SIZE(cmd) && !data)
++		return -EINVAL;
++	return drm_ioctl_dispatch(filp, cmd, 0, data, out_size);
++}
++EXPORT_SYMBOL(drm_ioctl_kernel_data);
++#endif
+ 
+ /**
+  * drm_ioctl_flags - Check for core ioctl and return ioctl permission flags

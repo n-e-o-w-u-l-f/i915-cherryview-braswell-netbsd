@@ -1,0 +1,46 @@
+{
+  "version": 3,
+  "purpose": "Preserved HP native Werror mmap request/core and MM identity component snapshots; no runtime or full kernel acceptance",
+  "files": [
+    {
+      "path": "uvm_entry_owner.patch",
+      "sha256": "e8b56268884e14664f7808a9485e370567dfb5af7baaed0cc555df26a085a3bd"
+    },
+    {
+      "path": "uvm_entry_owner.json",
+      "sha256": "11fbfa0df621660ee8e42cd8ae554834fabc10713c0da8abba6c04d6b4cf099a"
+    },
+    {
+      "path": "uvm_entry_helpers.inc",
+      "sha256": "da4824ff01d7e78f8a3a6e47e9a4c59303f38d28d4c7b9f6856376e80c06b701"
+    },
+    {
+      "path": "uvm_mmap_object.inc",
+      "sha256": "9f2fc6085c6a18d2d5e4263792f41ab54c373bc48e3aceff1f0c72df364ed82f"
+    },
+    {
+      "path": "prepare_uvm_entry_patch.py",
+      "sha256": "b059d532fcbf5c44cc4bf1fcb8edc2dc368d306597b3d7aad12a0027c5403153"
+    },
+    {
+      "path": "uvm_mm_identity.patch",
+      "sha256": "b8402354f029ad998074a749be61bad85eb1072a169b355a7f3361ac4d3e9f87"
+    },
+    {
+      "path": "uvm_mm_identity.json",
+      "sha256": "63b65cd24b97ab718d3b66aece0558ebb683da45dc6e0711e9a83d98c541f782"
+    },
+    {
+      "path": "prepare_mm_identity_patch.py",
+      "sha256": "9557ac5f019bc4f637ea999e2852255f43114e2dbb47d09f15ae04d64f121089"
+    },
+    {
+      "path": "linux_mm_identity.c",
+      "sha256": "905bba6b276c0f42d7cb3012493079be53857067ccd0ac27abefe3b4c59664a6"
+    },
+    {
+      "path": "include/linux/mm_identity_netbsd.h",
+      "sha256": "d3570d05e145fba264635dd8021f16e38a2a3a4bf87849bb3be54697fc012c35"
+    }
+  ]
+}

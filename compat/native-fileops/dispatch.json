@@ -1,0 +1,23 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "patch_sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+  "files": {
+    "sys/sys/file.h": {
+      "before_sha256": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c",
+      "after_sha256": "e8e947ecc19f5f8c9045a2d62f549965cddd6694859e78e23dc9989a35f71a04"
+    },
+    "sys/sys/filedesc.h": {
+      "before_sha256": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c",
+      "after_sha256": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549"
+    },
+    "sys/kern/sys_generic.c": {
+      "before_sha256": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514",
+      "after_sha256": "7d9ffd3ad324a4efb1334a866cb06188be80f41338045d8e8ed24393243fa781"
+    },
+    "sys/kern/kern_descrip.c": {
+      "before_sha256": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1",
+      "after_sha256": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+    }
+  },
+  "acceptance": "Actual source contract; native ABI and full kernel remain separate."
+}

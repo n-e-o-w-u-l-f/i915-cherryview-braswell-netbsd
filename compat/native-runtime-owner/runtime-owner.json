@@ -1,0 +1,14 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "required_prior": "exact0032 runtime at native pin;0035/0037 do not alter this unit",
+  "prior_source_patch_sha256": "9b53ce73daba8b6937c54209e2ff28087775409c9be2c386a97301f3781737fd",
+  "patch_sha256": "ccc0c274d03fc783cc5650756f498d7a27255cf5735ec37d54e4abcc73be035f",
+  "files": {
+    "sys/external/bsd/drm2/linux/linux_module.c": {
+      "before_sha256": "7a1686c8ed3ac86a9ffb3be6a518b0b0fc832dc0f217ab8faa9093db106b65ef",
+      "after_sha256": "5e479eb35bfd96f0ede56cb22a97d816ca4578134ecf83c5d7c4b4be28e0d159"
+    }
+  },
+  "header_sha256": "ebff8f70234e61247f333a6954e8911f7d0d5a07b964ef82c75fb044775469cc",
+  "acceptance": "Source preparation only; actual Native init/refusal/unwind/lifecycle compilation and full aggregate link remain mandatory."
+}

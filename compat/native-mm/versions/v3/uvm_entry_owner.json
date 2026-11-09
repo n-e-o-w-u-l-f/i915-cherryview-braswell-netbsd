@@ -1,0 +1,30 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "files": {
+    "sys/uvm/uvm_extern.h": {
+      "before_sha256": "14d6eb1c13d7b6e9f182d8c5043a719df8152858b2b3991120114ccd7867a5bb",
+      "after_sha256": "fb842bc4419de656c5b9f2ba35a21690be3d6f41852c4dda93f25a60b71bc3ed"
+    },
+    "sys/uvm/uvm_pager.h": {
+      "before_sha256": "89d472b83a9249cce27301500ffc1d313f2454c7ad0375abe573a19584d481f4",
+      "after_sha256": "004f19e59a23e2199fe67b9babd18c9d5c62b0eea4fde941dfa60e4d6525dec9"
+    },
+    "sys/uvm/uvm_map.h": {
+      "before_sha256": "a7caf1e149874521e7fbc09483ad17d8ae72fda08b9b366a35c84f3f25c92a3b",
+      "after_sha256": "1bc81d084b12c0353e2fb8541bf969839039294d5f51e4f0a043906b98c87d52"
+    },
+    "sys/uvm/uvm_map.c": {
+      "before_sha256": "4f87e2d28da17fbce3ccada6bd969ec7d1f39a79076df334f7b09014ab4a684b",
+      "after_sha256": "c8986515c55e68d22bee37c2093ff79b14b7c566eaaa5971e6604a824d370cb2"
+    },
+    "sys/uvm/uvm_mmap.c": {
+      "before_sha256": "c1b1c3e16f12a9a30b777eba3f08dfec08f61d3d10c384569c5d67317bc7733d",
+      "after_sha256": "c3cd4d13ec8745c8919236a34aef024797cbaea5a5a2872326526d8fec8d6019"
+    }
+  },
+  "helper_sha256": "da4824ff01d7e78f8a3a6e47e9a4c59303f38d28d4c7b9f6856376e80c06b701",
+  "patch_sha256": "e8b56268884e14664f7808a9485e370567dfb5af7baaed0cc555df26a085a3bd",
+  "acceptance": "Source preparation only. Per-entry provider bodies, native compilation, lifecycle/fault/revocation tests and full kernel link remain mandatory.",
+  "version": 3,
+  "mmap_object_helper_sha256": "9f2fc6085c6a18d2d5e4263792f41ab54c373bc48e3aceff1f0c72df364ed82f"
+}

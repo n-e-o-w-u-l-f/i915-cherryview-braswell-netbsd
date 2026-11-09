@@ -1,0 +1,107 @@
+--- a/sys/external/bsd/drm2/linux/linux_module.c
++++ b/sys/external/bsd/drm2/linux/linux_module.c
+@@ -38,6 +38,7 @@
+ #endif
+ 
+ #include <linux/atomic.h>
++#include <linux/native_runtime_owner_netbsd.h>
+ #include <linux/dma-fence.h>
+ #include <linux/highmem.h>
+ #include <linux/idr.h>
+@@ -52,6 +53,22 @@
+ 
+ MODULE(MODULE_CLASS_MISC, drmkms_linux, "i2cexec");
+ 
++/* All external identity publication is closed before the aggregate drain.
++ * The actual MM queue join and native callback call count cover code return.
++ * Init failure reaches this only after a successful MM init and before any
++ * external caller can pass the enclosing native once/module admission.
++ */
++static void
++linux_mm_shutdown(void)
++{
++	int error = linux_mm_identity_quiesce();
++	if (error != 0)
++		panic("linux MM shutdown: live owner after quiesce: %d", error);
++	error = linux_mm_identity_fini();
++	if (error != 0)
++		panic("linux MM shutdown: incomplete native drain: %d", error);
++}
++
+ static int
+ linux_init(void)
+ {
+@@ -73,6 +90,14 @@
+ 	if (error) {
+ 		printf("linux: unable to initialize rcu gc: %d\n", error);
+ 		goto fail2;
++	}
++
++	/* Native MM retirement uses its own native queue, and must exist
++	 * before any Linux callback worker can publish a task MM. */
++	error = linux_mm_identity_init();
++	if (error) {
++		printf("linux: unable to initialize MM owners: %d\n", error);
++		goto fail_mm;
+ 	}
+ 
+ 	error = linux_workqueue_init();
+@@ -118,11 +143,21 @@
+ 		goto fail9;
+ 	}
+ 
++	/* Task/specificdata resources already exist; FILE init owns its
++	 * queues, shared anon inode, page retirement and commit ledger. */
++	error = linux_file_system_init();
++	if (error) {
++		printf("linux: unable to initialize FILE owners: %d\n", error);
++		goto fail_file;
++	}
++
+ 	linux_irq_work_init();
+ 	linux_dma_fences_init();
+ 
+ 	return 0;
+ 
++fail_file:
++	linux_wait_var_fini();
+ fail9:
+ 	linux_kthread_fini();
+ fail8:	linux_wait_bit_fini();
+@@ -130,7 +165,9 @@
+ fail6:	linux_atomic64_fini();
+ fail5:	linux_writecomb_fini();
+ fail4:	linux_workqueue_fini();
+-fail3:	linux_rcu_gc_fini();
++fail3:	linux_mm_shutdown();
++fail_mm:
++	linux_rcu_gc_fini();
+ fail2:	linux_kmap_fini();
+ fail1:	linux_idr_module_fini();
+ fail0:	return error;
+@@ -162,6 +199,7 @@
+ 	linux_atomic64_fini();
+ 	linux_writecomb_fini();
+ 	linux_workqueue_fini();
++	linux_mm_shutdown();
+ 	linux_rcu_gc_fini();
+ 	linux_kmap_fini();
+ 	linux_idr_module_fini();
+@@ -179,9 +217,16 @@
+ 		return linux_guarantee_initialized();
+ #endif
+ 	case MODULE_CMD_FINI: {
+-		int error = linux_task_system_quiesce();
++		int error = linux_mm_identity_quiesce();
+ 		if (error != 0)
+ 			return error;
++		/* FILE performs the retained-LWP task quiesce and queue join.
++		 * A refusal preserves FILE resources and restores MM admission. */
++		error = linux_file_system_fini();
++		if (error != 0) {
++			linux_mm_identity_resume();
++			return error;
++		}
+ 		linux_fini();
+ 		return 0;
+ 	}

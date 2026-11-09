@@ -1,0 +1,46 @@
+{
+  "version": 4,
+  "purpose": "Preserved HP Native six core object Werror chain with early per-entry fault protocol; MM provider source captured separately not implied tested",
+  "files": [
+    {
+      "sha256": "3b5ad3e16e53eeed4b6ede64d0174f026441cf8f390a9df5a394a6199fbf7a69",
+      "path": "uvm_entry_owner.patch"
+    },
+    {
+      "sha256": "e867d0f91633dd03eaeef4d6dc9cfc9634fa50a144783fec7813a11ec3df0090",
+      "path": "uvm_entry_owner.json"
+    },
+    {
+      "sha256": "da4824ff01d7e78f8a3a6e47e9a4c59303f38d28d4c7b9f6856376e80c06b701",
+      "path": "uvm_entry_helpers.inc"
+    },
+    {
+      "sha256": "9f2fc6085c6a18d2d5e4263792f41ab54c373bc48e3aceff1f0c72df364ed82f",
+      "path": "uvm_mmap_object.inc"
+    },
+    {
+      "sha256": "410751a74a858cee2d3d55f4601c0d19cfceddfd96666305e39c89c7b8320cff",
+      "path": "prepare_uvm_entry_patch.py"
+    },
+    {
+      "sha256": "5ef8abc8780feb6ad2e8ccc7c554543feb95621463d6c1470feabaefc892a8b6",
+      "path": "uvm_mm_identity.patch"
+    },
+    {
+      "sha256": "3118b2768633bfd67ff86bf5e66da7151471318241c58b825f36580dd920971e",
+      "path": "uvm_mm_identity.json"
+    },
+    {
+      "sha256": "d9fd0b3f8f5c42be18c1679b1be50d71bb33b4d1dd6e598b8cce2b25071fda8b",
+      "path": "prepare_mm_identity_patch.py"
+    },
+    {
+      "sha256": "2e018f03d73c08a23b457a26894fe97ab69189030f2867aca446cf86390813d0",
+      "path": "linux_mm_identity.c"
+    },
+    {
+      "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+      "path": "include/linux/mm_identity_netbsd.h"
+    }
+  ]
+}

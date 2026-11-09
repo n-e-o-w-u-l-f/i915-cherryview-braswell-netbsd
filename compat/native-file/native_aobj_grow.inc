@@ -1,0 +1,109 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+/* Copyright (c) 2026 n-e-o-w-u-l-f */
+/* Insert into frozen uvm_aobj.c after uao_create. Same object/pager/refcount,
+ * resident pages and swap slots are retained. Caller owns a reference. */
+int
+uao_grow(struct uvm_object *uobj, voff_t size)
+{
+    struct uvm_aobj *aobj = (struct uvm_aobj *)uobj;
+    pgoff_t pages, oldpages;
+#if defined(VMSWAP)
+    int *newslots = NULL, *oldslots = NULL;
+    struct uao_swhash *newhash = NULL;
+    u_long newmask = 0;
+    struct uao_swhash_elt *prepared[4] = { NULL, NULL, NULL, NULL };
+    unsigned int n, used = 0;
+#endif
+    ASSERT_SLEEPABLE();
+    if (!UVM_OBJ_IS_AOBJ(uobj) || UVM_OBJ_IS_KERN_OBJECT(uobj) ||
+        size <= 0 || size > (voff_t)INT64_MAX - (PAGE_SIZE - 1) ||
+        (uint64_t)size > (uint64_t)INT_MAX * PAGE_SIZE)
+        return EINVAL;
+    pages = ((size + (PAGE_SIZE - 1)) & ~(voff_t)(PAGE_SIZE - 1)) >> PAGE_SHIFT;
+    rw_enter(uobj->vmobjlock, RW_READER);
+    oldpages = aobj->u_pages;
+    rw_exit(uobj->vmobjlock);
+    if (pages <= oldpages)
+        return 0;
+#if defined(VMSWAP)
+    /* No metadata allocation under the writer lock. A small swap array
+     * has at most four sixteen-page clusters. */
+    if (oldpages <= UAO_SWHASH_THRESHOLD) {
+        if (pages <= UAO_SWHASH_THRESHOLD) {
+            newslots = kmem_zalloc(pages * sizeof(*newslots), KM_SLEEP);
+        } else {
+            newhash = hashinit(MIN(pages >> UAO_SWHASH_CLUSTER_SHIFT,
+                UAO_SWHASH_MAXBUCKETS), HASH_LIST, true, &newmask);
+            for (n = 0; n < __arraycount(prepared); n++)
+                prepared[n] = pool_get(&uao_swhash_elt_pool, PR_WAITOK);
+        }
+    }
+#endif
+    rw_enter(uobj->vmobjlock, RW_WRITER);
+    oldpages = aobj->u_pages;
+    if (pages <= oldpages)
+        goto unlock;
+#if defined(VMSWAP)
+    if (!UAO_USES_SWHASH(aobj)) {
+        oldslots = aobj->u_swslots;
+        if (pages <= UAO_SWHASH_THRESHOLD) {
+            memcpy(newslots, oldslots, oldpages * sizeof(*newslots));
+            aobj->u_swslots = newslots;
+            newslots = NULL;
+        } else {
+            pgoff_t base, index;
+            for (base = 0; base < oldpages; base += UAO_SWHASH_CLUSTER_SIZE) {
+                struct uao_swhash_elt *elt = prepared[used];
+                memset(elt, 0, sizeof(*elt));
+                elt->tag = UAO_SWHASH_ELT_TAG(base);
+                for (index = base;
+                     index < MIN(oldpages, base + UAO_SWHASH_CLUSTER_SIZE);
+                     index++) {
+                    int slot = oldslots[index];
+                    if (slot != 0) {
+                        UAO_SWHASH_ELT_PAGESLOT(elt, index) = slot;
+                        elt->count++;
+                    }
+                }
+                if (elt->count != 0) {
+                    LIST_INSERT_HEAD(&newhash[elt->tag & newmask], elt, list);
+                    prepared[used++] = NULL;
+                }
+            }
+            aobj->u_swslots = NULL;
+            aobj->u_swhash = newhash;
+            aobj->u_swhashmask = newmask;
+            newhash = NULL;
+        }
+    }
+    /* Existing hash/mask remains correct after growth; extra collisions
+     * affect speed only. hashdone receives that same retained mask. */
+#endif
+    aobj->u_pages = pages;
+unlock:
+    rw_exit(uobj->vmobjlock);
+#if defined(VMSWAP)
+    if (oldslots != NULL)
+        kmem_free(oldslots, oldpages * sizeof(*oldslots));
+    if (newslots != NULL)
+        kmem_free(newslots, pages * sizeof(*newslots));
+    if (newhash != NULL)
+        hashdone(newhash, HASH_LIST, newmask);
+    for (n = 0; n < __arraycount(prepared); n++)
+        if (prepared[n] != NULL)
+            pool_put(&uao_swhash_elt_pool, prepared[n]);
+#endif
+    return 0;
+}
+/* Future allocations follow this policy under the same object lock used
+ * by uao_get. Existing pages are not silently migrated by a GFP change. */
+int
+uao_set_pgfl_future(struct uvm_object *object, int freelist)
+{
+    struct uvm_aobj *aobj = (struct uvm_aobj *)object;
+    KASSERT(rw_write_held(object->vmobjlock));
+    if (!UVM_OBJ_IS_AOBJ(object) || freelist < 0 || freelist > VM_NFREELIST)
+        return EINVAL;
+    aobj->u_freelist = freelist;
+    return 0;
+}

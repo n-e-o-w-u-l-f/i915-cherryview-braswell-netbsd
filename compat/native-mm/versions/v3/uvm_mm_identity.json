@@ -1,0 +1,17 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "prior_entry_patch_sha256": "e8b56268884e14664f7808a9485e370567dfb5af7baaed0cc555df26a085a3bd",
+  "files": {
+    "sys/uvm/uvm_extern.h": {
+      "before_sha256": "fb842bc4419de656c5b9f2ba35a21690be3d6f41852c4dda93f25a60b71bc3ed",
+      "after_sha256": "755b6b4e4f863a18513a44c19ab1e3a3898a506a05593a5480b9b5d3d3122e67"
+    },
+    "sys/uvm/uvm_map.c": {
+      "before_sha256": "c8986515c55e68d22bee37c2093ff79b14b7c566eaaa5971e6604a824d370cb2",
+      "after_sha256": "43afea3ef8d815c9011279020dbc7ea836ee192e70a47b5a04b7c8bd22dd57ad"
+    }
+  },
+  "patch_sha256": "b8402354f029ad998074a749be61bad85eb1072a169b355a7f3361ac4d3e9f87",
+  "acceptance": "Native source preparation only. MM owner component, native kernel compilation, publication/exec/pin race tests, code-owner rundown and full link remain separate mandatory gates.",
+  "version": 3
+}

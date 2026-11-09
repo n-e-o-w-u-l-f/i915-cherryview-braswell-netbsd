@@ -11,6 +11,7 @@ import io
 import json
 from pathlib import Path, PurePosixPath
 import sys
+from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
@@ -202,11 +203,17 @@ class EntrypointAdmission(unittest.TestCase):
         manifest = {"linux_head_verified": True, "linux_pin": contract.LINUX_PIN,
                     "netbsd_pin": contract.NETBSD_PIN, "files": []}
         staged = {"state": "CONFIGURED", "linux_pin": contract.LINUX_PIN,
-                  "netbsd_pin": contract.NETBSD_PIN, "units": groups}
+                  "netbsd_pin": contract.NETBSD_PIN, "units": groups,
+                  "paths": {"base_tool_dir": "/usr/tools"}}
         target = manifest if module is prepare else staged
         target.update(stage_changes or {})
         readmap = {work / "full-scope-audit/linux-stage-verified/PORT-MANIFEST.json":
                    json.dumps(manifest), work / "full-linux-graph-status.json": json.dumps(staged)}
+        # These are explicitly synthetic source-preflight inputs. Real path,
+        # reference-copy and provenance gates have their own pure tests and a
+        # separately executed native HP stage; this fixture isolates the real
+        # main() -> exact graph contract admission before any native output.
+        readmap[PurePosixPath("/mock-owner/docs/evidence/HP_I915_REFERENCE_MANIFEST_20261005.json")] = json.dumps({"files": []})
 
         class MemoryPath:
             def __init__(self, value):
@@ -225,11 +232,30 @@ class EntrypointAdmission(unittest.TestCase):
             def parent(self):
                 return MemoryPath(self.path.parent)
 
+            @property
+            def parents(self):
+                return tuple(MemoryPath(path) for path in self.path.parents)
+
             def resolve(self, strict=False):
                 return self
 
             def exists(self):
                 return False
+
+            def is_symlink(self):
+                return False
+
+            def is_absolute(self):
+                return self.path.is_absolute()
+
+            def is_dir(self):
+                return True
+
+            def is_file(self):
+                return True
+
+            def stat(self):
+                return SimpleNamespace(st_uid=1004)
 
             def read_text(self, *args, **kwargs):
                 reads.append(str(self.path))
@@ -244,6 +270,10 @@ class EntrypointAdmission(unittest.TestCase):
         argv = [module.__name__, "--workspace", str(work)]
         if module is probe:
             argv.extend(["--output", str(work / "new-contract-proof")])
+        else:
+            argv.extend(["--linux-tree", str(work / "linux-reference"),
+                         "--netbsd-reference", str(work / "netbsd-reference"),
+                         "--materialized-tree", str(work / "full-scope-audit/linux-stage-verified")])
         directories = {"drivers/gpu/drm/i915": "i915", "drivers/gpu/drm": "drm",
                        "drivers/gpu/drm/display": "display", "drivers/gpu/drm/ttm": "ttm"}
         with ExitStack() as stack:
@@ -252,13 +282,26 @@ class EntrypointAdmission(unittest.TestCase):
             stack.enter_context(patch.object(module.platform, "system", return_value=system))
             stack.enter_context(patch.object(module.platform, "release", return_value=release))
             stack.enter_context(patch.object(module.socket, "gethostname", return_value=hostname))
+            stack.enter_context(patch.object(module.os, "geteuid", return_value=1004, create=True))
             run = stack.enter_context(patch.object(module.subprocess, "run",
                                       side_effect=AssertionError("unexpected external execution")))
             check_output = stack.enter_context(patch.object(module.subprocess, "check_output",
                                                side_effect=AssertionError("unexpected external execution")))
             if module is prepare:
+                stack.enter_context(patch.object(module, "__file__", "/mock-owner/tools/prepare_hp_full_graph.py"))
+                stack.enter_context(patch.object(module.os, "geteuid", return_value=1004, create=True))
+                stack.enter_context(patch.object(module.os, "access", return_value=True))
+                stack.enter_context(patch.object(module, "disjoint", return_value=True))
+                stack.enter_context(patch.object(module, "clean_reference"))
+                stack.enter_context(patch.object(module, "stage_outputs", side_effect=lambda root, inputs:
+                    {name: root / name for name in ("netbsd-full-linux", "full-linux-obj", "full-linux-tools")}))
                 stack.enter_context(patch.object(module, "selected", side_effect=
                                     lambda root, directory, *args: groups.get(directories[directory])))
+            else:
+                stack.enter_context(patch.object(module, "stage_identity", return_value={"units": []}))
+                # Positive control stops at the next real native selection
+                # query. Negative contracts must reject before this call.
+                check_output.side_effect = NativeBoundary("native selection query")
             yield reads, writes, run, check_output
 
     def rejected(self, module, groups=None, stage_changes=None, **host):
@@ -276,12 +319,12 @@ class EntrypointAdmission(unittest.TestCase):
     def test_prepare_wrong_same_size_set_aborts_before_staging_or_tool_execution(self):
         groups = deepcopy(self.groups)
         groups["i915"][0] = "display/unreviewed.c"
-        self.assertEqual(len(self.rejected(prepare, groups)), 1)
+        self.assertEqual(len(self.rejected(prepare, groups)), 2)
 
     def test_prepare_missing_dependency_group_aborts_before_staging(self):
         groups = deepcopy(self.groups)
         del groups["ttm"]
-        self.assertEqual(len(self.rejected(prepare, groups)), 1)
+        self.assertEqual(len(self.rejected(prepare, groups)), 2)
 
     def test_prepare_wrong_materialized_pin_aborts_before_staging(self):
         self.assertEqual(len(self.rejected(prepare, stage_changes={"netbsd_pin": "wrong"})), 1)
@@ -313,7 +356,7 @@ class EntrypointAdmission(unittest.TestCase):
             with self.assertRaises(NativeBoundary):
                 prepare.main()
             self.assertEqual(writes, ["/root/hp-driver-port-20261005/netbsd-full-linux"])
-            self.assertEqual(len(reads), 1)
+            self.assertEqual(len(reads), 2)
             run.assert_not_called()
             check_output.assert_not_called()
 
@@ -322,9 +365,9 @@ class EntrypointAdmission(unittest.TestCase):
             with self.assertRaises(NativeBoundary):
                 probe.main()
             self.assertEqual(writes, [])
-            self.assertEqual(reads[-1], "/root/hp-driver-port-20261005/full-linux-obj/Makefile")
+            self.assertEqual(reads[-1], "/root/hp-driver-port-20261005/full-linux-graph-status.json")
             run.assert_not_called()
-            check_output.assert_not_called()
+            self.assertEqual(check_output.call_count, 1)
 
 
 if __name__ == "__main__":

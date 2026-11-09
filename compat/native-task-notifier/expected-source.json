@@ -1,0 +1,24 @@
+{
+  "required_prior_patches": [
+    "0032",
+    "0035",
+    "0037"
+  ],
+  "files": {
+    "sys/external/bsd/drm2/linux/linux_task.c": {
+      "before_sha256": "375113319b162867a34263bb8fa642f5e4e1d09a71d9329e9d82e6ed5a9b8a1c",
+      "after_sha256": "1b435ea0d47726f9de3bc9d49bbec4b5f26bcbf31dc4d217daa4ae00df8d7f2d"
+    },
+    "sys/external/bsd/drm2/include/linux/task_netbsd.h": {
+      "before_sha256": "e6aca23639d618eb2f49b808c856ac55b0b0d9954406964b18e63f5d4cd5df0b",
+      "after_sha256": "fb3c0fd2ddb558868cf8c3ef4b566a9eeced50da236e2fd74b5f86038c0cda8e"
+    }
+  },
+  "patch_sha256": "49615c91d849275aa15e0af7c258ed85431aa040e434425578ae468e68add14f",
+  "assets_sha256": {
+    "generate.py": "2de40392926b4fdc6096bf625fd91c03f8f92ca1e817ee6ef3e235fe955e229e",
+    "notifier.inc": "7d1e78cbe6f54bb7f603a49329418c4a1abfece55f103b3f139d2c71d0862ee3",
+    "owner_wait.inc": "b8b627f48da42ce75527cb7b29d6eebfed8cc2e559c359f29d961b95d481346a"
+  },
+  "scope": "One fallible native workqueue at init; embedded coalesced work, deferred final task destruction, retained-parent internal allocation. Native ABI/lifecycle and module/code-owner teardown require independent native validation."
+}

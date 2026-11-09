@@ -1,0 +1,9 @@
+{
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "linux_path": "drivers/gpu/drm/drm_ioctl.c",
+  "staged_path": "sys/external/bsd/drm2/dist/drm/drm_ioctl.c",
+  "before_sha256": "106d88395f14ccb6ef1969e12d8497af8e4f9cba558bfd22ed8f5d8ab69715e5",
+  "after_sha256": "79405dbd495495943ec71418a154c615639f8a4043eccac9dd8eb9e6ea3a3918",
+  "patch_sha256": "e2f072e5ef52c5b07e8904e9fed23ce7bf3801a95f74c0b395a6f1ad6cd6724a",
+  "limitation": "Source-derived ioctl factor only; native namespace, file provider, user-ioctl syscall hook and kernel compilation remain separate mandatory acceptance gates."
+}

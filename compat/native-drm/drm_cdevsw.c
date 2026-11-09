@@ -48,10 +48,9 @@ __KERNEL_RCSID(0, "$NetBSD: drm_cdevsw.c,v 1.31 2024/04/21 03:02:39 riastradh Ex
 #include <sys/uio.h>
 #include <uvm/uvm_extern.h>
 #include <linux/err.h>
-#include <linux/file.h>
 #include <linux/file_netbsd.h>
 #include <linux/mm_netbsd.h>
-#include <linux/poll.h>
+#include <linux/poll_netbsd.h>
 #include <linux/pci.h>
 #include <linux/slab.h>
 #include <linux/task_netbsd.h>
@@ -71,7 +70,7 @@ static int drm_native_poll(struct file *, int);
 static int drm_native_kqfilter(struct file *, struct knote *);
 static int drm_native_stat(struct file *, struct stat *);
 static int drm_native_mmap(struct file *, off_t *, size_t, int, int *, int *,
-    struct uvm_object **, int *);
+    struct uvm_object **, int *, struct uvm_mmap_request **);
 static size_t drm_native_event_size(struct linux_file *);
 
 const struct cdevsw drm_cdevsw = {
@@ -102,7 +101,7 @@ const struct fileops drm_fileops = {
 	.fo_close = drm_native_close,
 	.fo_kqfilter = drm_native_kqfilter,
 	.fo_restart = fnullop_restart,
-	.fo_mmap = drm_native_mmap,
+	.fo_mmap_prepare = drm_native_mmap,
 };
 
 static int
@@ -193,6 +192,8 @@ drm_native_open(dev_t devno, int flags, int fmt, struct lwp *lwp)
 	error = linux_file_poll_init(file);
 	if (error != 0)
 		goto out_file;
+	/* fd_clone transfers this file owner to one native container. */
+	linux_file_fd_attach(file);
 	error = fd_clone(native, fd, flags, &drm_fileops, file);
 	KASSERT(error == EMOVEFD);
 	drm_minor_release(dminor);
@@ -452,22 +453,20 @@ drm_native_stat(struct file *native, struct stat *stat)
 
 static int
 drm_native_mmap(struct file *native, off_t *offset, size_t length, int prot,
-    int *flags, int *advice, struct uvm_object **object, int *maxprot)
+    int *flags, int *advice, struct uvm_object **object, int *maxprot,
+    struct uvm_mmap_request **request)
 {
 	struct linux_file *file = native->f_data;
 	struct task_struct *task = NULL;
-	voff_t adjusted;
 	int error = linux_task_entry_enter(&task);
 
 	if (error != 0)
 		return error;
 	linux_file_sync_flags(file, native);
-	error = linux_uvm_mmap(file, *offset, length, prot, *flags, object, &adjusted);
-	if (error == 0) {
-		*offset = adjusted;
-		*maxprot &= linux_uvm_mmap_maxprot(*object);
-		*advice = UVM_ADV_RANDOM;
-	}
+	/* This real per-call transaction keeps preparation lifetime separate
+	 * from the Native UAO/device pager class and owns every error unwind. */
+	error = linux_uvm_mmap_prepare(file, offset, length, prot, flags, advice,
+	    object, maxprot, request);
 	linux_task_entry_leave(&task);
-	return drm_native_error(error);
+	return error; /* Factory already returns Native positive errno. */
 }
