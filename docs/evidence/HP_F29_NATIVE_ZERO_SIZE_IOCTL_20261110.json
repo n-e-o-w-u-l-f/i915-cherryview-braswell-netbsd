@@ -1,0 +1,594 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F29-NATIVE-ZERO-SIZE-IOCTL-20261110",
+  "source_parent": "b8699305ebf06d9b6b1145c21fecf51d685acab8",
+  "result": "SOURCE_VERIFIED",
+  "wrapper": {
+    "state": "PASS",
+    "command": [
+      "/usr/pkg/bin/python3",
+      "-B",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_f29_native_zero_size_ioctl.py",
+      "--native-source",
+      "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+      "--linux-source",
+      "/home/andreas/projects/hp-i915-f26-20261106/f29-reference-inputs/drm_ioctl_fd179f8.c",
+      "--output",
+      "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03"
+    ],
+    "log": "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03.log",
+    "started_at": "2026-11-09T23:27:23.274494+00:00",
+    "pid": 13179,
+    "exit_code": 0,
+    "finished_at": "2026-11-09T23:27:34.824358+00:00"
+  },
+  "detail": {
+    "state": "PASS",
+    "started_at": "2026-11-09T23:27:23.819149+00:00",
+    "host": "hp-tpnw121.lan",
+    "pid": 13179,
+    "native_source_receipt": {
+      "state": "PASS",
+      "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+      "source": "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+      "source_has_git": false,
+      "original_sha256": {
+        "sys/sys/file.h": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c",
+        "sys/sys/filedesc.h": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c",
+        "sys/kern/sys_generic.c": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514",
+        "sys/kern/kern_descrip.c": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1"
+      },
+      "patch_sha256": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+      "private_tree": "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/native-source",
+      "parent_git_discovery": "disabled by ceiling and cleared Git directory/index variables",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "--check",
+            "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/corrupt-context.patch"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "error: patch failed: sys/sys/file.h:81\nerror: sys/sys/file.h: patch does not apply\n",
+          "expected_success": false
+        },
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "--check",
+            "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "",
+          "expected_success": true
+        },
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "",
+          "expected_success": true
+        }
+      ],
+      "full_kernel": "NOT_RUN",
+      "native_kernel_headers": "NOT_RUN",
+      "patched_sha256": {
+        "sys/sys/file.h": "a1877ef189c59eab925487927932c9ea55681a0e8dfb460b56ebf6fc47f59770",
+        "sys/sys/filedesc.h": "0bfa222bfaeaf1c1ac049ff6525a2df4343741e2dd30d91f000460e9fc604519",
+        "sys/kern/sys_generic.c": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977",
+        "sys/kern/kern_descrip.c": "55d4c5b492535d1c281ce7962eccb1f4f6d684b4fd85ef7f1d317cdcbc39472d"
+      },
+      "originals_unchanged": true,
+      "finished_at": "2026-11-09T23:27:23.814774+00:00"
+    },
+    "linux_source": "/home/andreas/projects/hp-i915-f26-20261106/f29-reference-inputs/drm_ioctl_fd179f8.c",
+    "linux_source_sha256": "106d88395f14ccb6ef1969e12d8497af8e4f9cba558bfd22ed8f5d8ab69715e5",
+    "derived_complete_source_sha256": "79405dbd495495943ec71418a154c615639f8a4043eccac9dd8eb9e6ea3a3918",
+    "actual_drm_functions_sha256": "71b09904ff3d92586cda2271a5a1555940e0ff5605a7a2ae77bf526bddd58a1f",
+    "complete_patched_sys_ioctl_sha256": "caa96f576ac8f4586c9f0e7712b2be439afc2af937c4118ae5dca2855af83ede",
+    "native_excerpt_sha256": {
+      "early": "6f422686759609ff4ba9406011a40f982c8de2e99a4c93e7ef9b93f0c1065da7",
+      "size": "23b68e67635f793df12488dc3d30669f2d97b33138d4a07aef423d5e148d71e9",
+      "marshal": "fe80def38fb5ba0b14c7bc65dc2c18fc79d16c6a55b4d20a1e9749e226833aa1"
+    },
+    "patch_sha256": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+    "fixture_sha256": "49558ca1fb831e67a86cb60a2c56c4b00f714087f9098f2bc7d2f9c81c1e1d9e",
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "-fsyntax-only",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/actual.c"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/actual.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/actual"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/actual"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "80e97102973c9f1b4402a4c2be24faf0a0487248fcf9b19980e0139c8b5eb938",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_zero_guard.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_zero_guard"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_zero_guard"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "88981d2aaa500ffad39c8b9d9d551b8b78396bb918a4d83f9f0edda3d396508c",
+        "stderr_sha256": "c66acd1741217125e309e01d32f41b18cd59a245f1cfcaa96712ec5813f89636"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/broaden_zero_guard_to_legacy.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/broaden_zero_guard_to_legacy"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/broaden_zero_guard_to_legacy"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "081e89aad252e6908666b965151564c87677a83cf58455d292abb117b737c85d",
+        "stderr_sha256": "47fc2fade2ae354d8e56a70702fc01ef57c26aa8a9fc3509193924c449f3a376"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/guard_only_raw_zero_command.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/guard_only_raw_zero_command"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/guard_only_raw_zero_command"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "88981d2aaa500ffad39c8b9d9d551b8b78396bb918a4d83f9f0edda3d396508c",
+        "stderr_sha256": "c66acd1741217125e309e01d32f41b18cd59a245f1cfcaa96712ec5813f89636"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_direction_translation.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_direction_translation"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_direction_translation"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "3da31427c7d4dabdfe9b63d1dffa17b93d1fe3ef10a1345a5d0d034159996585",
+        "stderr_sha256": "08b0150c41cf153094e591decb2f1b40c9ab7bb064cbf963a825734da97ea933"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_highbit_guard.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_highbit_guard"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_highbit_guard"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "165a3a4b02e8307e93e99629d8cf010b8a563318af8bfe7a148991d9267dc0d9",
+        "stderr_sha256": "d4d47f050445b3c5e37d360e7f3351351b492c4644ed56f9f24bff1e3b32ee31"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/clear_data_for_all_drm_sizes.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/clear_data_for_all_drm_sizes"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/clear_data_for_all_drm_sizes"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "08047c0d7171e550fcc46ac8d8f970f74c6b2bc732920184a56dd44efcf620fe",
+        "stderr_sha256": "30e22280654d1659221c4083c67769463930570256226dc1e08582166ed4b47e"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_canonical_zero_extension.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_canonical_zero_extension"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/remove_canonical_zero_extension"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "88981d2aaa500ffad39c8b9d9d551b8b78396bb918a4d83f9f0edda3d396508c",
+        "stderr_sha256": "cf9284fc8fdc1749c3db6f34b2638a86b3350d065dac925742ef59ba32f3480f"
+      },
+      {
+        "command": [
+          "/usr/bin/cc",
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/dispatch_into_native_pointer.c",
+          "-o",
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/dispatch_into_native_pointer"
+        ],
+        "exit_code": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "d0e2f2a7edcdf716e3eb087f918fdfb43abb42f8a798e582653d8a8f9ce36631"
+      },
+      {
+        "command": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f29-native-zero-size-ioctl-20261110-a03/dispatch_into_native_pointer"
+        ],
+        "exit_code": -6,
+        "stdout_sha256": "88981d2aaa500ffad39c8b9d9d551b8b78396bb918a4d83f9f0edda3d396508c",
+        "stderr_sha256": "9b45d4ffe4a300a1e5aedec22aa70e6cb101cf1e8f6c4b65855a26f119e60c0c"
+      }
+    ],
+    "variants": [
+      {
+        "name": "actual",
+        "generated_source_sha256": "33174bd17d0336ae8e3c73f8fb04186c36d15577c22bd9cd07d14e25702e4e56",
+        "syntax_exit": 0,
+        "compile_exit": 0,
+        "run_exit": 0,
+        "passed_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16",
+          "legacy_zero_size_preserves_user_address",
+          "non_drm_hook_zero_size_preserves_user_address",
+          "copyin_fault_before_callback",
+          "highbit_rejected_before_uaccess",
+          "oversized_native_argument_rejected",
+          "null_user_zero_size_get_cap"
+        ],
+        "started_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16",
+          "legacy_zero_size_preserves_user_address",
+          "non_drm_hook_zero_size_preserves_user_address",
+          "copyin_fault_before_callback",
+          "highbit_rejected_before_uaccess",
+          "oversized_native_argument_rejected",
+          "null_user_zero_size_get_cap"
+        ],
+        "binary_sha256": "86e95659ec0d37322336d2ce19e768b458f06841389bd57dcc470e75a02c20af",
+        "accepted": true
+      },
+      {
+        "name": "remove_zero_guard",
+        "generated_source_sha256": "d12a56409923029e480ff38f05ecf0d9e5d61d35ba5af5e684089a5da79a8928",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [],
+        "started_cases": [
+          "forged_get_cap_zero_size"
+        ],
+        "binary_sha256": "72bf5f600db7de1e9487816c69fffcc2aa0037b84bbda6027ae09274b9fb2562",
+        "expected_case": "forged_get_cap_zero_size",
+        "expected_assertion": "data == NULL",
+        "accepted": true
+      },
+      {
+        "name": "broaden_zero_guard_to_legacy",
+        "generated_source_sha256": "ed6ab857ce395b07856bdb852162cd9ede8ddd4100e1269a398b29e8cbc63e0b",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16"
+        ],
+        "started_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16",
+          "legacy_zero_size_preserves_user_address"
+        ],
+        "binary_sha256": "a08f8b1bae79f3fb42c2e167f0eb4e5f1e231d3382b807b009aca3d46e5539b2",
+        "expected_case": "legacy_zero_size_preserves_user_address",
+        "expected_assertion": "native_seen_data == user_bytes",
+        "accepted": true
+      },
+      {
+        "name": "guard_only_raw_zero_command",
+        "generated_source_sha256": "981e22b72a2a5ce6d966b59bb91b496ba09dc78eedce09fa40b518bae475a468",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [],
+        "started_cases": [
+          "forged_get_cap_zero_size"
+        ],
+        "binary_sha256": "2f4f1075206de5c0a4675a228be1631ed7ca8e72fe9a279869d53089f241132f",
+        "expected_case": "forged_get_cap_zero_size",
+        "expected_assertion": "data == NULL",
+        "accepted": true
+      },
+      {
+        "name": "remove_direction_translation",
+        "generated_source_sha256": "e305a446f7a90f2396eba49098735dd74ebf3b88b5751f4d0a0b6574897bc772",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16"
+        ],
+        "started_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16"
+        ],
+        "binary_sha256": "9437cc5a8939083fc5e5298c26e9c9460a54b8b3c135615e23f8d483360ae52f",
+        "expected_case": "linux_write_only_16",
+        "expected_assertion": "memcmp(data, callback_prefix, callback_prefix_size) == 0",
+        "accepted": true
+      },
+      {
+        "name": "remove_highbit_guard",
+        "generated_source_sha256": "3aebad22dc68d75dd0707b4d7b6b9b18d6194707b4df27cd2e20567343070245",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16",
+          "legacy_zero_size_preserves_user_address",
+          "non_drm_hook_zero_size_preserves_user_address",
+          "copyin_fault_before_callback"
+        ],
+        "started_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16",
+          "linux_write_only_16",
+          "linux_read_only_16",
+          "legacy_zero_size_preserves_user_address",
+          "non_drm_hook_zero_size_preserves_user_address",
+          "copyin_fault_before_callback",
+          "highbit_rejected_before_uaccess"
+        ],
+        "binary_sha256": "19d999c17d15290daa89967d3afd33428bb40627c0316b93d93382bdadc8c1dd",
+        "expected_case": "highbit_rejected_before_uaccess",
+        "expected_assertion": "error == ENOTTY",
+        "accepted": true
+      },
+      {
+        "name": "clear_data_for_all_drm_sizes",
+        "generated_source_sha256": "41a847f800e7a4b42f6c14e4996ef184327b112e34238b1d25a81662f5650b47",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical"
+        ],
+        "started_cases": [
+          "forged_get_cap_zero_size",
+          "zero_size_large_canonical",
+          "linux_read_write_16"
+        ],
+        "binary_sha256": "012e5be5e7756970a5c52a5912473153d2f843de6fa7a6198eedb6558200bbf4",
+        "expected_case": "linux_read_write_16",
+        "expected_assertion": "error == 0",
+        "accepted": true
+      },
+      {
+        "name": "remove_canonical_zero_extension",
+        "generated_source_sha256": "f9c01f2bf5cfa66b0992e283756d93fd9ccc5a8351c853d9424bfdc7c26f5e78",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [],
+        "started_cases": [
+          "forged_get_cap_zero_size"
+        ],
+        "binary_sha256": "3d741b0ce240aa86c993e3c2dfec8af07d86f2a27df9def2d102bf85d3fb9242",
+        "expected_case": "forged_get_cap_zero_size",
+        "expected_assertion": "p[i] == 0",
+        "accepted": true
+      },
+      {
+        "name": "dispatch_into_native_pointer",
+        "generated_source_sha256": "1e5f4bf299adf0bb676efa5e7f9fdd89840a75853b63edb5b3dc67318f9ad493",
+        "compile_exit": 0,
+        "run_exit": -6,
+        "passed_cases": [],
+        "started_cases": [
+          "forged_get_cap_zero_size"
+        ],
+        "binary_sha256": "7e5845e1210e5f0470e65302151389f54b45bf62752567371e8d4211a090ba2e",
+        "expected_case": "forged_get_cap_zero_size",
+        "expected_assertion": "data != NULL",
+        "accepted": true
+      }
+    ],
+    "source_sha256": {
+      "patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+      "tests/fixtures/f29_native_ioctl_bridge.c": "49558ca1fb831e67a86cb60a2c56c4b00f714087f9098f2bc7d2f9c81c1e1d9e",
+      "tests/test_f29_native_zero_size_ioctl.py": "b56061dddf8616dfbe62a7009540e3e875bfd1e6bc6fbfefdc794803c5a07e41",
+      "tools/check_f29_native_zero_size_patch.py": "89d96be15e9e6895bf51e2b948b6300ea299bdf1de439d7386d210c7407e6df7"
+    },
+    "native_kernel_headers": "NOT_RUN",
+    "full_kernel": "NOT_RUN",
+    "hardware": "NOT_RUN",
+    "limitation": "Exact unchanged native source excerpts and five real DRM functions with modeled FD/file/DRM/allocator/uaccess surroundings only",
+    "baseline_cases": 11,
+    "negative_controls": 8,
+    "finished_at": "2026-11-09T23:27:34.744095+00:00"
+  },
+  "earlier_attempts": [
+    {
+      "attempt": "A01",
+      "result": "fixture macro redefinition under-Werror; retained"
+    },
+    {
+      "attempt": "A02",
+      "result": "unused modeled file variable under-Werror; retained"
+    }
+  ],
+  "f11_result_comparison": "three header/fd-owner files byte-exact;sys_generic only scoped nullbranch",
+  "native_kernel_headers": "NOT_RUN",
+  "full_kernel": "NOT_RUN",
+  "runtime": "NOT_RUN"
+}
