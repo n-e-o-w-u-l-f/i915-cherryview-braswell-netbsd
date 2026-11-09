@@ -26,10 +26,14 @@ def main(argv=None):
     parser.add_argument('--kernel-obj', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--toolchain', type=Path, required=True)
+    parser.add_argument('--source-archive', type=Path,
+                        help='explicit fixed-pin archive used-source proof')
     args = parser.parse_args(argv)
     command = [sys.executable, '-B', str(CORE_BUILDER),
                '--source', str(args.source), '--kernel-obj', str(args.kernel_obj),
                '--output', str(args.output), '--toolchain', str(args.toolchain)]
+    if args.source_archive is not None:
+        command.extend(('--source-archive', str(args.source_archive)))
     for patch, contract in DEFAULT_CHAIN:
         command.extend(('--patch', str(patch), '--contract', str(contract)))
     return subprocess.run(command, check=False).returncode
