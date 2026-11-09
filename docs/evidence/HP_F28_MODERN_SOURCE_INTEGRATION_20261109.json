@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F28-MODERN-PROVIDER-INTEGRATION-20261109",
+  "observed_at": "2026-11-09T22:31:21.086861+00:00",
+  "status": "SOURCE_INTEGRATION_AND_PREFLIGHT_VERIFIED",
+  "source_merge": {
+    "commit": "51e6c20c172f940f686ba128cfac634238a2d4b3",
+    "parents": [
+      "6db373c5462d29541a57a36c54409d04399cb9fa",
+      "fd61cceac3774f68795f6bd91b241889c3b69f13"
+    ],
+    "tree": "32eef6c5fa97c637bb6f3ea44bc8adbedceb6a1c",
+    "recovered_files": 146,
+    "recovered_exact_at_merge": 146,
+    "parent_owned_paths": 246,
+    "same_file_overlap": 0,
+    "source_python_ast_pass": 37,
+    "full_inherited_diff_check_exit": 2,
+    "inherited_whitespace": "preserved exact CRLF/patch bytes"
+  },
+  "validation": {
+    "verified_at": "2026-11-09T22:28:30.250559+00:00",
+    "state": "PASS",
+    "counts": {
+      "native_hp_build_preflight": 18,
+      "native_core_patch_chain": 8
+    },
+    "commands": [
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_native_hp_build_preflight.py",
+          "-v"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "test_core_hashes_for_different_tool_paths_are_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_core_hashes_for_different_tool_paths_are_rejected) ... ok\ntest_different_core_toolchain_root_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_different_core_toolchain_root_is_rejected) ... ok\ntest_historical_missing_root_or_tool_hashes_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_historical_missing_root_or_tool_hashes_is_rejected) ... ok\ntest_malformed_recorded_tool_digest_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_malformed_recorded_tool_digest_is_rejected) ... ok\ntest_matching_core_provenance_is_retained_without_rebaselining (test_native_hp_build_preflight.CoreToolchainReceipt.test_matching_core_provenance_is_retained_without_rebaselining) ... ok\ntest_same_path_tool_drift_after_core_pass_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_same_path_tool_drift_after_core_pass_is_rejected) ... ok\ntest_current_and_previous_non_root_owners_are_admitted (test_native_hp_build_preflight.HostAdmission.test_current_and_previous_non_root_owners_are_admitted) ... ok\ntest_root_other_host_os_version_and_architecture_are_rejected (test_native_hp_build_preflight.HostAdmission.test_root_other_host_os_version_and_architecture_are_rejected) ... ok\ntest_exclusive_mkdir_preserves_path_created_after_preflight (test_native_hp_build_preflight.PrivateOutput.test_exclusive_mkdir_preserves_path_created_after_preflight) ... ok\ntest_existing_and_dangling_symlink_outputs_are_preserved (test_native_hp_build_preflight.PrivateOutput.test_existing_and_dangling_symlink_outputs_are_preserved) ... ok\ntest_output_inside_input_or_input_symlink_is_rejected (test_native_hp_build_preflight.PrivateOutput.test_output_inside_input_or_input_symlink_is_rejected) ... ok\ntest_owned_fresh_output_is_created_exclusively_with_private_permissions (test_native_hp_build_preflight.PrivateOutput.test_owned_fresh_output_is_created_exclusively_with_private_permissions) ... ok\ntest_sticky_shared_parent_is_admitted_for_safe_temporary_workflows (test_native_hp_build_preflight.PrivateOutput.test_sticky_shared_parent_is_admitted_for_safe_temporary_workflows) ... ok\ntest_unowned_non_sticky_parent_is_rejected_without_creating_output (test_native_hp_build_preflight.PrivateOutput.test_unowned_non_sticky_parent_is_rejected_without_creating_output) ... ok\ntest_actual_executable_paths_and_matching_config_are_admitted (test_native_hp_build_preflight.ToolchainAdmission.test_actual_executable_paths_and_matching_config_are_admitted) ... ok\ntest_foreign_relative_wrapped_or_additional_compiler_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_foreign_relative_wrapped_or_additional_compiler_is_rejected) ... ok\ntest_missing_or_non_executable_tool_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_missing_or_non_executable_tool_is_rejected) ... ok\ntest_tool_symlink_escaping_root_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_tool_symlink_escaping_root_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.171s\n\nOK\n"
+      },
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_native_core_patch_chain.py",
+          "-v"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "test_ambiguous_output_name_refused (test_native_core_patch_chain.ChainAdmission.test_ambiguous_output_name_refused) ... ok\ntest_duplicate_and_unpaired_refused (test_native_core_patch_chain.ChainAdmission.test_duplicate_and_unpaired_refused) ... ok\ntest_missing_c_owner_refused (test_native_core_patch_chain.ChainAdmission.test_missing_c_owner_refused) ... ok\ntest_noncomposing_source_digest_refused (test_native_core_patch_chain.ChainAdmission.test_noncomposing_source_digest_refused) ... ok\ntest_ordered_composition_keeps_original_and_final (test_native_core_patch_chain.ChainAdmission.test_ordered_composition_keeps_original_and_final) ... ok\ntest_patch_drift_refused (test_native_core_patch_chain.ChainAdmission.test_patch_drift_refused) ... ok\ntest_unsafe_source_path_refused (test_native_core_patch_chain.ChainAdmission.test_unsafe_source_path_refused) ... ok\ntest_wrong_order_refused (test_native_core_patch_chain.ChainAdmission.test_wrong_order_refused) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.081s\n\nOK\n"
+      },
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "tools/build_hp_native_provider.py",
+          "--help"
+        ],
+        "exit_code": 0,
+        "stdout": "usage: build_hp_native_provider.py [-h] --source SOURCE\n                                   --kernel-obj KERNEL_OBJ\n                                   --core-status CORE_STATUS\n                                   --provider-root PROVIDER_ROOT\n                                   --output OUTPUT --toolchain TOOLCHAIN\n                                   --unit UNIT [--include-root INCLUDE_ROOT]\n\nCompile real provider C against a completed native patch-chain ABI snapshot.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --kernel-obj KERNEL_OBJ\n  --core-status CORE_STATUS\n  --provider-root PROVIDER_ROOT\n  --output OUTPUT\n  --toolchain TOOLCHAIN\n  --unit UNIT\n  --include-root INCLUDE_ROOT\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "tools/build_hp_native_fileops.py",
+          "tools/build_hp_native_core_patch.py",
+          "tools/build_hp_native_provider.py",
+          "tools/native_hp_build.py",
+          "tests/test_native_hp_build_preflight.py",
+          "tests/test_native_core_patch_chain.py"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "-c",
+          "import json, sys\nsys.path.insert(0, 'tools')\nfrom native_hp_build import require_hp_owner, toolchain_paths, configured_compiler\nrequire_hp_owner()\ntools=toolchain_paths('/usr/obj/tooldir.NetBSD-11.0-amd64')\nprint(json.dumps({'host_preflight':'PASS','tools':{k:str(v) for k,v in tools.items()},'compiler':configured_compiler(str(tools['compiler']),tools)}))\n"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"host_preflight\": \"PASS\", \"tools\": {\"root\": \"/usr/obj/tooldir.NetBSD-11.0-amd64\", \"make\": \"/usr/obj/tooldir.NetBSD-11.0-amd64/bin/nbmake-amd64\", \"compiler\": \"/usr/obj/tooldir.NetBSD-11.0-amd64/bin/x86_64--netbsd-gcc\"}, \"compiler\": [\"/usr/obj/tooldir.NetBSD-11.0-amd64/bin/x86_64--netbsd-gcc\"]}\n",
+        "stderr": ""
+      }
+    ],
+    "source_sha256": {
+      "tools/build_hp_native_fileops.py": "2ec93def3b099855f39fd4a842a91302165248fa838492a573683bafb0d55544",
+      "tools/build_hp_native_core_patch.py": "bae06167aab34dddf7922ab0c4a949f11891cc6dd47e702ca5358182d67e8344",
+      "tools/build_hp_native_provider.py": "a3b321ca354fa2276e862941e12d2aeb849ce8bbc06591ef70620f7931461814",
+      "tools/native_hp_build.py": "39d4963544e050433ab97f898ac2bbcd3f5dc80e69bf4b43953fa25ad6c45c9b",
+      "tests/test_native_hp_build_preflight.py": "789058a1512f70837191ce75862983a5f08cb8fab854d3e3e807ce6ccc3c8639",
+      "tests/test_native_core_patch_chain.py": "856a1cca11988589806f88fa20df06cb611af1aab4ee052601e12164d9f150d7"
+    },
+    "prior_receipts": [
+      "f28-native-preflight.json",
+      "f28-native-preflight-regression.json"
+    ],
+    "nbmake_backend": {
+      "reported_path": "/usr/src/obj/tooldir.NetBSD-11.0-amd64/bin/nbmake",
+      "canonical": "/usr/obj/tooldir.NetBSD-11.0-amd64/bin/nbmake",
+      "declared_path": "/usr/obj/tooldir.NetBSD-11.0-amd64/bin/nbmake",
+      "same_file": true,
+      "sha256": "f2562913d259c34d162cde5cea1a8156db4cd66a0d67d220136e7339ece54c50"
+    },
+    "source_syntax": "PASS",
+    "trailing_whitespace": "PASS",
+    "log": "/home/andreas/projects/hp-i915-f26-20261106/f28-native-preflight-final.log",
+    "log_sha256": "a168a612080b1f03c1eb8a92a1a1ce0d7053c3b38055d7fbd3a92a1c9314cecc",
+    "native_objects": "NOT_RUN",
+    "full_kernel": "NOT_RUN",
+    "driver_runtime": "NOT_RUN",
+    "p2_correction": "Provider requires core toolchain root and exact original tool hashes before output creation; missing historical provenance rejected"
+  },
+  "earlier_regression": {
+    "state": "FAIL",
+    "error": "ModuleNotFoundError: No module named 'native_hp_build'",
+    "cause": "existing spec_from_file_location test did not add tools to import path",
+    "correction": "two-line explicit tools import-path setup in existing test"
+  },
+  "fleet": [
+    {
+      "host": "HP",
+      "access": "VERIFIED",
+      "principal": "andreas uid1000",
+      "os": "NetBSD11amd64",
+      "original_head": "5c7ac64c8c740701365dfbf3bf9159cc13fcf344",
+      "original_clean": true,
+      "unverified_paths": [
+        "/root/i915-full-port-work: dubious ownership",
+        "/root/i915-audit: not a Git root",
+        "/home/megal/hp-driver-source-stage-20261023: permission denied"
+      ]
+    },
+    {
+      "host": "Legion",
+      "access": "READ_ONLY_VERIFIED",
+      "heads": [
+        "27fd4d7d483be456158884c08d04446dd5312326",
+        "9b5e118ed945190d19d4f0b66fd97acd021c5bd0"
+      ],
+      "clean": true,
+      "result": "mirrors preserved; not advanced"
+    },
+    {
+      "host": "Spinnennet",
+      "access": "READ_ONLY_VERIFIED",
+      "path": "/opt/ChatGPT/hp-tpnw121-firmware/netbsd-i915-current-stage",
+      "head": "eae449e34f2e88b110f23fb6e5a17d333b9b1d68",
+      "clean": true,
+      "remote": null,
+      "result": "ancestry unresolved; preserved"
+    },
+    {
+      "host": "BMAX-B6",
+      "access": "SSH_VERIFIED_PROJECT_ACL_BLOCKED",
+      "os": "Windows10.0.26200.0",
+      "head": "UNVERIFIED",
+      "result": "exact registered project path denied before Git; no permission changes"
+    },
+    {
+      "host": "PHOBOS",
+      "access": "UNVERIFIED",
+      "result": "DC offline; current-account SSH route not verified"
+    },
+    {
+      "host": "Pi-hole",
+      "access": "IDENTITY_ONLY",
+      "os": "Linux6.18.50+rpt-rpi-v8 aarch64",
+      "result": "no registered i915 path; no project scan"
+    },
+    {
+      "host": "localhost",
+      "access": "IDENTITY_ONLY",
+      "os": "Android13 Linux5.15.197 aarch64",
+      "result": "not SteamDeck; no registered i915 path; no project scan"
+    }
+  ],
+  "coverage": [
+    {
+      "row": "source/history",
+      "state": "VERIFIED",
+      "evidence": "two-parent merge;146exact recovered blobs;246disjoint changed parent paths"
+    },
+    {
+      "row": "native build admission",
+      "state": "VERIFIED",
+      "evidence": "18preflight+8patchchain tests; explicit tools and predecessor hashes"
+    },
+    {
+      "row": "native ioctl",
+      "state": "OPEN",
+      "next": "supersede F11 to use NULL kernel data for LinuxDRM size0 before raw pointer branch; capacity/direction/errorcopyout gates"
+    },
+    {
+      "row": "compat32 ioctl",
+      "state": "OPEN",
+      "next": "independent netbsd32_ioctl native marshalling/dispatch; hook not automatically reached"
+    },
+    {
+      "row": "FILE/task/page/RCU/module lifetime",
+      "state": "OPEN",
+      "next": "native owner/provider lifecycle composition"
+    },
+    {
+      "row": "MM/UVM/GEM mapping/fault/revocation",
+      "state": "OPEN",
+      "next": "preparation/commit/split/fork/protect/remove/fault/unmap native composition"
+    },
+    {
+      "row": "modern410objects/full kernel",
+      "state": "NOT_RUN",
+      "next": "prepare_hp_full_graph remains UNREVIEWED development probe"
+    },
+    {
+      "row": "physical KMS/PM/recovery",
+      "state": "NOT_RUN",
+      "next": "full source/build gates and independent physical F77/stock fallback"
+    },
+    {
+      "row": "companion RTL/WPA2",
+      "state": "OPEN_NOT_INVESTIGATED",
+      "next": "other project repository outside this run scope"
+    }
+  ],
+  "safe_state": {
+    "installed_kernel_sha256": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde",
+    "boot_cfg_sha256": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df",
+    "durable_f27_kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+    "installed": false,
+    "booted": false,
+    "kernel_build": false
+  },
+  "governance": {
+    "pre_commit": "a1ea3639895fc964cf4f699443cb3bbc376d5386",
+    "old_F27_ledger": "unchanged; invalid CLOSED/invariant drift; explicit new reentry correction passes",
+    "old_owner_archive_sha256": "18ee04e33fa22786ac3af4cc35e0bb23c603499c13a8554426b633b2c4617e0f",
+    "global_historical_validation": "NOT_CLAIMED"
+  }
+}

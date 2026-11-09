@@ -9,10 +9,12 @@ import hashlib
 import json
 import os
 from pathlib import Path
-import platform
 import shlex
 import socket
 import subprocess
+
+from native_hp_build import (configured_compiler, create_private_output,
+                             private_output, require_hp_owner, toolchain_paths)
 
 PIN = '03d918f6d0e81fa05b8f1160eca0628ad39988a6'
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,25 +35,28 @@ def main():
     p.add_argument('--netbsd-source', type=Path, required=True)
     p.add_argument('--kernel-obj', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--toolchain', type=Path, required=True)
     a = p.parse_args()
-    if (platform.system() != 'NetBSD' or platform.release().split('.')[0] != '11'
-            or platform.machine() != 'amd64' or os.geteuid() == 0
-            or socket.gethostname().split('.')[0] != 'hp-tpnw121'):
-        p.error('HP NetBSD11 amd64 non-root only')
+    try:
+        require_hp_owner()
+        tools = toolchain_paths(a.toolchain)
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     source, obj = a.netbsd_source.resolve(strict=True), a.kernel_obj.resolve(strict=True)
-    output = a.output.parent.resolve(strict=True) / a.output.name
-    if (a.output.name in ('', '.', '..') or output.exists() or a.output.is_symlink()
-            or any(output.is_relative_to(x) for x in (source, obj, ROOT))):
-        p.error('new output outside all source/config inputs required')
+    try:
+        output = private_output(a.output, (source, obj, ROOT, tools['root']))
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     if checked(['git', '-C', source, 'rev-parse', 'HEAD']) != PIN:
         p.error('wrong NetBSD source pin')
     if checked(['git', '-C', source, 'status', '--porcelain']):
         p.error('pinned source dirty')
-    values = {k: checked(['/usr/tools/bin/nbmake-amd64', '-C', obj, '-v', k])
+    values = {k: checked([tools['make'], '-C', obj, '-v', k])
               for k in ('CC', 'CFLAGS', 'CPPFLAGS', 'S')}
-    cc = shlex.split(values['CC'])
-    if cc != ['/usr/tools/bin/x86_64--netbsd-gcc']:
-        p.error('unexpected native compiler')
+    try:
+        cc = configured_compiler(values['CC'], tools)
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     configured = Path(values['S']).resolve(strict=True).parent
     flags = shlex.split(values['CFLAGS']) + [v.replace(str(configured) + '/', str(source) + '/')
                                             for v in shlex.split(values['CPPFLAGS'])]
@@ -62,9 +67,11 @@ def main():
                  pid=os.getpid(), host=socket.gethostname(), source_pin=PIN,
                  patch_sha256=sha(patch), makefile_sha256=sha(obj / 'Makefile'),
                  prior_kernel_sha256=sha(obj / 'netbsd'), native_flags=values,
+                 toolchain=str(tools['root']),
+                 native_tool_sha256={str(tools[k]):sha(tools[k]) for k in ('make','compiler')},
                  inputs={}, commands=[], full_adapter='NOT_RUN', full_kernel='NOT_RUN',
                  installed=False, booted=False)
-    output.mkdir()
+    create_private_output(output)
     receipt = output / 'status.json'
 
     def save():
@@ -106,7 +113,8 @@ def main():
                 headers_sha256={str(v): sha(v) for v in sorted(headers)})
         if sha(obj / 'netbsd') != state['prior_kernel_sha256']:
             raise RuntimeError('prior kernel changed')
-        if sha(patch) != state['patch_sha256'] or sha(obj / 'Makefile') != state['makefile_sha256']:
+        if (sha(patch) != state['patch_sha256'] or sha(obj / 'Makefile') != state['makefile_sha256']
+                or any(sha(path)!=expected for path,expected in state['native_tool_sha256'].items())):
             raise RuntimeError('patch/config drift')
         state['state'] = 'PASS'
     except BaseException as error:

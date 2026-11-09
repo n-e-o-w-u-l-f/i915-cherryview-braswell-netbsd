@@ -6,10 +6,12 @@ import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
-import platform
 import shlex
 import socket
 import subprocess
+
+from native_hp_build import (configured_compiler, create_private_output,
+                             private_output, require_hp_owner, toolchain_paths)
 
 PIN = '03d918f6d0e81fa05b8f1160eca0628ad39988a6'
 
@@ -76,19 +78,21 @@ def main():
         p.add_argument('--' + name, type=Path, required=True)
     for name in ('patch', 'contract'):
         p.add_argument('--' + name, type=Path, required=True, action='append')
+    p.add_argument('--toolchain', type=Path, required=True)
     a = p.parse_args()
-    if (platform.system() != 'NetBSD' or platform.release().split('.')[0] != '11'
-            or platform.machine() != 'amd64' or os.geteuid() == 0
-            or socket.gethostname().split('.')[0] != 'hp-tpnw121'):
-        p.error('HP NetBSD11 amd64 non-root only')
+    try:
+        require_hp_owner()
+        tools = toolchain_paths(a.toolchain)
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     source, obj = [x.resolve(strict=True) for x in (a.source, a.kernel_obj)]
     patches = [x.resolve(strict=True) for x in a.patch]
     contracts = [x.resolve(strict=True) for x in a.contract]
-    output = a.output.parent.resolve(strict=True) / a.output.name
-    if (a.output.name in ('', '.', '..') or output.exists() or a.output.is_symlink()
-            or any(output.is_relative_to(x) for x in
-                   (source, obj, *patches, *contracts, Path(__file__).resolve().parents[1]))):
-        p.error('new output outside protected source/config/patch inputs required')
+    try:
+        output = private_output(a.output, (source, obj, *patches, *contracts,
+                                tools['root'], Path(__file__).resolve().parents[1]))
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     try:
         chain, initial, final, units = patch_chain(patches, contracts)
     except (ValueError, KeyError) as error:
@@ -100,11 +104,12 @@ def main():
     for rel, before in initial.items():
         if digest(source / rel) != before:
             p.error('changed native patch input: ' + rel)
-    values = {key: checked(['/usr/tools/bin/nbmake-amd64', '-C', obj, '-v', key])
+    values = {key: checked([tools['make'], '-C', obj, '-v', key])
               for key in ('CC', 'CFLAGS', 'CPPFLAGS', 'S')}
-    cc = shlex.split(values['CC'])
-    if cc != ['/usr/tools/bin/x86_64--netbsd-gcc']:
-        p.error('unexpected native compiler')
+    try:
+        cc = configured_compiler(values['CC'], tools)
+    except (ValueError, OSError) as error:
+        p.error(str(error))
     configured = Path(values['S']).resolve(strict=True).parent
     flags = shlex.split(values['CFLAGS']) + [v.replace(str(configured) + '/', str(source) + '/')
                                             for v in shlex.split(values['CPPFLAGS'])]
@@ -112,12 +117,13 @@ def main():
         p.error('kernel flags missing')
     state = dict(state='RUNNING', pid=os.getpid(), host=socket.gethostname(),
                  started=datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                 netbsd_pin=PIN, patch_chain=chain,
+                 netbsd_pin=PIN, patch_chain=chain, toolchain=str(tools['root']),
+                 native_tool_sha256={str(tools[k]):digest(tools[k]) for k in ('make','compiler')},
                  configured_makefile_sha256=digest(obj/'Makefile'),
                  prior_kernel_sha256=digest(obj/'netbsd'), flags=values,
                  commands=[], objects={}, scope='actual native changed C units only',
                  full_kernel='NOT_RUN', runtime='NOT_RUN', installed=False, booted=False)
-    output.mkdir()
+    create_private_output(output)
     status = output/'status.json'
     def save():
         status.write_text(json.dumps(state,indent=2)+'\n',encoding='utf8')
@@ -167,7 +173,8 @@ def main():
                 digest(v['contract']) != v['contract_sha256'] for v in chain)
                 or any(digest(source/rel) != before for rel, before in initial.items())
                 or digest(obj/'Makefile')!=state['configured_makefile_sha256']
-                or digest(obj/'netbsd')!=state['prior_kernel_sha256']):
+                or digest(obj/'netbsd')!=state['prior_kernel_sha256']
+                or any(digest(path)!=expected for path,expected in state['native_tool_sha256'].items())):
             raise RuntimeError('input/config/prior kernel changed')
         state['state']='PASS'
     except BaseException as error:

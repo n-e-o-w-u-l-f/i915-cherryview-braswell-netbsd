@@ -3,10 +3,12 @@ import importlib.util
 import hashlib
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'tools'))
 spec = importlib.util.spec_from_file_location('native_core', ROOT/'tools/build_hp_native_core_patch.py')
 core = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(core)
