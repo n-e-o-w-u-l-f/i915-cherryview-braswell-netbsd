@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F30-NATIVE-IOCTL-CHAIN-20261110",
+  "source_parent": "9fc6686b8d77c5f8120ea2ccd3ca342425f71965",
+  "complete_acceptance": {
+    "state": "PASS",
+    "host": "hp-tpnw121.lan",
+    "uid": 1000,
+    "started_at": "2026-11-09T23:38:01.623294+00:00",
+    "commands": [
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_f30_native_ioctl_chain.py",
+          "-v"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_native_core_patch_chain.py",
+          "-v"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "tools/check_f30_native_ioctl_chain.py",
+          "--source",
+          "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+          "--output",
+          "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "scope": "Admission Python tests plus private original source Git application; no C/compiler",
+    "previous_attempt": "a01: help-test whitespace assertion fixed; original evidence retained",
+    "protected_before": {
+      "compat/native-fileops/dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+      "compat/native-fileops/dispatch.json": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9",
+      "compat/native-fileops/mmap-request.patch": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+      "compat/native-fileops/mmap-request.json": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f",
+      "patches/0038-netbsd-linux-fileops-dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+      "patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+      "tools/build_hp_native_core_patch.py": "bae06167aab34dddf7922ab0c4a949f11891cc6dd47e702ca5358182d67e8344"
+    },
+    "protected_after": {
+      "compat/native-fileops/dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+      "compat/native-fileops/dispatch.json": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9",
+      "compat/native-fileops/mmap-request.patch": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+      "compat/native-fileops/mmap-request.json": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f",
+      "patches/0038-netbsd-linux-fileops-dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+      "patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+      "tools/build_hp_native_core_patch.py": "bae06167aab34dddf7922ab0c4a949f11891cc6dd47e702ca5358182d67e8344"
+    },
+    "new_tests": 8,
+    "existing_chain_tests": 8,
+    "source_receipt": "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02/status.json",
+    "negative_controls": 6,
+    "final_sha256": {
+      "sys/sys/file.h": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521",
+      "sys/sys/filedesc.h": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549",
+      "sys/kern/sys_generic.c": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977",
+      "sys/kern/kern_descrip.c": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+    },
+    "compiler_invocations": 0,
+    "finished_at": "2026-11-09T23:38:03.904751+00:00",
+    "log_sha256": "432f9285b28c72da445fe6ad21101436e1720f4e8042b876415ddadc9d4d08d0"
+  },
+  "final_wrapper_acceptance": {
+    "state": "PASS",
+    "host": "hp-tpnw121.lan",
+    "uid": 1000,
+    "finished_at": "2026-11-09T23:38:34.884845+00:00",
+    "command": [
+      "/usr/pkg/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_f30_native_ioctl_chain.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "new_tests": 8,
+    "change": "Child native core Python now carries -B, guarded delegation preserved",
+    "source_before": {
+      "compat/native-fileops/early-drm-ioctl.patch": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+      "compat/native-fileops/early-drm-ioctl.json": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed",
+      "tools/build_hp_native_fileops.py": "5c5d0ee5a702203d8a282670151d71a6c743f45ca33af6cb42c9adb9432f19e6",
+      "tools/check_f30_native_ioctl_chain.py": "8872a59a31e0efb0b66fee64827a8c11ba89676c375e8ed325fb68f79146e065",
+      "tests/test_f30_native_ioctl_chain.py": "747965870d52d554e1b100643a8986932c38cbee44b0861c45126111903bffcd"
+    },
+    "source_after": {
+      "compat/native-fileops/early-drm-ioctl.patch": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+      "compat/native-fileops/early-drm-ioctl.json": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed",
+      "tools/build_hp_native_fileops.py": "5c5d0ee5a702203d8a282670151d71a6c743f45ca33af6cb42c9adb9432f19e6",
+      "tools/check_f30_native_ioctl_chain.py": "8872a59a31e0efb0b66fee64827a8c11ba89676c375e8ed325fb68f79146e065",
+      "tests/test_f30_native_ioctl_chain.py": "747965870d52d554e1b100643a8986932c38cbee44b0861c45126111903bffcd"
+    },
+    "prior_complete_acceptance": "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02.json",
+    "log_sha256": "705248877a1f2db6e49d3b6841da94d4f6a267a44598c528d04e4b585c7b0a7d",
+    "C_compilers_invoked": 0
+  },
+  "actual_chain": {
+    "state": "PASS",
+    "started_at": "2026-11-09T23:38:03.364436+00:00",
+    "project": "HP-I915",
+    "step": "F30",
+    "source": "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "tree": "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02/source",
+    "chain": [
+      {
+        "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch",
+        "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.json",
+        "patch_sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+        "contract_sha256": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9",
+        "files": {
+          "sys/sys/file.h": {
+            "before_sha256": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c",
+            "after_sha256": "e8e947ecc19f5f8c9045a2d62f549965cddd6694859e78e23dc9989a35f71a04"
+          },
+          "sys/sys/filedesc.h": {
+            "before_sha256": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c",
+            "after_sha256": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549"
+          },
+          "sys/kern/sys_generic.c": {
+            "before_sha256": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514",
+            "after_sha256": "7d9ffd3ad324a4efb1334a866cb06188be80f41338045d8e8ed24393243fa781"
+          },
+          "sys/kern/kern_descrip.c": {
+            "before_sha256": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1",
+            "after_sha256": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+          }
+        }
+      },
+      {
+        "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch",
+        "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.json",
+        "patch_sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+        "contract_sha256": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f",
+        "files": {
+          "sys/sys/file.h": {
+            "before_sha256": "e8e947ecc19f5f8c9045a2d62f549965cddd6694859e78e23dc9989a35f71a04",
+            "after_sha256": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521"
+          }
+        }
+      },
+      {
+        "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch",
+        "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.json",
+        "patch_sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+        "contract_sha256": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed",
+        "files": {
+          "sys/kern/sys_generic.c": {
+            "before_sha256": "7d9ffd3ad324a4efb1334a866cb06188be80f41338045d8e8ed24393243fa781",
+            "after_sha256": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977"
+          }
+        }
+      }
+    ],
+    "initial": {
+      "sys/sys/file.h": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c",
+      "sys/sys/filedesc.h": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c",
+      "sys/kern/sys_generic.c": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514",
+      "sys/kern/kern_descrip.c": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1"
+    },
+    "final": {
+      "sys/sys/file.h": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521",
+      "sys/sys/filedesc.h": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549",
+      "sys/kern/sys_generic.c": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977",
+      "sys/kern/kern_descrip.c": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+    },
+    "native_c_owners": [
+      "sys/kern/sys_generic.c",
+      "sys/kern/kern_descrip.c"
+    ],
+    "commands": [
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "--check",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "--check",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "--check",
+          "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02/corrupt-context.patch"
+        ],
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "error: patch failed: sys/kern/sys_generic.c:514\nerror: sys/kern/sys_generic.c: patch does not apply\n",
+        "expected_success": false
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "--check",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "expected_success": true
+      },
+      {
+        "command": [
+          "git",
+          "-c",
+          "core.autocrlf=false",
+          "apply",
+          "--whitespace=error",
+          "--check",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch"
+        ],
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "error: patch failed: sys/kern/sys_generic.c:514\nerror: sys/kern/sys_generic.c: patch does not apply\n",
+        "expected_success": false
+      }
+    ],
+    "negative_controls": [
+      {
+        "name": "wrong_order",
+        "result": "PASS",
+        "error": "patch predecessor identity mismatch"
+      },
+      {
+        "name": "double_chain",
+        "result": "PASS",
+        "error": "patch/source identity mismatch or duplicate patch"
+      },
+      {
+        "name": "patch_drift",
+        "result": "PASS",
+        "error": "patch/source identity mismatch or duplicate patch"
+      },
+      {
+        "name": "source_contract_drift",
+        "result": "PASS",
+        "error": "noncomposing native source contract: sys/kern/sys_generic.c"
+      },
+      {
+        "name": "corrupt_actual_context",
+        "result": "PASS",
+        "exit_code": 1
+      },
+      {
+        "name": "double_apply_actual_delta",
+        "result": "PASS",
+        "exit_code": 1
+      }
+    ],
+    "input_sha256": {
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.json": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.json": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.json": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed",
+      "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f"
+    },
+    "parent_git_discovery": "ceiling and cleared Git directory/index variables",
+    "native_object_compilation": "NOT_RUN",
+    "full_kernel": "NOT_RUN",
+    "hardware": "NOT_RUN",
+    "final_sha256": {
+      "sys/sys/file.h": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521",
+      "sys/sys/filedesc.h": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549",
+      "sys/kern/sys_generic.c": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977",
+      "sys/kern/kern_descrip.c": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+    },
+    "recovered_other_three_unchanged": true,
+    "standalone_f29_syscall_byte_equal": true,
+    "standalone_receipt": {
+      "state": "PASS",
+      "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+      "source": "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+      "source_has_git": false,
+      "original_sha256": {
+        "sys/sys/file.h": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c",
+        "sys/sys/filedesc.h": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c",
+        "sys/kern/sys_generic.c": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514",
+        "sys/kern/kern_descrip.c": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1"
+      },
+      "patch_sha256": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+      "private_tree": "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02/standalone-f29/native-source",
+      "parent_git_discovery": "disabled by ceiling and cleared Git directory/index variables",
+      "commands": [
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "--check",
+            "/home/andreas/projects/hp-i915-f26-20261106/f30-native-ioctl-chain-20261110-a02/standalone-f29/corrupt-context.patch"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "error: patch failed: sys/sys/file.h:81\nerror: sys/sys/file.h: patch does not apply\n",
+          "expected_success": false
+        },
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "--check",
+            "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "",
+          "expected_success": true
+        },
+        {
+          "command": [
+            "git",
+            "-c",
+            "core.autocrlf=false",
+            "apply",
+            "--whitespace=error",
+            "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "",
+          "expected_success": true
+        }
+      ],
+      "full_kernel": "NOT_RUN",
+      "native_kernel_headers": "NOT_RUN",
+      "patched_sha256": {
+        "sys/sys/file.h": "a1877ef189c59eab925487927932c9ea55681a0e8dfb460b56ebf6fc47f59770",
+        "sys/sys/filedesc.h": "0bfa222bfaeaf1c1ac049ff6525a2df4343741e2dd30d91f000460e9fc604519",
+        "sys/kern/sys_generic.c": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977",
+        "sys/kern/kern_descrip.c": "55d4c5b492535d1c281ce7962eccb1f4f6d684b4fd85ef7f1d317cdcbc39472d"
+      },
+      "originals_unchanged": true,
+      "finished_at": "2026-11-09T23:38:03.814950+00:00"
+    },
+    "originals_unchanged": true,
+    "negative_count": 6,
+    "finished_at": "2026-11-09T23:38:03.819171+00:00"
+  },
+  "native_objects": "NOT_RUN",
+  "full_kernel": "NOT_RUN",
+  "runtime": "NOT_RUN"
+}

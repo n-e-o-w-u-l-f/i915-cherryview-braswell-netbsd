@@ -1,0 +1,18 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "step_id": "HP-I915-F30-NATIVE-IOCTL-CHAIN-20261110",
+  "prior_patch_sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+  "patch_sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+  "files": {
+    "sys/kern/sys_generic.c": {
+      "before_sha256": "7d9ffd3ad324a4efb1334a866cb06188be80f41338045d8e8ed24393243fa781",
+      "after_sha256": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977"
+    }
+  },
+  "standalone_f29": {
+    "path": "patches/candidates/netbsd-11-drm-fileops-bridge-zero-size-kernel-data-20261110.patch",
+    "patch_sha256": "32ee8fa0ba8e301c560e696200a14ca16e9b2396cd317ca294758585a92c035f",
+    "sys_generic_sha256": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977"
+  },
+  "acceptance": "Active native FILE ABI probe selection only. Preserves recovered dispatch/mmap headers; native object compilation, compat32, full kernel and hardware remain separate gates."
+}
