@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "state": "PINNED_SOURCE_INPUTS",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "acquisition": "exact two pinned upstream blobs; no checkout or clean-tree claim",
+  "files": {
+    "include/linux/wait.h": {
+      "size": 45202,
+      "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+      "git_blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+      "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/include/linux/wait.h"
+    },
+    "kernel/sched/wait.c": {
+      "size": 14840,
+      "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+      "git_blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+      "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/kernel/sched/wait.c"
+    }
+  }
+}

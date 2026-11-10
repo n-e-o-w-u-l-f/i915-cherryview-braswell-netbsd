@@ -1,0 +1,1556 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F43-GENERIC-WAIT-OWNER-PROVENANCE-20261110",
+  "state": "PASS",
+  "baseline_ref": "358fb34d3285fb8a0013d00c54292a8a582a2b0d",
+  "test_count": 200,
+  "receipts": {
+    "f43-wait-recovery-20261110-a01/status.json": {
+      "state": "PASS",
+      "source_head": "358fb34d3285fb8a0013d00c54292a8a582a2b0d",
+      "preserved_before": {
+        "compat/linux/raw_spinlock.h": {
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+          "bytes": 1992
+        },
+        "compat/native-entry/task_entry.inc": {
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+          "bytes": 1427
+        },
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": {
+          "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+          "bytes": 500
+        },
+        "compat/native-file/include/linux/file_api_netbsd.h": {
+          "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+          "bytes": 1318
+        },
+        "compat/native-file/include/linux/file_netbsd.h": {
+          "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+          "bytes": 1614
+        },
+        "compat/native-file/include/linux/file_ref_netbsd.h": {
+          "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+          "bytes": 2966
+        },
+        "compat/native-file/include/linux/fs_netbsd.h": {
+          "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+          "bytes": 8568
+        },
+        "compat/native-file/include/linux/pagemap_netbsd.h": {
+          "sha256": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+          "bytes": 4324
+        },
+        "compat/native-file/linux_anon.c": {
+          "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+          "bytes": 3988
+        },
+        "compat/native-file/linux_fd.c": {
+          "sha256": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+          "bytes": 5202
+        },
+        "compat/native-file/linux_file.c": {
+          "sha256": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+          "bytes": 13372
+        },
+        "compat/native-file/provider-inputs-f33.json": {
+          "sha256": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+          "bytes": 2396
+        },
+        "compat/native-file/provider-inputs-f35-anon.json": {
+          "sha256": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+          "bytes": 2699
+        },
+        "compat/native-file/provider-inputs-f37-file.json": {
+          "sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+          "bytes": 5099
+        },
+        "compat/native-file/task_entry_preallocated.h": {
+          "sha256": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+          "bytes": 1742
+        },
+        "compat/native-file/task_entry_preallocated.inc": {
+          "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+          "bytes": 2004
+        },
+        "compat/native-file/task_quiesce_retained.inc": {
+          "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+          "bytes": 1228
+        },
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+          "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+          "bytes": 356
+        },
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": {
+          "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+          "bytes": 1751
+        },
+        "compat/native-mm/include/linux/vma_netbsd.h": {
+          "sha256": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+          "bytes": 8236
+        },
+        "compat/native-runtime/include/linux/raw_spinlock.h": {
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+          "bytes": 302
+        },
+        "compat/native-runtime/include/linux/sched.h": {
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+          "bytes": 270
+        },
+        "compat/native-runtime/include/linux/task_netbsd.h": {
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+          "bytes": 294
+        },
+        "compat/native-runtime/task/SOURCE_SHA256.json": {
+          "sha256": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+          "bytes": 653
+        },
+        "compat/native-runtime/task/generate_wait.py": {
+          "sha256": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+          "bytes": 8977
+        },
+        "compat/native-runtime/task/linux_task.c": {
+          "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+          "bytes": 14743
+        },
+        "compat/native-runtime/task/linux_task_worker_owner.c": {
+          "sha256": "3fb3bf80427285c0d14fac993d33f4a7f26b6bb4074b9111192ed1ce2551b64c",
+          "bytes": 185
+        },
+        "compat/native-runtime/task/provider-inputs-f39-task.json": {
+          "sha256": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+          "bytes": 3311
+        },
+        "compat/native-runtime/task/provider-inputs-f41-task-worker.json": {
+          "sha256": "0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4",
+          "bytes": 4341
+        },
+        "compat/native-runtime/task/sched.h": {
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+          "bytes": 2556
+        },
+        "compat/native-runtime/task/task_entry_netbsd.h": {
+          "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+          "bytes": 670
+        },
+        "compat/native-runtime/task/task_netbsd.h": {
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+          "bytes": 1817
+        },
+        "compat/native-runtime/task/task_worker_wake_netbsd.h": {
+          "sha256": "7b3b39d38a643b3f38e976780a9772e7e88095c06a7e06f6e21e2b0528a3ddbc",
+          "bytes": 428
+        },
+        "compat/native-runtime/worker/worker.inc": {
+          "sha256": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d",
+          "bytes": 10512
+        },
+        "compat/native-runtime/worker/worker_header.inc": {
+          "sha256": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2",
+          "bytes": 2098
+        },
+        "compat/native-uio/include/linux/kiocb_netbsd.h": {
+          "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+          "bytes": 1349
+        },
+        "tests/test_native_anon_provider_admission.py": {
+          "sha256": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+          "bytes": 8366
+        },
+        "tests/test_native_anon_provider_inputs.py": {
+          "sha256": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+          "bytes": 12991
+        },
+        "tests/test_native_file_provider_admission.py": {
+          "sha256": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+          "bytes": 17261
+        },
+        "tests/test_native_file_provider_inputs.py": {
+          "sha256": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+          "bytes": 17593
+        },
+        "tests/test_native_provider_archive_admission.py": {
+          "sha256": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+          "bytes": 14266
+        },
+        "tests/test_native_provider_inputs.py": {
+          "sha256": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+          "bytes": 26457
+        },
+        "tests/test_native_task_owner_composition.py": {
+          "sha256": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+          "bytes": 11093
+        },
+        "tests/test_native_task_provider_admission.py": {
+          "sha256": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788",
+          "bytes": 10593
+        },
+        "tests/test_native_task_provider_inputs.py": {
+          "sha256": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+          "bytes": 12634
+        },
+        "tests/test_native_task_worker_provider_admission.py": {
+          "sha256": "769a181188daa52ca6018197c3cc5214b8b886ca4d73b63898ca1e57c505e6bc",
+          "bytes": 8338
+        },
+        "tests/test_native_task_worker_provider_inputs.py": {
+          "sha256": "c5512599bd2a9410a02a71f91c7a1c83adc402c7d0676ce032fdbe571604222a",
+          "bytes": 12570
+        },
+        "tests/test_native_task_worker_wake_api.py": {
+          "sha256": "b2c2f2b1fd20b46acd676cd46163905bd743cdf32922ad7db99317e106a59616",
+          "bytes": 11672
+        },
+        "tools/build_hp_native_provider.py": {
+          "sha256": "2a51a93961bd3e74c26b51b38f9d02a1884962c3e4cea77f6aca1eca976cd2bd",
+          "bytes": 16272
+        },
+        "tools/native_provider_inputs.py": {
+          "sha256": "e6ddaefc52c4c157517dc13f0dee08b4008d2dd3f50fde71d476f8965125dfb7",
+          "bytes": 18601
+        }
+      },
+      "new_paths": [
+        "tools/recover_native_wait.py",
+        "tests/test_native_wait_recovery.py",
+        "compat/native-runtime/wait-inputs-f43/include/linux/wait.h",
+        "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c",
+        "compat/native-runtime/wait-inputs-f43/provenance.json",
+        "compat/native-runtime/wait-f43/include/linux/wait.h",
+        "compat/native-runtime/wait-f43/linux_wait.c",
+        "compat/native-runtime/wait-f43/provenance.json"
+      ],
+      "old_tests": 163,
+      "actual_recovery": "PASS",
+      "native_preprocessing": "NOT_RUN",
+      "native_compilation": "NOT_RUN",
+      "source_access": "exact two already-returned pinned upstream dependency blobs; no local checkout",
+      "started": "2026-11-10T14:59:00.030603+00:00",
+      "stage": "SOURCE_RECOVERY_COMPLETE",
+      "pid": 18424,
+      "host": "hp-tpnw121.lan",
+      "uid": 1000,
+      "system": "NetBSD",
+      "tested_source_sha256_before": {
+        "tools/recover_native_wait.py": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+        "tests/test_native_wait_recovery.py": "3b2ba215a219dd2f1350759fa1b58deed7e43b6bf48da4e91b21570eaa12bdaa",
+        "compat/native-runtime/wait-inputs-f43/include/linux/wait.h": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+        "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+        "compat/native-runtime/wait-inputs-f43/provenance.json": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e"
+      },
+      "tests": [
+        {
+          "label": "test_native_wait_recovery",
+          "pid": 10540,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_wait_recovery.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_wait_recovery.log",
+          "log_sha256": "bee6c213b3f8e27aa3c6a392de8c051fb687679954b3e2a4479562307c419a70",
+          "test_count": 37
+        },
+        {
+          "label": "test_native_provider_inputs",
+          "pid": 2914,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_provider_inputs.log",
+          "log_sha256": "5c170f30a9fa65fdcb4ad57618960d25cf9ba04ff3eba73992744bed1729b948",
+          "test_count": 31
+        },
+        {
+          "label": "test_native_provider_archive_admission",
+          "pid": 2238,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_provider_archive_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_provider_archive_admission.log",
+          "log_sha256": "41db7ffd828da946ba7b61a23e0974f31f324a9b52e1dd8e59ab794286b66cd6",
+          "test_count": 11
+        },
+        {
+          "label": "test_native_anon_provider_inputs",
+          "pid": 12081,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_anon_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_anon_provider_inputs.log",
+          "log_sha256": "25717b824d21ab5eb1f07c6acb69b02633c2cc55bb5e5f4466c680a159f2b107",
+          "test_count": 15
+        },
+        {
+          "label": "test_native_anon_provider_admission",
+          "pid": 3459,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_anon_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_anon_provider_admission.log",
+          "log_sha256": "aa70ea183de91844f7b12d9ac0605dab726483569011ba79f95372aeea3950e2",
+          "test_count": 9
+        },
+        {
+          "label": "test_native_file_provider_inputs",
+          "pid": 6558,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_file_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_file_provider_inputs.log",
+          "log_sha256": "a4290f2c6c376c4d2b8bcd2dace414fb62550cc87b7b03c8767726054b1b9c23",
+          "test_count": 15
+        },
+        {
+          "label": "test_native_file_provider_admission",
+          "pid": 24806,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_file_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_file_provider_admission.log",
+          "log_sha256": "a56edf845e1b6ab29bcdcf5c334d1bd08151cee8ad13938b97f78efb21f7ebf4",
+          "test_count": 17
+        },
+        {
+          "label": "test_native_task_owner_composition",
+          "pid": 7395,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_owner_composition.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_owner_composition.log",
+          "log_sha256": "7fa0e785ac14187955a76cf5a74d419de45d91ea294953091ed32b116f0ac94c",
+          "test_count": 10
+        },
+        {
+          "label": "test_native_task_provider_inputs",
+          "pid": 29922,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_provider_inputs.log",
+          "log_sha256": "428202ee1c7a8d7fec67d420ebc5e49e7c7982df42f35540f4a87670fd0757d9",
+          "test_count": 9
+        },
+        {
+          "label": "test_native_task_provider_admission",
+          "pid": 27176,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_provider_admission.log",
+          "log_sha256": "66ef331ca994d8f879ee0f737c9aa9527a9a41db5349befb2c9d227c508ddf7e",
+          "test_count": 12
+        },
+        {
+          "label": "test_native_task_worker_wake_api",
+          "pid": 20727,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_worker_wake_api.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_worker_wake_api.log",
+          "log_sha256": "1a41ec68e90cf29679d998b87ca1ffdbfdf8bf9e8a626f8cc57537daad6fcb7b",
+          "test_count": 12
+        },
+        {
+          "label": "test_native_task_worker_provider_inputs",
+          "pid": 25303,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_worker_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_worker_provider_inputs.log",
+          "log_sha256": "ce1aae2da4d0b2e8a5178cf37641e91118df85d28e79ecaf208bcdc177f5397e",
+          "test_count": 9
+        },
+        {
+          "label": "test_native_task_worker_provider_admission",
+          "pid": 24332,
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_worker_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/test_native_task_worker_provider_admission.log",
+          "log_sha256": "5c445f14e04b06e585b319345a9b91ef2028833eba33f6feb267801296a01b12",
+          "test_count": 13
+        }
+      ],
+      "tests_passed": 200,
+      "production_command": {
+        "label": "tracked-recovery",
+        "pid": 20335,
+        "command": [
+          "/usr/pkg/bin/python3",
+          "-B",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/recover_native_wait.py",
+          "--inputs",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/wait-inputs-f43",
+          "--output",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/wait-f43"
+        ],
+        "exit_code": 0,
+        "log": "/home/andreas/projects/hp-i915-f26-20261106/f43-wait-recovery-20261110-a01/tracked-recovery.log",
+        "log_sha256": "95ad23f8464c435df6f7dbf4b8a2a39b0561538944eb9f42850e62b7e448c207"
+      },
+      "generated_files": {
+        "compat/native-runtime/wait-f43/include/linux/wait.h": {
+          "bytes": 49625,
+          "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+        },
+        "compat/native-runtime/wait-f43/linux_wait.c": {
+          "bytes": 14091,
+          "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+        },
+        "compat/native-runtime/wait-f43/provenance.json": {
+          "bytes": 8037,
+          "sha256": "a84ac39db9642f7a935a25a6ac3b0721b568be6132a8221cab42b454f7972078"
+        }
+      },
+      "operation_count": 49,
+      "tested_source_sha256_after": {
+        "tools/recover_native_wait.py": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+        "tests/test_native_wait_recovery.py": "3b2ba215a219dd2f1350759fa1b58deed7e43b6bf48da4e91b21570eaa12bdaa",
+        "compat/native-runtime/wait-inputs-f43/include/linux/wait.h": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+        "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+        "compat/native-runtime/wait-inputs-f43/provenance.json": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e"
+      },
+      "preserved_sha256_after": {
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-file/linux_anon.c": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+        "compat/native-file/linux_fd.c": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-file/task_entry_preallocated.inc": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+        "compat/native-file/task_quiesce_retained.inc": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/task/SOURCE_SHA256.json": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+        "compat/native-runtime/task/generate_wait.py": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/linux_task_worker_owner.c": "3fb3bf80427285c0d14fac993d33f4a7f26b6bb4074b9111192ed1ce2551b64c",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "compat/native-runtime/task/provider-inputs-f41-task-worker.json": "0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/native-runtime/task/task_worker_wake_netbsd.h": "7b3b39d38a643b3f38e976780a9772e7e88095c06a7e06f6e21e2b0528a3ddbc",
+        "compat/native-runtime/worker/worker.inc": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d",
+        "compat/native-runtime/worker/worker_header.inc": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_worker_provider_admission.py": "769a181188daa52ca6018197c3cc5214b8b886ca4d73b63898ca1e57c505e6bc",
+        "tests/test_native_task_worker_provider_inputs.py": "c5512599bd2a9410a02a71f91c7a1c83adc402c7d0676ce032fdbe571604222a",
+        "tests/test_native_task_worker_wake_api.py": "b2c2f2b1fd20b46acd676cd46163905bd743cdf32922ad7db99317e106a59616",
+        "tools/build_hp_native_provider.py": "2a51a93961bd3e74c26b51b38f9d02a1884962c3e4cea77f6aca1eca976cd2bd",
+        "tools/native_provider_inputs.py": "e6ddaefc52c4c157517dc13f0dee08b4008d2dd3f50fde71d476f8965125dfb7"
+      },
+      "finished": "2026-11-10T15:20:14.906532+00:00"
+    },
+    "f43-wait-recovery-test-baseline-20261110-a01.json": {
+      "scope": "F43 independent test-authoring baseline before exclusive new test creation; no producer/generator/native execution",
+      "observed_at": "2026-11-10T15:10:39.420026+00:00",
+      "source_head": "358fb34d3285fb8a0013d00c54292a8a582a2b0d",
+      "new_test": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_wait_recovery.py",
+      "new_test_absent": true,
+      "producer_sha_label": "candidate at test authoring; final combined batch must freeze final producer before/after",
+      "candidate_recovery_inputs_sha256": {
+        "tools/recover_native_wait.py": "80a77ead8a6ff8ee2947da047cccb9fdacc6cb8a7f94deda7e06de626d8bb264",
+        "compat/native-runtime/wait-inputs-f43/provenance.json": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e",
+        "compat/native-runtime/wait-inputs-f43/include/linux/wait.h": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+        "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+        "compat/native-runtime/task/generate_wait.py": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+        "compat/native-runtime/task/SOURCE_SHA256.json": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662"
+      },
+      "old_28_controller_sha256": {
+        "tools/native_provider_inputs.py": "e6ddaefc52c4c157517dc13f0dee08b4008d2dd3f50fde71d476f8965125dfb7",
+        "tools/build_hp_native_provider.py": "2a51a93961bd3e74c26b51b38f9d02a1884962c3e4cea77f6aca1eca976cd2bd",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "compat/native-runtime/task/provider-inputs-f41-task-worker.json": "0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4",
+        "compat/native-runtime/task/linux_task_worker_owner.c": "3fb3bf80427285c0d14fac993d33f4a7f26b6bb4074b9111192ed1ce2551b64c",
+        "compat/native-runtime/task/task_worker_wake_netbsd.h": "7b3b39d38a643b3f38e976780a9772e7e88095c06a7e06f6e21e2b0528a3ddbc",
+        "tests/test_native_task_worker_wake_api.py": "b2c2f2b1fd20b46acd676cd46163905bd743cdf32922ad7db99317e106a59616",
+        "tests/test_native_task_worker_provider_inputs.py": "c5512599bd2a9410a02a71f91c7a1c83adc402c7d0676ce032fdbe571604222a",
+        "tests/test_native_task_worker_provider_admission.py": "769a181188daa52ca6018197c3cc5214b8b886ca4d73b63898ca1e57c505e6bc"
+      },
+      "old_unique_selected_input_sha256": {
+        "compat/native-file/linux_fd.c": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "compat/native-file/linux_anon.c": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "compat/native-file/task_entry_preallocated.inc": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+        "compat/native-file/task_quiesce_retained.inc": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+        "compat/native-runtime/task/linux_task_worker_owner.c": "3fb3bf80427285c0d14fac993d33f4a7f26b6bb4074b9111192ed1ce2551b64c",
+        "compat/native-runtime/task/task_worker_wake_netbsd.h": "7b3b39d38a643b3f38e976780a9772e7e88095c06a7e06f6e21e2b0528a3ddbc",
+        "compat/native-runtime/worker/worker_header.inc": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2",
+        "compat/native-runtime/worker/worker.inc": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d"
+      },
+      "five_manifest_sha256": {
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "compat/native-runtime/task/provider-inputs-f41-task-worker.json": "0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4"
+      },
+      "protected_native_receipt_sha256": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f42-native-task-worker-owner-20261110-a01/status.json": "0727f115f360a75a676e97c2609f5e91a4140d2d1eed35f3ed0cc00a9a18b6b3",
+        "/home/andreas/projects/hp-i915-f26-20261106/f42-native-task-worker-owner-20261110-a01/linux_task_worker_owner.o": "b867436f6175a4c0e42fd45a90d3833e3cb5aa4489cd8fda67536ad9762499db",
+        "/home/andreas/projects/hp-i915-f26-20261106/f40-native-task-owner-20261110-a01/status.json": "908908110bf70474194e2528b3530e4bd6e3e6a21021fe88f82298bb6f362751",
+        "/home/andreas/projects/hp-i915-f26-20261106/f40-native-task-owner-20261110-a01-launch.json": "d59992c3f93e15963a9d13687cdd47ce8886bbe5e22abfac7d7b7eff0b65c057",
+        "/home/andreas/projects/hp-i915-f26-20261106/f40-native-task-owner-20261110-a01-exit.json": "0114ec32fad8a35340c1dedb7db7e49e3254e1c34d5f14b1a0bf9217b68d619d"
+      },
+      "production_recovered_output_exists": false
+    },
+    "f43-root-input-snapshot-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T15:00:40.431737+00:00",
+      "scope": "F43 two exact pinned dependency snapshots only; no transform/generation/compiler",
+      "physical_host": "hp-tpnw121.lan",
+      "project_id": "HP-I915",
+      "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+      "raw_inputs": {
+        "include/linux/wait.h": {
+          "bytes": 45202,
+          "blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+          "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+          "canonical_regular_input": true
+        },
+        "kernel/sched/wait.c": {
+          "bytes": 14840,
+          "blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+          "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+          "canonical_regular_input": true
+        }
+      },
+      "input_provenance_sha256": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e",
+      "local_clean_Linux_Git_checkout": "NOT_CLAIMED",
+      "provenance": {
+        "schema": 1,
+        "state": "PINNED_SOURCE_INPUTS",
+        "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+        "acquisition": "exact two pinned upstream blobs; no checkout or clean-tree claim",
+        "files": {
+          "include/linux/wait.h": {
+            "size": 45202,
+            "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+            "git_blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+            "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/include/linux/wait.h"
+          },
+          "kernel/sched/wait.c": {
+            "size": 14840,
+            "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+            "git_blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+            "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/kernel/sched/wait.c"
+          }
+        }
+      }
+    },
+    "f43-root-pure-transform-20261110-a01.json": {
+      "observed_at": "2026-11-10T15:16:19.617499+00:00",
+      "scope": "Independent in-memory exact-source transform only; no output tree or native call",
+      "project_id": "HP-I915",
+      "tool_sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+      "actual_output_creation": "NOT_RUN",
+      "native_preprocessing": "NOT_RUN",
+      "native_compilation": "NOT_RUN",
+      "state": "PASS",
+      "outputs": {
+        "include/linux/wait.h": {
+          "bytes": 49625,
+          "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+        },
+        "linux_wait.c": {
+          "bytes": 14091,
+          "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+        }
+      },
+      "operations": [
+        {
+          "operation": "header-task-namespace",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "namespace-identifiers",
+          "kind": "named-set",
+          "count": 26
+        },
+        {
+          "operation": "header-dynamic-native-init",
+          "kind": "region",
+          "count": 1,
+          "removed_sha256": "6211a726ced73d112a5798535cc385881cbd47debd1ff6750f7572feb8162b1e"
+        },
+        {
+          "operation": "header-static-init-remains-open",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "header-stack-init",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "header-poll-to-key",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "header-key-to-poll",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "header-timeout-budget-parameter",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "header-timeout-budget-references",
+          "kind": "literal",
+          "count": 3
+        },
+        {
+          "operation": "header-timeout-budget-region",
+          "kind": "region",
+          "count": 1,
+          "removed_sha256": "4bf10c129b7dce898f81b3d2d2458c3fcb9b1e1561b1f51aa4a4beb8f5f4f8af"
+        },
+        {
+          "operation": "header-timeout-predicate-calls",
+          "kind": "literal",
+          "count": 15
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_freezable",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_freezable_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:__wait_event_hrtimeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_hrtimeout",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_hrtimeout",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_exclusive",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_killable_exclusive",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_freezable_exclusive",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_idle_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_idle_exclusive_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:__wait_event_interruptible_locked",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_killable",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:io_wait_event_killable",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_state",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_state_exclusive",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_killable_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_cmd",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_lock_irq",
+          "kind": "regex",
+          "count": 3
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper:wait_event_lock_irq_timeout",
+          "kind": "regex",
+          "count": 4
+        },
+        {
+          "operation": "shadow-wrapper-set",
+          "kind": "named-set",
+          "count": 23
+        },
+        {
+          "operation": "body-native-includes",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-export-removals",
+          "kind": "regex",
+          "count": 23
+        },
+        {
+          "operation": "body-lockdep-class",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-lockdep-assert",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-explicit-lock",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-priority-error-and-success-unlock",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-finish-wait-always-locked",
+          "kind": "region",
+          "count": 1,
+          "removed_sha256": "c7924e0147099dad52a0fdf2c06c42bccd25f9fdd72a1f9317a1a66607fc5f29"
+        },
+        {
+          "operation": "body-autoremove-list",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-generic-task-stop-predicate",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-generic-task-stop-helper",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-pollfree-key",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-pollfree-assertion",
+          "kind": "literal",
+          "count": 1
+        },
+        {
+          "operation": "body-exclude-keyed-bit-callback",
+          "kind": "tail",
+          "count": 1,
+          "removed_sha256": "3bdae330595dd8ed1ebfc2a687e1be7f172bafbbe8e00e6a939dd81690b92ae8"
+        },
+        {
+          "operation": "body-task-owned-default-wake",
+          "kind": "append",
+          "count": 1
+        }
+      ],
+      "witnesses": {
+        "recipe": {
+          "path": "compat/native-runtime/task/generate_wait.py",
+          "sha256": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+          "git_blob": "384872c7c87595d62497227d7c2c8aaff31e2dd0"
+        },
+        "historical_ledger": {
+          "path": "compat/native-runtime/task/SOURCE_SHA256.json",
+          "sha256": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+          "git_blob": "0b1cf16eb8cd424c2c87c4d7e6d19513edc6771f"
+        }
+      }
+    },
+    "f43-root-replay-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T15:22:13.440656+00:00",
+      "project_id": "HP-I915",
+      "step_id": "HP-I915-F43-GENERIC-WAIT-OWNER-PROVENANCE-20261110",
+      "source_head": "358fb34d3285fb8a0013d00c54292a8a582a2b0d",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/recover_native_wait.py",
+        "--inputs",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/wait-inputs-f43",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f43-root-replay-20261110-a01"
+      ],
+      "first_replay_exit": 0,
+      "same_output_retry_rejected_exit": 1,
+      "noclobber_original_bytes_preserved": true,
+      "byte_identical_three_outputs": {
+        "include/linux/wait.h": {
+          "exists": true,
+          "size": 49625,
+          "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+        },
+        "linux_wait.c": {
+          "exists": true,
+          "size": 14091,
+          "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+        },
+        "provenance.json": {
+          "exists": true,
+          "size": 8037,
+          "sha256": "a84ac39db9642f7a935a25a6ac3b0721b568be6132a8221cab42b454f7972078"
+        }
+      },
+      "operations": 49,
+      "producer_source_sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+      "replay_log_sha256": "95ad23f8464c435df6f7dbf4b8a2a39b0561538944eb9f42850e62b7e448c207",
+      "noclobber_log_sha256": "d9a9377797366f2a222efeb5fa5083d2c2d2ec3b0045f2a3ba2053a4a6535ef3",
+      "prior_frozen_states": 468,
+      "all_prior_states_unchanged": true,
+      "F42_private_artifacts_unchanged": true,
+      "all_five_current_contract_inputs_unchanged": true,
+      "native_preprocessing": "NOT_RUN",
+      "native_compilation": "NOT_RUN",
+      "archive_scan": "NOT_RUN",
+      "linked": false,
+      "installed": false,
+      "booted": false,
+      "runtime": "NOT_RUN"
+    },
+    "f43-source-final-20261110-a01.json": {
+      "state": "CODE_READY",
+      "source_head": "358fb34d3285fb8a0013d00c54292a8a582a2b0d",
+      "source_files": {
+        "tools/recover_native_wait.py": {
+          "bytes": 23130,
+          "sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+          "git_blob": "e9ed8f61a5e4250f971e872d3fd6a9aea2327b1c"
+        },
+        "tests/test_native_wait_recovery.py": {
+          "bytes": 30780,
+          "sha256": "3b2ba215a219dd2f1350759fa1b58deed7e43b6bf48da4e91b21570eaa12bdaa",
+          "git_blob": "b8ed6df5e31732e95ddeb0463905bcf62800635c"
+        },
+        "compat/native-runtime/wait-inputs-f43/include/linux/wait.h": {
+          "bytes": 45202,
+          "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+          "git_blob": "7e215330199cfea27008f718e0336d0f48bfe17d"
+        },
+        "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c": {
+          "bytes": 14840,
+          "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+          "git_blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e"
+        },
+        "compat/native-runtime/wait-inputs-f43/provenance.json": {
+          "bytes": 866,
+          "sha256": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e",
+          "git_blob": "54ff54bfd06ffb48600231733a7b8e2b560fb872"
+        },
+        "compat/native-runtime/wait-f43/include/linux/wait.h": {
+          "bytes": 49625,
+          "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86",
+          "git_blob": "2de8a3d14fd4b27430dab21169e2f4819d9ec090"
+        },
+        "compat/native-runtime/wait-f43/linux_wait.c": {
+          "bytes": 14091,
+          "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69",
+          "git_blob": "4c7e3f0511be997175c4009918800ff9adf984ba"
+        },
+        "compat/native-runtime/wait-f43/provenance.json": {
+          "bytes": 8037,
+          "sha256": "a84ac39db9642f7a935a25a6ac3b0721b568be6132a8221cab42b454f7972078",
+          "git_blob": "df6cc727b86f0e8eb4e69efade20053ebabc009e"
+        }
+      },
+      "preserved_old_source_sha256": {
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-file/linux_anon.c": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+        "compat/native-file/linux_fd.c": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-file/task_entry_preallocated.inc": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+        "compat/native-file/task_quiesce_retained.inc": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/task/SOURCE_SHA256.json": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+        "compat/native-runtime/task/generate_wait.py": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/linux_task_worker_owner.c": "3fb3bf80427285c0d14fac993d33f4a7f26b6bb4074b9111192ed1ce2551b64c",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "compat/native-runtime/task/provider-inputs-f41-task-worker.json": "0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/native-runtime/task/task_worker_wake_netbsd.h": "7b3b39d38a643b3f38e976780a9772e7e88095c06a7e06f6e21e2b0528a3ddbc",
+        "compat/native-runtime/worker/worker.inc": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d",
+        "compat/native-runtime/worker/worker_header.inc": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_worker_provider_admission.py": "769a181188daa52ca6018197c3cc5214b8b886ca4d73b63898ca1e57c505e6bc",
+        "tests/test_native_task_worker_provider_inputs.py": "c5512599bd2a9410a02a71f91c7a1c83adc402c7d0676ce032fdbe571604222a",
+        "tests/test_native_task_worker_wake_api.py": "b2c2f2b1fd20b46acd676cd46163905bd743cdf32922ad7db99317e106a59616",
+        "tools/build_hp_native_provider.py": "2a51a93961bd3e74c26b51b38f9d02a1884962c3e4cea77f6aca1eca976cd2bd",
+        "tools/native_provider_inputs.py": "e6ddaefc52c4c157517dc13f0dee08b4008d2dd3f50fde71d476f8965125dfb7"
+      },
+      "receipts_sha256": {
+        "f43-wait-recovery-20261110-a01/status.json": "0d8245102b53a2bd3c3378a8f8a6ffd4d693f0eb4a44ab5e6ecd6baa6cada1a4",
+        "f43-wait-recovery-20261110-a01/guard-transcript.json": "19ae72515111fb55a9e1711f5bf2c059b8d2bd58c45a9eb63581322c94d448c7",
+        "f43-root-input-snapshot-verification-20261110-a01.json": "73bcab4504b02c8cc7868277717f9a2b1bdb97e5751620603932ac49a7bb17b1",
+        "f43-root-pure-transform-20261110-a01.json": "8d1e78ce7910d13b7414424d45c12624d2cb8ec960df8c2d0cf97d5ff1bd7e09",
+        "f43-root-replay-verification-20261110-a01.json": "6797e49b3871440923286f88b38911d90526599349564a1ae1296cfe4276bf30",
+        "f43-wait-recovery-test-baseline-20261110-a01.json": "8e07accc263bf97ee89afb65686c0f2236dc43812f9590891396ef0300c12a62"
+      },
+      "test_logs_sha256": {
+        "test_native_wait_recovery": "bee6c213b3f8e27aa3c6a392de8c051fb687679954b3e2a4479562307c419a70",
+        "test_native_provider_inputs": "5c170f30a9fa65fdcb4ad57618960d25cf9ba04ff3eba73992744bed1729b948",
+        "test_native_provider_archive_admission": "41db7ffd828da946ba7b61a23e0974f31f324a9b52e1dd8e59ab794286b66cd6",
+        "test_native_anon_provider_inputs": "25717b824d21ab5eb1f07c6acb69b02633c2cc55bb5e5f4466c680a159f2b107",
+        "test_native_anon_provider_admission": "aa70ea183de91844f7b12d9ac0605dab726483569011ba79f95372aeea3950e2",
+        "test_native_file_provider_inputs": "a4290f2c6c376c4d2b8bcd2dace414fb62550cc87b7b03c8767726054b1b9c23",
+        "test_native_file_provider_admission": "a56edf845e1b6ab29bcdcf5c334d1bd08151cee8ad13938b97f78efb21f7ebf4",
+        "test_native_task_owner_composition": "7fa0e785ac14187955a76cf5a74d419de45d91ea294953091ed32b116f0ac94c",
+        "test_native_task_provider_inputs": "428202ee1c7a8d7fec67d420ebc5e49e7c7982df42f35540f4a87670fd0757d9",
+        "test_native_task_provider_admission": "66ef331ca994d8f879ee0f737c9aa9527a9a41db5349befb2c9d227c508ddf7e",
+        "test_native_task_worker_wake_api": "1a41ec68e90cf29679d998b87ca1ffdbfdf8bf9e8a626f8cc57537daad6fcb7b",
+        "test_native_task_worker_provider_inputs": "ce1aae2da4d0b2e8a5178cf37641e91118df85d28e79ecaf208bcdc177f5397e",
+        "test_native_task_worker_provider_admission": "5c445f14e04b06e585b319345a9b91ef2028833eba33f6feb267801296a01b12"
+      },
+      "production_log_sha256": "95ad23f8464c435df6f7dbf4b8a2a39b0561538944eb9f42850e62b7e448c207",
+      "tests_passed": 200,
+      "new_tests": 37,
+      "old_tests": 163,
+      "actual_tracked_recovery": "PASS",
+      "independent_raw_input_check": "PASS",
+      "independent_in_memory_recipe_check": "PASS",
+      "independent_fresh_cli_replay": "PASS_ALL_THREE_FILES_BYTE_IDENTICAL",
+      "independent_existing_output_negative": "PASS_REJECTED_EXIT1_NO_CLOBBER",
+      "independent_native_protected_states": "468_UNCHANGED_ROOT_VERIFIED",
+      "checked_transform_operations": 49,
+      "retained_preproduction_review_corrections": [
+        "Bind admitted parent/output directory descriptors and reject path replacement/aliases.",
+        "Build all three payloads before mkdir and verify provenance bytes as well as code bytes.",
+        "Recheck canonical input parent after same-descriptor reads.",
+        "Copy returned input metadata rows and open-gate lists to preserve authority/determinism."
+      ],
+      "original_generator_execution": "NOT_RUN",
+      "native_preprocessing": "NOT_RUN",
+      "native_compilation": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "model_execution": "NOT_RUN",
+      "installed": false,
+      "linked": false,
+      "runtime": "NOT_RUN",
+      "finished": "2026-11-10T15:23:44.170918+00:00"
+    }
+  },
+  "receipt_sha256": {
+    "f43-wait-recovery-20261110-a01/status.json": "0d8245102b53a2bd3c3378a8f8a6ffd4d693f0eb4a44ab5e6ecd6baa6cada1a4",
+    "f43-wait-recovery-test-baseline-20261110-a01.json": "8e07accc263bf97ee89afb65686c0f2236dc43812f9590891396ef0300c12a62",
+    "f43-root-input-snapshot-verification-20261110-a01.json": "73bcab4504b02c8cc7868277717f9a2b1bdb97e5751620603932ac49a7bb17b1",
+    "f43-root-pure-transform-20261110-a01.json": "8d1e78ce7910d13b7414424d45c12624d2cb8ec960df8c2d0cf97d5ff1bd7e09",
+    "f43-root-replay-verification-20261110-a01.json": "6797e49b3871440923286f88b38911d90526599349564a1ae1296cfe4276bf30",
+    "f43-source-final-20261110-a01.json": "d4dd7ebbecd56c7cc6135488d434e58e143e420e53636767cf2a18c05ea208f5"
+  },
+  "preserved_F42_receipt_sha256": {
+    "f42-native-task-worker-owner-20261110-a01/status.json": "0727f115f360a75a676e97c2609f5e91a4140d2d1eed35f3ed0cc00a9a18b6b3",
+    "f42-native-task-worker-owner-20261110-a01-launch.json": "e519759d28879adeb9d01083027530696a46884553e271508342d11b34d38d7d",
+    "f42-native-task-worker-owner-20261110-a01-exit.json": "1539eb67b61bd472a323bb583c50bd821379987ceb6e02c01077208cbd4ef32a"
+  },
+  "output_provenance": {
+    "schema": 1,
+    "state": "RECOVERED_SOURCE_ONLY_NOT_INSTALLED",
+    "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+    "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+    "source_mode": "PINNED_UPSTREAM_BLOB_SNAPSHOTS; NO CHECKOUT/CLEAN-TREE CLAIM",
+    "inputs": {
+      "include/linux/wait.h": {
+        "size": 45202,
+        "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+        "git_blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+        "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/include/linux/wait.h"
+      },
+      "kernel/sched/wait.c": {
+        "size": 14840,
+        "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+        "git_blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+        "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/kernel/sched/wait.c"
+      }
+    },
+    "witnesses": {
+      "recipe": {
+        "path": "compat/native-runtime/task/generate_wait.py",
+        "sha256": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+        "git_blob": "384872c7c87595d62497227d7c2c8aaff31e2dd0"
+      },
+      "historical_ledger": {
+        "path": "compat/native-runtime/task/SOURCE_SHA256.json",
+        "sha256": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+        "git_blob": "0b1cf16eb8cd424c2c87c4d7e6d19513edc6771f"
+      }
+    },
+    "recovery_tool_sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+    "files": {
+      "include/linux/wait.h": {
+        "size": 49625,
+        "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+      },
+      "linux_wait.c": {
+        "size": 14091,
+        "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+      }
+    },
+    "operations": [
+      {
+        "operation": "header-task-namespace",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "namespace-identifiers",
+        "kind": "named-set",
+        "count": 26
+      },
+      {
+        "operation": "header-dynamic-native-init",
+        "kind": "region",
+        "count": 1,
+        "removed_sha256": "6211a726ced73d112a5798535cc385881cbd47debd1ff6750f7572feb8162b1e"
+      },
+      {
+        "operation": "header-static-init-remains-open",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "header-stack-init",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "header-poll-to-key",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "header-key-to-poll",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "header-timeout-budget-parameter",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "header-timeout-budget-references",
+        "kind": "literal",
+        "count": 3
+      },
+      {
+        "operation": "header-timeout-budget-region",
+        "kind": "region",
+        "count": 1,
+        "removed_sha256": "4bf10c129b7dce898f81b3d2d2458c3fcb9b1e1561b1f51aa4a4beb8f5f4f8af"
+      },
+      {
+        "operation": "header-timeout-predicate-calls",
+        "kind": "literal",
+        "count": 15
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_freezable",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_freezable_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:__wait_event_hrtimeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_hrtimeout",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_hrtimeout",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_exclusive",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_killable_exclusive",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_freezable_exclusive",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_idle_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_idle_exclusive_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:__wait_event_interruptible_locked",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_killable",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:io_wait_event_killable",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_state",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_state_exclusive",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_killable_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_cmd",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_lock_irq",
+        "kind": "regex",
+        "count": 3
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper:wait_event_lock_irq_timeout",
+        "kind": "regex",
+        "count": 4
+      },
+      {
+        "operation": "shadow-wrapper-set",
+        "kind": "named-set",
+        "count": 23
+      },
+      {
+        "operation": "body-native-includes",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-export-removals",
+        "kind": "regex",
+        "count": 23
+      },
+      {
+        "operation": "body-lockdep-class",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-lockdep-assert",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-explicit-lock",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-priority-error-and-success-unlock",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-finish-wait-always-locked",
+        "kind": "region",
+        "count": 1,
+        "removed_sha256": "c7924e0147099dad52a0fdf2c06c42bccd25f9fdd72a1f9317a1a66607fc5f29"
+      },
+      {
+        "operation": "body-autoremove-list",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-generic-task-stop-predicate",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-generic-task-stop-helper",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-pollfree-key",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-pollfree-assertion",
+        "kind": "literal",
+        "count": 1
+      },
+      {
+        "operation": "body-exclude-keyed-bit-callback",
+        "kind": "tail",
+        "count": 1,
+        "removed_sha256": "3bdae330595dd8ed1ebfc2a687e1be7f172bafbbe8e00e6a939dd81690b92ae8"
+      },
+      {
+        "operation": "body-task-owned-default-wake",
+        "kind": "append",
+        "count": 1
+      }
+    ],
+    "open_gates": [
+      "fatal-only sleeps",
+      "static native waitqueue initializer",
+      "PID/mm/IO accounting",
+      "generic native boundary attachment",
+      "module unload/owner draining",
+      "sync/current-CPU scheduler hints",
+      "poll registrations/RCU/free lifetime",
+      "bit wait/lock/IO/timeouts"
+    ],
+    "native_preprocessing": "NOT_RUN",
+    "native_compilation": "NOT_RUN",
+    "linked": false,
+    "installed": false,
+    "runtime": "NOT_RUN"
+  },
+  "lossless_owner_archive": {
+    "governance_commit": "c14c222f2b5c0b5d0ffa432daa50b677a9aa52b8",
+    "path": "archive/2026-11-10-HP-I915-before-f43.md",
+    "bytes": 15680,
+    "blob": "56cf1132b34b15605b0d28eb62ee2376381e6172",
+    "sha256": "dc1ce9657d9d74a7f357bce23e50025ebad840ffe8c75af24add85587ed0ad57"
+  },
+  "independent_reviews": [
+    "modern_provider_review: all producer IO/metadata fixes and37tests reviewedGO; no execution",
+    "native_abi_preflight: actual source/provenance/468states/F42artifacts reviewedGO; no duplicate generation/nativecall"
+  ],
+  "native_preprocessing": "NOT_RUN",
+  "native_compilation": "NOT_RUN",
+  "archive_scan": "NOT_RUN",
+  "linked": false,
+  "installed": false,
+  "booted": false,
+  "runtime": "NOT_RUN"
+}

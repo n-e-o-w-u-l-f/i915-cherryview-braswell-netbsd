@@ -1,0 +1,310 @@
+{
+  "schema": 1,
+  "state": "RECOVERED_SOURCE_ONLY_NOT_INSTALLED",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "source_mode": "PINNED_UPSTREAM_BLOB_SNAPSHOTS; NO CHECKOUT/CLEAN-TREE CLAIM",
+  "inputs": {
+    "include/linux/wait.h": {
+      "size": 45202,
+      "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417",
+      "git_blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+      "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/include/linux/wait.h"
+    },
+    "kernel/sched/wait.c": {
+      "size": 14840,
+      "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f",
+      "git_blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+      "source_url": "https://github.com/torvalds/linux/blob/fd179f8a05be3ccae366b9b96e176b51fbe54aab/kernel/sched/wait.c"
+    }
+  },
+  "witnesses": {
+    "recipe": {
+      "path": "compat/native-runtime/task/generate_wait.py",
+      "sha256": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6",
+      "git_blob": "384872c7c87595d62497227d7c2c8aaff31e2dd0"
+    },
+    "historical_ledger": {
+      "path": "compat/native-runtime/task/SOURCE_SHA256.json",
+      "sha256": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662",
+      "git_blob": "0b1cf16eb8cd424c2c87c4d7e6d19513edc6771f"
+    }
+  },
+  "recovery_tool_sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521",
+  "files": {
+    "include/linux/wait.h": {
+      "size": 49625,
+      "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+    },
+    "linux_wait.c": {
+      "size": 14091,
+      "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+    }
+  },
+  "operations": [
+    {
+      "operation": "header-task-namespace",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "namespace-identifiers",
+      "kind": "named-set",
+      "count": 26
+    },
+    {
+      "operation": "header-dynamic-native-init",
+      "kind": "region",
+      "count": 1,
+      "removed_sha256": "6211a726ced73d112a5798535cc385881cbd47debd1ff6750f7572feb8162b1e"
+    },
+    {
+      "operation": "header-static-init-remains-open",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "header-stack-init",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "header-poll-to-key",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "header-key-to-poll",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "header-timeout-budget-parameter",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "header-timeout-budget-references",
+      "kind": "literal",
+      "count": 3
+    },
+    {
+      "operation": "header-timeout-budget-region",
+      "kind": "region",
+      "count": 1,
+      "removed_sha256": "4bf10c129b7dce898f81b3d2d2458c3fcb9b1e1561b1f51aa4a4beb8f5f4f8af"
+    },
+    {
+      "operation": "header-timeout-predicate-calls",
+      "kind": "literal",
+      "count": 15
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_freezable",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_freezable_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:__wait_event_hrtimeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_hrtimeout",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_hrtimeout",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_exclusive",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_killable_exclusive",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_freezable_exclusive",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_idle_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_idle_exclusive_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:__wait_event_interruptible_locked",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_killable",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:io_wait_event_killable",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_state",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_state_exclusive",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_killable_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_cmd",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_lock_irq",
+      "kind": "regex",
+      "count": 3
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_interruptible_lock_irq_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper:wait_event_lock_irq_timeout",
+      "kind": "regex",
+      "count": 4
+    },
+    {
+      "operation": "shadow-wrapper-set",
+      "kind": "named-set",
+      "count": 23
+    },
+    {
+      "operation": "body-native-includes",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-export-removals",
+      "kind": "regex",
+      "count": 23
+    },
+    {
+      "operation": "body-lockdep-class",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-lockdep-assert",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-explicit-lock",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-priority-error-and-success-unlock",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-finish-wait-always-locked",
+      "kind": "region",
+      "count": 1,
+      "removed_sha256": "c7924e0147099dad52a0fdf2c06c42bccd25f9fdd72a1f9317a1a66607fc5f29"
+    },
+    {
+      "operation": "body-autoremove-list",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-generic-task-stop-predicate",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-generic-task-stop-helper",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-pollfree-key",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-pollfree-assertion",
+      "kind": "literal",
+      "count": 1
+    },
+    {
+      "operation": "body-exclude-keyed-bit-callback",
+      "kind": "tail",
+      "count": 1,
+      "removed_sha256": "3bdae330595dd8ed1ebfc2a687e1be7f172bafbbe8e00e6a939dd81690b92ae8"
+    },
+    {
+      "operation": "body-task-owned-default-wake",
+      "kind": "append",
+      "count": 1
+    }
+  ],
+  "open_gates": [
+    "fatal-only sleeps",
+    "static native waitqueue initializer",
+    "PID/mm/IO accounting",
+    "generic native boundary attachment",
+    "module unload/owner draining",
+    "sync/current-CPU scheduler hints",
+    "poll registrations/RCU/free lifetime",
+    "bit wait/lock/IO/timeouts"
+  ],
+  "native_preprocessing": "NOT_RUN",
+  "native_compilation": "NOT_RUN",
+  "linked": false,
+  "installed": false,
+  "runtime": "NOT_RUN"
+}
