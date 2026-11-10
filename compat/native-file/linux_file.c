@@ -20,7 +20,7 @@
 #include <linux/pagemap_netbsd.h>
 #include <linux/sched.h>
 #include <linux/task_netbsd.h>
-#include <linux/task_entry_preallocated.h>
+#include "task_entry_preallocated.h"
 
 static kmutex_t file_system_lock;
 static kcondvar_t file_system_cv;

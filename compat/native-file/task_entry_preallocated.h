@@ -26,6 +26,8 @@ struct task_struct;
  */
 void linux_task_entry_enter_preallocated(struct task_struct **,
     struct task_struct **);
+/* Shared leave API defined by compat/native-entry/task_entry.inc. */
+void linux_task_entry_leave(struct task_struct **);
 /* Close admission only after an object subsystem has drained; permit its
  * one retained native worker task to finish actual LWP exit before fini. */
 int linux_task_system_quiesce_retained(struct task_struct *);
