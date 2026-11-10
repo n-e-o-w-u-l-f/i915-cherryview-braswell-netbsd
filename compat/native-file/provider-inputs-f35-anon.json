@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "scope": "F35 native anonymous FILE provider admission; no runtime or full kernel claim",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "repository_commit": "070f728b6ec617c079a4600c14b3e89867f50b18",
+  "provider_root": "compat/native-file",
+  "units": [
+    "linux_anon.c"
+  ],
+  "required_patched_headers": [
+    "sys/sys/file.h"
+  ],
+  "repository_include_roots": [
+    "compat/native-file/include",
+    "compat/native-mm/include",
+    "compat/native-uio/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "repository_inputs": {
+    "compat/native-file/linux_anon.c": {
+      "role": "translation_unit",
+      "blob": "2eb1210045024fca9c2d90fdb666847bd65f4444",
+      "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e"
+    },
+    "compat/native-file/include/linux/anon_inodes_netbsd.h": {
+      "role": "anon_header",
+      "blob": "553f337dd528cbdb5a362a8a1171fd38a8f040b7",
+      "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4"
+    },
+    "compat/native-file/include/linux/file_api_netbsd.h": {
+      "role": "file_header",
+      "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+      "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+    },
+    "compat/native-file/include/linux/file_netbsd.h": {
+      "role": "file_header",
+      "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+      "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+    },
+    "compat/native-file/include/linux/fs_netbsd.h": {
+      "role": "file_header",
+      "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+      "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+    },
+    "compat/native-file/include/linux/file_ref_netbsd.h": {
+      "role": "file_header",
+      "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+      "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+    },
+    "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+      "role": "mm_abi_header",
+      "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+      "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+    },
+    "compat/native-uio/include/linux/kiocb_netbsd.h": {
+      "role": "uio_header",
+      "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+      "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+    }
+  }
+}

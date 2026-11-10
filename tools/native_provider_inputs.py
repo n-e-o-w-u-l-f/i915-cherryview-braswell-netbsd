@@ -1,4 +1,4 @@
-"""Reviewed F33 provider identities and independent native dependency admission."""
+"""Reviewed native FILE provider identities and independent dependency admission."""
 import hashlib
 import json
 import os
@@ -15,6 +15,8 @@ from native_source_archive import (
 REPOSITORY = Path(__file__).resolve().parents[1]
 CONTRACT_PATH = 'compat/native-file/provider-inputs-f33.json'
 CONTRACT_SHA256 = 'f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3'
+ANON_CONTRACT_PATH = 'compat/native-file/provider-inputs-f35-anon.json'
+ANON_CONTRACT_SHA256 = 'c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d'
 
 
 def regular_bytes(path):
@@ -49,15 +51,24 @@ def unique_object(pairs):
     return result
 
 
-def load_contract(path, repository=REPOSITORY):
+def reviewed_contract_sha256(path, repository=REPOSITORY):
+    """Select only an explicitly reviewed source-owned path and its fixed digest."""
     repository = Path(repository).resolve(strict=True)
     path = Path(path)
-    expected = repository / CONTRACT_PATH
-    if path.is_symlink() or path.resolve(strict=True) != expected:
-        raise ValueError('the reviewed source-owned F33 provider contract is required')
+    if not path.is_symlink():
+        resolved = path.resolve(strict=True)
+        for relative, expected in ((CONTRACT_PATH, CONTRACT_SHA256),
+                                   (ANON_CONTRACT_PATH, ANON_CONTRACT_SHA256)):
+            if resolved == repository / relative:
+                return expected
+    raise ValueError('a reviewed source-owned native FILE provider contract is required')
+
+
+def load_contract(path, repository=REPOSITORY):
+    expected = reviewed_contract_sha256(path, repository)
     raw = regular_bytes(path)
-    if sha_bytes(raw) != CONTRACT_SHA256:
-        raise ValueError('F33 provider contract bytes differ from reviewed identity')
+    if sha_bytes(raw) != expected:
+        raise ValueError('provider contract bytes differ from reviewed identity')
     document = json.loads(raw, object_pairs_hook=unique_object)
     if document['netbsd_pin'] != PIN or document['archive_sha256'] != ARCHIVE_SHA256:
         raise ValueError('provider contract native archive identity differs')
@@ -99,9 +110,9 @@ def repository_inputs(repository, contract):
 def selected_inputs(contract, repository, source, provider, units, includes):
     repository, source = Path(repository), Path(source)
     if Path(provider) != repository / contract['provider_root']:
-        raise ValueError('F33 requires the reviewed native FILE provider root')
+        raise ValueError('the reviewed native FILE provider root is required')
     if list(units) != contract['units']:
-        raise ValueError('F33 permits only the reviewed linux_fd.c unit')
+        raise ValueError('provider units differ from the reviewed selection')
     required = ([repository / name for name in contract['repository_include_roots']] +
                 [source / name for name in contract['native_include_roots']])
     if includes and list(map(Path, includes)) != required:
@@ -207,8 +218,32 @@ def native_archive_expectations(core, bindings):
     return archive_expectations(core['source_provenance']['verified_source_members'], native)
 
 
-def require_provider_headers(bindings, repository, core):
+def provider_header_policy(core, contract=None):
+    """Keep the original all-header default; narrow only via reviewed contract metadata."""
+    available = {name for name in core['patched_inputs'] if name.endswith('.h')}
+    if contract is None or 'required_patched_headers' not in contract:
+        return sorted(available)
+    names = contract['required_patched_headers']
+    if not isinstance(names, list) or not names:
+        raise ValueError('required_patched_headers must be a nonempty list')
+    if any(not isinstance(name, str) for name in names):
+        raise ValueError('required patched headers must be canonical header paths')
+    for name in names:
+        source_relative(name)
+        if not name.endswith('.h'):
+            raise ValueError('required patched header is not a header path')
+    required = set(names)
+    if len(required) != len(names):
+        raise ValueError('duplicate required patched header')
+    if 'sys/sys/file.h' not in required:
+        raise ValueError('native FILE header must remain required')
+    if not required.issubset(available):
+        raise ValueError('required patched header is outside the selected core')
+    return sorted(required)
+
+
+def require_provider_headers(bindings, repository, core, contract=None):
     consumed = {row['relative'] for row in bindings.values() if row['kind'] == 'patched'}
-    required = {name for name in core['patched_inputs'] if name.endswith('.h')}
+    required = set(provider_header_policy(core, contract))
     if not required.issubset(consumed):
         raise ValueError('provider did not consume the patched native FILE headers')
