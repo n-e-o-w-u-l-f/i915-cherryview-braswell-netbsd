@@ -150,5 +150,192 @@ class FileProviderMappingTests(unittest.TestCase):
                                  baseline_bytes(relative))
 
 
+
+# Phase B composes the private F35/F33 admission fixture without inheriting tests.
+import contextlib
+import importlib.util
+import io
+
+_fixture_spec = importlib.util.spec_from_file_location(
+    '_f37_anon_admission_fixture', Path(__file__).with_name('test_native_anon_provider_admission.py'))
+_fixture_module = importlib.util.module_from_spec(_fixture_spec)
+_fixture_spec.loader.exec_module(_fixture_module)
+
+
+class FileProviderAdmissionTests(unittest.TestCase):
+    def setUp(self):
+        self.parent_fixture = _fixture_module.AnonymousProviderAdmissionTests(
+            'test_anon_preflight_records_selected_hash_and_file_header_policy')
+        self.parent_fixture.setUp()
+        self.addCleanup(self.parent_fixture.doCleanups)
+        f = self.fixture = self.parent_fixture.fixture
+        support = _fixture_module.fixture_module
+        self.inputs = _fixture_module.inputs
+        old_unit = f.unit
+        f.unit = old_unit.with_name('linux_file.c')
+        old_unit.rename(f.unit)
+        row = f.bindings.pop(str(old_unit))
+        row['relative'] = 'compat/native-file/linux_file.c'
+        f.bindings[str(f.unit)] = row
+        previous_header = self.parent_fixture.anon_header
+        self.entry_header = f.provider / 'task_entry_preallocated.h'
+        previous_header.rename(self.entry_header)
+        row = f.bindings.pop(str(previous_header))
+        row.update(relative='compat/native-file/task_entry_preallocated.h',
+                   role='task_entry_header')
+        f.bindings[str(self.entry_header)] = row
+        self.parent_fixture.anon_header = self.entry_header
+        f.contract_path = support.write(f.repo / self.inputs.FILE_CONTRACT_PATH)
+        f.contract['units'] = ['linux_file.c']
+        (f.repo / 'compat/native-runtime/include').mkdir(parents=True)
+        f.contract['repository_include_roots'].append('compat/native-runtime/include')
+        self.task_paths = []
+        for name, (target, owner, guard) in MAPPINGS.items():
+            forward = support.write(f.repo / 'compat/native-runtime/include/linux' / name,
+                                    ('#include "' + target + '"\n').encode())
+            actual = support.write(f.repo / owner, ('/* private ' + name + ' owner */\n').encode())
+            for path, role in ((forward, 'task_mapping_header'), (actual, 'task_owner_header')):
+                self.bind(path, role)
+                self.task_paths.append(path)
+        self.api_owner = support.write(f.repo / API_OWNER, b'/* private API definition owner */\n')
+        self.bind(self.api_owner, 'api_definition_owner')
+        prior_arguments = f.arguments
+
+        def arguments(archive=True, extra=()):
+            result = prior_arguments(archive=archive, extra=extra)
+            result[result.index('--unit') + 1] = 'linux_file.c'
+            return result
+
+        f.arguments = arguments
+        prior_compiler = f.fake_compiler
+
+        def compiler(command, **keywords):
+            result = prior_compiler(command, **keywords)
+            dep = Path(command[command.index('-MF') + 1])
+            target, body = dep.read_text().split(':', 1)
+            paths = body.split() + list(map(str, self.task_paths))
+            if getattr(self, 'consume_api_owner', False) or (
+                    '-MD' in command and getattr(self, 'consume_api_owner_md', False)):
+                paths.append(str(self.api_owner))
+            if getattr(self, 'unreviewed_task_header', False):
+                path = support.write(f.repo / 'compat/native-runtime/include/linux/extra.h')
+                paths.append(str(path))
+            if getattr(self, 'omit_file_header', False):
+                paths.remove(str(f.overlay / 'sys/sys/file.h'))
+            if '-MD' in command and getattr(self, 'actual_task_dependency_drift', False):
+                paths.remove(str(self.task_paths[0]))
+            dep.write_text(target + ': ' + ' '.join(paths) + '\n')
+            return result
+
+        f.fake_compiler = compiler
+
+    def bind(self, path, role):
+        f = self.fixture
+        raw = path.read_bytes()
+        f.bindings[str(path)] = dict(kind='repository', relative=str(path.relative_to(f.repo)),
+            role=role, blob=hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest(),
+            sha256=digest(raw))
+
+    def test_file_preflight_records_fixed_contract_task_owners_and_separate_api_owner(self):
+        f = self.fixture
+        self.assertEqual(f.invoke(['--preflight-only']), 0)
+        state = f.status()
+        self.assertEqual(state['state'], 'PREFLIGHT_PASS')
+        self.assertEqual(state['object_compilation'], 'NOT_RUN')
+        self.assertEqual(state['objects'], {})
+        self.assertEqual(state['provider_contract_sha256'], self.inputs.FILE_CONTRACT_SHA256)
+        self.assertEqual(state['required_patched_headers'], ['sys/sys/file.h'])
+        self.assertEqual(state['repository_inputs'][str(self.api_owner)]['role'],
+                         'api_definition_owner')
+        proof = state['precompile_dependencies']['linux_file']
+        self.assertNotIn(str(self.api_owner), proof)
+        for path in self.task_paths + [self.entry_header]:
+            self.assertEqual(proof[str(path)]['kind'], 'repository')
+        command = f.commands[0][0]
+        ordered = [f.overlay / 'sys'] + [
+            f.repo / name for name in f.contract['repository_include_roots']] + [
+            f.source / name for name in f.contract['native_include_roots']]
+        self.assertEqual(command[1:8], ['-I' + str(path) for path in ordered])
+        self.assertNotIn('-c', command)
+        self.assertFalse((f.output / 'linux_file.o').exists())
+
+    def test_file_compile_mock_requires_equal_independent_and_actual_proofs(self):
+        f = self.fixture
+        self.assertEqual(f.invoke(), 0)
+        state = f.status()
+        self.assertEqual(state['state'], 'PASS')
+        self.assertEqual(list(state['objects']), ['linux_file'])
+        self.assertEqual(state['objects']['linux_file']['dependency_proof'],
+                         state['precompile_dependencies']['linux_file'])
+        self.assertNotIn(str(self.api_owner), state['objects']['linux_file']['dependency_proof'])
+        self.assertEqual(len(f.commands), 2)
+        self.assertIn('-M', f.commands[0][0])
+        self.assertIn('-MD', f.commands[1][0])
+        self.assertIn('-c', f.commands[1][0])
+        self.assertEqual(f.archives[0].verified, {'sys/native.h': digest(f.native.read_bytes())})
+        self.assertFalse((f.obj / 'linux_file.o').exists())
+
+    def test_api_definition_owner_cannot_be_consumed_by_preprocessor(self):
+        f = self.fixture
+        self.consume_api_owner = True
+        with self.assertRaisesRegex(ValueError, 'API definition owner is not a provider dependency'):
+            f.invoke()
+        self.assertEqual(f.status()['state'], 'FAIL')
+        self.assertEqual(len(f.commands), 1)
+
+    def test_api_definition_owner_cannot_be_added_by_actual_compile_dependency(self):
+        f = self.fixture
+        self.consume_api_owner_md = True
+        with self.assertRaisesRegex(ValueError, 'API definition owner is not a provider dependency'):
+            f.invoke()
+        self.assertEqual(f.status()['state'], 'FAIL')
+        self.assertEqual(f.status()['objects'], {})
+        self.assertEqual(len(f.commands), 2)
+
+    def test_runtime_directory_membership_does_not_admit_an_unreviewed_header(self):
+        f = self.fixture
+        self.unreviewed_task_header = True
+        with self.assertRaisesRegex(ValueError, 'unreviewed repository'):
+            f.invoke()
+        self.assertEqual(f.status()['state'], 'FAIL')
+        self.assertEqual(len(f.commands), 1)
+
+    def test_file_header_remains_mandatory_with_task_mappings(self):
+        f = self.fixture
+        self.omit_file_header = True
+        with self.assertRaisesRegex(ValueError, 'patched native FILE headers'):
+            f.invoke()
+        self.assertEqual(f.status()['state'], 'FAIL')
+        self.assertEqual(len(f.commands), 1)
+
+    def test_actual_task_dependency_set_must_match_independent_scan(self):
+        f = self.fixture
+        self.actual_task_dependency_drift = True
+        with self.assertRaisesRegex(ValueError, 'independent scan'):
+            f.invoke()
+        self.assertEqual(f.status()['state'], 'FAIL')
+        self.assertEqual(len(f.commands), 2)
+
+    def test_file_contract_cannot_select_previous_fd_or_anon_units(self):
+        f = self.fixture
+        for name in ('linux_fd.c', 'linux_anon.c'):
+            with self.subTest(name=name), contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    f.invoke(['--unit', name])
+                self.assertFalse(f.output.exists())
+                self.assertEqual(f.commands, [])
+
+    def test_fourth_arbitrary_contract_and_broad_include_root_stay_rejected(self):
+        f = self.fixture
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            f.invoke(['--include-root', str(f.repo / 'compat')])
+        self.assertFalse(f.output.exists())
+        f.contract_path = _fixture_module.fixture_module.write(f.repo / 'arbitrary-fourth.json')
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            f.invoke(['--preflight-only'])
+        self.assertFalse(f.output.exists())
+        self.assertEqual(f.commands, [])
+
+
 if __name__ == '__main__':
     unittest.main()

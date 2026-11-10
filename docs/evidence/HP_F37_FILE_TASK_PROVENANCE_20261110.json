@@ -1,0 +1,724 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F37-FILE-OWNER-HEADER-PROVENANCE-20261110",
+  "state": "PASS",
+  "source_base": "e538a4679cdeab2c8d3756577f634300f1d6213d",
+  "source_fix_commit": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+  "source_sha256": {
+    "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+    "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+    "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+    "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+    "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+    "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+    "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+    "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+    "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824"
+  },
+  "preserved_sha256": {
+    "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+    "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+    "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+    "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+    "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+    "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+    "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+  },
+  "original_remote_owner_anchors": [
+    {
+      "path": "compat/linux/raw_spinlock.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "size": 1992,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/4ecd3caa782b6817921e1d5287663a3cb5db3ceb"
+    },
+    {
+      "path": "compat/native-entry/task_entry.inc",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+      "size": 1427,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/d2b65c9c6c2a9c5057e6060f742e2288a45ca97f"
+    },
+    {
+      "path": "compat/native-file/include/linux/file_api_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+      "size": 1318,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/271684bd9e980ab9e5bfb9847ff5ecc13a65357b"
+    },
+    {
+      "path": "compat/native-file/include/linux/file_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+      "size": 1614,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/e919f2f6a03bd58b85a40cea89ded14242983d2b"
+    },
+    {
+      "path": "compat/native-file/include/linux/file_ref_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+      "size": 2966,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/3b6c5b499380b6374ca9e7540e89d8cc55362678"
+    },
+    {
+      "path": "compat/native-file/include/linux/fs_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+      "size": 8568,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/2f304f344fdaf92fb0c412a140c27837fc1d3163"
+    },
+    {
+      "path": "compat/native-file/include/linux/pagemap_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50f0e56ddea3edba091fe5fcaffc338674b0cef9",
+      "size": 4324,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/50f0e56ddea3edba091fe5fcaffc338674b0cef9"
+    },
+    {
+      "path": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "034e1034ba925299a14bf85f6defd37998023bf3",
+      "size": 356,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/034e1034ba925299a14bf85f6defd37998023bf3"
+    },
+    {
+      "path": "compat/native-mm/include/linux/mm_identity_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60",
+      "size": 1751,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60"
+    },
+    {
+      "path": "compat/native-mm/include/linux/vma_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4b15106f2df86befb7fbc287bf065008fe9321d",
+      "size": 8236,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/a4b15106f2df86befb7fbc287bf065008fe9321d"
+    },
+    {
+      "path": "compat/native-runtime/task/sched.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "size": 2556,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/c73b0405e05678f8acac4b2cc8084afcf7690f5a"
+    },
+    {
+      "path": "compat/native-runtime/task/task_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "size": 1817,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/bd87eaf96aa3174154226a55e59ed0162e7b92ee"
+    },
+    {
+      "path": "compat/native-uio/include/linux/kiocb_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e54e8be249a3975c91fd5710ea024da817571df9",
+      "size": 1349,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/e54e8be249a3975c91fd5710ea024da817571df9"
+    }
+  ],
+  "receipts": {
+    "f37-source-final-20261110-a01.json": {
+      "state": "CODE_READY",
+      "source_head": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+      "source_sha256": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824"
+      },
+      "preserved_sha256": {
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "receipts_sha256": {
+        "f37-file-header-mapping-20261110-a01/status.json": "e6bc15cb3113a44809651adf8d83f2b071c26ec2d3f81227629558a867dc16c1",
+        "f37-file-header-mapping-20261110-a01/tests.log": "888d77155a6164973ca3905b6a1e85dc28be93b4ec164214b8c849ee8c0e0b27",
+        "f37-local-source-fix-20261110-a01.json": "af13bc06169051b689d1a7bc09105d7abbfd598f8335c29dc0c54a81561d2fe1",
+        "f37-file-provider-admission-tests-20261110-a01/status.json": "6a3addf84e1eb331c705ce94293bd04fc928aa58cee7ad3c2765ca7e07d85d4e",
+        "f37-file-provider-admission-tests-20261110-a01/tests.log": "46bd4f25e283a49ffa0def176a5c32bf52dc769eb8fbf8afa3632acf0a04120d",
+        "f37-file-provider-input-unit-a01.json": "be1e26ab6ccb5cd843266e27c09607631c02c1ae3e006832e48084bc0bc4ca64",
+        "f37-file-provider-input-unit-a01.log": "8ece9a2ef4121d39eb4aad09e88e8c84af49dd624d0fa280e456f9e80537c644"
+      },
+      "tests_passed": 98,
+      "actual_18_input_and_f32_core_admission": "PASS",
+      "actual_preprocessor": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "actual_native_object": "NOT_RUN",
+      "task_implementation_link_runtime": "NOT_CLAIMED",
+      "ast": "PASS",
+      "finished": "2026-11-10T09:17:13.705505+00:00"
+    },
+    "f37-root-source-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T09:20:58.533163+00:00",
+      "source_fix_commit": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+      "source_sha256": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824"
+      },
+      "preserved_sha256": {
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "tests": 98,
+      "repository_input_count": 18,
+      "provider_inputs": 17,
+      "api_definition_owners": 1,
+      "api_owner_not_consumable": true,
+      "input_blobs": {
+        "compat/native-file/linux_file.c": "951fee9293bb707d9ecc1592e55d2b31f9cb1967",
+        "compat/native-file/include/linux/file_api_netbsd.h": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+        "compat/native-file/include/linux/file_netbsd.h": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+        "compat/native-file/include/linux/fs_netbsd.h": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "034e1034ba925299a14bf85f6defd37998023bf3",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "e54e8be249a3975c91fd5710ea024da817571df9",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "50f0e56ddea3edba091fe5fcaffc338674b0cef9",
+        "compat/native-mm/include/linux/vma_netbsd.h": "a4b15106f2df86befb7fbc287bf065008fe9321d",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60",
+        "compat/native-runtime/task/sched.h": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+        "compat/native-runtime/task/task_netbsd.h": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+        "compat/linux/raw_spinlock.h": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+        "compat/native-file/task_entry_preallocated.h": "7adbb95a97687711340a1968b00769e4e8899973",
+        "compat/native-runtime/include/linux/sched.h": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+        "compat/native-runtime/include/linux/task_netbsd.h": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+        "compat/native-entry/task_entry.inc": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f"
+      },
+      "original_remote_owner_anchors": 13,
+      "builder_byte_equal": true,
+      "public_freepath_negative": "PASS",
+      "actual_readonly18_core_admission": "PASS",
+      "actual_preprocessor": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "task_link_runtime": "NOT_CLAIMED",
+      "protected_inputs_unchanged": true,
+      "previous_objects_preserved": true,
+      "full_kernel": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f37-local-source-fix-20261110-a01.json": {
+      "state": "LOCAL_SOURCE_FIX_VERIFIED",
+      "observed_at": "2026-11-10T09:10:29.779075+00:00",
+      "project_id": "HP-I915",
+      "parent": "e538a4679cdeab2c8d3756577f634300f1d6213d",
+      "commit": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+      "publication": "LOCAL_ONLY_PENDING_COMPLETE_F37_ACCEPTANCE",
+      "source_sha256": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tests/test_native_file_provider_admission.py": "b19bd05b6ee1c6e0ffc9b80abf78bcbe9599b9d243948dfe670ab66154d17dbf"
+      },
+      "preserved_sha256": {
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "tests": 8,
+      "receipt_sha256": "e6bc15cb3113a44809651adf8d83f2b071c26ec2d3f81227629558a867dc16c1",
+      "governance_ref_checked": "80a1112ea1e460a3b9d5f88db032ffcdfefb0f5a",
+      "native_preprocessor": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "full_kernel": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f37-file-header-mapping-20261110-a01/status.json": {
+      "state": "PASS",
+      "source_head": "e538a4679cdeab2c8d3756577f634300f1d6213d",
+      "source_sha256_before": {
+        "compat/native-file/linux_file.c": "6875e7b65c2b61454c46d5cf68d7a706ae6b7b7d8f75763421e02bea6fcd6ac8",
+        "compat/native-file/task_entry_preallocated.h": "cbced0095ccad379128037a66bc154659fae78be1180e2d49778abca93f5be1b",
+        "compat/native-runtime/include/linux/sched.h": null,
+        "compat/native-runtime/include/linux/task_netbsd.h": null,
+        "compat/native-runtime/include/linux/raw_spinlock.h": null,
+        "tests/test_native_file_provider_admission.py": null
+      },
+      "preserved_sha256_before": {
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "actual_preprocessor": "NOT_RUN",
+      "actual_native_object": "NOT_RUN",
+      "started": "2026-11-10T09:03:12.695964+00:00",
+      "tested_source_sha256_before": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tests/test_native_file_provider_admission.py": "b19bd05b6ee1c6e0ffc9b80abf78bcbe9599b9d243948dfe670ab66154d17dbf"
+      },
+      "tests_exit_code": 0,
+      "diff_check": 0,
+      "tested_source_sha256_after": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tests/test_native_file_provider_admission.py": "b19bd05b6ee1c6e0ffc9b80abf78bcbe9599b9d243948dfe670ab66154d17dbf"
+      },
+      "preserved_sha256_after": {
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "log_sha256": "888d77155a6164973ca3905b6a1e85dc28be93b4ec164214b8c849ee8c0e0b27",
+      "finished": "2026-11-10T09:05:02.751277+00:00"
+    },
+    "f37-file-provider-admission-tests-20261110-a01/status.json": {
+      "state": "PASS",
+      "source_head": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+      "source_sha256_before": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "actual_preprocessor": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "tests": [
+        {
+          "pattern": "test_native_file_provider_admission.py",
+          "exit_code": 0
+        },
+        {
+          "pattern": "test_native_provider_inputs.py",
+          "exit_code": 0
+        },
+        {
+          "pattern": "test_native_provider_archive_admission.py",
+          "exit_code": 0
+        },
+        {
+          "pattern": "test_native_anon_provider_inputs.py",
+          "exit_code": 0
+        },
+        {
+          "pattern": "test_native_anon_provider_admission.py",
+          "exit_code": 0
+        }
+      ],
+      "actual_input_admission": {
+        "state": "PASS",
+        "provider_contract_sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "repository_commit": "4858b14bdb6d94fa27ce1e9d5b966dd98c0637bb",
+        "repository_inputs": {
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/linux_file.c": {
+            "kind": "repository",
+            "relative": "compat/native-file/linux_file.c",
+            "role": "translation_unit",
+            "blob": "951fee9293bb707d9ecc1592e55d2b31f9cb1967",
+            "sha256": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_api_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_api_netbsd.h",
+            "role": "file_header",
+            "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+            "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_netbsd.h",
+            "role": "file_header",
+            "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+            "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/fs_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/fs_netbsd.h",
+            "role": "file_header",
+            "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+            "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_ref_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_ref_netbsd.h",
+            "role": "file_header",
+            "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+            "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+            "role": "mm_abi_header",
+            "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+            "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include/linux/kiocb_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-uio/include/linux/kiocb_netbsd.h",
+            "role": "uio_header",
+            "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+            "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/pagemap_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/pagemap_netbsd.h",
+            "role": "file_page_header",
+            "blob": "50f0e56ddea3edba091fe5fcaffc338674b0cef9",
+            "sha256": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/vma_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-mm/include/linux/vma_netbsd.h",
+            "role": "mm_vma_header",
+            "blob": "a4b15106f2df86befb7fbc287bf065008fe9321d",
+            "sha256": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/mm_identity_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-mm/include/linux/mm_identity_netbsd.h",
+            "role": "mm_identity_header",
+            "blob": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60",
+            "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/sched.h": {
+            "kind": "repository",
+            "relative": "compat/native-runtime/task/sched.h",
+            "role": "task_scheduler_header",
+            "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+            "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/task_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-runtime/task/task_netbsd.h",
+            "role": "task_header",
+            "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+            "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/linux/raw_spinlock.h": {
+            "kind": "repository",
+            "relative": "compat/linux/raw_spinlock.h",
+            "role": "raw_spinlock_header",
+            "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+            "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/task_entry_preallocated.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/task_entry_preallocated.h",
+            "role": "task_entry_header",
+            "blob": "7adbb95a97687711340a1968b00769e4e8899973",
+            "sha256": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/sched.h": {
+            "kind": "repository",
+            "relative": "compat/native-runtime/include/linux/sched.h",
+            "role": "task_mapping_header",
+            "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+            "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/task_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-runtime/include/linux/task_netbsd.h",
+            "role": "task_mapping_header",
+            "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+            "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/raw_spinlock.h": {
+            "kind": "repository",
+            "relative": "compat/native-runtime/include/linux/raw_spinlock.h",
+            "role": "task_mapping_header",
+            "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+            "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-entry/task_entry.inc": {
+            "kind": "repository",
+            "relative": "compat/native-entry/task_entry.inc",
+            "role": "api_definition_owner",
+            "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+            "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+          }
+        },
+        "include_roots": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/common/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/drm2/include"
+        ],
+        "required_patched_headers": [
+          "sys/sys/file.h"
+        ],
+        "core_status": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+        "core_objects": {
+          "sys_generic": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6",
+          "kern_descrip": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+          "netbsd32_ioctl": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590"
+        },
+        "declared_generated_configuration": {
+          "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+        },
+        "api_owner_provenance": "VERIFIED_NONCONSUMED_INPUT; NO TASK IMPLEMENTATION/LINK/RUNTIME CLAIM"
+      },
+      "diff_check": 0,
+      "source_sha256_after": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+      },
+      "log_sha256": "46bd4f25e283a49ffa0def176a5c32bf52dc769eb8fbf8afa3632acf0a04120d",
+      "finished": "2026-11-10T09:16:22.682424+00:00"
+    },
+    "f37-file-provider-input-unit-a01.json": {
+      "scope": "F37 focused isolated new FILE provider input/owner tests; no native preprocessing/compilation",
+      "state": "PASS",
+      "launcher_pid": 4683,
+      "started": "2026-11-10T09:15:13.048744+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_file_provider_inputs.py",
+        "-v"
+      ],
+      "cwd": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+      "before_sha256": {
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tools/native_hp_build.py": "39d4963544e050433ab97f898ac2bbcd3f5dc80e69bf4b43953fa25ad6c45c9b",
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0"
+      },
+      "test_pid": 9822,
+      "exit_code": 0,
+      "test_count": 15,
+      "finished": "2026-11-10T09:15:18.349299+00:00",
+      "after_sha256": {
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tools/native_hp_build.py": "39d4963544e050433ab97f898ac2bbcd3f5dc80e69bf4b43953fa25ad6c45c9b",
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0"
+      },
+      "log_sha256": "8ece9a2ef4121d39eb4aad09e88e8c84af49dd624d0fa280e456f9e80537c644"
+    },
+    "f37-real-cli-negative-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T09:19:42.711983+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "tools/build_hp_native_provider.py",
+        "--source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--core-status",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "--provider-root",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file",
+        "--unit",
+        "linux_file.c",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f37-free-contract-negative-20261110-a01/output",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools",
+        "--source-archive",
+        "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz",
+        "--provider-contract",
+        "/home/andreas/projects/hp-i915-f26-20261106/f37-free-contract-negative-20261110-a01/copied-contract.json"
+      ],
+      "exit_code": 2,
+      "expected": "canonical source-owned fixed contract",
+      "contract_copy_sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+      "canonical_contract_sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+      "output_absent": true,
+      "output": "/home/andreas/projects/hp-i915-f26-20261106/f37-free-contract-negative-20261110-a01/output",
+      "log_sha256": "07cb936ea7b5e2e93e1e8df469ca04e2f6dc703556715e8749dcdcf360677a55",
+      "source_sha256": {
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824"
+      },
+      "actual_preprocessor": "NOT_RUN",
+      "native_object": "NOT_RUN"
+    }
+  },
+  "logs": {
+    "f37-file-header-mapping-20261110-a01/tests.log": "test_actual_task_raw_spin_and_api_owners_remain_unmodified (test_native_file_provider_admission.FileProviderMappingTests.test_actual_task_raw_spin_and_api_owners_remain_unmodified) ... ok\ntest_file_source_preserves_every_other_byte (test_native_file_provider_admission.FileProviderMappingTests.test_file_source_preserves_every_other_byte) ... ok\ntest_forwarders_are_regular_files_to_exact_separately_owned_headers (test_native_file_provider_admission.FileProviderMappingTests.test_forwarders_are_regular_files_to_exact_separately_owned_headers) ... ok\ntest_leave_signature_is_derived_from_the_actual_permitted_definition (test_native_file_provider_admission.FileProviderMappingTests.test_leave_signature_is_derived_from_the_actual_permitted_definition) ... ok\ntest_local_header_adds_only_owner_derived_leave_declaration (test_native_file_provider_admission.FileProviderMappingTests.test_local_header_adds_only_owner_derived_leave_declaration) ... ok\ntest_task_internal_includes_resolve_through_the_same_narrow_mapping (test_native_file_provider_admission.FileProviderMappingTests.test_task_internal_includes_resolve_through_the_same_narrow_mapping) ... ok\ntest_wrong_include_and_other_body_change_are_rejected (test_native_file_provider_admission.FileProviderMappingTests.test_wrong_include_and_other_body_change_are_rejected) ... ok\ntest_wrong_target_and_actual_owner_guard_are_rejected (test_native_file_provider_admission.FileProviderMappingTests.test_wrong_target_and_actual_owner_guard_are_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.461s\n\nOK\n\n",
+    "f37-file-provider-admission-tests-20261110-a01/tests.log": "test_native_file_provider_admission.py\ntest_actual_task_dependency_set_must_match_independent_scan (test_native_file_provider_admission.FileProviderAdmissionTests.test_actual_task_dependency_set_must_match_independent_scan) ... ok\ntest_api_definition_owner_cannot_be_added_by_actual_compile_dependency (test_native_file_provider_admission.FileProviderAdmissionTests.test_api_definition_owner_cannot_be_added_by_actual_compile_dependency) ... ok\ntest_api_definition_owner_cannot_be_consumed_by_preprocessor (test_native_file_provider_admission.FileProviderAdmissionTests.test_api_definition_owner_cannot_be_consumed_by_preprocessor) ... ok\ntest_file_compile_mock_requires_equal_independent_and_actual_proofs (test_native_file_provider_admission.FileProviderAdmissionTests.test_file_compile_mock_requires_equal_independent_and_actual_proofs) ... ok\ntest_file_contract_cannot_select_previous_fd_or_anon_units (test_native_file_provider_admission.FileProviderAdmissionTests.test_file_contract_cannot_select_previous_fd_or_anon_units) ... ok\ntest_file_header_remains_mandatory_with_task_mappings (test_native_file_provider_admission.FileProviderAdmissionTests.test_file_header_remains_mandatory_with_task_mappings) ... ok\ntest_file_preflight_records_fixed_contract_task_owners_and_separate_api_owner (test_native_file_provider_admission.FileProviderAdmissionTests.test_file_preflight_records_fixed_contract_task_owners_and_separate_api_owner) ... ok\ntest_fourth_arbitrary_contract_and_broad_include_root_stay_rejected (test_native_file_provider_admission.FileProviderAdmissionTests.test_fourth_arbitrary_contract_and_broad_include_root_stay_rejected) ... ok\ntest_runtime_directory_membership_does_not_admit_an_unreviewed_header (test_native_file_provider_admission.FileProviderAdmissionTests.test_runtime_directory_membership_does_not_admit_an_unreviewed_header) ... ok\ntest_actual_task_raw_spin_and_api_owners_remain_unmodified (test_native_file_provider_admission.FileProviderMappingTests.test_actual_task_raw_spin_and_api_owners_remain_unmodified) ... ok\ntest_file_source_preserves_every_other_byte (test_native_file_provider_admission.FileProviderMappingTests.test_file_source_preserves_every_other_byte) ... ok\ntest_forwarders_are_regular_files_to_exact_separately_owned_headers (test_native_file_provider_admission.FileProviderMappingTests.test_forwarders_are_regular_files_to_exact_separately_owned_headers) ... ok\ntest_leave_signature_is_derived_from_the_actual_permitted_definition (test_native_file_provider_admission.FileProviderMappingTests.test_leave_signature_is_derived_from_the_actual_permitted_definition) ... ok\ntest_local_header_adds_only_owner_derived_leave_declaration (test_native_file_provider_admission.FileProviderMappingTests.test_local_header_adds_only_owner_derived_leave_declaration) ... ok\ntest_task_internal_includes_resolve_through_the_same_narrow_mapping (test_native_file_provider_admission.FileProviderMappingTests.test_task_internal_includes_resolve_through_the_same_narrow_mapping) ... ok\ntest_wrong_include_and_other_body_change_are_rejected (test_native_file_provider_admission.FileProviderMappingTests.test_wrong_include_and_other_body_change_are_rejected) ... ok\ntest_wrong_target_and_actual_owner_guard_are_rejected (test_native_file_provider_admission.FileProviderMappingTests.test_wrong_target_and_actual_owner_guard_are_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 1.645s\n\nOK\n\ntest_native_provider_inputs.py\ntest_archive_expectations_exclude_repository_and_detect_native_conflict (test_native_provider_inputs.ProviderInputTests.test_archive_expectations_exclude_repository_and_detect_native_conflict) ... ok\ntest_contract_rejects_duplicate_json_keys_and_foreign_pin (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_duplicate_json_keys_and_foreign_pin) ... ok\ntest_contract_rejects_modified_bytes_and_wrong_location (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_modified_bytes_and_wrong_location) ... ok\ntest_contract_rejects_symlink_even_with_identical_target (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_symlink_even_with_identical_target) ... ok\ntest_core_freezes_old_artifact_bytes_and_absence (test_native_provider_inputs.ProviderInputTests.test_core_freezes_old_artifact_bytes_and_absence) ... ok\ntest_core_positive_revalidates_three_owners_and_unused_lockstat (test_native_provider_inputs.ProviderInputTests.test_core_positive_revalidates_three_owners_and_unused_lockstat) ... ok\ntest_core_rejects_dependency_proof_set_or_hash_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_dependency_proof_set_or_hash_drift) ... ok\ntest_core_rejects_object_makefile_and_prior_kernel_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_object_makefile_and_prior_kernel_drift) ... ok\ntest_core_rejects_opt_declared_and_tool_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_opt_declared_and_tool_drift) ... ok\ntest_core_rejects_overlay_patch_contract_and_source_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_overlay_patch_contract_and_source_drift) ... ok\ntest_core_reparsed_document_must_equal_frozen_document (test_native_provider_inputs.ProviderInputTests.test_core_reparsed_document_must_equal_frozen_document) ... ok\ntest_core_state_owner_set_and_provenance_required (test_native_provider_inputs.ProviderInputTests.test_core_state_owner_set_and_provenance_required) ... ok\ntest_declared_lockstat_revalidated_without_requiring_provider_consumption (test_native_provider_inputs.ProviderInputTests.test_declared_lockstat_revalidated_without_requiring_provider_consumption) ... ok\ntest_directory_membership_does_not_admit_unreviewed_repository_header (test_native_provider_inputs.ProviderInputTests.test_directory_membership_does_not_admit_unreviewed_repository_header) ... ok\ntest_dirty_selected_input_rejected_but_unselected_file_not_trusted (test_native_provider_inputs.ProviderInputTests.test_dirty_selected_input_rejected_but_unselected_file_not_trusted) ... ok\ntest_empty_dependency_set_rejected (test_native_provider_inputs.ProviderInputTests.test_empty_dependency_set_rejected) ... ok\ntest_exact_core_receipt_bytes_required (test_native_provider_inputs.ProviderInputTests.test_exact_core_receipt_bytes_required) ... ok\ntest_include_roles_exact_order_and_unit_selection (test_native_provider_inputs.ProviderInputTests.test_include_roles_exact_order_and_unit_selection) ... ok\ntest_include_root_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_include_root_symlink_rejected) ... ok\ntest_inherited_git_selectors_cannot_redirect_identity_reads (test_native_provider_inputs.ProviderInputTests.test_inherited_git_selectors_cannot_redirect_identity_reads) ... ok\ntest_missing_patched_native_header_cannot_pass_provider_admission (test_native_provider_inputs.ProviderInputTests.test_missing_patched_native_header_cannot_pass_provider_admission) ... ok\ntest_original_patched_header_and_foreign_native_dependency_rejected (test_native_provider_inputs.ProviderInputTests.test_original_patched_header_and_foreign_native_dependency_rejected) ... ok\ntest_post_md_set_native_and_config_drift_rejected (test_native_provider_inputs.ProviderInputTests.test_post_md_set_native_and_config_drift_rejected) ... ok\ntest_provider_dependency_kinds_are_separate_and_exact (test_native_provider_inputs.ProviderInputTests.test_provider_dependency_kinds_are_separate_and_exact) ... ok\ntest_repository_commit_blob_and_working_bytes_agree (test_native_provider_inputs.ProviderInputTests.test_repository_commit_blob_and_working_bytes_agree) ... ok\ntest_repository_dependency_drift_after_scan_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_dependency_drift_after_scan_rejected) ... ok\ntest_repository_escape_and_selected_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_escape_and_selected_symlink_rejected) ... ok\ntest_repository_parent_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_parent_symlink_rejected) ... ok\ntest_reviewed_real_contract_has_fixed_seven_identities_and_roles (test_native_provider_inputs.ProviderInputTests.test_reviewed_real_contract_has_fixed_seven_identities_and_roles) ... ok\ntest_selected_blob_sha_and_commit_path_each_required (test_native_provider_inputs.ProviderInputTests.test_selected_blob_sha_and_commit_path_each_required) ... ok\ntest_wrong_repository_cannot_supply_commit (test_native_provider_inputs.ProviderInputTests.test_wrong_repository_cannot_supply_commit) ... fatal: not a tree object\nok\n\n----------------------------------------------------------------------\nRan 31 tests in 3.705s\n\nOK\n\ntest_native_provider_archive_admission.py\ntest_actual_dependency_set_drift_fails_with_receipt (test_native_provider_archive_admission.ProviderAdmissionTests.test_actual_dependency_set_drift_fails_with_receipt) ... ok\ntest_compile_requires_independent_scan_and_equal_actual_dependencies (test_native_provider_archive_admission.ProviderAdmissionTests.test_compile_requires_independent_scan_and_equal_actual_dependencies) ... ok\ntest_default_mode_still_rejects_dirty_native_git_source (test_native_provider_archive_admission.ProviderAdmissionTests.test_default_mode_still_rejects_dirty_native_git_source) ... ok\ntest_existing_output_is_preserved (test_native_provider_archive_admission.ProviderAdmissionTests.test_existing_output_is_preserved) ... ok\ntest_foreign_repository_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_foreign_repository_header_rejected_before_compile) ... ok\ntest_missing_patched_native_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_missing_patched_native_header_rejected_before_compile) ... ok\ntest_native_command_failure_retains_first_log_and_status (test_native_provider_archive_admission.ProviderAdmissionTests.test_native_command_failure_retains_first_log_and_status) ... ok\ntest_original_dependency_creation_is_reported_even_after_preflight (test_native_provider_archive_admission.ProviderAdmissionTests.test_original_dependency_creation_is_reported_even_after_preflight) ... ok\ntest_paired_flags_rejected_before_host_check_or_output (test_native_provider_archive_admission.ProviderAdmissionTests.test_paired_flags_rejected_before_host_check_or_output) ... ok\ntest_preflight_only_has_no_compile_or_object_pass (test_native_provider_archive_admission.ProviderAdmissionTests.test_preflight_only_has_no_compile_or_object_pass) ... ok\ntest_unselected_unit_and_include_root_fail_before_output_or_command (test_native_provider_archive_admission.ProviderAdmissionTests.test_unselected_unit_and_include_root_fail_before_output_or_command) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 1.152s\n\nOK\n\ntest_native_anon_provider_inputs.py\ntest_anonymous_contract_requires_file_header_without_inventing_filedesc_use (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_anonymous_contract_requires_file_header_without_inventing_filedesc_use) ... ok\ntest_both_source_owned_paths_select_only_their_fixed_digest (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_both_source_owned_paths_select_only_their_fixed_digest) ... ok\ntest_crossed_contract_bytes_rejected_in_both_directions (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_crossed_contract_bytes_rejected_in_both_directions) ... ok\ntest_default_and_original_contract_still_require_both_patched_headers (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_default_and_original_contract_still_require_both_patched_headers) ... ok\ntest_eight_inputs_are_exact_new_owner_and_header_plus_six_prior_headers (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_eight_inputs_are_exact_new_owner_and_header_plus_six_prior_headers) ... ok\ntest_explicit_policy_must_be_nonempty_list_of_unique_canonical_headers (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_explicit_policy_must_be_nonempty_list_of_unique_canonical_headers) ... ok\ntest_fixed_second_contract_preserves_first_contract_identity (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_fixed_second_contract_preserves_first_contract_identity) ... ok\ntest_foreign_repository_path_cannot_select_original_source_contract (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_foreign_repository_path_cannot_select_original_source_contract) ... ok\ntest_lockstat_stays_separate_full_core_input_without_provider_consumption (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_lockstat_stays_separate_full_core_input_without_provider_consumption) ... ok\ntest_modified_anonymous_contract_cannot_change_unit_or_policy (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_modified_anonymous_contract_cannot_change_unit_or_policy) ... ok\ntest_original_filedesc_remains_forbidden_outside_required_subset (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_original_filedesc_remains_forbidden_outside_required_subset) ... ok\ntest_policy_cannot_omit_file_header_or_add_header_outside_selected_core (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_policy_cannot_omit_file_header_or_add_header_outside_selected_core) ... ok\ntest_selected_contracts_reject_crossed_units_and_include_overrides (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_selected_contracts_reject_crossed_units_and_include_overrides) ... ok\ntest_unreviewed_path_and_direct_symlink_cannot_select_contract (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_unreviewed_path_and_direct_symlink_cannot_select_contract) ... ok\ntest_valid_explicit_full_subset_is_sorted_and_does_not_change_default (test_native_anon_provider_inputs.AnonymousProviderInputTests.test_valid_explicit_full_subset_is_sorted_and_does_not_change_default) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.824s\n\nOK\n\ntest_native_anon_provider_admission.py\ntest_absent_policy_retains_original_both_header_requirement (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_absent_policy_retains_original_both_header_requirement) ... ok\ntest_anon_actual_dependency_set_drift_fails_with_receipt (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_anon_actual_dependency_set_drift_fails_with_receipt) ... ok\ntest_anon_compile_mock_requires_independent_scan_and_equal_actual_proof (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_anon_compile_mock_requires_independent_scan_and_equal_actual_proof) ... ok\ntest_anon_contract_cannot_admit_fd_or_second_unit (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_anon_contract_cannot_admit_fd_or_second_unit) ... ok\ntest_anon_missing_required_file_header_cannot_compile (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_anon_missing_required_file_header_cannot_compile) ... ok\ntest_anon_preflight_records_selected_hash_and_file_header_policy (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_anon_preflight_records_selected_hash_and_file_header_policy) ... ok\ntest_invalid_explicit_policies_fail_before_output_or_scan (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_invalid_explicit_policies_fail_before_output_or_scan) ... ok\ntest_original_filedesc_is_rejected_even_when_not_required (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_original_filedesc_is_rejected_even_when_not_required) ... ok\ntest_third_contract_path_rejected_before_output_despite_fixture_loader (test_native_anon_provider_admission.AnonymousProviderAdmissionTests.test_third_contract_path_rejected_before_output_despite_fixture_loader) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.066s\n\nOK\n\n\nACTUAL_READONLY_18_INPUT_AND_FULL_F32_CORE_ADMISSION PASS; no PP/TARscan/CC.\n",
+    "f37-file-provider-input-unit-a01.log": "test_api_definition_owner_is_forbidden_in_scan_and_post_md_dependencies (test_native_file_provider_inputs.FileProviderInputTests.test_api_definition_owner_is_forbidden_in_scan_and_post_md_dependencies) ... ok\ntest_api_owner_and_forwarder_symlinks_do_not_replace_reviewed_regular_files (test_native_file_provider_inputs.FileProviderInputTests.test_api_owner_and_forwarder_symlinks_do_not_replace_reviewed_regular_files) ... ok\ntest_api_owner_commit_blob_is_required_without_fake_dependency_consumption (test_native_file_provider_inputs.FileProviderInputTests.test_api_owner_commit_blob_is_required_without_fake_dependency_consumption) ... ok\ntest_core_lockstat_is_rechecked_without_claiming_provider_consumption (test_native_file_provider_inputs.FileProviderInputTests.test_core_lockstat_is_rechecked_without_claiming_provider_consumption) ... ok\ntest_crossed_contract_bytes_cannot_select_another_owner (test_native_file_provider_inputs.FileProviderInputTests.test_crossed_contract_bytes_cannot_select_another_owner) ... ok\ntest_directory_membership_never_admits_unreviewed_runtime_wrapper (test_native_file_provider_inputs.FileProviderInputTests.test_directory_membership_never_admits_unreviewed_runtime_wrapper) ... ok\ntest_forwarder_and_separate_owner_bytes_each_bound_before_and_after_scan (test_native_file_provider_inputs.FileProviderInputTests.test_forwarder_and_separate_owner_bytes_each_bound_before_and_after_scan) ... ok\ntest_narrow_root_symlink_cannot_redirect_runtime_owners (test_native_file_provider_inputs.FileProviderInputTests.test_narrow_root_symlink_cannot_redirect_runtime_owners) ... ok\ntest_new_contract_rejects_alias_foreign_path_symlink_and_tamper (test_native_file_provider_inputs.FileProviderInputTests.test_new_contract_rejects_alias_foreign_path_symlink_and_tamper) ... ok\ntest_old_fd_policy_and_new_anon_file_policies_remain_independent (test_native_file_provider_inputs.FileProviderInputTests.test_old_fd_policy_and_new_anon_file_policies_remain_independent) ... ok\ntest_original_filedesc_stays_forbidden_despite_file_only_required_subset (test_native_file_provider_inputs.FileProviderInputTests.test_original_filedesc_stays_forbidden_despite_file_only_required_subset) ... ok\ntest_private_repository_checks_api_owner_even_when_not_consumed (test_native_file_provider_inputs.FileProviderInputTests.test_private_repository_checks_api_owner_even_when_not_consumed) ... ok\ntest_runtime_mapping_has_one_exact_narrow_root_before_native_kpi_roots (test_native_file_provider_inputs.FileProviderInputTests.test_runtime_mapping_has_one_exact_narrow_root_before_native_kpi_roots) ... ok\ntest_third_fixed_contract_binds_actual_source_commit_and_eighteen_inputs (test_native_file_provider_inputs.FileProviderInputTests.test_third_fixed_contract_binds_actual_source_commit_and_eighteen_inputs) ... ok\ntest_three_fixed_source_owned_contracts_preserve_prior_identity (test_native_file_provider_inputs.FileProviderInputTests.test_three_fixed_source_owned_contracts_preserve_prior_identity) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 4.326s\n\nOK\n",
+    "f37-real-cli-negative-20261110-a01.log": "usage: build_hp_native_provider.py [-h] --source SOURCE\n                                   --kernel-obj KERNEL_OBJ\n                                   --core-status CORE_STATUS\n                                   --provider-root PROVIDER_ROOT\n                                   --output OUTPUT --toolchain TOOLCHAIN\n                                   --unit UNIT [--include-root INCLUDE_ROOT]\n                                   [--source-archive SOURCE_ARCHIVE]\n                                   [--provider-contract PROVIDER_CONTRACT]\n                                   [--preflight-only]\nbuild_hp_native_provider.py: error: a reviewed source-owned native FILE provider contract is required\n"
+  },
+  "file_sha256": {
+    "f37-source-final-20261110-a01.json": "b090a6cbff79b2711c9109db6d12aca86abc7e807cac9ad48f5525918c3fd13c",
+    "f37-root-source-verification-20261110-a01.json": "0294dfc80b7ab6cef952f497e8d6307566970ac8601f4994662bd0053c979268",
+    "f37-local-source-fix-20261110-a01.json": "af13bc06169051b689d1a7bc09105d7abbfd598f8335c29dc0c54a81561d2fe1",
+    "f37-file-header-mapping-20261110-a01/status.json": "e6bc15cb3113a44809651adf8d83f2b071c26ec2d3f81227629558a867dc16c1",
+    "f37-file-provider-admission-tests-20261110-a01/status.json": "6a3addf84e1eb331c705ce94293bd04fc928aa58cee7ad3c2765ca7e07d85d4e",
+    "f37-file-provider-input-unit-a01.json": "be1e26ab6ccb5cd843266e27c09607631c02c1ae3e006832e48084bc0bc4ca64",
+    "f37-real-cli-negative-20261110-a01.json": "0fb0dae4810f6046be6a0b57fa3ee8c824fd88d403a8242842ac8d1aa686e611",
+    "f37-file-header-mapping-20261110-a01/tests.log": "888d77155a6164973ca3905b6a1e85dc28be93b4ec164214b8c849ee8c0e0b27",
+    "f37-file-provider-admission-tests-20261110-a01/tests.log": "46bd4f25e283a49ffa0def176a5c32bf52dc769eb8fbf8afa3632acf0a04120d",
+    "f37-file-provider-input-unit-a01.log": "8ece9a2ef4121d39eb4aad09e88e8c84af49dd624d0fa280e456f9e80537c644",
+    "f37-real-cli-negative-20261110-a01.log": "07cb936ea7b5e2e93e1e8df469ca04e2f6dc703556715e8749dcdcf360677a55"
+  },
+  "actual_preprocessor": "NOT_RUN",
+  "native_object": "NOT_RUN",
+  "task_implementation_link_runtime": "NOT_CLAIMED",
+  "full_kernel": "NOT_RUN",
+  "installed": false,
+  "booted": false
+}

@@ -17,6 +17,8 @@ CONTRACT_PATH = 'compat/native-file/provider-inputs-f33.json'
 CONTRACT_SHA256 = 'f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3'
 ANON_CONTRACT_PATH = 'compat/native-file/provider-inputs-f35-anon.json'
 ANON_CONTRACT_SHA256 = 'c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d'
+FILE_CONTRACT_PATH = 'compat/native-file/provider-inputs-f37-file.json'
+FILE_CONTRACT_SHA256 = 'a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09'
 
 
 def regular_bytes(path):
@@ -58,7 +60,8 @@ def reviewed_contract_sha256(path, repository=REPOSITORY):
     if not path.is_symlink():
         resolved = path.resolve(strict=True)
         for relative, expected in ((CONTRACT_PATH, CONTRACT_SHA256),
-                                   (ANON_CONTRACT_PATH, ANON_CONTRACT_SHA256)):
+                                   (ANON_CONTRACT_PATH, ANON_CONTRACT_SHA256),
+                                   (FILE_CONTRACT_PATH, FILE_CONTRACT_SHA256)):
             if resolved == repository / relative:
                 return expected
     raise ValueError('a reviewed source-owned native FILE provider contract is required')
@@ -192,6 +195,8 @@ def provider_dependencies(paths, repository, repository_bindings, source, overla
             if str(path) not in repository_bindings:
                 raise ValueError('unreviewed repository dependency: ' + str(path))
             row = repository_bindings[str(path)]
+            if row.get('role') == 'api_definition_owner':
+                raise ValueError('API definition owner is not a provider dependency: ' + str(path))
             raw = regular_bytes(path)
             blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
             if sha_bytes(raw) != row['sha256'] or blob != row['blob']:
