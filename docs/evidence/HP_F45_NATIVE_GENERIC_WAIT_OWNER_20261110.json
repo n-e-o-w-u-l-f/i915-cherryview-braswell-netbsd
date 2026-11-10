@@ -3888,6 +3888,23 @@
     "ReadonlyBSDpsformatting observer corrected to targeted PIDonlyread; no native rerun.",
     "RootfirstrawELFthunkbytefieldwasemptybecauseELFst_size0; immutablecoldreceiptreferencesretainedandsection-onlyreceiptverifiesactual17bytes."
   ],
+  "preparation_failure_witness": {
+    "classification": "PREPARATION_OBSERVER_FAILURE_BEFORE_BASELINE_OR_NATIVE_ATTEMPT; corrected comment-stripped derivation, actual native attempt remains singlePASS",
+    "path": "/home/andreas/projects/hp-i915-f26-20261106/f45-native-generic-wait-owner-20261110-a01-preparation-failure.json",
+    "payload": {
+      "baseline_created": false,
+      "cause": "unstripped comment matched source-definition regex",
+      "error": "ValueError: ambiguous public body: __wake_up_sync_key",
+      "native_compilation": "NOT_RUN",
+      "native_preprocessing": "NOT_RUN",
+      "preparation_exit_code": 1,
+      "preparation_pid": 17812,
+      "preparation_source_sha256": "d666bb01b8bae43673b667432a1108d41fda1c252ec43a50659e60a530244e49",
+      "provider_process_started": false,
+      "stage": "PRELAUNCH_BASELINE_SYMBOL_DERIVATION"
+    },
+    "sha256": "7a0eb21b013408f9939296c96bf377433fba68b1b2a8acf8bd4bd449cbb575cf"
+  },
   "private_baseline": {
     "archive": {
       "expected_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
