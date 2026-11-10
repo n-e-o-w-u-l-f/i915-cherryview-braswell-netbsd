@@ -21,6 +21,8 @@ FILE_CONTRACT_PATH = 'compat/native-file/provider-inputs-f37-file.json'
 FILE_CONTRACT_SHA256 = 'a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09'
 TASK_CONTRACT_PATH = 'compat/native-runtime/task/provider-inputs-f39-task.json'
 TASK_CONTRACT_SHA256 = '5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df'
+TASK_WORKER_CONTRACT_PATH = 'compat/native-runtime/task/provider-inputs-f41-task-worker.json'
+TASK_WORKER_CONTRACT_SHA256 = '0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4'
 _TASK_INPUT_ROLES = {
     'compat/native-runtime/task/linux_task.c': 'translation_unit',
     'compat/native-runtime/task/task_entry_netbsd.h': 'task_entry_header',
@@ -36,6 +38,26 @@ _TASK_INPUT_ROLES = {
 }
 _TASK_FRAGMENTS = frozenset(name for name, role in _TASK_INPUT_ROLES.items()
                             if role == 'task_fragment')
+_TASK_WORKER_INPUT_ROLES = {
+    'compat/native-runtime/task/linux_task.c': 'task_implementation_owner',
+    'compat/native-runtime/task/task_entry_netbsd.h': 'task_entry_header',
+    'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+    'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+    'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+    'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+    'compat/native-runtime/task/task_netbsd.h': 'task_header',
+    'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+    'compat/native-entry/task_entry.inc': 'task_fragment',
+    'compat/native-file/task_entry_preallocated.inc': 'task_fragment',
+    'compat/native-file/task_quiesce_retained.inc': 'task_fragment',
+    'compat/native-runtime/task/linux_task_worker_owner.c': 'translation_unit',
+    'compat/native-runtime/task/task_worker_wake_netbsd.h': 'task_worker_api_header',
+    'compat/native-runtime/worker/worker_header.inc': 'api_definition_owner',
+    'compat/native-runtime/worker/worker.inc': 'api_definition_owner',
+}
+_TASK_WORKER_REQUIRED_INPUTS = (
+    'compat/native-runtime/task/linux_task.c',
+    'compat/native-runtime/task/task_worker_wake_netbsd.h')
 
 
 def regular_bytes(path):
@@ -79,7 +101,8 @@ def reviewed_contract_sha256(path, repository=REPOSITORY):
         for relative, expected in ((CONTRACT_PATH, CONTRACT_SHA256),
                                    (ANON_CONTRACT_PATH, ANON_CONTRACT_SHA256),
                                    (FILE_CONTRACT_PATH, FILE_CONTRACT_SHA256),
-                                   (TASK_CONTRACT_PATH, TASK_CONTRACT_SHA256)):
+                                   (TASK_CONTRACT_PATH, TASK_CONTRACT_SHA256),
+                                   (TASK_WORKER_CONTRACT_PATH, TASK_WORKER_CONTRACT_SHA256)):
             if resolved == repository / relative:
                 return expected
     raise ValueError('a reviewed source-owned native FILE provider contract is required')
@@ -241,8 +264,39 @@ def native_archive_expectations(core, bindings):
     return archive_expectations(core['source_provenance']['verified_source_members'], native)
 
 
+def task_worker_input_policy(contract=None, reviewed_sha256=None):
+    """The fifth fixed selection alone may compose the original Task C and worker API."""
+    if reviewed_sha256 != TASK_WORKER_CONTRACT_SHA256:
+        return []
+    if not isinstance(contract, dict):
+        raise ValueError('reviewed Task worker provider identity/shape differs')
+    rows = contract.get('repository_inputs', {})
+    shape = dict(provider_root='compat/native-runtime/task',
+                 units=['linux_task_worker_owner.c'],
+                 repository_include_roots=['compat/native-runtime/include'],
+                 native_include_roots=['sys/external/bsd/common/include',
+                                       'sys/external/bsd/drm2/include'],
+                 required_patched_headers=[])
+    if (any(contract.get(key) != value for key, value in shape.items()) or
+            not isinstance(rows, dict) or
+            any(not isinstance(row, dict) for row in rows.values()) or
+            {name: row.get('role') for name, row in rows.items()} != _TASK_WORKER_INPUT_ROLES):
+        raise ValueError('reviewed Task worker provider identity/shape differs')
+    return sorted(_TASK_WORKER_REQUIRED_INPUTS)
+
+
+def require_task_worker_inputs(bindings, repository, contract=None, reviewed_sha256=None):
+    for name in task_worker_input_policy(contract, reviewed_sha256):
+        expected = dict(kind='repository', relative=name, **contract['repository_inputs'][name])
+        if bindings.get(str(Path(repository) / name)) != expected:
+            raise ValueError('provider did not consume the exact Task worker input: ' + name)
+
+
 def task_fragment_policy(contract=None, reviewed_sha256=None):
     """Only the exact reviewed Task selection may consume its three owner fragments."""
+    if reviewed_sha256 == TASK_WORKER_CONTRACT_SHA256:
+        task_worker_input_policy(contract, reviewed_sha256)
+        return sorted(_TASK_FRAGMENTS)
     rows = (contract or {}).get('repository_inputs', {})
     fragments = {name for name, row in rows.items() if row.get('role') == 'task_fragment'}
     if reviewed_sha256 != TASK_CONTRACT_SHA256:
