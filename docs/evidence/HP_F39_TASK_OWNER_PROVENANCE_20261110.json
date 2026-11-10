@@ -1,0 +1,1249 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F39-TASK-OWNER-COMPOSITION-PROVENANCE-20261110",
+  "state": "PASS",
+  "baseline_ref": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+  "provider_input_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+  "contract_sha256": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+  "receipts": {
+    "f39-task-owner-composition-20261110-a01/status.json": {
+      "state": "PASS",
+      "source_head": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+      "source_before": {
+        "compat/native-runtime/task/linux_task.c": {
+          "sha256": "d434fcaa9dea2e01d52b44605c3b2eedf9045550b1ff9c572c19e85eb0600ee4",
+          "blob": "160ad5801a077f8ae13cc894a4e6a0d0e7a2dcf3",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 14467
+        },
+        "compat/native-runtime/task/task_entry_netbsd.h": null,
+        "tests/test_native_task_owner_composition.py": null
+      },
+      "preserved_before": {
+        "compat/linux/raw_spinlock.h": {
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+          "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1992
+        },
+        "compat/native-entry/task_entry.inc": {
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+          "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1427
+        },
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": {
+          "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+          "blob": "553f337dd528cbdb5a362a8a1171fd38a8f040b7",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 500
+        },
+        "compat/native-file/include/linux/file_api_netbsd.h": {
+          "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+          "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1318
+        },
+        "compat/native-file/include/linux/file_netbsd.h": {
+          "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+          "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1614
+        },
+        "compat/native-file/include/linux/file_ref_netbsd.h": {
+          "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+          "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 2966
+        },
+        "compat/native-file/include/linux/fs_netbsd.h": {
+          "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+          "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 8568
+        },
+        "compat/native-file/include/linux/pagemap_netbsd.h": {
+          "sha256": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+          "blob": "50f0e56ddea3edba091fe5fcaffc338674b0cef9",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 4324
+        },
+        "compat/native-file/linux_anon.c": {
+          "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+          "blob": "2eb1210045024fca9c2d90fdb666847bd65f4444",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 3988
+        },
+        "compat/native-file/linux_fd.c": {
+          "sha256": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+          "blob": "2dc8720c9a33355e930e280cc98d4e8016002cb0",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 5202
+        },
+        "compat/native-file/linux_file.c": {
+          "sha256": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+          "blob": "951fee9293bb707d9ecc1592e55d2b31f9cb1967",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 13372
+        },
+        "compat/native-file/provider-inputs-f33.json": {
+          "sha256": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+          "blob": "92b6e7bd12ac3be2d4f99d017f73dd5e38ecb5d6",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 2396
+        },
+        "compat/native-file/provider-inputs-f35-anon.json": {
+          "sha256": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+          "blob": "dc6231d5a382c825bad17194ae8d9ba3b30af63b",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 2699
+        },
+        "compat/native-file/provider-inputs-f37-file.json": {
+          "sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+          "blob": "832156bf897726d396bb6c7ccf35361bc3a949dd",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 5099
+        },
+        "compat/native-file/task_entry_preallocated.h": {
+          "sha256": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+          "blob": "7adbb95a97687711340a1968b00769e4e8899973",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1742
+        },
+        "compat/native-file/task_entry_preallocated.inc": {
+          "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+          "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 2004
+        },
+        "compat/native-file/task_quiesce_retained.inc": {
+          "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+          "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1228
+        },
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+          "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+          "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 356
+        },
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": {
+          "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+          "blob": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1751
+        },
+        "compat/native-mm/include/linux/vma_netbsd.h": {
+          "sha256": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+          "blob": "a4b15106f2df86befb7fbc287bf065008fe9321d",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 8236
+        },
+        "compat/native-runtime/include/linux/raw_spinlock.h": {
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+          "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 302
+        },
+        "compat/native-runtime/include/linux/sched.h": {
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+          "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 270
+        },
+        "compat/native-runtime/include/linux/task_netbsd.h": {
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+          "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 294
+        },
+        "compat/native-runtime/task/sched.h": {
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+          "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 2556
+        },
+        "compat/native-runtime/task/task_netbsd.h": {
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+          "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1817
+        },
+        "compat/native-uio/include/linux/kiocb_netbsd.h": {
+          "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+          "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 1349
+        },
+        "tests/test_native_anon_provider_admission.py": {
+          "sha256": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+          "blob": "cbde8c3a3f10c2fc70012dc46d9cc28786ce19ab",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 8366
+        },
+        "tests/test_native_anon_provider_inputs.py": {
+          "sha256": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+          "blob": "a7b79f86372cc8a8822257995eabf3d0ffd22e1c",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 12991
+        },
+        "tests/test_native_file_provider_admission.py": {
+          "sha256": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+          "blob": "0b77ac05b226f18df5068e7a4981f8c8cb9915f2",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 17261
+        },
+        "tests/test_native_file_provider_inputs.py": {
+          "sha256": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+          "blob": "2bb0003b48e2ea172fa81d270a66419a0c8dbc9d",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 17593
+        },
+        "tests/test_native_provider_archive_admission.py": {
+          "sha256": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+          "blob": "94f2cc1f7997ed30b621d2d95129a3e3bcc808d2",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 14266
+        },
+        "tests/test_native_provider_inputs.py": {
+          "sha256": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+          "blob": "0421caa42a1482119b744b9782c1554df59babde",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 26457
+        },
+        "tools/build_hp_native_provider.py": {
+          "sha256": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+          "blob": "7e4c0356e4880c4c02f5c4a5a6c4d0dbfeb503de",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 15486
+        },
+        "tools/native_provider_inputs.py": {
+          "sha256": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+          "blob": "65d885eec6daa7377275a33e790a066dfef70679",
+          "commit": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+          "bytes": 12414
+        }
+      },
+      "actual_preprocessor": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "scope": "source-only same-owner Task composition; no notifier/owner_wait changes",
+      "started": "2026-11-10T09:53:42.930901+00:00",
+      "tested_source_sha256_before": {
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c"
+      },
+      "tests": {
+        "expected_count": 10,
+        "negative_mutations": 12,
+        "negative_groups": {
+          "fragment_path_count": 3,
+          "placement": 2,
+          "api_signatures": 4,
+          "duplicate_runtime_or_layout": 2,
+          "old_function_body": 1
+        }
+      },
+      "test_exit_code": 0,
+      "diff_check": 0,
+      "ast": "PASS",
+      "negative_mutations_rejected": 12,
+      "tested_source_sha256_after": {
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c"
+      },
+      "preserved_sha256_after": {
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-file/linux_anon.c": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+        "compat/native-file/linux_fd.c": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-file/task_entry_preallocated.inc": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6",
+        "compat/native-file/task_quiesce_retained.inc": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9"
+      },
+      "log_sha256": "60bc3d5ef479c4a85c1824ce7bf0188b351d0c9f3a126224294974305143c10e",
+      "finished": "2026-11-10T09:57:05.507475+00:00"
+    },
+    "f39-local-source-fix-20261110-a01.json": {
+      "state": "LOCAL_ONLY",
+      "observed_at": "2026-11-10T09:58:19.268163+00:00",
+      "project_id": "HP-I915",
+      "step_id": "HP-I915-F39-TASK-OWNER-COMPOSITION-PROVENANCE-20261110",
+      "baseline_ref": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+      "correction_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+      "phase_source_tests": "10PASS;12negative mutants rejected;AST/diffcheckPASS;independentreviewsGO",
+      "files": {
+        "compat/native-runtime/task/linux_task.c": {
+          "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+          "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+          "role": "source_composition"
+        },
+        "compat/native-runtime/task/task_entry_netbsd.h": {
+          "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+          "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+          "role": "API_declarations"
+        },
+        "tests/test_native_task_owner_composition.py": {
+          "sha256": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+          "blob": "1566eab8f3a76768e4e5be8e2d359014c06fb967",
+          "role": "focused_tests"
+        }
+      },
+      "SAFE_STATE": "No native PP/CC/install/boot; old contracts/input bytes preserved",
+      "NEXT": "Bind final separate Task contract to this actual correction commit; run Task admission+98previous suites before publication"
+    },
+    "f39-task-admission-baseline-20261110-a01.json": {
+      "scope": "F39 helper/admission baseline before first delegated mutation",
+      "time": "2026-11-10T09:53:42.012085+00:00",
+      "repository": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+      "head": "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc",
+      "refs": [
+        "27fd4d7d483be456158884c08d04446dd5312326 refs/heads/main",
+        "e2c48bfa52b5fcfd1dbeab52dbb9ca749b94b2dc refs/heads/work/hp-f28-modern-provider-integration-20261109"
+      ],
+      "status": [],
+      "files": {
+        "compat/linux/raw_spinlock.h": {
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+          "bytes": 1992
+        },
+        "compat/native-entry/task_entry.inc": {
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+          "bytes": 1427
+        },
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": {
+          "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+          "bytes": 500
+        },
+        "compat/native-file/include/linux/file_api_netbsd.h": {
+          "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+          "bytes": 1318
+        },
+        "compat/native-file/include/linux/file_netbsd.h": {
+          "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+          "bytes": 1614
+        },
+        "compat/native-file/include/linux/file_ref_netbsd.h": {
+          "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+          "bytes": 2966
+        },
+        "compat/native-file/include/linux/fs_netbsd.h": {
+          "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+          "bytes": 8568
+        },
+        "compat/native-file/include/linux/pagemap_netbsd.h": {
+          "sha256": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+          "bytes": 4324
+        },
+        "compat/native-file/linux_anon.c": {
+          "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+          "bytes": 3988
+        },
+        "compat/native-file/linux_fd.c": {
+          "sha256": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+          "bytes": 5202
+        },
+        "compat/native-file/linux_file.c": {
+          "sha256": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+          "bytes": 13372
+        },
+        "compat/native-file/provider-inputs-f33.json": {
+          "sha256": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+          "bytes": 2396
+        },
+        "compat/native-file/provider-inputs-f35-anon.json": {
+          "sha256": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+          "bytes": 2699
+        },
+        "compat/native-file/provider-inputs-f37-file.json": {
+          "sha256": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+          "bytes": 5099
+        },
+        "compat/native-file/task_entry_preallocated.h": {
+          "sha256": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+          "bytes": 1742
+        },
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+          "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+          "bytes": 356
+        },
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": {
+          "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+          "bytes": 1751
+        },
+        "compat/native-mm/include/linux/vma_netbsd.h": {
+          "sha256": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+          "bytes": 8236
+        },
+        "compat/native-runtime/include/linux/raw_spinlock.h": {
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+          "bytes": 302
+        },
+        "compat/native-runtime/include/linux/sched.h": {
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+          "bytes": 270
+        },
+        "compat/native-runtime/include/linux/task_netbsd.h": {
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+          "bytes": 294
+        },
+        "compat/native-runtime/task/sched.h": {
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+          "bytes": 2556
+        },
+        "compat/native-runtime/task/task_netbsd.h": {
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+          "bytes": 1817
+        },
+        "compat/native-uio/include/linux/kiocb_netbsd.h": {
+          "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+          "bytes": 1349
+        },
+        "tests/test_native_anon_provider_admission.py": {
+          "sha256": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+          "bytes": 8366
+        },
+        "tests/test_native_anon_provider_inputs.py": {
+          "sha256": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+          "bytes": 12991
+        },
+        "tests/test_native_file_provider_admission.py": {
+          "sha256": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+          "bytes": 17261
+        },
+        "tests/test_native_file_provider_inputs.py": {
+          "sha256": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+          "bytes": 17593
+        },
+        "tests/test_native_provider_archive_admission.py": {
+          "sha256": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+          "bytes": 14266
+        },
+        "tests/test_native_provider_inputs.py": {
+          "sha256": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+          "bytes": 26457
+        },
+        "tools/build_hp_native_provider.py": {
+          "sha256": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+          "bytes": 15486
+        },
+        "tools/native_provider_inputs.py": {
+          "sha256": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+          "bytes": 12414
+        }
+      }
+    },
+    "f39-task-admission-implementation-20261110-a01.json": {
+      "time": "2026-11-10T09:59:33.156035+00:00",
+      "source_fix_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+      "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/provider-inputs-f39-task.json",
+      "contract_sha256": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+      "repository_inputs": {
+        "compat/native-runtime/task/linux_task.c": {
+          "role": "translation_unit",
+          "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+          "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d"
+        },
+        "compat/native-runtime/task/task_entry_netbsd.h": {
+          "role": "task_entry_header",
+          "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+          "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032"
+        },
+        "compat/native-runtime/include/linux/sched.h": {
+          "role": "task_mapping_header",
+          "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+        },
+        "compat/native-runtime/include/linux/task_netbsd.h": {
+          "role": "task_mapping_header",
+          "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+        },
+        "compat/native-runtime/include/linux/raw_spinlock.h": {
+          "role": "task_mapping_header",
+          "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+        },
+        "compat/native-runtime/task/sched.h": {
+          "role": "task_scheduler_header",
+          "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+        },
+        "compat/native-runtime/task/task_netbsd.h": {
+          "role": "task_header",
+          "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+        },
+        "compat/linux/raw_spinlock.h": {
+          "role": "raw_spinlock_header",
+          "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+        },
+        "compat/native-entry/task_entry.inc": {
+          "role": "task_fragment",
+          "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+        },
+        "compat/native-file/task_entry_preallocated.inc": {
+          "role": "task_fragment",
+          "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+          "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+        },
+        "compat/native-file/task_quiesce_retained.inc": {
+          "role": "task_fragment",
+          "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+          "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90"
+        }
+      },
+      "before": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_provider_inputs.py": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca"
+      },
+      "after": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_provider_inputs.py": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc"
+      },
+      "ast": "PASS",
+      "actual_native_preprocessing": "NOT_RUN",
+      "actual_native_compilation": "NOT_RUN"
+    },
+    "f39-task-provider-tests-20261110-a01/status.json": {
+      "scope": "F39 targeted admission tests only; no native preprocessor/compiler or archive scan",
+      "started": "2026-11-10T10:00:26.196653+00:00",
+      "pid": 22910,
+      "before": {
+        "tools/native_provider_inputs.py": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556",
+        "tools/build_hp_native_provider.py": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788"
+      },
+      "commands": [
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_provider_inputs.py.log",
+          "log_sha256": "62502cb288911894e8440c4b52ab8be20e3a26b6393c15d87af69ff9abdfceb6"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_provider_admission.py.log",
+          "log_sha256": "d4c61f1fae3259812dbaa5c4a9971e216f9c8bfc98a6c842347b3ab6bdb5eac1"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_provider_inputs.py.log",
+          "log_sha256": "84e2f8c9c5488ab2b858b7e66cc115aef0a54d48091b17c8eef39a022fd70779"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_provider_archive_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_provider_archive_admission.py.log",
+          "log_sha256": "c7d35d43782029caca22c4dde139d6a5eee23930b95e7a2e26b8271fda3dc718"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_anon_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_anon_provider_inputs.py.log",
+          "log_sha256": "6290b14485e0c554ed328ba2ec6d764a13e9936ab429ec52f27d47df63694c79"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_anon_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_anon_provider_admission.py.log",
+          "log_sha256": "b2c838269f42e6f3b0b8328558cdbc077b7ff18c811df6c9fea1a3a19d7fb25a"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_file_provider_inputs.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_file_provider_inputs.py.log",
+          "log_sha256": "ebc3154cdc8d2b152a3566ee47ad9c066563e37e3429981f86d0c20092b67882"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_file_provider_admission.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_file_provider_admission.py.log",
+          "log_sha256": "34af153d53c8c365e5b542362e7636abe2bd7e704834d84989573e9413f41a16"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_task_owner_composition.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_owner_composition.py.log",
+          "log_sha256": "f28505a426b6f7d6379c5165507d14898eb1398acf07487ef813513c3040fa41"
+        }
+      ],
+      "actual_native_preprocessing": "NOT_RUN",
+      "actual_native_compilation": "NOT_RUN",
+      "ast_and_whitespace": "PASS",
+      "after": {
+        "tools/native_provider_inputs.py": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556",
+        "tools/build_hp_native_provider.py": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788"
+      },
+      "state": "PASS",
+      "finished": "2026-11-10T10:00:49.820527+00:00"
+    },
+    "f39-task-input-admission-20261110-a01.json": {
+      "scope": "F39 bounded actual eleven-input and full F32 core admission; no dependency scan or object build",
+      "started": "2026-11-10T10:02:02.934883+00:00",
+      "pid": 7414,
+      "actual_native_preprocessing": "NOT_RUN",
+      "actual_native_compilation": "NOT_RUN",
+      "provider_dependencies": "NOT_SCANNED",
+      "archive_scan": "NOT_RUN",
+      "state": "PASS",
+      "repository_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+      "provider_contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/provider-inputs-f39-task.json",
+      "provider_contract_sha256": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+      "repository_inputs": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/linux_task.c": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/linux_task.c",
+          "role": "translation_unit",
+          "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+          "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/task_entry_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/task_entry_netbsd.h",
+          "role": "task_entry_header",
+          "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+          "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/sched.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/sched.h",
+          "role": "task_mapping_header",
+          "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/task_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/task_netbsd.h",
+          "role": "task_mapping_header",
+          "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/raw_spinlock.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/raw_spinlock.h",
+          "role": "task_mapping_header",
+          "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/sched.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/sched.h",
+          "role": "task_scheduler_header",
+          "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/task_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/task_netbsd.h",
+          "role": "task_header",
+          "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/linux/raw_spinlock.h": {
+          "kind": "repository",
+          "relative": "compat/linux/raw_spinlock.h",
+          "role": "raw_spinlock_header",
+          "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-entry/task_entry.inc": {
+          "kind": "repository",
+          "relative": "compat/native-entry/task_entry.inc",
+          "role": "task_fragment",
+          "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/task_entry_preallocated.inc": {
+          "kind": "repository",
+          "relative": "compat/native-file/task_entry_preallocated.inc",
+          "role": "task_fragment",
+          "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+          "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/task_quiesce_retained.inc": {
+          "kind": "repository",
+          "relative": "compat/native-file/task_quiesce_retained.inc",
+          "role": "task_fragment",
+          "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+          "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90"
+        }
+      },
+      "include_roots": [
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/common/include",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/drm2/include"
+      ],
+      "required_patched_headers": [],
+      "required_task_fragments": [
+        "compat/native-entry/task_entry.inc",
+        "compat/native-file/task_entry_preallocated.inc",
+        "compat/native-file/task_quiesce_retained.inc"
+      ],
+      "full_core_receipt_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+      "core_owners": [
+        "kern_descrip",
+        "netbsd32_ioctl",
+        "sys_generic"
+      ],
+      "native_tool_sha256": {
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/nbmake-amd64": "dda9680d9b13eb34abc0107adcccbaa9ff505a74cd3114bbc26a22f4c91cd5a5",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/x86_64--netbsd-gcc": "34e3b5d21de6047acd46df0d5c52efe677eed51a028bbc6218f7f1cd4ba4a4f5"
+      },
+      "declared_generated_configuration": {
+        "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "preserved_files": {
+        "compat/linux/raw_spinlock.h": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9",
+        "compat/native-entry/task_entry.inc": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026",
+        "compat/native-file/include/linux/anon_inodes_netbsd.h": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4",
+        "compat/native-file/include/linux/file_api_netbsd.h": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850",
+        "compat/native-file/include/linux/file_netbsd.h": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c",
+        "compat/native-file/include/linux/file_ref_netbsd.h": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8",
+        "compat/native-file/include/linux/fs_netbsd.h": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229",
+        "compat/native-file/include/linux/pagemap_netbsd.h": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828",
+        "compat/native-file/linux_anon.c": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e",
+        "compat/native-file/linux_fd.c": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591",
+        "compat/native-file/linux_file.c": "52ce11f4c0c5d6d786468c7c8378fbc1d6614cc2b390f418b21b414b195e2e99",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "compat/native-file/provider-inputs-f37-file.json": "a79eaf94d6f0c9b0ee0b64ed998f7e158b6ad0cb5b305878c79ef1c49a4f2e09",
+        "compat/native-file/task_entry_preallocated.h": "8003e714d3d0544e6c235b4fa720cd17c2f7e740a2efce39aead0cce76b22919",
+        "compat/native-mm/include/linux/mm_abi_types_netbsd.h": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054",
+        "compat/native-mm/include/linux/mm_identity_netbsd.h": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6",
+        "compat/native-mm/include/linux/vma_netbsd.h": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af",
+        "compat/native-runtime/include/linux/raw_spinlock.h": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506",
+        "compat/native-runtime/include/linux/sched.h": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de",
+        "compat/native-runtime/include/linux/task_netbsd.h": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121",
+        "compat/native-runtime/task/sched.h": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4",
+        "compat/native-runtime/task/task_netbsd.h": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68",
+        "compat/native-uio/include/linux/kiocb_netbsd.h": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_file_provider_admission.py": "86865e7264ff2a7bee93f021cdb61c6a10c8fbe7f906cd181f6a721a2c28bf11",
+        "tests/test_native_file_provider_inputs.py": "18fb011459431c4d9502ff452e296e5bbe40eab9dac81b105bec59270da0b824",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c"
+      },
+      "proof_scope": "Inputs and policy only; actual Task -M/-MD/object acceptance remains NOT_RUN",
+      "finished": "2026-11-10T10:02:05.648627+00:00"
+    },
+    "f39-source-final-20261110-a01.json": {
+      "state": "PASS",
+      "time": "2026-11-10T10:03:07.696064+00:00",
+      "scope": "F39 source and admission only; actual Task native -M/-MD/object, link and runtime NOT_RUN",
+      "repository": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+      "head": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+      "source_files": {
+        "tools/native_provider_inputs.py": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556",
+        "tools/build_hp_native_provider.py": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788",
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c"
+      },
+      "receipts": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-task-admission-baseline-20261110-a01.json": "6c4f31204746b8a361f1bf7d07cf9ee4625d1be86433db6c70802fa77806a723",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-task-admission-implementation-20261110-a01.json": "68b86d18836bcd8f1bc3e0ce0879d83e86fb59522349e94720772896570bf196",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/status.json": "17fdf781c9dee2d41a7893be0be916a3633ad346e3ff37d86c79b6f45543b752",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-task-input-admission-20261110-a01.json": "1957641dcce0f54c01b73b8e45781db148a1f43da12a998a14522e523687efbc",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-local-source-fix-20261110-a01.json": "993cff80bb4694effd2872aeef5e8570564096244f180df01d3dccbb6d349a0a",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-task-owner-composition-20261110-a01/status.json": "bd73ae9af60cec6455ee0471b13ffaaba806335ee1191a2c1b47d791ae74ea80"
+      },
+      "test_commands": [
+        {
+          "pattern": "test_native_task_provider_inputs.py",
+          "tests": 9,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_provider_inputs.py.log",
+          "log_sha256": "62502cb288911894e8440c4b52ab8be20e3a26b6393c15d87af69ff9abdfceb6"
+        },
+        {
+          "pattern": "test_native_task_provider_admission.py",
+          "tests": 12,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_provider_admission.py.log",
+          "log_sha256": "d4c61f1fae3259812dbaa5c4a9971e216f9c8bfc98a6c842347b3ab6bdb5eac1"
+        },
+        {
+          "pattern": "test_native_provider_inputs.py",
+          "tests": 31,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_provider_inputs.py.log",
+          "log_sha256": "84e2f8c9c5488ab2b858b7e66cc115aef0a54d48091b17c8eef39a022fd70779"
+        },
+        {
+          "pattern": "test_native_provider_archive_admission.py",
+          "tests": 11,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_provider_archive_admission.py.log",
+          "log_sha256": "c7d35d43782029caca22c4dde139d6a5eee23930b95e7a2e26b8271fda3dc718"
+        },
+        {
+          "pattern": "test_native_anon_provider_inputs.py",
+          "tests": 15,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_anon_provider_inputs.py.log",
+          "log_sha256": "6290b14485e0c554ed328ba2ec6d764a13e9936ab429ec52f27d47df63694c79"
+        },
+        {
+          "pattern": "test_native_anon_provider_admission.py",
+          "tests": 9,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_anon_provider_admission.py.log",
+          "log_sha256": "b2c838269f42e6f3b0b8328558cdbc077b7ff18c811df6c9fea1a3a19d7fb25a"
+        },
+        {
+          "pattern": "test_native_file_provider_inputs.py",
+          "tests": 15,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_file_provider_inputs.py.log",
+          "log_sha256": "ebc3154cdc8d2b152a3566ee47ad9c066563e37e3429981f86d0c20092b67882"
+        },
+        {
+          "pattern": "test_native_file_provider_admission.py",
+          "tests": 17,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_file_provider_admission.py.log",
+          "log_sha256": "34af153d53c8c365e5b542362e7636abe2bd7e704834d84989573e9413f41a16"
+        },
+        {
+          "pattern": "test_native_task_owner_composition.py",
+          "tests": 10,
+          "exit_code": 0,
+          "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-task-provider-tests-20261110-a01/test_native_task_owner_composition.py.log",
+          "log_sha256": "f28505a426b6f7d6379c5165507d14898eb1398acf07487ef813513c3040fa41"
+        }
+      ],
+      "total_tests": 129,
+      "new_task_admission_tests": 21,
+      "unchanged_prior_tests": 98,
+      "source_composition_tests": 10,
+      "default_git_builder_body": "BYTE_IDENTICAL",
+      "provider_dependency_binder": "BYTE_IDENTICAL",
+      "full_core_verifier": "BYTE_IDENTICAL",
+      "prior_contract_inputs_and_tests": 30,
+      "input_admission": "PASS",
+      "required_task_fragments": [
+        "compat/native-entry/task_entry.inc",
+        "compat/native-file/task_entry_preallocated.inc",
+        "compat/native-file/task_quiesce_retained.inc"
+      ],
+      "required_patched_headers": [],
+      "diff_check": {
+        "command": [
+          "git",
+          "-C",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+          "diff",
+          "--check",
+          "--",
+          "tools/native_provider_inputs.py",
+          "tools/build_hp_native_provider.py",
+          "compat/native-runtime/task/provider-inputs-f39-task.json",
+          "tests/test_native_task_provider_inputs.py",
+          "tests/test_native_task_provider_admission.py",
+          "compat/native-runtime/task/linux_task.c",
+          "compat/native-runtime/task/task_entry_netbsd.h",
+          "tests/test_native_task_owner_composition.py"
+        ],
+        "exit_code": 0,
+        "log": "/home/andreas/projects/hp-i915-f26-20261106/f39-source-final-20261110-a01.log",
+        "log_sha256": "493784d50d426bbc63cbe1b991e1b91fcf4f9c886f906691b08772a38dcc0b87"
+      },
+      "status": [
+        " M tools/build_hp_native_provider.py",
+        " M tools/native_provider_inputs.py",
+        "?? compat/native-runtime/task/provider-inputs-f39-task.json",
+        "?? tests/test_native_task_provider_admission.py",
+        "?? tests/test_native_task_provider_inputs.py"
+      ],
+      "actual_native_preprocessing": "NOT_RUN",
+      "actual_native_compilation": "NOT_RUN",
+      "full_kernel": "NOT_RUN",
+      "runtime": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f39-real-cli-negative-20261110-a01/status.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T10:01:34.058750+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py",
+        "--source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--core-status",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "--provider-root",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task",
+        "--unit",
+        "linux_task.c",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-real-cli-negative-20261110-a01/forbidden-output",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools",
+        "--source-archive",
+        "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz",
+        "--provider-contract",
+        "/home/andreas/projects/hp-i915-f26-20261106/f39-real-cli-negative-20261110-a01/provider-inputs.json"
+      ],
+      "exit_code": 2,
+      "copied_task_contract_sha256": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+      "log_sha256": "07cb936ea7b5e2e93e1e8df469ca04e2f6dc703556715e8749dcdcf360677a55",
+      "output_created": false,
+      "provider_preprocessing": "NOT_REACHED",
+      "provider_compilation": "NOT_REACHED",
+      "rejection": "Exact reviewed contract bytes at an unreviewed path are rejected before output/preprocessing/compilation"
+    },
+    "f39-root-source-admission-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T10:02:41.774255+00:00",
+      "physical_host": "hp-tpnw121.lan",
+      "project_id": "HP-I915",
+      "step_id": "HP-I915-F39-TASK-OWNER-COMPOSITION-PROVENANCE-20261110",
+      "provider_input_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+      "source_sha256": {
+        "compat/native-runtime/task/linux_task.c": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d",
+        "compat/native-runtime/task/task_entry_netbsd.h": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032",
+        "tests/test_native_task_owner_composition.py": "6c01b8e227cb5e15229ad13cf048faaefad28e2397fb6188ac85a95813d6e24c",
+        "tools/native_provider_inputs.py": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556",
+        "tools/build_hp_native_provider.py": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc",
+        "compat/native-runtime/task/provider-inputs-f39-task.json": "5709061e886f4334c32b2485b98a38c8854ab3929e27ff41ce23192535c273df",
+        "tests/test_native_task_provider_inputs.py": "d77bcfce1ba41dc5581244cc6df74b90fb571b359a69696c6fe4605090155282",
+        "tests/test_native_task_provider_admission.py": "6cf3510352f575a5c48f8cad97c2beab08fdc3219fb7de0e35d419bdf6c6d788"
+      },
+      "actual_contract_input_counts": {
+        "compat/native-file/provider-inputs-f33.json": 7,
+        "compat/native-file/provider-inputs-f35-anon.json": 8,
+        "compat/native-file/provider-inputs-f37-file.json": 18,
+        "compat/native-runtime/task/provider-inputs-f39-task.json": 11
+      },
+      "actual_task_repository_inputs": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/linux_task.c": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/linux_task.c",
+          "role": "translation_unit",
+          "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+          "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/task_entry_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/task_entry_netbsd.h",
+          "role": "task_entry_header",
+          "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+          "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/sched.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/sched.h",
+          "role": "task_mapping_header",
+          "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+          "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/task_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/task_netbsd.h",
+          "role": "task_mapping_header",
+          "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+          "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/include/linux/raw_spinlock.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/include/linux/raw_spinlock.h",
+          "role": "task_mapping_header",
+          "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+          "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/sched.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/sched.h",
+          "role": "task_scheduler_header",
+          "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+          "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-runtime/task/task_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-runtime/task/task_netbsd.h",
+          "role": "task_header",
+          "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+          "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/linux/raw_spinlock.h": {
+          "kind": "repository",
+          "relative": "compat/linux/raw_spinlock.h",
+          "role": "raw_spinlock_header",
+          "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+          "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-entry/task_entry.inc": {
+          "kind": "repository",
+          "relative": "compat/native-entry/task_entry.inc",
+          "role": "task_fragment",
+          "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+          "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/task_entry_preallocated.inc": {
+          "kind": "repository",
+          "relative": "compat/native-file/task_entry_preallocated.inc",
+          "role": "task_fragment",
+          "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+          "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/task_quiesce_retained.inc": {
+          "kind": "repository",
+          "relative": "compat/native-file/task_quiesce_retained.inc",
+          "role": "task_fragment",
+          "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+          "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90"
+        }
+      },
+      "header_policies": {
+        "compat/native-file/provider-inputs-f33.json": [
+          "sys/sys/file.h",
+          "sys/sys/filedesc.h"
+        ],
+        "compat/native-file/provider-inputs-f35-anon.json": [
+          "sys/sys/file.h"
+        ],
+        "compat/native-file/provider-inputs-f37-file.json": [
+          "sys/sys/file.h"
+        ],
+        "compat/native-runtime/task/provider-inputs-f39-task.json": []
+      },
+      "required_consumed_task_fragments": [
+        "compat/native-entry/task_entry.inc",
+        "compat/native-file/task_entry_preallocated.inc",
+        "compat/native-file/task_quiesce_retained.inc"
+      ],
+      "full_F32_core_verified": true,
+      "kthread_native_equals_tracked_owner_sha256": "4384d635d5049d38bd322009007b04808afeb30e4c99c0e484ba95bfbd10933b",
+      "prior_F38_frozen_states": 434,
+      "unchanged_prior_F38_states": 432,
+      "intentional_F39_controller_changes": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py": {
+          "before": {
+            "exists": true,
+            "size": 15486,
+            "sha256": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca"
+          },
+          "after": {
+            "exists": true,
+            "size": 15880,
+            "sha256": "99adadf52ccddc4a1c66af6eec733ded8dae2482bfe1bb4a30afe9cbda5f05dc"
+          }
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_provider_inputs.py": {
+          "before": {
+            "exists": true,
+            "size": 12414,
+            "sha256": "1f26863efeddd64d60f6cfc09bd45dac7bc4e7e7e12cc877ce5b3ac724562ba9"
+          },
+          "after": {
+            "exists": true,
+            "size": 15285,
+            "sha256": "d5fc080602f287594035ed57530766b1f479d37b00ab17aaac15bd5c0ecab556"
+          }
+        }
+      },
+      "prior_F38_private_artifacts": {
+        "status.json": {
+          "bytes": 218614,
+          "sha256": "1c6cf13fa5226fa7a63f73a8b179895e6ed10af9cbe0b7d27f817042bc5a8167"
+        },
+        "linux_file.pre.d": {
+          "bytes": 22104,
+          "sha256": "8c2f5ea4a94f0602f2e526d8a6170a22c9e5db06b33843a650dc23326adec8f4"
+        },
+        "command-000.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "linux_file.su": {
+          "bytes": 2774,
+          "sha256": "f4732d2174fdaf46cc1b5f53704ad1c216def84bb180702ae8990de7fb01e261"
+        },
+        "linux_file.d": {
+          "bytes": 22183,
+          "sha256": "af7911445b7c3dd1fec79ee2fa96ba3b64e9f37ab922835898c0bcf84cf7ecc6"
+        },
+        "linux_file.o": {
+          "bytes": 138048,
+          "sha256": "c5853c8d6c5d26958a556a4f568b9f01d08b068165b8a4ec4287b1e381fc14bf"
+        },
+        "command-001.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "linux_file.nm.log": {
+          "bytes": 5654,
+          "sha256": "b4f7c54b13a457cd58ac18dd2f1de8b76f31b76b8a9c0d84c8a4a3f42ad08865"
+        }
+      },
+      "old_F27_checkout_clean": true,
+      "old_Task_artifacts_absent": true,
+      "provider_preprocessing": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "native_Task_compilation": "NOT_RUN",
+      "link": "NOT_RUN",
+      "runtime": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    }
+  },
+  "receipt_sha256": {
+    "f39-task-owner-composition-20261110-a01/status.json": "bd73ae9af60cec6455ee0471b13ffaaba806335ee1191a2c1b47d791ae74ea80",
+    "f39-local-source-fix-20261110-a01.json": "993cff80bb4694effd2872aeef5e8570564096244f180df01d3dccbb6d349a0a",
+    "f39-task-admission-baseline-20261110-a01.json": "6c4f31204746b8a361f1bf7d07cf9ee4625d1be86433db6c70802fa77806a723",
+    "f39-task-admission-implementation-20261110-a01.json": "68b86d18836bcd8f1bc3e0ce0879d83e86fb59522349e94720772896570bf196",
+    "f39-task-provider-tests-20261110-a01/status.json": "17fdf781c9dee2d41a7893be0be916a3633ad346e3ff37d86c79b6f45543b752",
+    "f39-task-input-admission-20261110-a01.json": "1957641dcce0f54c01b73b8e45781db148a1f43da12a998a14522e523687efbc",
+    "f39-source-final-20261110-a01.json": "4e117760919a1b1f9480ab86f9b23c44dda6e212a727e1fb7fe82b87da0fa0b2",
+    "f39-real-cli-negative-20261110-a01/status.json": "7cf95fc56000dbcbcdf0f2ba46ed5eacc1988b090b903e0bb22b0cb8b522fa01",
+    "f39-root-source-admission-verification-20261110-a01.json": "7153c1ac28f47c4468d46f62eeb60f3a0a4736a5dabc9680fa5f527ee5540990"
+  },
+  "independent_reviews": [
+    "native_abi_preflight: actual source composition/static resource order/API signatures and all18FILEinputs verified",
+    "github_project_audit: final fixed Task/header/fragment policies and existing guards reviewed; no blocking findings"
+  ],
+  "actual_Task_native_preprocessing": "NOT_RUN",
+  "actual_Task_native_compilation": "NOT_RUN",
+  "full_kernel": "NOT_RUN",
+  "runtime": "NOT_RUN",
+  "installed": false,
+  "booted": false
+}

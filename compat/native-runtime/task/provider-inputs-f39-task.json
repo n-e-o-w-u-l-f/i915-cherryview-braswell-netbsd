@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "scope": "F39 exact same-owner Task composition admission; no link or runtime claim",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "repository_commit": "5298bf8cfe5268787ea759ba3df54d5bc1d50ddc",
+  "provider_root": "compat/native-runtime/task",
+  "units": [
+    "linux_task.c"
+  ],
+  "required_patched_headers": [],
+  "repository_include_roots": [
+    "compat/native-runtime/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "repository_inputs": {
+    "compat/native-runtime/task/linux_task.c": {
+      "role": "translation_unit",
+      "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+      "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d"
+    },
+    "compat/native-runtime/task/task_entry_netbsd.h": {
+      "role": "task_entry_header",
+      "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+      "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032"
+    },
+    "compat/native-runtime/include/linux/sched.h": {
+      "role": "task_mapping_header",
+      "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+      "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+    },
+    "compat/native-runtime/include/linux/task_netbsd.h": {
+      "role": "task_mapping_header",
+      "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+      "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+    },
+    "compat/native-runtime/include/linux/raw_spinlock.h": {
+      "role": "task_mapping_header",
+      "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+      "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+    },
+    "compat/native-runtime/task/sched.h": {
+      "role": "task_scheduler_header",
+      "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+    },
+    "compat/native-runtime/task/task_netbsd.h": {
+      "role": "task_header",
+      "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+    },
+    "compat/linux/raw_spinlock.h": {
+      "role": "raw_spinlock_header",
+      "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+    },
+    "compat/native-entry/task_entry.inc": {
+      "role": "task_fragment",
+      "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+      "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+    },
+    "compat/native-file/task_entry_preallocated.inc": {
+      "role": "task_fragment",
+      "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+      "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+    },
+    "compat/native-file/task_quiesce_retained.inc": {
+      "role": "task_fragment",
+      "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+      "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90"
+    }
+  }
+}
