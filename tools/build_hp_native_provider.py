@@ -146,7 +146,8 @@ def archive_provider(args, parser, tools):
         provider_dependencies, recheck_provider_dependencies, repository_inputs,
         require_provider_headers, require_task_fragments, require_task_worker_inputs,
         reviewed_contract_sha256, selected_inputs, task_fragment_policy,
-        task_worker_input_policy, verify_core)
+        task_worker_input_policy, verify_core, wait_input_policy, require_wait_inputs,
+        verify_wait_generation)
     from native_source_archive import (
         ArchiveSource, dependency_paths, recheck_prior_artifacts, snapshot_prior_artifacts)
     try:
@@ -161,6 +162,8 @@ def archive_provider(args, parser, tools):
         required_headers = provider_header_policy(core, contract, contract_digest)
         required_fragments = task_fragment_policy(contract, contract_digest)
         required_worker_inputs = task_worker_input_policy(contract, contract_digest)
+        required_wait_inputs = wait_input_policy(contract, contract_digest)
+        wait_generation = verify_wait_generation(REPOSITORY, contract, inputs, contract_digest)
         overlay = core_path.parent / 'source'
         cc = configured_compiler(core['flags']['CC'], tools)
         configured = Path(core['flags']['S']).resolve(strict=True).parent
@@ -183,6 +186,7 @@ def archive_provider(args, parser, tools):
         provider_contract_sha256=contract_digest, required_patched_headers=required_headers,
         required_task_fragments=required_fragments,
         required_task_worker_inputs=required_worker_inputs,
+        required_wait_inputs=required_wait_inputs, wait_generation_proof=wait_generation,
         repository_commit=contract['repository_commit'], repository_inputs=inputs,
         toolchain=str(tools['root']), native_tool_sha256=core['native_tool_sha256'],
         flags=core['flags'], include_roots=[str(path) for path in includes],
@@ -227,6 +231,7 @@ def archive_provider(args, parser, tools):
                 require_provider_headers(bindings, REPOSITORY, core, contract, contract_digest)
                 require_task_fragments(bindings, REPOSITORY, contract, contract_digest)
                 require_task_worker_inputs(bindings, REPOSITORY, contract, contract_digest)
+                require_wait_inputs(bindings, REPOSITORY, contract, contract_digest)
                 for path, row in bindings.items():
                     if path in all_bindings and all_bindings[path] != row:
                         raise ValueError('provider dependency changed between scans')
@@ -250,6 +255,7 @@ def archive_provider(args, parser, tools):
                         state['precompile_dependencies'][unit.stem], *binding_arguments)
                     require_task_fragments(proof, REPOSITORY, contract, contract_digest)
                     require_task_worker_inputs(proof, REPOSITORY, contract, contract_digest)
+                    require_wait_inputs(proof, REPOSITORY, contract, contract_digest)
                     state['objects'][unit.stem] = dict(bytes=artifact.stat().st_size,
                         sha256=sha(artifact), dependency_proof=proof)
                     save()
@@ -267,6 +273,8 @@ def archive_provider(args, parser, tools):
             load_contract(args.provider_contract)
             if repository_inputs(REPOSITORY, contract) != inputs:
                 raise ValueError('reviewed provider identity changed')
+            if verify_wait_generation(REPOSITORY, contract, inputs, contract_digest) != wait_generation:
+                raise ValueError('Wait generation proof changed')
             verify_core(core_path, contract, source, obj, tools, core=core)
             recheck_prior_artifacts(obj, prior)
         except BaseException as error:

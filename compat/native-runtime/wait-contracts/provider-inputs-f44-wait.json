@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "scope": "F44 exact recovered generic Wait source admission; native preprocessing, compilation, link and runtime are separate gates",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "linux_pin": "fd179f8a05be3ccae366b9b96e176b51fbe54aab",
+  "repository_commit": "610c66b412672ca96b0048179d07035929443402",
+  "provider_root": "compat/native-runtime/wait-f43",
+  "units": [
+    "linux_wait.c"
+  ],
+  "required_patched_headers": [],
+  "repository_include_roots": [
+    "compat/native-runtime/wait-f43/include",
+    "compat/native-runtime/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "generation_provenance_sha256": "a84ac39db9642f7a935a25a6ac3b0721b568be6132a8221cab42b454f7972078",
+  "repository_inputs": {
+    "compat/native-runtime/wait-f43/linux_wait.c": {
+      "role": "translation_unit",
+      "blob": "4c7e3f0511be997175c4009918800ff9adf984ba",
+      "sha256": "4a933c0bb0cbf5c2483c22d8fb7a36b7166d0b52b2e30bf9223d69d9a8cd0c69"
+    },
+    "compat/native-runtime/wait-f43/include/linux/wait.h": {
+      "role": "wait_header",
+      "blob": "2de8a3d14fd4b27430dab21169e2f4819d9ec090",
+      "sha256": "61ef59279676174b3394e88451ff828a83bff7c50d679b4a946d3daee45dfa86"
+    },
+    "compat/native-runtime/include/linux/sched.h": {
+      "role": "task_mapping_header",
+      "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+      "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+    },
+    "compat/native-runtime/include/linux/task_netbsd.h": {
+      "role": "task_mapping_header",
+      "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+      "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+    },
+    "compat/native-runtime/include/linux/raw_spinlock.h": {
+      "role": "task_mapping_header",
+      "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+      "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+    },
+    "compat/native-runtime/task/sched.h": {
+      "role": "task_scheduler_header",
+      "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+    },
+    "compat/native-runtime/task/task_netbsd.h": {
+      "role": "task_header",
+      "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+    },
+    "compat/linux/raw_spinlock.h": {
+      "role": "raw_spinlock_header",
+      "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+    },
+    "compat/native-runtime/wait-inputs-f43/include/linux/wait.h": {
+      "role": "generation_proof_owner",
+      "blob": "7e215330199cfea27008f718e0336d0f48bfe17d",
+      "sha256": "f9f53a02fd25a1a1fefdc41310285975d5c1fdce1a1b62282cc05e737ae96417"
+    },
+    "compat/native-runtime/wait-inputs-f43/kernel/sched/wait.c": {
+      "role": "generation_proof_owner",
+      "blob": "d033f600f48c6fc3a0a088ea5d9f6ed95ec4c86e",
+      "sha256": "05a9c8d9b1b4cb3a63e1dd59744adf24c8912d108307f46d7e3a6b1f26013e5f"
+    },
+    "compat/native-runtime/wait-inputs-f43/provenance.json": {
+      "role": "generation_proof_owner",
+      "blob": "54ff54bfd06ffb48600231733a7b8e2b560fb872",
+      "sha256": "31c6ecead016cf621d6f3d8262177057d788e859add55804ee6202264f01807e"
+    },
+    "compat/native-runtime/wait-f43/provenance.json": {
+      "role": "generation_proof_owner",
+      "blob": "df6cc727b86f0e8eb4e69efade20053ebabc009e",
+      "sha256": "a84ac39db9642f7a935a25a6ac3b0721b568be6132a8221cab42b454f7972078"
+    },
+    "compat/native-runtime/task/generate_wait.py": {
+      "role": "generation_proof_owner",
+      "blob": "384872c7c87595d62497227d7c2c8aaff31e2dd0",
+      "sha256": "598d3de2afdf1e6c02ff8aecdde0f4a83c7f32341adbfc791b367a007df378d6"
+    },
+    "compat/native-runtime/task/SOURCE_SHA256.json": {
+      "role": "generation_proof_owner",
+      "blob": "0b1cf16eb8cd424c2c87c4d7e6d19513edc6771f",
+      "sha256": "99b37dca5385fa243e3bad9867a36405caab52804423010690c5427193c82662"
+    },
+    "tools/recover_native_wait.py": {
+      "role": "generation_proof_owner",
+      "blob": "e9ed8f61a5e4250f971e872d3fd6a9aea2327b1c",
+      "sha256": "daa986375fe841baf5cf85f80dadbf675c9030695a221a065dbd8ea70b45b521"
+    }
+  }
+}
