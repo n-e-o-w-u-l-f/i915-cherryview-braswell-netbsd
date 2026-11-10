@@ -1,0 +1,2377 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F36-NATIVE-ANON-PROVIDER-OBJECT-20261110",
+  "state": "PASS",
+  "runner_source_head": "0b40ca4aac08fd3c5367b8dc8676304588c4e6ac",
+  "provider_input_commit": "070f728b6ec617c079a4600c14b3e89867f50b18",
+  "root_verification": {
+    "state": "PASS",
+    "observed_at": "2026-11-10T07:07:55.748829+00:00",
+    "runner_source_head": "0b40ca4aac08fd3c5367b8dc8676304588c4e6ac",
+    "source_sha256": {
+      "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+      "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+      "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+      "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+      "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3"
+    },
+    "preserved_f33_sha256": {
+      "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+      "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+      "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+    },
+    "object": {
+      "bytes": 100944,
+      "sha256": "48e69c1b7cf3b73af35becf1c8202769ceecc5b175c6f02d65e50ff687305422",
+      "elf": "ELF64 x86-64 relocatable",
+      "required_T_symbols": [
+        "linux_anon_inode_init",
+        "linux_anon_inode_fini",
+        "linux_anon_inode_busy",
+        "linux_file_alloc_named",
+        "anon_inode_getfile",
+        "anon_inode_getfile_fmode",
+        "anon_inode_getfd"
+      ]
+    },
+    "commands": 2,
+    "dependencies": 238,
+    "dependency_roles": {
+      "repository": 8,
+      "archive": 204,
+      "generated_configuration": 25,
+      "patched": 1
+    },
+    "consumed_patched_headers": [
+      "sys/sys/file.h"
+    ],
+    "core_lockstat_preserved_not_consumed": true,
+    "archive_members": 344,
+    "frozen_inputs": 411,
+    "prior_artifact_states": 29,
+    "actual_dependency_files_reparsed": true,
+    "protected_inputs_unchanged": true,
+    "F34object_preserved": true,
+    "old_checkout_clean": true,
+    "native_status_sha256": "20d01969cfaf9bdf456f5ba8db90c9566b4ffd75880cfe4dbc09713b1c260b53",
+    "launch_sha256": "c227ab65c2682761817fbb13334e8f14bf1d311e4824157ff820122b3b34de6e",
+    "exit_sha256": "d8daaa8da83e1b593f20436bd172d7713f2c47b78beabf2234c681f90a54f191",
+    "full_kernel": "NOT_RUN",
+    "runtime": "NOT_RUN",
+    "installed": false,
+    "booted": false
+  },
+  "receipts": {
+    "f36-native-anon-file-20261110-a01-launch.json": {
+      "scope": "F36 actual linux_anon.c only; archive-backed relocatable ABI probe",
+      "state": "PASS",
+      "stage": "COMPLETE",
+      "started": "2026-11-10T07:00:41.588179+00:00",
+      "launcher_pid": 11870,
+      "host": "hp-tpnw121.lan",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py",
+        "--source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--core-status",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "--provider-root",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file",
+        "--unit",
+        "linux_anon.c",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f36-native-anon-file-20261110-a01",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools",
+        "--source-archive",
+        "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz",
+        "--provider-contract",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/provider-inputs-f35-anon.json"
+      ],
+      "output": "/home/andreas/projects/hp-i915-f26-20261106/f36-native-anon-file-20261110-a01",
+      "full_kernel": "NOT_RUN",
+      "linked": false,
+      "runtime": "NOT_RUN",
+      "installed": false,
+      "booted": false,
+      "source_head": "0b40ca4aac08fd3c5367b8dc8676304588c4e6ac",
+      "code_sha256": {
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+      },
+      "provider_inputs": {
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/linux_anon.c": {
+          "kind": "repository",
+          "relative": "compat/native-file/linux_anon.c",
+          "role": "translation_unit",
+          "blob": "2eb1210045024fca9c2d90fdb666847bd65f4444",
+          "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/anon_inodes_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-file/include/linux/anon_inodes_netbsd.h",
+          "role": "anon_header",
+          "blob": "553f337dd528cbdb5a362a8a1171fd38a8f040b7",
+          "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_api_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-file/include/linux/file_api_netbsd.h",
+          "role": "file_header",
+          "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+          "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-file/include/linux/file_netbsd.h",
+          "role": "file_header",
+          "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+          "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/fs_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-file/include/linux/fs_netbsd.h",
+          "role": "file_header",
+          "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+          "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_ref_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-file/include/linux/file_ref_netbsd.h",
+          "role": "file_header",
+          "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+          "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+          "role": "mm_abi_header",
+          "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+          "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include/linux/kiocb_netbsd.h": {
+          "kind": "repository",
+          "relative": "compat/native-uio/include/linux/kiocb_netbsd.h",
+          "role": "uio_header",
+          "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+          "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+        }
+      },
+      "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+      "frozen_inputs": {
+        "/boot.cfg": {
+          "exists": true,
+          "size": 630,
+          "sha256": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/anon_inodes_netbsd.h": {
+          "exists": true,
+          "size": 500,
+          "sha256": "4ca1bfa214d70c71dc72a8e93e2f685ca8abc378f019a9f8c2d270674f2be3b4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_api_netbsd.h": {
+          "exists": true,
+          "size": 1318,
+          "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_netbsd.h": {
+          "exists": true,
+          "size": 1614,
+          "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_ref_netbsd.h": {
+          "exists": true,
+          "size": 2966,
+          "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/fs_netbsd.h": {
+          "exists": true,
+          "size": 8568,
+          "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/linux_anon.c": {
+          "exists": true,
+          "size": 3988,
+          "sha256": "1b34dab32df905280cc477554afe11a3c434360ac2a3d5638cb3acdda528291e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/provider-inputs-f33.json": {
+          "exists": true,
+          "size": 2396,
+          "sha256": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/provider-inputs-f35-anon.json": {
+          "exists": true,
+          "size": 2699,
+          "sha256": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.json": {
+          "exists": true,
+          "size": 1118,
+          "sha256": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch": {
+          "exists": true,
+          "size": 2659,
+          "sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.json": {
+          "exists": true,
+          "size": 1033,
+          "sha256": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch": {
+          "exists": true,
+          "size": 3441,
+          "sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.json": {
+          "exists": true,
+          "size": 613,
+          "sha256": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch": {
+          "exists": true,
+          "size": 881,
+          "sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.json": {
+          "exists": true,
+          "size": 1055,
+          "sha256": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.patch": {
+          "exists": true,
+          "size": 469,
+          "sha256": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+          "exists": true,
+          "size": 356,
+          "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include/linux/kiocb_netbsd.h": {
+          "exists": true,
+          "size": 1349,
+          "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_anon_provider_admission.py": {
+          "exists": true,
+          "size": 8366,
+          "sha256": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_anon_provider_inputs.py": {
+          "exists": true,
+          "size": 12991,
+          "sha256": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_provider_archive_admission.py": {
+          "exists": true,
+          "size": 14266,
+          "sha256": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_provider_inputs.py": {
+          "exists": true,
+          "size": 26457,
+          "sha256": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/build_hp_native_provider.py": {
+          "exists": true,
+          "size": 15486,
+          "sha256": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_hp_build.py": {
+          "exists": true,
+          "size": 4398,
+          "sha256": "39d4963544e050433ab97f898ac2bbcd3f5dc80e69bf4b43953fa25ad6c45c9b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_provider_inputs.py": {
+          "exists": true,
+          "size": 12015,
+          "sha256": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tools/native_source_archive.py": {
+          "exists": true,
+          "size": 12934,
+          "sha256": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/kern_descrip.d": {
+          "exists": true,
+          "size": 19167,
+          "sha256": "dacb88af69ca41c4880ac82f8188f08599346809458f64775ca4956be72b2f8c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/kern_descrip.o": {
+          "exists": true,
+          "size": 259968,
+          "sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/kern_descrip.su": {
+          "exists": true,
+          "size": 6582,
+          "sha256": "6c0e2668929321b2611063232f10c7fa27aa936cc0abc3b225f728e974c80c9a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/netbsd32_ioctl.d": {
+          "exists": true,
+          "size": 29429,
+          "sha256": "275eb112b3aa371f434a471f1dae30dfc729ebed35ea76782dafce9784517557"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/netbsd32_ioctl.o": {
+          "exists": true,
+          "size": 308104,
+          "sha256": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/netbsd32_ioctl.su": {
+          "exists": true,
+          "size": 149,
+          "sha256": "7ec59f99fccc75bf5a83e3d7f9e27874ec71453c78914124ad9e3e08ed4269d2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/source/sys/compat/netbsd32/netbsd32_ioctl.c": {
+          "exists": true,
+          "size": 47449,
+          "sha256": "d0385949c415c1810dbdcbb91197bd0766c6bbef6bd3ff232be3f40128f72c6d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/source/sys/kern/kern_descrip.c": {
+          "exists": true,
+          "size": 59097,
+          "sha256": "614e5ca25265322a2462ca2da81d67ee5e416f737a05d2b12c2ab4410569ab37"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/source/sys/kern/sys_generic.c": {
+          "exists": true,
+          "size": 18839,
+          "sha256": "36d9743f193d7a7e40e0bbf0c2a84ee4183cadc21363d8261a54e60af443e977"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/source/sys/sys/file.h": {
+          "exists": true,
+          "size": 10158,
+          "sha256": "efa6a2d1d13681f45e032dced3bf3cc21a5282d035a510fd339b59160a6c2521"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/source/sys/sys/filedesc.h": {
+          "exists": true,
+          "size": 10312,
+          "sha256": "72cda1ee9dd9fd4efb26d8cd3f8861e6e1179c828b80ae3d2481d9f88e7f3549"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json": {
+          "exists": true,
+          "size": 717310,
+          "sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/sys_generic.d": {
+          "exists": true,
+          "size": 19414,
+          "sha256": "38f61320e1916d9b657a72913ce7669d39e3822d1c31a065dcccebc4a8209db2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/sys_generic.o": {
+          "exists": true,
+          "size": 154048,
+          "sha256": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/sys_generic.su": {
+          "exists": true,
+          "size": 1440,
+          "sha256": "7205175fdf14876179af739c0859e636c6a734d9017f9012fd82a55b01da0227"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/linux_fd.d": {
+          "exists": true,
+          "size": 20108,
+          "sha256": "6983491782eb50f54be202af51d357fca9f4470a9e4d605e51513735ac140396"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/linux_fd.o": {
+          "exists": true,
+          "size": 99328,
+          "sha256": "d8d86e0a4448709f57c50fc723871f0ad24849933394c0357d9e128f5c067c6b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/linux_fd.pre.d": {
+          "exists": true,
+          "size": 20032,
+          "sha256": "7a6ac68eba260ad3ff11680237caa3cd1993941415f20cc9b40d1cbb854e1cba"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/linux_fd.su": {
+          "exists": true,
+          "size": 1558,
+          "sha256": "f87b32f397f2fffa5fb4c9b34bf37458a571c9ac84610741de0de394a5fe7320"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/status.json": {
+          "exists": true,
+          "size": 199964,
+          "sha256": "ae07055aa48a0f1759c68cabaeb860004a2c78265785fb90a54b01154751eff7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01-exit.json": {
+          "exists": true,
+          "size": 227,
+          "sha256": "96c42b73b63f2be708b9cf2a5aabf99010ad96851dae38c0b64803dcf46858aa"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01-launch.json": {
+          "exists": true,
+          "size": 105052,
+          "sha256": "50e660ccfd78468a2a12a08353bbf36ac800fc10c4e5d41a4cc3dcb26674dbfc"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/plistref.h": {
+          "exists": true,
+          "size": 1942,
+          "sha256": "f7b0a0274e01453e9e9611d3c540449305b5d397357afa1f6b29173611832e0f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_array.h": {
+          "exists": true,
+          "size": 9707,
+          "sha256": "53fde3846d67ab00b5765c43d7c186539992ef69eb11c633c88a3baf9a7b0513"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_bool.h": {
+          "exists": true,
+          "size": 1955,
+          "sha256": "657a1f963a2a3c8dcb270120680772c4a4d64719cf4e8549eebdb0420ce528cc"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_data.h": {
+          "exists": true,
+          "size": 2405,
+          "sha256": "69258919055a996d435b7ff0a498186960fc4e76d01f98ff7ac419e395295aeb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_dictionary.h": {
+          "exists": true,
+          "size": 9927,
+          "sha256": "7c2c78244458db4baeb5eeaba91b9ee307940954e4b37533649d1570e9a92689"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_ingest.h": {
+          "exists": true,
+          "size": 3186,
+          "sha256": "b18672246366ee4389d618cebd20e384c1564670f2fddf5c96432a8b445d4511"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_number.h": {
+          "exists": true,
+          "size": 3939,
+          "sha256": "a094d471cfafd1c888fdc17a11a6628689576236679fcd54ff23cc034a380f45"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_object.h": {
+          "exists": true,
+          "size": 4350,
+          "sha256": "6375191af168f99d14b5cce80999c6602a11e8b713e48be39de84a911b9cbd40"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/prop_string.h": {
+          "exists": true,
+          "size": 2968,
+          "sha256": "44f47203332040b8d82ae80fcf1d97b2feda256c22ddd4f2a2f5aa3521638ec8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/common/include/prop/proplib.h": {
+          "exists": true,
+          "size": 1935,
+          "sha256": "e84b2c62c817619ceec29147c446de22f6ad55afc84f916c8301f25fca287aa6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/altq/if_altq.h": {
+          "exists": true,
+          "size": 6580,
+          "sha256": "a170bf6160ae7ce0fc8490b889cff04dd77bdbfba242939e733ecc5f3dacd346"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/ansi.h": {
+          "exists": true,
+          "size": 91,
+          "sha256": "2f6231d30b8e37f6a1eac8410e928188d87127386572a9fbb145d4876f9fa3ae"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/bswap.h": {
+          "exists": true,
+          "size": 371,
+          "sha256": "870ac37360d9ede80a2f597cacdd1a4372e505059ef6665870e137fd67203e56"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/byte_swap.h": {
+          "exists": true,
+          "size": 2665,
+          "sha256": "e9c4d55ce1f1133b2f8d29b368753fb8ecee1e3c00289c945995e3b1afbdf8da"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/cdefs.h": {
+          "exists": true,
+          "size": 186,
+          "sha256": "a30602490a6cf27ff080b7bf43654f095cbf3ce8a592b09e78cf9cb1caee0f1f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/cpu.h": {
+          "exists": true,
+          "size": 3383,
+          "sha256": "95ffd8a0de974f75cfb696482e84863cb008c29d21be84955ed635c86c3aab82"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/cpu_counter.h": {
+          "exists": true,
+          "size": 1485,
+          "sha256": "9d949279cb87e916bdab798b1746274d4f575ca3fcdf72d0c9a5ac19b63421e8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/cpufunc.h": {
+          "exists": true,
+          "size": 141,
+          "sha256": "bb41c9f030f665243d1769a48ad09cbccb5ec627e20660669e08f096cf8e6d5f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/disklabel.h": {
+          "exists": true,
+          "size": 2830,
+          "sha256": "38bf5f583033b0daa93f38df2b0543243ee09e41deccbb357b2570a19aafb121"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/elf_machdep.h": {
+          "exists": true,
+          "size": 1851,
+          "sha256": "ef1d7c59af3be6b06dd0a8cfb43466f9f4362b5efb9a57140d904ef902473dd9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/endian.h": {
+          "exists": true,
+          "size": 86,
+          "sha256": "ccd91c14c32b23410c4185955f8d5d838596ce1ed0861e3670808a3d4b66343c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/endian_machdep.h": {
+          "exists": true,
+          "size": 104,
+          "sha256": "daee272d8ef4e9e670320bec8767657ff4f5c785deadf5c23e678ff0e08bf7d0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/frame.h": {
+          "exists": true,
+          "size": 4555,
+          "sha256": "1b1138ce397accc82613d4c1cc2ef749c6f8bd78a0d7b2db536788eea741a2f1"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/frame_regs.h": {
+          "exists": true,
+          "size": 2751,
+          "sha256": "6a16889f3a0b22a7d20ec07c3133cf286779cf9da4d9d1beb6300f86378706c8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/int_const.h": {
+          "exists": true,
+          "size": 2229,
+          "sha256": "3daac50f6e49c529185ae1724b398b2f7622ef6714ec53f61db4888c989299d8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/int_fmtio.h": {
+          "exists": true,
+          "size": 8323,
+          "sha256": "af6f1d9118c7f316946afdc68fd54c3af7289b6a8f8967d66107750b987c21ad"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/int_limits.h": {
+          "exists": true,
+          "size": 5562,
+          "sha256": "fc53f3b4222760ad05f013e989c828ba0e6f197e9a22cde48117e9c8e0a84822"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/int_mwgwtypes.h": {
+          "exists": true,
+          "size": 2672,
+          "sha256": "b64e5318e58b8048730ddaa8c55526f90c9358ebb92ab5b272a3fa3df080e3bb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/int_types.h": {
+          "exists": true,
+          "size": 2503,
+          "sha256": "328a7e88d928a091b21be47b5bccce9b93874fd7b0bf03d48150d1dbaa666ddb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/intr.h": {
+          "exists": true,
+          "size": 82,
+          "sha256": "dab97384b65929400cf7388bb47887400fb4bc064f8b7c5e2e51cba95b9ed5b6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/intrdefs.h": {
+          "exists": true,
+          "size": 137,
+          "sha256": "96c8fe52e41a4b3f3355a55a555506295bd4df7e4ac3fff359d47240eb85b985"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/limits.h": {
+          "exists": true,
+          "size": 3884,
+          "sha256": "7dc88be6e2be57c37c973b46aa4c74851d27ad17a7ba5ed3cf2989b30a0a18cc"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/lock.h": {
+          "exists": true,
+          "size": 82,
+          "sha256": "d263ca683a86b8300389d199e16a9741bfbcebbb2afe79e44bcaea3738f1621a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/mcontext.h": {
+          "exists": true,
+          "size": 5052,
+          "sha256": "456744721078909f0535836ca93c46234aa855e0f2a4ac6f08197a8bebeb64a7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/mutex.h": {
+          "exists": true,
+          "size": 82,
+          "sha256": "ded0efa6c11771f64a7c93a61d70b8b3d6b17615fa01210d8a91167ed74451a6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/netbsd32_machdep.h": {
+          "exists": true,
+          "size": 4057,
+          "sha256": "acb3fecc20cf147e2832a1783120b6fad15e97f75afb13c241e6e763b4069c18"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/param.h": {
+          "exists": true,
+          "size": 4220,
+          "sha256": "277cb9546ea5311463887116865d500a75767ce131157d9eff52a8952989f7ce"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/pcb.h": {
+          "exists": true,
+          "size": 4759,
+          "sha256": "400d5e91bed4e49bdb892d59202e9de095e2511d6f93e901f1bf572823e26d52"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/pic.h": {
+          "exists": true,
+          "size": 80,
+          "sha256": "e79cc0eceac318686886e27683f687093e9c0430d820a696ca48034e176ae475"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/pmap.h": {
+          "exists": true,
+          "size": 88,
+          "sha256": "fcf5d240c18c5fc55940e420ef6fd507088596e2b7586b42755e42227b3b1a04"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/proc.h": {
+          "exists": true,
+          "size": 2581,
+          "sha256": "c29662720ffc8c3d4c4e83e7e83ff162567bf255a44a0977d13857e9c61a6d7c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/psl.h": {
+          "exists": true,
+          "size": 80,
+          "sha256": "7e1425fca527dafe1093c15b66da44a424be9c2cebbd17014f000a3122df7bf8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/pte.h": {
+          "exists": true,
+          "size": 5273,
+          "sha256": "2872e7c2c8a261907e1213cb162509a4631af14f73bc5b9ab9c0b69320fea4c7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/ptrace.h": {
+          "exists": true,
+          "size": 5273,
+          "sha256": "22606a436bd16610ea1b82daf429cb278734763ef4ec55e3123741a9e4410f18"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/reg.h": {
+          "exists": true,
+          "size": 2541,
+          "sha256": "458107c8e68b4014d0fbf9c9aaba9956c51d2f9432e4c3c7c52c4a6d0a396467"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/segments.h": {
+          "exists": true,
+          "size": 14036,
+          "sha256": "e1d36248cbefec84e31473318765e0393218fb66e55a7ee38b942e37e4f8f50a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/signal.h": {
+          "exists": true,
+          "size": 2300,
+          "sha256": "38ada99a6c50a9d1dd8f0ee778eff485550c76ace610fba9f13e2b2b77c1659b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/specialreg.h": {
+          "exists": true,
+          "size": 97,
+          "sha256": "542a1dd32f80f648e410486201ae747b3ff8bfc665ba0a8277083569f5e41ba2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/trap.h": {
+          "exists": true,
+          "size": 82,
+          "sha256": "6044b5807f8bcca72141e10619b54a382f1516e3206d146897c963df2a7bc3e2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/tss.h": {
+          "exists": true,
+          "size": 2722,
+          "sha256": "584081b56ff02a0833fa14fb38be8ebca683da80d1e745dc0e723682063d72ef"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/types.h": {
+          "exists": true,
+          "size": 3936,
+          "sha256": "3ca6aff96c82a85be39c6a1111501e1c62ba5dd4d074bfc0bd741f2e789ed97e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/vmparam.h": {
+          "exists": true,
+          "size": 5570,
+          "sha256": "7d66ba15a8deca5310d6a1e4f6dc32ea5de48b4e9685ce7edc661f1f1c25dcd6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/amd64/include/wchar_limits.h": {
+          "exists": true,
+          "size": 1949,
+          "sha256": "ceed39cd0f5a8d7e813bc931739dde9032653a31031a277daa7c2e6aaf25a929"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/cacheinfo.h": {
+          "exists": true,
+          "size": 16106,
+          "sha256": "0e6690cdffa92093f43f0ccdf40a51ca6b79320b430c5caa543902a1453852da"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/cpu.h": {
+          "exists": true,
+          "size": 19187,
+          "sha256": "e187d138f47139aad096ee5a818a4a46a7f003d2c259c63f150278e9e7dbc038"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/cpu_counter.h": {
+          "exists": true,
+          "size": 2138,
+          "sha256": "de70b2db30445d293441a394b0b241d649fe9560d7a77b64dc22a22b61f650bd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/cpu_extended_state.h": {
+          "exists": true,
+          "size": 11510,
+          "sha256": "b112a5d46ac5beb6d5df05ac8f6958f7adb90efa7ea0a8a06fe1c7c5f3282ca8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/cpufunc.h": {
+          "exists": true,
+          "size": 11467,
+          "sha256": "285dfcc52fc4028034a6500d851e90d0c21b76a294e9ff95e9a124f34e6b6a75"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/fpu.h": {
+          "exists": true,
+          "size": 1656,
+          "sha256": "9dc4319c115cedb13eab238f7e6b285532d053482bd7cdad86a2b36a105939fe"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/intr.h": {
+          "exists": true,
+          "size": 7586,
+          "sha256": "66a4c719cb6043f926d10f7bee66868c0d20f1300de7f31c97a12bf8b805317a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/intrdefs.h": {
+          "exists": true,
+          "size": 2544,
+          "sha256": "8264b36754b2a4ed5eb067b569594de7f672122f153f266e90ff5f708a2d6452"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/lock.h": {
+          "exists": true,
+          "size": 5906,
+          "sha256": "ffbcf29f7f9b886318123b6781fe667475e959f041d779739fd4610b2df43f7f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/mutex.h": {
+          "exists": true,
+          "size": 2438,
+          "sha256": "98773f92137a7e5ffc538030e261a423d1ea42e903940bd16fea833fa9126b71"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/pic.h": {
+          "exists": true,
+          "size": 1266,
+          "sha256": "72de3971b10d1abfd16c13c6a8d80971bfb8e3211edc1219990f9398e718cfe0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/pmap.h": {
+          "exists": true,
+          "size": 7837,
+          "sha256": "619d09c7496cc6e9c02cf78477206765592f3562b3647cd6cd543b6a9425415c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/pmap_pv.h": {
+          "exists": true,
+          "size": 2987,
+          "sha256": "56f6effe806750e080bb33574c6c71092f24949668cdfcbe5fbd495770e09953"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/psl.h": {
+          "exists": true,
+          "size": 3190,
+          "sha256": "b8d62b9d8a0021dc0d7e71c07ffb1ddb88a246f26a81ebc59cf4ab2cfffdf66f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/pte.h": {
+          "exists": true,
+          "size": 3229,
+          "sha256": "5dd5415f11f83bfbc05399c3192203b49d93a34f3261a724264832a6c35dd684"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/specialreg.h": {
+          "exists": true,
+          "size": 69727,
+          "sha256": "c55fae26f18ffc38e11bd3b85d7419faf622fd9a01dc33412cc2cd5adaa4b16a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/x86/include/trap.h": {
+          "exists": true,
+          "size": 2880,
+          "sha256": "0b1d3c5f42967bb0b52608502db15e545441c977466024dd1a42f9968f58acf4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/arch/xen/include/intrdefs.h": {
+          "exists": true,
+          "size": 805,
+          "sha256": "43a30e867d99e06b738ae809c8be6211758895a892b14ae252086df87362ec42"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/common/compat_util.h": {
+          "exists": true,
+          "size": 3553,
+          "sha256": "7546c98e0fa456a700324bc821c83fa603943e414c5487d9b461f9532e4498a2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/net/if.h": {
+          "exists": true,
+          "size": 9419,
+          "sha256": "53adc8bc89bed40a1431e136f7ca2dcdc3e4b27ceabcc1bbcd86ec35d97d06a9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/netbsd32/netbsd32.h": {
+          "exists": true,
+          "size": 46478,
+          "sha256": "47ae604ef9781ea647dfa66eb8c4447149759a9cb1acbe61de458e6d61655f65"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/netbsd32/netbsd32_conv.h": {
+          "exists": true,
+          "size": 28523,
+          "sha256": "8adbedfaca44101d1ddeb6c542a482c357814fff805272a774a8f2aeea34e592"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/netbsd32/netbsd32_ioctl.c": {
+          "exists": true,
+          "size": 47191,
+          "sha256": "846c5602be6de8550aae1ea03e66e3e46a5107db20708987ece89b41a5184e46"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/netbsd32/netbsd32_ioctl.h": {
+          "exists": true,
+          "size": 26757,
+          "sha256": "b1c9145acd50fbca54d6eeff2cc2f33418c89ab4dc822083f723ef0d1ebefa68"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/netbsd32/netbsd32_syscallargs.h": {
+          "exists": true,
+          "size": 114307,
+          "sha256": "ef7aa8aabdcdc233265161e55dd8c0e3df14dde7295de34901921ed0b245bfca"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/dirent.h": {
+          "exists": true,
+          "size": 2325,
+          "sha256": "a56a0e974854e2fb2a86e44b9ddcaefc8349e0383f5c6515519406ced19359ff"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/mount.h": {
+          "exists": true,
+          "size": 7333,
+          "sha256": "687e62a920816b628bddf9975fc567edb6bf1e04f635741a323504e882b47db7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/siginfo.h": {
+          "exists": true,
+          "size": 2895,
+          "sha256": "fd95dcdcae1b8319328cbc21ada65e4b89dcd9364add151caed155c19de3dd8d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/signal.h": {
+          "exists": true,
+          "size": 3219,
+          "sha256": "b6feae3e90965f79689c684367f09de3562128f26a043ec47ae9bf306c3b5ef6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/sigtypes.h": {
+          "exists": true,
+          "size": 3048,
+          "sha256": "ff47287d7d6244a61434b7eb851f0b9c79a49bf3e334e6af12b278aaa15a5b96"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/sockio.h": {
+          "exists": true,
+          "size": 4575,
+          "sha256": "ca7b79792007619acb864570c9fe2032346b5fec19da0ff658394faee699ea83"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/time.h": {
+          "exists": true,
+          "size": 3270,
+          "sha256": "682c89e43eb6304d0c31ad1888218be8928e9db41ef2265eeb2e4c14ac41845b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/time_types.h": {
+          "exists": true,
+          "size": 4402,
+          "sha256": "5994ea372ad7500357ca0eabe0c1fbd9ec4b0a2d1a65df1be7577d952e563501"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/compat/sys/ucontext.h": {
+          "exists": true,
+          "size": 2600,
+          "sha256": "a00bc71b772db52b29dc5f67206be8b6635c50396212f34503a2315afc01a37f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/crypto/cprng_fast/cprng_fast.h": {
+          "exists": true,
+          "size": 211,
+          "sha256": "e4de34f95422506ca6cc4ec08844fe0442f04753b6cbe54d5263892627a0e1cc"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/crypto/nist_hash_drbg/nist_hash_drbg.h": {
+          "exists": true,
+          "size": 3504,
+          "sha256": "85154796face77d1b7b4e04ac59c6360cac3dc04d06714258ea9277feee93068"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/dkvar.h": {
+          "exists": true,
+          "size": 4737,
+          "sha256": "72a7389ebf833d3674cb56f2498ce113f9ce024c1f4e1d2d161f2d1c3fd02b52"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/fssvar.h": {
+          "exists": true,
+          "size": 6766,
+          "sha256": "fd2ffb382b8d3d055250122ed79d944def1777a20c2313c2fbc01421bebdcfd6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/lockstat.h": {
+          "exists": true,
+          "size": 7435,
+          "sha256": "2c9b4c6a90702cbbab82139637370a6f6c20522bf9eaab1decb778c9d725e449"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/vndvar.h": {
+          "exists": true,
+          "size": 8261,
+          "sha256": "f66d1783c6c353e953a5ff6b88a64784f891bfcb0690fe1f3e1989564c5daf11"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/wscons/wsconsio.h": {
+          "exists": true,
+          "size": 27078,
+          "sha256": "cc0e435d6212ff4db69b0a3bd494d72c8c236670e4afb1f28ec666eea2cc28a9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/dev/wscons/wsksymvar.h": {
+          "exists": true,
+          "size": 2582,
+          "sha256": "6784532dba2c048602adc3e480d6a78c98229d4da3ec9659c8d0361eb3e641e2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/libnv/dist/nv.h": {
+          "exists": true,
+          "size": 11781,
+          "sha256": "5b3b7b006a5930b86b5b806e5924ca308d13c77412fe6277fa981cb7dbab40e5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/mit/xen-include-public/dist/xen/include/public/arch-x86/xen-x86_64.h": {
+          "exists": true,
+          "size": 7977,
+          "sha256": "dac5759eef588dbf91a07fef902632f0d43398fdd4e3fa8dbdf8ac3acd6eb21a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/mit/xen-include-public/dist/xen/include/public/arch-x86/xen.h": {
+          "exists": true,
+          "size": 13811,
+          "sha256": "259943e40df24750f55f2447899332ba83876fc999fa266dfd7e73fe68af0408"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/mit/xen-include-public/dist/xen/include/public/event_channel.h": {
+          "exists": true,
+          "size": 12791,
+          "sha256": "6a2cf495ab0a6dff8a8af6b242ba06975312316e2a1e79ff4b0605eba03b12ab"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/mit/xen-include-public/dist/xen/include/public/xen-compat.h": {
+          "exists": true,
+          "size": 1950,
+          "sha256": "b5f1f2416308b157d6aa2e41c6a8d2084ac9712e16986db1ce13afa2ed7ca91f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/mit/xen-include-public/dist/xen/include/public/xen.h": {
+          "exists": true,
+          "size": 40727,
+          "sha256": "4e72df4b7932e5ed097bba1c9e02cf8a01c557bd75ff2a4b652498ecd46207c4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/kern/kern_descrip.c": {
+          "exists": true,
+          "size": 58507,
+          "sha256": "48006299c61b697c7342f2341cd867066f5ea5851efc174f93ce3aa284df4de1"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/kern/sys_generic.c": {
+          "exists": true,
+          "size": 17778,
+          "sha256": "532ff66e2560a93be706032fd5f69e1a1b69d57f165621ea66d3f3e0aea69514"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/lib/libkern/libkern.h": {
+          "exists": true,
+          "size": 14868,
+          "sha256": "a37db587647d65c466699a5d61177922dce4d24745aa66c3c62abeaacf2799b5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/lib/libkern/strlist.h": {
+          "exists": true,
+          "size": 2192,
+          "sha256": "f5b6e18b19c813c23bc15e7b91f96a20a98a0445735b6638bfdc7d2bf16ac71e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/miscfs/specfs/specdev.h": {
+          "exists": true,
+          "size": 8136,
+          "sha256": "78f26e6cf1e878e23255fed2f7d785f482081b5529076a6cdc1f970a9a782f70"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/bpf.h": {
+          "exists": true,
+          "size": 17876,
+          "sha256": "334282f1e4a784a3722a52c21fca356dbabeb66b00bf8d9037e47cb84e5c07d4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/bpfjit.h": {
+          "exists": true,
+          "size": 2452,
+          "sha256": "fe869b3738cad6740f2c5c03a6a1736980d8526c10d30bf2bf6617f5c3350fa1"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/dlt.h": {
+          "exists": true,
+          "size": 51927,
+          "sha256": "3d3cecfd204b2da6d299d7a0fbf9b60282f8072c65fabe0e235e2214e39d7f86"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/ethertypes.h": {
+          "exists": true,
+          "size": 17560,
+          "sha256": "1f4f815f601c70200a6e729f86be842ad5233790756515e048a5dc165e8d3195"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if.h": {
+          "exists": true,
+          "size": 48434,
+          "sha256": "ead9abd2d503a8a68988bdcacc9e3f5af7bbf999dd73c42a2d29791852a47553"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_arp.h": {
+          "exists": true,
+          "size": 6209,
+          "sha256": "6985ff1ea1bd1c09b11cd44b21e219a1b35850009d770497a3bbc9ec5b1c351a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_ether.h": {
+          "exists": true,
+          "size": 14088,
+          "sha256": "9d66751b0899f007a06f406f96b42ea5a92b2dcd4db4511b5bb6fa5fbcd27a2e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_llatbl.h": {
+          "exists": true,
+          "size": 10476,
+          "sha256": "63e5e2550b566a15fccb2ff7468420fa29cf491bc1c05f93822cd16d5f7d0ace"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_pppoe.h": {
+          "exists": true,
+          "size": 3358,
+          "sha256": "c33b1a836f52ce33dc6d911f34716ed51349894a5a5932cc3e1bf2da92cd2ca0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_sppp.h": {
+          "exists": true,
+          "size": 8415,
+          "sha256": "1e5bb2a85a5813ee2749924da503e1f2ecb7232c76e717a2050a6802cc2dfe20"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/if_stats.h": {
+          "exists": true,
+          "size": 4400,
+          "sha256": "2a12517c45041d86af64062dee8ac945c72c306bfab8e6ef6a6147a215f0339e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/net_stats.h": {
+          "exists": true,
+          "size": 3793,
+          "sha256": "06920283fec9625d2a568e4fb08ac8b61f6a3e63c9e9ae7573329b2815d184bb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/npf/npf.h": {
+          "exists": true,
+          "size": 9570,
+          "sha256": "2cce061af19439fd2e29bb1f96202f1eec7c7f5e79752dd8a69e22be32c1a3ef"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/pfil.h": {
+          "exists": true,
+          "size": 2917,
+          "sha256": "6d2ad7c8dce5919a00f6b23c9d968742562ec15a717003e940a3a49b27cb5272"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/pktqueue.h": {
+          "exists": true,
+          "size": 2580,
+          "sha256": "c785c21aba1a18161ca0f8260bdb5127164174a0323fae62c4bca52bd015a7b7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/radix.h": {
+          "exists": true,
+          "size": 6268,
+          "sha256": "b338d98b6432a98e135676a9d281222e7cbc6783d39c0deea420121b68ee9338"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/route.h": {
+          "exists": true,
+          "size": 19774,
+          "sha256": "f1903e7f406454e9aeb406753732b928f58fce99d887c88e8ae4096034c420a9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net/zlib.h": {
+          "exists": true,
+          "size": 48818,
+          "sha256": "8648b3655ead85a58edaac6add5d50f17e253b339c5123cd3b9c62d1965bb650"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net80211/_ieee80211.h": {
+          "exists": true,
+          "size": 10245,
+          "sha256": "879d607f87adbb72313911572bed181cff4e7af5f5f0da91a9d4af23fd4e3df2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net80211/ieee80211.h": {
+          "exists": true,
+          "size": 22914,
+          "sha256": "c1e81f8ec528417c69d9555da78a18331d626f2a1e8d416af061d881cdfc56af"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net80211/ieee80211_crypto.h": {
+          "exists": true,
+          "size": 9281,
+          "sha256": "9e5a097f2eb6e2af194e8f3da42e497512077b1415d79aac2e7cd27c1c16423e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/net80211/ieee80211_ioctl.h": {
+          "exists": true,
+          "size": 25128,
+          "sha256": "54dd4c0e162c7afc7ea82c3db9658aea601ccd4dc470f0140e266b5167cbc746"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/icmp6.h": {
+          "exists": true,
+          "size": 26332,
+          "sha256": "c46c1ef27b0db2c995b0bb8e62f4bcb4425e233b7a2a992c9dfbb52a91bfa7af"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/igmp.h": {
+          "exists": true,
+          "size": 5425,
+          "sha256": "52039f84c109532b551ba2b8f3dff6877a05ed9066a8aa57bb1bdf066f832f39"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/igmp_var.h": {
+          "exists": true,
+          "size": 5270,
+          "sha256": "ff89327420f4c7f3b41c13c2c9665d445a78d7dbdc2dbc4c960eaad227f9649f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/in.h": {
+          "exists": true,
+          "size": 17603,
+          "sha256": "6df1f6047acb223c15d2190c8d897b4f99c55e2da28bb6a6063a637883d292eb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/in_selsrc.h": {
+          "exists": true,
+          "size": 776,
+          "sha256": "e3db8d06ac66806d55254ed02363b760f58ae8227f23b14e1b9c6a17be94b012"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/in_systm.h": {
+          "exists": true,
+          "size": 2436,
+          "sha256": "e84ca5411b3b96fc4f6b3b4f7e30612485be942a035df5c2c8c56e9918018e30"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/in_var.h": {
+          "exists": true,
+          "size": 15808,
+          "sha256": "e9b456c00277f2af1419de31895fd4e8926a9e21dbd55f766a9ce4d327539aaa"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/ip.h": {
+          "exists": true,
+          "size": 8403,
+          "sha256": "2a3f34b88edf7a5de270a303356b50c9d79e545a7732e745813ba63649dab644"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/ip6.h": {
+          "exists": true,
+          "size": 9318,
+          "sha256": "081841f7b75c4aa3fd40ccd0c0918b9d50da394ead234797d6bc9edbe268cb1c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/ip_icmp.h": {
+          "exists": true,
+          "size": 10741,
+          "sha256": "7401d82f5204e6dda27c4ced35559957236309bda4fc7999968d31e99a11f201"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/ip_mroute.h": {
+          "exists": true,
+          "size": 12607,
+          "sha256": "ab8e3a8301e25bde1e599a5bec1bd7bc71788e81864415a4e852828c7d887fbc"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/tcp.h": {
+          "exists": true,
+          "size": 7666,
+          "sha256": "5f4b3488ffe73184871757593d7f774d2d8b47ea50324ecaf4278bcc2a0a0a15"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet/udp.h": {
+          "exists": true,
+          "size": 2494,
+          "sha256": "5bed5617a702301ded8909e33c7fc4ea237ebddb6ca6e7ff610838d8a21548f5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet6/in6.h": {
+          "exists": true,
+          "size": 26412,
+          "sha256": "efbc57398becbebaaa91c79732b72840c112368033f5901cdef0d8290bf3423e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet6/in6_var.h": {
+          "exists": true,
+          "size": 22867,
+          "sha256": "4e790b6777052e2c628de130269ba349811f3961b1b53509dd4a9bdd3ae75686"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/netinet6/nd6.h": {
+          "exists": true,
+          "size": 7177,
+          "sha256": "5d811a2ce5882d490c87e201954c455fbc91549444080cbf9f60463a981d33f9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/nfs/rpcv2.h": {
+          "exists": true,
+          "size": 4206,
+          "sha256": "87dfa82b4b657da6680e2d6d97996167395c7135204639ef32de9f9e10eb46ab"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/secmodel/secmodel.h": {
+          "exists": true,
+          "size": 2551,
+          "sha256": "4166e57b0aff8dcac421301f9322baebdb07a7d2fc624e96e21a67219351f436"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/acl.h": {
+          "exists": true,
+          "size": 15974,
+          "sha256": "e9e4fa64e494a07f49b6694ea56d16d43a69eaa2426dba83968353b9a5d94cf3"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/aio.h": {
+          "exists": true,
+          "size": 3979,
+          "sha256": "ba3c5f9adeb2a428447b2780ddd5ea076568ca4c668d42a0af5249983cf81618"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ansi.h": {
+          "exists": true,
+          "size": 3025,
+          "sha256": "36b4b96db8a35fbb77d0ea33f64869f5bc7953f45a92355156f8f3f19d98bde7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ataio.h": {
+          "exists": true,
+          "size": 1522,
+          "sha256": "f397cc11332545f9120f470053245cd0c1996991d7f5de790af2ccff87a8004b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/atomic.h": {
+          "exists": true,
+          "size": 22246,
+          "sha256": "cb10414243b3f76655e309848df34bc10205f2a9b1b4918c97e5d7a9cfbca303"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/audioio.h": {
+          "exists": true,
+          "size": 14091,
+          "sha256": "fd7697f8d46fa182fddc53a571e57a3a2b21c95f041520e24365d259f21a4d0b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/bootblock.h": {
+          "exists": true,
+          "size": 57615,
+          "sha256": "2c5a1b362fa48effeb2b682e219d20ef850e86b242bf57ec63c0f95f951fc870"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/bswap.h": {
+          "exists": true,
+          "size": 2962,
+          "sha256": "ce0f5588625102f159b1a48175b45d8a0b815431dc15bbe7562c4c9d01d75daa"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/bufq.h": {
+          "exists": true,
+          "size": 4799,
+          "sha256": "16a8c05989859d720b09ef16c46888394a09d8b64b614bfaa6df13efca0ef335"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/callback.h": {
+          "exists": true,
+          "size": 2370,
+          "sha256": "ef6e9f0eb1436b502cc4252dd24958c14a8a320296efb2c369c9f680961d14c5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/callout.h": {
+          "exists": true,
+          "size": 4337,
+          "sha256": "26be848560760a0538f320152e962642e1d19a119edddc898351d5a435aa3533"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/cdefs.h": {
+          "exists": true,
+          "size": 25475,
+          "sha256": "e9d20af9dd61673849afe8d5f20c1d025b72ba1a146d6ee67bc4824fc64399fb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/cdefs_elf.h": {
+          "exists": true,
+          "size": 8475,
+          "sha256": "13b0b627034d2b7e67a0785a53d64bd6b3d7022ae315de328892b2c9c5673341"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/clockctl.h": {
+          "exists": true,
+          "size": 2690,
+          "sha256": "4dabbd9a9173dfd289033078702519211d77556a0f6e114c4ece318a39929b4c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/common_ansi.h": {
+          "exists": true,
+          "size": 2823,
+          "sha256": "1dc8764131d28b69d590183129a1fbefe0ca7750b886474cafe90f7fe9dd115c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/common_int_limits.h": {
+          "exists": true,
+          "size": 4741,
+          "sha256": "5d9c9d5ef4433c899d18dd3d4326a68a6f3dd44f32553469db92ccbd188088a0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/common_int_mwgwtypes.h": {
+          "exists": true,
+          "size": 2783,
+          "sha256": "b104797b3cc3d3d03b20b2899e8ffa12bfe66f706264f2254d3a5cf4c3c69d83"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/common_int_types.h": {
+          "exists": true,
+          "size": 2315,
+          "sha256": "fd04b08366d797808f8030ce6d4bf9231f97e7c561420c5e8ba3954ba814c082"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/compat_stub.h": {
+          "exists": true,
+          "size": 11569,
+          "sha256": "63833cbbdba67968a333734aab42ee88aa419c4dc4e02eaa9747ca8891297c93"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/condvar.h": {
+          "exists": true,
+          "size": 2514,
+          "sha256": "1add5c0edb7b54c7a2fa1ada5581653ee5c356f687fa08450483a7ac67bc19f5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/conf.h": {
+          "exists": true,
+          "size": 10361,
+          "sha256": "e807490551586d5f4b4ebf232eb66513f0088b14fcd6e7c79e5b96530335ba02"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/container_of.h": {
+          "exists": true,
+          "size": 2964,
+          "sha256": "c170a397f0ef1ff1151639d3b9ed61f225a4d9e5c39b7ff7ca72aeed63884281"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/cprng.h": {
+          "exists": true,
+          "size": 2601,
+          "sha256": "18a884fb593368b160aa24dbab538b21bfcb913255ad8537fba64ca4ca1268a4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/cpu.h": {
+          "exists": true,
+          "size": 4612,
+          "sha256": "9ca10554b793cbee4ab728771aa1a7b93c6c24af294680ae920d4b67484342bd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/cpu_data.h": {
+          "exists": true,
+          "size": 8636,
+          "sha256": "ca7d533b8dc28ae3181b7ac57478a6ea7fb81192a6639a1e50cea7039a0ffdbe"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/device.h": {
+          "exists": true,
+          "size": 25259,
+          "sha256": "f300af3e39f23fe07de4a1bb3840d4ec1106ac0c6169c057d6f69740cd3028ec"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/device_if.h": {
+          "exists": true,
+          "size": 615,
+          "sha256": "2fcf7e60b20b07471049bdab4b1127e203021ba80686e005b5511a1b7f118d76"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/dirent.h": {
+          "exists": true,
+          "size": 4846,
+          "sha256": "27c71c5cf169aa2cf1b7a5b0421fd3d61c58a990a192e01ed453050ad6460b18"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/disk.h": {
+          "exists": true,
+          "size": 18708,
+          "sha256": "22db813b67133fee9be8389a9a1c55a6db6f01a1963248cc291335f65427f4a5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/disklabel.h": {
+          "exists": true,
+          "size": 19290,
+          "sha256": "7f8acab9ebbdcd03506ebe10efaf707ff7f6a01e942f06903fd2be1cc0f2e391"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/dkbad.h": {
+          "exists": true,
+          "size": 3352,
+          "sha256": "5a0d0ea5968f313214172e2bd7ed39b0f75d4c252de822664fc63d4b307f03cd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/dkio.h": {
+          "exists": true,
+          "size": 5835,
+          "sha256": "89cf2399402caccedb7acb6c9e97ed194a89a276572a4228da312eb7fa828de4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/drvctlio.h": {
+          "exists": true,
+          "size": 3671,
+          "sha256": "c6d74077a987eb748256944510755b5c5cfb148054386965c52a6902cbd19960"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/endian.h": {
+          "exists": true,
+          "size": 9639,
+          "sha256": "26f6148375ad0d629f4b360afb55f75321e0c15851916aff29aab88d08ad73a4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/envsys.h": {
+          "exists": true,
+          "size": 7129,
+          "sha256": "22ee85c395a06a59a50488f77e71133ef854bda290af1a2c8d20c6d1b6c5e220"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/epoll.h": {
+          "exists": true,
+          "size": 3413,
+          "sha256": "953dc57728f310baefe83f135250d0c1eea111cf98cf014ee405e9e32838aa3b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/errno.h": {
+          "exists": true,
+          "size": 8148,
+          "sha256": "fa66e824fc276959fb9fd3904d9f31f4994d1761059162e2a43381b25210254e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/evcnt.h": {
+          "exists": true,
+          "size": 6341,
+          "sha256": "df111949bb79b72d057e332acc3f9894fe4f98099f4b934d68ea4dcc20c01727"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/event.h": {
+          "exists": true,
+          "size": 11972,
+          "sha256": "440531e1e31e43aff8ffd9fde7c7ba5d42162404d30d81ad261059607368587e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/exec_elf.h": {
+          "exists": true,
+          "size": 54581,
+          "sha256": "b8fabbdff0c38ca9a512647251f785062c0346326120fb6d338a022736ac1018"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/fcntl.h": {
+          "exists": true,
+          "size": 13867,
+          "sha256": "4dde740c500b7f1a7da5ce6b2c3430c306586646487ac97db1812727670d282c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/fd_set.h": {
+          "exists": true,
+          "size": 3629,
+          "sha256": "1be2332e27f0be9bc0e9b9eac683da987c5eb88a31db0a934dd060eed96efa46"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/featuretest.h": {
+          "exists": true,
+          "size": 6037,
+          "sha256": "19805c35b9c65b8b54713221a753ff0a3b7cedd8d02904bfa08199618345c5cd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/file.h": {
+          "exists": true,
+          "size": 8970,
+          "sha256": "a6019f187474dddf7eac80eff44ea652fc9d3bb43459d076bbf106c5bac69a4c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/filedesc.h": {
+          "exists": true,
+          "size": 10245,
+          "sha256": "3ef72d7490544b5cd806abe869e80a03ba0414f9b621b0351b26587ede81a72c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/filio.h": {
+          "exists": true,
+          "size": 3173,
+          "sha256": "0a0e3c91ae8841974d6d02c05bd26db22ec392fcb7b2c259a08b7ab158839e1a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/fstypes.h": {
+          "exists": true,
+          "size": 10405,
+          "sha256": "ce257d9f20ac4d6111f4ccd81986805eb14348e4948d23d50c5240a6a0e70a59"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/hook.h": {
+          "exists": true,
+          "size": 2030,
+          "sha256": "8bd0318431af59d3b234ff7769781947f7f26c0393ed308860630136fa4881fa"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/idtype.h": {
+          "exists": true,
+          "size": 2663,
+          "sha256": "ef6c2d03ac9738f96f926259a898fa50efdf88acfc34ae01a90ea5c83035f414"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/intr.h": {
+          "exists": true,
+          "size": 3088,
+          "sha256": "987674daa30597a387a1adf7038339bd5149c2e1045ce5f85c0fc95af0a64622"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/inttypes.h": {
+          "exists": true,
+          "size": 1852,
+          "sha256": "705956a88979e79db4b27a34d5b45411cc19fff7ae1d3a1b26b768d066dee7b7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ioccom.h": {
+          "exists": true,
+          "size": 3637,
+          "sha256": "50b0ea9c39db131acff2b1fe12dc5228ba795764436b62455786720b24e7f8ca"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ioctl.h": {
+          "exists": true,
+          "size": 3977,
+          "sha256": "d39e75946480ce6a854b4a0cf440c4869b80a36b47061a1e3685c2a7561844f1"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ioctl_compat.h": {
+          "exists": true,
+          "size": 7012,
+          "sha256": "ab8d4837613af4a3732f474702a40346851556ed663eb005e7df4bd866582b77"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/iostat.h": {
+          "exists": true,
+          "size": 4428,
+          "sha256": "0c553778ca9834f4d6eaeb27bc4ceec9f015f8620ce795124fe23c35ac50c502"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ipc.h": {
+          "exists": true,
+          "size": 4747,
+          "sha256": "02c2a2446c0bf089f5df681352914fc4ae97d31af8d62fb677197fb5ba85fb30"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ipi.h": {
+          "exists": true,
+          "size": 2825,
+          "sha256": "d3a0bca84e77776609c56e03de8ff7bfaa5117e92b71a0acfc2b06c5ff7fd33f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/kauth.h": {
+          "exists": true,
+          "size": 17173,
+          "sha256": "deed086b5eb9d96639f444f53a10bd381d27f0a590a012c8a86dab3dd8a14ad0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/kcpuset.h": {
+          "exists": true,
+          "size": 3323,
+          "sha256": "fdec7e1c5491f172e2a518990bd9b0ffe4092ab6ee518dbecbad80ee9332b927"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/kernel.h": {
+          "exists": true,
+          "size": 3006,
+          "sha256": "9962fbd0f69c4fe8d3c3228b40eeaa18d761d9c218dee772762d6f4b68c525b8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/kmem.h": {
+          "exists": true,
+          "size": 2332,
+          "sha256": "300750aff2d57e13beaffab90d7342dd3549f3f3ca98bf08c0e58013b048e870"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ksyms.h": {
+          "exists": true,
+          "size": 5257,
+          "sha256": "f512fb37890bc1be97d6869ee4c58c66fcb9d9ffcebbf5b56685d11f9bc9e6b6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ktrace.h": {
+          "exists": true,
+          "size": 10997,
+          "sha256": "c9b3b073cf63a395e6568fd0d99f49e039f650eca986b851d83bd3368a08a34c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/localcount.h": {
+          "exists": true,
+          "size": 2312,
+          "sha256": "474ad3e230802b7cf3464b5e56f41aff38ec3b086a4fa712f4d66b58519324f0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/lock.h": {
+          "exists": true,
+          "size": 2677,
+          "sha256": "feaeb84835876bba5b25b14c11de8fd5c7b40fc4ce0d636898f64630c31470d0"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/lwp.h": {
+          "exists": true,
+          "size": 18644,
+          "sha256": "d80440b632b71c2ee73e7963b1ac346094ed3627189931297e59944ce7904fc4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/malloc.h": {
+          "exists": true,
+          "size": 2808,
+          "sha256": "da963bae38326a6b3fbc13fdfc9d2e35043e8024375443a298657c3cb6db6fc6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/mallocvar.h": {
+          "exists": true,
+          "size": 2254,
+          "sha256": "eac135bdf91ee4b540ca1fdedd74fee816e3de6d58982aebd783f2e659c4157e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/mbuf.h": {
+          "exists": true,
+          "size": 31776,
+          "sha256": "31c5f3c8b25c991e9bf7fc3cd4fe59dc71aa2499620846bde76eb623fc39e6d6"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/module_hook.h": {
+          "exists": true,
+          "size": 3626,
+          "sha256": "65d80119056191df5bc0f4711a9bcf356657b1b9ac8ecbbf0d0b43ba2a6beb29"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/mount.h": {
+          "exists": true,
+          "size": 20268,
+          "sha256": "030d4e7a43854b5217be2bf37701daae900e40edeca54cdda3654d05b36327d2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/mqueue.h": {
+          "exists": true,
+          "size": 3848,
+          "sha256": "5c70fe9888225593193d2b6517c282312d74d9c8437d622a921d5aab059f9380"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/msg.h": {
+          "exists": true,
+          "size": 6969,
+          "sha256": "22e398f1011b5d5c22b0afadd32531ebe7ef03b875a165bd51366130927ea588"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/mutex.h": {
+          "exists": true,
+          "size": 6458,
+          "sha256": "e85eb669cf3052fd3fcb8212ed25176a43b846e6457e47a1199ab344e9f75347"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/namei.h": {
+          "exists": true,
+          "size": 14513,
+          "sha256": "5280821a1a3ad8decc70764253967d182eca9ff7b411e89490119f05f2486c09"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/null.h": {
+          "exists": true,
+          "size": 454,
+          "sha256": "e4f30dc61d62607a84c8b11b679f6fa1231134ae8cc3de356770f60c92b8276e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/param.h": {
+          "exists": true,
+          "size": 18175,
+          "sha256": "d4f0dc1f4e63a723a880dc770895af177505605a107fe1bbb98a51b3f6a6f777"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/pcu.h": {
+          "exists": true,
+          "size": 3069,
+          "sha256": "d0f2154fcd1ec77436fa36b33f0848c25edb58dc6052fb3ebe465d3c698cfe7f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/percpu.h": {
+          "exists": true,
+          "size": 2195,
+          "sha256": "24c8c0e3c5580261afd2d4c87a9b850e23e9ebc733d0ad11847f57b20aae159c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/percpu_types.h": {
+          "exists": true,
+          "size": 1679,
+          "sha256": "585aee0ffdc8e68ab2197e9ae711ee757216a1b1425078b3e60c66c153433c8e"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/pmf.h": {
+          "exists": true,
+          "size": 4634,
+          "sha256": "e4d746812d1577cdac3e6a588e0dfa486d9af13a1a0870ee117358d48d9d92ab"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/poll.h": {
+          "exists": true,
+          "size": 3197,
+          "sha256": "f0acb4977b18a98ac63321933d2f0ec6e78b08ab8ef7700f28a739b92ba5b604"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/pool.h": {
+          "exists": true,
+          "size": 12177,
+          "sha256": "c7c881e89de6990b01aafdf3390b8d6a470d7b327c531080622b0aa9c541de16"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/power.h": {
+          "exists": true,
+          "size": 9686,
+          "sha256": "84de890f64ed1035cb965257d8c79f76edc59f2616e9408c927a54fef26542cb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/proc.h": {
+          "exists": true,
+          "size": 23053,
+          "sha256": "52abe4719189b14376b4239a2884e1c50cf61d3cb5d9766abbb93b68ec4f6f4c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/protosw.h": {
+          "exists": true,
+          "size": 16425,
+          "sha256": "76819ec7c02cecc1f96064562156e568abeb0a52041a49995353c0abed5329b2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/pserialize.h": {
+          "exists": true,
+          "size": 1955,
+          "sha256": "25ae9ca85e3aa75f92093761755fa4ff0942f15347dd50913dbd211e85fffb5b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/pslist.h": {
+          "exists": true,
+          "size": 10291,
+          "sha256": "b791fa2c90bdf92825c7573ffc7eab78a10b2e109695fc011cb91a4b47064e12"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/psref.h": {
+          "exists": true,
+          "size": 4235,
+          "sha256": "fff94f4c691a8cb2a898598ea9c3905be31ae8a0ef2ca768c4c7f831564d2273"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ptrace.h": {
+          "exists": true,
+          "size": 12204,
+          "sha256": "8a23ccbff56ba9403d462b05dc1b3ff83f84533d5fd3e6e92cd8039f3fe3e4c7"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/queue.h": {
+          "exists": true,
+          "size": 22568,
+          "sha256": "fd5cc829362a29cf3dd7a837cc07b68a9e50832af82248492ec8955aa9d3b262"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/radixtree.h": {
+          "exists": true,
+          "size": 3304,
+          "sha256": "42a11b93ebf6296287536d086d32bb23f14b2f595046198ca8f8d026f5131fae"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/rbtree.h": {
+          "exists": true,
+          "size": 7943,
+          "sha256": "9e4187e2f3a9cbf269d7025aa9a94a1f89c616f71cb43a0cbc766fb26166a526"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/resource.h": {
+          "exists": true,
+          "size": 5156,
+          "sha256": "c0e9014f3e604f89355ac9f5cee2af341885c9489f85400286806fddb5c0b455"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/resourcevar.h": {
+          "exists": true,
+          "size": 4502,
+          "sha256": "c10a203cb07340983f05640925d595f4ac1d338af0ac8b1d45ae05872367effd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/rndio.h": {
+          "exists": true,
+          "size": 6084,
+          "sha256": "66b80b3028e6c21af37821652fc5589361f32b9ac6f1585de754bf0beb588c7c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/rndsource.h": {
+          "exists": true,
+          "size": 3714,
+          "sha256": "a09993efa010066c5804a4334b60d6f5fad124ed3f798745828df67874b40cf9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/rngtest.h": {
+          "exists": true,
+          "size": 1901,
+          "sha256": "2b1f8d7bd2688e4dda57e867fd4a3f4e4c5fff47f874049405bf420c8c872bae"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/rwlock.h": {
+          "exists": true,
+          "size": 4140,
+          "sha256": "04e5a4824f71a88e638b861f69195c0f295a4b0fbe80894571e8b693338be5e2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sched.h": {
+          "exists": true,
+          "size": 9992,
+          "sha256": "b0764bd2e1e944bb0b2aff79f19090c50748c952c2b1bf70eebf8436f708a536"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sdt.h": {
+          "exists": true,
+          "size": 21406,
+          "sha256": "942746accf3eebda6372d4354111c4091c739cc9c49a3f0e000c430be8e84d4b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/select.h": {
+          "exists": true,
+          "size": 2954,
+          "sha256": "af2c91147632fbc120e60b7b68cef464af43727506086bbc24f1a93dadbad241"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/selinfo.h": {
+          "exists": true,
+          "size": 3940,
+          "sha256": "aede2bc21dd1a9cec98ce6b31bfd402cc496207a9e4af03504b8389acc88cbbe"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sem.h": {
+          "exists": true,
+          "size": 7222,
+          "sha256": "b4f590f54e847b263dd6aedc76ddb9d9c8a57b6b6b50aafda464da8588621004"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sha1.h": {
+          "exists": true,
+          "size": 950,
+          "sha256": "d31b437a97677ca3fcd9258d2470b2614893f82c72d8cf4e61e16919e8a4307c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/shm.h": {
+          "exists": true,
+          "size": 7423,
+          "sha256": "37a0bcf3d73d76b4c8a1709ebfac958b737e2cda8e89a5bea5e1b45fdc66bb66"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/siginfo.h": {
+          "exists": true,
+          "size": 9157,
+          "sha256": "9276650daf72af7129e513f03aef65d8205915e2f95d4f5e1c8b51b7504e4541"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/signal.h": {
+          "exists": true,
+          "size": 12698,
+          "sha256": "b2e5eff9ea07a12e1c81bc5e8ef0149c83242fcbfeb978a8c92ac73bc2c3eaff"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/signalvar.h": {
+          "exists": true,
+          "size": 10286,
+          "sha256": "c858ad0d15881eefa60f40e5ee4ac0bdd91afe578dab1a3fbe6c528270a79272"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sigtypes.h": {
+          "exists": true,
+          "size": 4705,
+          "sha256": "37d8bba577d5aa3658a54512e2ef321f896b9880956ecb3d7a7902e068c34561"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/socket.h": {
+          "exists": true,
+          "size": 22615,
+          "sha256": "89811befa6504aadc1cc572fed4373c4f3495e24676308e09d7dd9c32e5d6588"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/socketvar.h": {
+          "exists": true,
+          "size": 20823,
+          "sha256": "831ea722b2da67395a12315037173d321b9cc10404a6e4983d46190bb7815031"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sockio.h": {
+          "exists": true,
+          "size": 7510,
+          "sha256": "2966bc828cd7c71e1b930aa98fca9f6f4c76f9e0c6042bdf2d26569f980ec69d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/specificdata.h": {
+          "exists": true,
+          "size": 2920,
+          "sha256": "eb3d8d93d39e144da02c33d36d3f146931a640fa7b0572a76ba869996f698d28"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/spl.h": {
+          "exists": true,
+          "size": 2397,
+          "sha256": "bc2c7560c5492efa6c0833f32e207f9e4cae58d857c0dee6f28bab019149ac31"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/stat.h": {
+          "exists": true,
+          "size": 11094,
+          "sha256": "19f5223d4ef14589810543f443a1d4fcd06aefdfee5416bd867137ad5cb4431c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/statvfs.h": {
+          "exists": true,
+          "size": 6193,
+          "sha256": "56fa79c0b5f8e5d2908e120bafbc8817cab970edfadbd3a5713488640ef425a9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/stdarg.h": {
+          "exists": true,
+          "size": 2796,
+          "sha256": "5d3702b3907a468c94370f2d9920f3ed62fdef167acdd004fd7581d49e8b6531"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/stdbool.h": {
+          "exists": true,
+          "size": 1844,
+          "sha256": "64fab94a25a32c2f5ee53acd2ce642aa2ad59302ee0d067265d8fdf9c6c575ee"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/stddef.h": {
+          "exists": true,
+          "size": 4611,
+          "sha256": "0295a8674bc18ace3c8fe70ce93f95c9e941b11c1eb3bd84ddd291ce126df938"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/stdint.h": {
+          "exists": true,
+          "size": 2834,
+          "sha256": "26a9a000cee835449d7b266ed88ef630618aef613770721b036bb44ea95875bd"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/syscall.h": {
+          "exists": true,
+          "size": 50928,
+          "sha256": "c1e80db5b7bae03f0ac753f17ae8a02b547bbf2f90a5c19c79aa4834481ad552"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/syscallargs.h": {
+          "exists": true,
+          "size": 118044,
+          "sha256": "49e937b9f5d270125c587d537f97b8d01620c6ae04d428f9975a0f2ee463b679"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/sysctl.h": {
+          "exists": true,
+          "size": 48530,
+          "sha256": "f03b147caf311be6429c83d83346f5cb52eb4708426c55c66041bac6b6275cf2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/syslimits.h": {
+          "exists": true,
+          "size": 4061,
+          "sha256": "a34450eae0b8efafad2d11e6cddf81654b68339435c0d5d52e153c8920decdac"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/syslog.h": {
+          "exists": true,
+          "size": 8898,
+          "sha256": "746d75b10bc1afb2e9bc03cde48a68f6408689878e20d5208237356d62973b2d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/systm.h": {
+          "exists": true,
+          "size": 24645,
+          "sha256": "78ab1169256f595aec8d003d6b35f9ef13cc107287d01aa0e9c14cc5778bd63a"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/time.h": {
+          "exists": true,
+          "size": 10050,
+          "sha256": "0c44e2c178d0094a7f1181db6b0851ebc48836c0fdf626f0f6a1383d7f20ca48"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/timearith.h": {
+          "exists": true,
+          "size": 3560,
+          "sha256": "225356718d75356370e04646edecaf1de3c35e1e9d6d2ba07cbb67751f00ee2c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/timespec.h": {
+          "exists": true,
+          "size": 2090,
+          "sha256": "fa13b303794e991462a5e9d86363d0c7782ff3e063c0689c9d38b752069ead31"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/timevar.h": {
+          "exists": true,
+          "size": 9656,
+          "sha256": "8ef0835f921d24c78b7b0073706d58dc3bcb865c701995e9a9f27cc9581af772"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/timex.h": {
+          "exists": true,
+          "size": 9255,
+          "sha256": "d483c1509734e51ba410b05b465e96ea8995bbb0cc6a02ff5b97cadf80201427"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/tree.h": {
+          "exists": true,
+          "size": 25601,
+          "sha256": "333d72ed9e7557a2cb05ce7db28524dac5132da0613b01ec3544a40861207fb8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ttychars.h": {
+          "exists": true,
+          "size": 2567,
+          "sha256": "dab85082ef6aa18fe5786315a194b3aa682b7f219c3e2c0266d109c04f4d9321"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ttycom.h": {
+          "exists": true,
+          "size": 8161,
+          "sha256": "84bb4a81daf93a9ca7c2ed32f624437b0a8e47e8cba941ed3f4da9cfe24cf53f"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ttydev.h": {
+          "exists": true,
+          "size": 2154,
+          "sha256": "25255ea7dc50863cb871108af7144521b233eccc4fb9defccd74f1268b348011"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/types.h": {
+          "exists": true,
+          "size": 9839,
+          "sha256": "e768402e74898e597a4e1ecf82175c54c69ac334ad8d7d9140aa1cd437d5a163"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ucontext.h": {
+          "exists": true,
+          "size": 3825,
+          "sha256": "37afbcc775226ec77d2d2d049a3ce88f0bd4231a9cd5893f0b241be7034ffe3d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/ucred.h": {
+          "exists": true,
+          "size": 2180,
+          "sha256": "f5361d1544484c4d399a977d42c57fc60858c52cdd7d4034f313a9b7b5caa9d1"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/uidinfo.h": {
+          "exists": true,
+          "size": 2341,
+          "sha256": "c2bfb51097f916e6cce41f02cc262c985ad6b26b4fb354e1db5dc15c43e469e5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/uio.h": {
+          "exists": true,
+          "size": 3554,
+          "sha256": "c898602e50b402568bce7064444f8e5485617bdeefcfa26acbe4d970b0257b6d"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/unistd.h": {
+          "exists": true,
+          "size": 11817,
+          "sha256": "57b1adf205e2dc9e27bd3437bde3ae283e869c2750dfc194c8b5eab77fc58dd3"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/vmem.h": {
+          "exists": true,
+          "size": 3796,
+          "sha256": "a2ff49bdcd23b639859bcdeaf5c390bc30331147f6fc706894edefbad4ff31e2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/vmmeter.h": {
+          "exists": true,
+          "size": 2482,
+          "sha256": "50872db8034135ac5cec0546259d41e4ccd189df1f2400ca7f169b3b111a457c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/vnode.h": {
+          "exists": true,
+          "size": 23668,
+          "sha256": "eef494ac4351b5e8fdf180fc1eb4eb3288707fbb86bef60bf4cdbf60ff9fe346"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/vnode_if.h": {
+          "exists": true,
+          "size": 17634,
+          "sha256": "6fb01444a08b96528b064111b048dae54774549379cf129529e19cbdb24ae981"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/wchan.h": {
+          "exists": true,
+          "size": 1684,
+          "sha256": "2051d979478dd1965ffbaa1b1ad39552d255a2014811c15b800e355ee29e87e8"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/wdog.h": {
+          "exists": true,
+          "size": 3865,
+          "sha256": "9da5094b19f9faf7e9db547c420ea12f1d98bf88a0c5a39a4322ced0a07589e5"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/sys/workqueue.h": {
+          "exists": true,
+          "size": 2197,
+          "sha256": "ea7bcfc7e639d0a170411f951c66966cef9b33cd9d13422411f19eaac76284da"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/pmap/pmap_pvt.h": {
+          "exists": true,
+          "size": 1854,
+          "sha256": "265b8534f0b4185981e4baff19e17e9936e33d4036006aa760a03d5b9dad07ed"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_anon.h": {
+          "exists": true,
+          "size": 3480,
+          "sha256": "beca55a981e1c7c1c5ce2c24e61bb46a408866c067dc1c9b9e63176de81895c9"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_extern.h": {
+          "exists": true,
+          "size": 27610,
+          "sha256": "14d6eb1c13d7b6e9f182d8c5043a719df8152858b2b3991120114ccd7867a5bb"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_map.h": {
+          "exists": true,
+          "size": 12065,
+          "sha256": "a7caf1e149874521e7fbc09483ad17d8ae72fda08b9b366a35c84f3f25c92a3b"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_object.h": {
+          "exists": true,
+          "size": 4666,
+          "sha256": "ed5aa82e0beef960ce9ec3416d462a4bbdfd42b04d4ff14b110887b2846a2077"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_pager.h": {
+          "exists": true,
+          "size": 7561,
+          "sha256": "89d472b83a9249cce27301500ffc1d313f2454c7ad0375abe573a19584d481f4"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_param.h": {
+          "exists": true,
+          "size": 7154,
+          "sha256": "92ed097515a6bc6d7658619b9b8c54549bcf94c9731aa42bb67bd44a704d09d2"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_pglist.h": {
+          "exists": true,
+          "size": 3531,
+          "sha256": "2d2b9e750cb7b3187b4166bab511a35bc02b7b5c7ad772518bbb1b65cc94ac41"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_physseg.h": {
+          "exists": true,
+          "size": 4977,
+          "sha256": "a96b14ddedbdf79cc78a5068a52292dcba7abb7da76db2e5dc3e0357afef0e5c"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_pmap.h": {
+          "exists": true,
+          "size": 7446,
+          "sha256": "2f17f70fd1a5a3ede0e3761d1ac3d22293cb4daa8d2d2d7978f03a726d58d769"
+        },
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/uvm/uvm_prot.h": {
+          "exists": true,
+          "size": 3676,
+          "sha256": "9bd31ff993ed46578faeb21045333db4186010c2310d73cd0f1c59cc028852e6"
+        },
+        "/netbsd": {
+          "exists": true,
+          "size": 27252768,
+          "sha256": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/Makefile": {
+          "exists": true,
+          "size": 252564,
+          "sha256": "ffa140e1552a45d2cf15c6f312290668b5a6b4635c1266498f59f75f6b96a1e8"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/kern_descrip.d": {
+          "exists": true,
+          "size": 11497,
+          "sha256": "54e90c7846ee70e619c5819cfbc04dd2dadaea68056896c0d0c3a425e58f85f5"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/kern_descrip.o": {
+          "exists": true,
+          "size": 312720,
+          "sha256": "afb1c17e061133320d33a264f04000c6228b9a91d8635eef9169a3b0bc1415df"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/kern_descrip.su": {
+          "exists": true,
+          "size": 4534,
+          "sha256": "550cbb686e33ef6cced4b42cd21a6a37d98c8cd83177440ec288dd6b8a6fe721"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_anon.d": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_anon.o": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_anon.su": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_fd.d": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_fd.o": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/linux_fd.su": {
+          "exists": false
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": {
+          "exists": true,
+          "size": 269,
+          "sha256": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd": {
+          "exists": true,
+          "size": 29652840,
+          "sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.d": {
+          "exists": true,
+          "size": 17395,
+          "sha256": "13eff355504a2239e713942fb199064cad20bca4541ae321ca00748b21f5f4d9"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.o": {
+          "exists": true,
+          "size": 373464,
+          "sha256": "f32d91e54aa9f10a6c38da521fbb6d92bdfa1a7712173887e93970faba8923ff"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/netbsd32_ioctl.su": {
+          "exists": true,
+          "size": 110,
+          "sha256": "315d6c13456d9e51a3567c8f151e3714bb6a85ad930ab0f6044a2e4cf26e121f"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_altq_enabled.h": {
+          "exists": true,
+          "size": 265,
+          "sha256": "f5b209dc2b180ef5d5d98d56023631a54566a86607725327fb8b21ad88605361"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_43.h": {
+          "exists": true,
+          "size": 269,
+          "sha256": "a380d46c1d59a3167833535449bfb03a03ae8ee0a9905af3e76cef23d59d7752"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_freebsd.h": {
+          "exists": true,
+          "size": 335,
+          "sha256": "148fe1c65090aec26b93ef488386917300522fe5427fc69d946338ebb560d5b2"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_netbsd.h": {
+          "exists": true,
+          "size": 5660,
+          "sha256": "d18fc0d7e4e0ae0d5ab97bdf9eff3bc9eeedc233b06a19dc99fd0c578aefa76a"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_netbsd32.h": {
+          "exists": true,
+          "size": 311,
+          "sha256": "656c8ae56e1d721962062aa7f953639b4341f7f608a595205582fa7379f0dd75"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_sunos.h": {
+          "exists": true,
+          "size": 321,
+          "sha256": "dcfe2c5cc1eb188e9c3dde4d0a01d6c2c4035e47b0248da4567e8d90d1bac487"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_ddb.h": {
+          "exists": true,
+          "size": 576,
+          "sha256": "7f69a89f624a8edd28a57450a28e1f7f89a9bcab751e2bb70e1e25a0d5aa3d1e"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_dtrace.h": {
+          "exists": true,
+          "size": 297,
+          "sha256": "249d53a25c394fbc0b6f6cddd25c8ef0c8f5d9b7b6438258cf99aa8047298496"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_execfmt.h": {
+          "exists": true,
+          "size": 2067,
+          "sha256": "1630b01ecd80019a4a3cddaeab97589111ddf7aa3a0a355d1b8c9764843f6018"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_gateway.h": {
+          "exists": true,
+          "size": 286,
+          "sha256": "c55480df7ff95d415eb26b83da164f238c482532e272068d9f5d08d7f81774a7"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_gprof.h": {
+          "exists": true,
+          "size": 272,
+          "sha256": "af363c696240f98ddeca565917743dc2e6487ea1e4f4c9a546c58bf36cb9d9c3"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_kasan.h": {
+          "exists": true,
+          "size": 586,
+          "sha256": "8d4f77b078f1f8b4cf5868a239eb841d95eb931ce4a13d09724332a1e2bc882e"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_kcov.h": {
+          "exists": true,
+          "size": 265,
+          "sha256": "badc439da1579097be693b7298853a827962b72dccf38cce551b892016471717"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_kcsan.h": {
+          "exists": true,
+          "size": 586,
+          "sha256": "64fa52f8ffca0aed8c94a3a4dccf6eeb47bfd667119cdd000a288a6dde2ef044"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_kmsan.h": {
+          "exists": true,
+          "size": 586,
+          "sha256": "3f67a89b36d3f33854395f09113ecdf4eb28faa888a17ac74e5780ff65702c6a"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_kstack.h": {
+          "exists": true,
+          "size": 363,
+          "sha256": "182e3f029b9f287a621af4db3e5560a4847db5b581c2af6c48a15d3031b3dbe3"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_lockdebug.h": {
+          "exists": true,
+          "size": 300,
+          "sha256": "2a1f4ecd8e524508bcac4b1d0740879bc6505537e73b0e0ed3d426b8f3f75bb6"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_maxlwp.h": {
+          "exists": true,
+          "size": 279,
+          "sha256": "644fa3a0b728c6cadad1589dd12996a5c87d96623e05ca553e7c14863d5c9fea"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_mbuftrace.h": {
+          "exists": true,
+          "size": 300,
+          "sha256": "0457c86f193b3b65880866dd1d673b61bcfa01d84c792e4333db8ac5b2ef0f35"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_modular.h": {
+          "exists": true,
+          "size": 1495,
+          "sha256": "1a0d1d0c984a026f009d81a4ecf1c1e96820ff49e802ac159c83243015a7e0f5"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_multiprocessor.h": {
+          "exists": true,
+          "size": 304,
+          "sha256": "b3491934365ca01ea0512f93bba151e7c497fb2bd924f20af57feb7ffd3f906a"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_net_mpsafe.h": {
+          "exists": true,
+          "size": 307,
+          "sha256": "6f1221c70999e01be2437d3d85b53693ee6664a0f6ce0a14aa3115e013bd787a"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_ntp.h": {
+          "exists": true,
+          "size": 820,
+          "sha256": "684bb039012602bd28418a117e703a062d3121296e21e57729ece20b2b11da6f"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_param.h": {
+          "exists": true,
+          "size": 572,
+          "sha256": "98c119e2a46dbf5eae3c9e35f9ac8ac590dc5b81ede148de4cc8591179e7c479"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_pool.h": {
+          "exists": true,
+          "size": 663,
+          "sha256": "18d8c343c028ce9fb443d51b8654679e8e08eab1eca94138f150b80ec45e672a"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_psref_debug.h": {
+          "exists": true,
+          "size": 314,
+          "sha256": "6ee543b802bec02d1b16cf1111a8f8aff0f9fcdeebd11c5629caad8ee3510a89"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_svs.h": {
+          "exists": true,
+          "size": 227,
+          "sha256": "d3df8c65d913b59c6af89fcaffc1e256ce582bb804c83863896fc7490d3f5fe5"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_sysctl.h": {
+          "exists": true,
+          "size": 1861,
+          "sha256": "3a21fa32099d7f196b00a473b0b5ceab2d813605d39b95d9eb14c191470c316f"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_syslimits.h": {
+          "exists": true,
+          "size": 545,
+          "sha256": "9a177977f5093f1ff1cea5f8243891654cafccdba9a592bd35bdd5171a27f98d"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_uvm.h": {
+          "exists": true,
+          "size": 1019,
+          "sha256": "0ce62aefba3375b479c3c1417e6eaefd2f9abe45dbb4814ece7ebb38bf797088"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_uvm_hotplug.h": {
+          "exists": true,
+          "size": 314,
+          "sha256": "8f79cf988fe6429f5269eab6ea80f7b7222ee233a2de9e0623b7c5ec6515e265"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_vmswap.h": {
+          "exists": true,
+          "size": 653,
+          "sha256": "86dc122b75a8eeb99648b8d61c8173c3036cb427f93ae103cd001e524ff95a6b"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_wsdisplay_compat.h": {
+          "exists": true,
+          "size": 4580,
+          "sha256": "d23e5e71a941ef89e015c5d419f03b19b4334482d2bc9297f48ff9aeda95e761"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_xen.h": {
+          "exists": true,
+          "size": 1361,
+          "sha256": "e7297f74097594b372389aae9ca81d49f5a5b79accffb4e09c6c91c8d155a0fa"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/sys_generic.d": {
+          "exists": true,
+          "size": 11646,
+          "sha256": "473223d10e46b8491bd95de666bd0f86981072a07f85816316704828733ffcad"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/sys_generic.o": {
+          "exists": true,
+          "size": 200928,
+          "sha256": "5232ccc0da7fd4cce0f1cd9cc7ca6969d0c69e5609bde5994401d0e457b021d4"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/sys_generic.su": {
+          "exists": true,
+          "size": 1011,
+          "sha256": "5ee7278991f794f1f95e0904c758c42bf20dc26a965f27e305b43a889ee1b935"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/nbmake-amd64": {
+          "exists": true,
+          "size": 1495,
+          "sha256": "dda9680d9b13eb34abc0107adcccbaa9ff505a74cd3114bbc26a22f4c91cd5a5"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/x86_64--netbsd-gcc": {
+          "exists": true,
+          "size": 1485848,
+          "sha256": "34e3b5d21de6047acd46df0d5c52efe677eed51a028bbc6218f7f1cd4ba4a4f5"
+        },
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/x86_64--netbsd-nm": {
+          "exists": true,
+          "size": 1276168,
+          "sha256": "8f8237f0034793e4a0c82864cec0006f42cd7e1f7abde1283cdfe405669cc8ca"
+        }
+      },
+      "archive": {
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz",
+        "expected_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+        "identity": [
+          43009,
+          26597691,
+          680758467,
+          1793922309328247646,
+          1793922309328247646
+        ]
+      },
+      "provider_pid": 4588,
+      "provider_started": "2026-11-10T07:00:47.025605+00:00",
+      "provider_exit_code": 0,
+      "changed_inputs": {},
+      "preserved_input_count": 411,
+      "dependency_count": 238,
+      "dependency_kind_counts": {
+        "archive": 204,
+        "generated_configuration": 25,
+        "patched": 1,
+        "repository": 8
+      },
+      "actually_consumed_patched_headers": [
+        "sys/sys/file.h"
+      ],
+      "actually_consumed_declared_configuration": [],
+      "archive_member_count": 344,
+      "provider_status_sha256": "20d01969cfaf9bdf456f5ba8db90c9566b4ffd75880cfe4dbc09713b1c260b53",
+      "object": {
+        "bytes": 100944,
+        "sha256": "48e69c1b7cf3b73af35becf1c8202769ceecc5b175c6f02d65e50ff687305422",
+        "elf": {
+          "magic": "7f454c46",
+          "elf_class": 2,
+          "data": 1,
+          "type": 1,
+          "machine": 62
+        },
+        "required_T_symbols": [
+          "linux_anon_inode_init",
+          "linux_anon_inode_fini",
+          "linux_anon_inode_busy",
+          "linux_file_alloc_named",
+          "anon_inode_getfile",
+          "anon_inode_getfile_fmode",
+          "anon_inode_getfd"
+        ],
+        "nm_log_sha256": "3356944263976c36317c45af6d659c83a6a280af4b15ae0611c286dde0307543"
+      },
+      "command_count": 2,
+      "finished": "2026-11-10T07:02:36.602143+00:00",
+      "launch_log_sha256": "fb7e8483fca2bed179aae17b9448c21673ea8971fdb554b2f73c68a6f18b9fe7"
+    },
+    "f36-native-anon-file-20261110-a01-exit.json": {
+      "state": "PASS",
+      "exit_code": 0,
+      "launcher_pid": 11870,
+      "provider_pid": 4588,
+      "receipt_sha256": "c227ab65c2682761817fbb13334e8f14bf1d311e4824157ff820122b3b34de6e",
+      "finished": "2026-11-10T07:02:36.602143+00:00"
+    },
+    "f36-root-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T07:07:55.748829+00:00",
+      "runner_source_head": "0b40ca4aac08fd3c5367b8dc8676304588c4e6ac",
+      "source_sha256": {
+        "tools/native_provider_inputs.py": "6d004e1152e2fd1272f32a5e7aa0a17cb19671b3e66c11a7297c596ced0cc380",
+        "tools/build_hp_native_provider.py": "5a1df09e8944798eaa92cc3b17c218dad10ffcf3db0c78c6d39812cec912c1ca",
+        "compat/native-file/provider-inputs-f35-anon.json": "c45f3ab9f59602955ec5ebe27974a926316787faa0ff57935e3f1c95ac00214d",
+        "tests/test_native_anon_provider_admission.py": "5f2c9b37c18387c4a7571ba5a4a477c4195240a68ce8f24c732ea42ed7834dc8",
+        "tests/test_native_anon_provider_inputs.py": "0a97067bdc971564fb368a029ccde157ca470370224f5892bc67007e0d7d84c3"
+      },
+      "preserved_f33_sha256": {
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+      },
+      "object": {
+        "bytes": 100944,
+        "sha256": "48e69c1b7cf3b73af35becf1c8202769ceecc5b175c6f02d65e50ff687305422",
+        "elf": "ELF64 x86-64 relocatable",
+        "required_T_symbols": [
+          "linux_anon_inode_init",
+          "linux_anon_inode_fini",
+          "linux_anon_inode_busy",
+          "linux_file_alloc_named",
+          "anon_inode_getfile",
+          "anon_inode_getfile_fmode",
+          "anon_inode_getfd"
+        ]
+      },
+      "commands": 2,
+      "dependencies": 238,
+      "dependency_roles": {
+        "repository": 8,
+        "archive": 204,
+        "generated_configuration": 25,
+        "patched": 1
+      },
+      "consumed_patched_headers": [
+        "sys/sys/file.h"
+      ],
+      "core_lockstat_preserved_not_consumed": true,
+      "archive_members": 344,
+      "frozen_inputs": 411,
+      "prior_artifact_states": 29,
+      "actual_dependency_files_reparsed": true,
+      "protected_inputs_unchanged": true,
+      "F34object_preserved": true,
+      "old_checkout_clean": true,
+      "native_status_sha256": "20d01969cfaf9bdf456f5ba8db90c9566b4ffd75880cfe4dbc09713b1c260b53",
+      "launch_sha256": "c227ab65c2682761817fbb13334e8f14bf1d311e4824157ff820122b3b34de6e",
+      "exit_sha256": "d8daaa8da83e1b593f20436bd172d7713f2c47b78beabf2234c681f90a54f191",
+      "full_kernel": "NOT_RUN",
+      "runtime": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f36-root-readback-a01-failure.json": {
+      "state": "FAILED_READBACK_ASSERTION",
+      "observed_at": "2026-11-10T07:07:49.772103+00:00",
+      "classification": "DEFECTIVE_VERIFIER_EXPECTATION",
+      "mechanism": "Root compared launch code map to only five F35 files; actual launch additionally binds all three preserved F33 files. Exact inspection confirms the eight-entry union matches.",
+      "repair": "Compare the complete F35+preservedF33 union with exact digest equality; rerun read-only artifact checks only.",
+      "native_provider_result": "PASS unchanged",
+      "compiler_rerun": false,
+      "source_changed": false,
+      "original_tool_pid": 15243
+    }
+  },
+  "receipt_sha256": {
+    "f36-native-anon-file-20261110-a01-launch.json": "c227ab65c2682761817fbb13334e8f14bf1d311e4824157ff820122b3b34de6e",
+    "f36-native-anon-file-20261110-a01-exit.json": "d8daaa8da83e1b593f20436bd172d7713f2c47b78beabf2234c681f90a54f191",
+    "f36-root-verification-20261110-a01.json": "88653dcf00835f0c7519d70284be95b6c346d8e03f21a5dd2845043d68d11a49",
+    "f36-root-readback-a01-failure.json": "de40fc0f29d9cdaf98abe73b9020abbe1fb8fc1184a8806247ac199bdf3215bd"
+  },
+  "private_output_artifacts": {
+    "linux_anon.o": {
+      "bytes": 100944,
+      "sha256": "48e69c1b7cf3b73af35becf1c8202769ceecc5b175c6f02d65e50ff687305422"
+    },
+    "linux_anon.d": {
+      "bytes": 20127,
+      "sha256": "b3eb314b99b9e106ea87670ccfad15b13bc04fde2cc78f0fcaba888ef85b5388"
+    },
+    "linux_anon.su": {
+      "bytes": 901,
+      "sha256": "56336656d818860d6976e2af723b0a24f209582d2c5116a5fdbf1c2d24289641"
+    },
+    "linux_anon.pre.d": {
+      "bytes": 20049,
+      "sha256": "25c3fa0d350798f0a0249d4d0f7e941b99ed20ab5db4ba9cd2a6f4f58174fc2e"
+    }
+  },
+  "native_status_sha256": "20d01969cfaf9bdf456f5ba8db90c9566b4ffd75880cfe4dbc09713b1c260b53",
+  "full_kernel": "NOT_RUN",
+  "runtime": "NOT_RUN",
+  "installed": false,
+  "booted": false
+}
