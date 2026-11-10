@@ -17,7 +17,8 @@ from native_hp_build import (configured_compiler, create_private_output,
 from native_source_archive import (ArchiveSource, archive_expectations, bind_dependencies,
                                    dependency_paths, recheck_dependencies,
                                    private_git_environment, snapshot_prior_artifacts,
-                                   recheck_prior_artifacts)
+                                   recheck_prior_artifacts, selected_generated_configuration,
+                                   declared_configuration_inputs, require_declared_configuration_consumed)
 
 PIN = '03d918f6d0e81fa05b8f1160eca0628ad39988a6'
 
@@ -106,7 +107,10 @@ def main():
         p.error(str(error))
     try:
         chain, initial, final, units = patch_chain(patches, contracts)
-    except (ValueError, KeyError) as error:
+        declared_configuration, configuration_contracts = selected_generated_configuration(
+            chain, archive_mode=a.source_archive is not None)
+        declared_inputs = declared_configuration_inputs(obj, declared_configuration)
+    except (ValueError, KeyError, OSError) as error:
         p.error(str(error))
     if a.source_archive is None:
         if checked(['git', '-C', source, 'rev-parse', 'HEAD']) != PIN:
@@ -131,6 +135,9 @@ def main():
                                                else 'GIT_CLEAN_PIN'),
                                         full_tree_clean_git=('NOT_CLAIMED' if a.source_archive
                                                              else 'VERIFIED_AT_START')),
+                 declared_generated_configuration=declared_configuration,
+                 generated_configuration_contracts=configuration_contracts,
+                 declared_generated_configuration_inputs=declared_inputs,
                  commands=[], objects={}, scope='actual native changed C units only',
                  full_kernel='NOT_RUN', runtime='NOT_RUN', installed=False, booted=False)
     create_private_output(output)
@@ -207,12 +214,14 @@ def main():
                         ['-M', '-MF', str(dep), '-MT', unit + '.o',
                          str(overlay / rel)], obj)
                     bindings = bind_dependencies(dependency_paths(dep, obj), source,
-                                                 overlay, obj, state['patched_inputs'])
+                                                 overlay, obj, state['patched_inputs'],
+                                                 declared_configuration)
                     for path, record in bindings.items():
                         if path in all_bindings and all_bindings[path] != record:
                             raise ValueError('dependency changed between owner scans: ' + path)
                         all_bindings[path] = record
                     dependencies[unit] = bindings
+                require_declared_configuration_consumed(all_bindings, declared_configuration)
                 stage('VERIFYING_DEPENDENCIES')
                 archive.verify_source_members(archive_expectations(initial, all_bindings))
                 state['source_provenance'] = archive.receipt()
@@ -222,7 +231,7 @@ def main():
                     if row['kind'] == 'generated_configuration'}
                 save()
                 recheck_dependencies(set(map(Path, all_bindings)), all_bindings, source,
-                                     overlay, obj, state['patched_inputs'])
+                                     overlay, obj, state['patched_inputs'], declared_configuration)
 
             consumed_patched_headers = set()
             for rel in units:
@@ -237,7 +246,7 @@ def main():
                 if archive is not None:
                     state['objects'].setdefault(unit, {})['dependency_proof'] = (
                         recheck_dependencies(paths, dependencies[unit], source, overlay,
-                                             obj, state['patched_inputs']))
+                                             obj, state['patched_inputs'], declared_configuration))
                 for header in [name for name in final if name.endswith('.h')]:
                     if (source / header).resolve() in headers:
                         raise RuntimeError('original version of patched header consumed: ' + header)
@@ -256,7 +265,7 @@ def main():
             if archive is not None:
                 archive.check_identity()
                 recheck_dependencies(set(map(Path, all_bindings)), all_bindings, source,
-                                     overlay, obj, state['patched_inputs'])
+                                     overlay, obj, state['patched_inputs'], declared_configuration)
             recheck_prior_artifacts(obj, state['prior_artifacts'])
             if (any(digest(v['patch']) != v['patch_sha256'] or
                     digest(v['contract']) != v['contract_sha256'] for v in chain)

@@ -1,0 +1,18 @@
+{
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "step_id": "HP-I915-F32-NETBSD32-DRM-ADMISSION-20261110",
+  "prior_patch_sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+  "patch_sha256": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+  "files": {
+    "sys/compat/netbsd32/netbsd32_ioctl.c": {
+      "before_sha256": "846c5602be6de8550aae1ea03e66e3e46a5107db20708987ece89b41a5184e46",
+      "after_sha256": "d0385949c415c1810dbdcbb91197bd0766c6bbef6bd3ff232be3f40128f72c6d"
+    }
+  },
+  "policy": "Early ENOTTY only for fo_ioctl_user opted-in DRM group d, before native NetBSD32 marshalling. Existing legacy/non-DRM/FD/permissions/FIOCLEX/unwind remain unchanged.",
+  "compat32_translation_implemented": false,
+  "acceptance": "Explicit partial admission safety gate. Source tests, native object compilation, full kernel and physical driver acceptance are distinct.",
+  "generated_configuration": {
+    "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+  }
+}

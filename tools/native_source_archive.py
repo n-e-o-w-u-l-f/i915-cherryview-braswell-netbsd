@@ -4,6 +4,7 @@ No extraction, source edits, compiler execution, or invented clean-Git identity.
 The production archive pin is fixed; generated opt headers are a separate input.
 """
 import hashlib
+import json
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -132,10 +133,13 @@ def dependency_paths(depfile, cwd):
              .resolve(strict=True)) for value in tokens}
 
 
-def bind_dependencies(paths, source, overlay, obj, patched):
-    """Classify actual real paths; config exceptions are direct opt_*.h only."""
+def bind_dependencies(paths, source, overlay, obj, patched, generated_configuration=None):
+    """Bind real paths; config is direct opt_*.h or exact selected-contract headers."""
     source, overlay, obj = [Path(value).resolve(strict=True)
                             for value in (source, overlay, obj)]
+    declared = ({} if generated_configuration is None else
+                validate_generated_configuration(generated_configuration, allow_empty=True))
+    declared_configuration_inputs(obj, declared)
     rows = {}
     for original in paths:
         path = Path(original).resolve(strict=True)
@@ -152,6 +156,10 @@ def bind_dependencies(paths, source, overlay, obj, patched):
             if rel in patched:
                 raise ValueError('original version of patched input consumed: ' + rel)
             row = dict(kind='archive', relative=source_relative(rel), sha256=current)
+        elif path.parent == obj and path.name in declared:
+            if current != declared[path.name]:
+                raise ValueError('declared configuration bytes differ: ' + path.name)
+            row = dict(kind='declared_generated_configuration', relative=path.name, sha256=current)
         elif path.parent == obj and re.fullmatch(r'opt_[A-Za-z0-9_]+\.h', path.name):
             row = dict(kind='generated_configuration', relative=path.name, sha256=current)
         else:
@@ -173,8 +181,8 @@ def archive_expectations(initial, bindings):
     return expected
 
 
-def recheck_dependencies(paths, before, source, overlay, obj, patched):
-    current = bind_dependencies(paths, source, overlay, obj, patched)
+def recheck_dependencies(paths, before, source, overlay, obj, patched, generated_configuration=None):
+    current = bind_dependencies(paths, source, overlay, obj, patched, generated_configuration)
     if current != before:
         raise ValueError('native dependency set or bytes changed after preflight')
     return current
@@ -209,3 +217,81 @@ def recheck_prior_artifacts(obj, expected):
     units = sorted({name.rsplit('.', 1)[0] for name in expected})
     if snapshot_prior_artifacts(obj, units) != expected:
         raise ValueError('original object/dependency/stack artifact changed')
+
+
+def validate_generated_configuration(mapping, allow_empty=False):
+    """Validate a selected contract's exact direct non-opt header declarations."""
+    if not isinstance(mapping, dict) or (not mapping and not allow_empty):
+        raise ValueError('generated_configuration must be a nonempty object')
+    result = {}
+    for name, expected in mapping.items():
+        if (not isinstance(name, str)
+                or re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*\.h', name) is None
+                or name.lower().startswith('opt_')):
+            raise ValueError('unsafe or opt generated configuration basename')
+        if (not isinstance(expected, str)
+                or re.fullmatch(r'[0-9a-f]{64}', expected) is None):
+            raise ValueError('invalid generated configuration SHA256: ' + name)
+        result[name] = expected
+    return result
+
+
+def _unique_contract_object(pairs):
+    result = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError('duplicate contract declaration: ' + name)
+        result[name] = value
+    return result
+
+
+def selected_generated_configuration(chain, archive_mode):
+    """Read metadata only from the already selected, hash-frozen contracts."""
+    declared, origins = {}, []
+    for step in chain:
+        path = Path(step['contract'])
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != step['contract_sha256']:
+            raise ValueError('selected contract changed before manifest admission')
+        document = json.loads(raw)
+        if not isinstance(document, dict):
+            raise ValueError('selected native contract must be an object')
+        if 'generated_configuration' not in document:
+            continue
+        if not archive_mode:
+            raise ValueError('generated_configuration requires explicit source archive mode')
+        document = json.loads(raw, object_pairs_hook=_unique_contract_object)
+        mapping = validate_generated_configuration(document['generated_configuration'])
+        for name, expected in mapping.items():
+            if name in declared:
+                raise ValueError('duplicate generated configuration declaration: ' + name)
+            declared[name] = expected
+        origins.append(dict(contract=str(path),
+                            contract_sha256=step['contract_sha256'],
+                            generated_configuration=mapping))
+    return declared, origins
+
+
+def declared_configuration_inputs(obj, mapping):
+    """Bind every declared basename to a real direct object-directory header."""
+    declared = validate_generated_configuration(mapping, allow_empty=True)
+    obj = Path(obj).resolve(strict=True)
+    result = {}
+    for name, expected in declared.items():
+        path = obj / name
+        if (path.is_symlink() or not path.is_file()
+                or path.resolve(strict=True).parent != obj):
+            raise ValueError('declared configuration is not a direct regular header: ' + name)
+        if digest(path) != expected:
+            raise ValueError('declared configuration bytes differ: ' + name)
+        result[str(path)] = expected
+    return result
+
+
+def require_declared_configuration_consumed(bindings, mapping):
+    declared = validate_generated_configuration(mapping, allow_empty=True)
+    consumed = {row['relative'] for row in bindings.values()
+                if row['kind'] == 'declared_generated_configuration'}
+    if consumed != set(declared):
+        raise ValueError('declared configuration not consumed: ' +
+                         str(sorted(set(declared) - consumed)))

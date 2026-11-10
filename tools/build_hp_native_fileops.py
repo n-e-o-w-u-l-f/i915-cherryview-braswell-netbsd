@@ -16,6 +16,8 @@ DEFAULT_CHAIN = tuple(
      ROOT / 'compat/native-fileops' / (name + '.json'))
     for name in ('dispatch', 'mmap-request', 'early-drm-ioctl')
 )
+NETBSD32_GUARD = (ROOT / 'compat/native-fileops/netbsd32-drm-admission.patch',
+                  ROOT / 'compat/native-fileops/netbsd32-drm-admission.json')
 CORE_BUILDER = ROOT / 'tools/build_hp_native_core_patch.py'
 
 
@@ -28,13 +30,16 @@ def main(argv=None):
     parser.add_argument('--toolchain', type=Path, required=True)
     parser.add_argument('--source-archive', type=Path,
                         help='explicit fixed-pin archive used-source proof')
+    parser.add_argument('--include-netbsd32-guard', action='store_true',
+                        help='append partial early ENOTTY guard; no Compat32 translation support')
     args = parser.parse_args(argv)
     command = [sys.executable, '-B', str(CORE_BUILDER),
                '--source', str(args.source), '--kernel-obj', str(args.kernel_obj),
                '--output', str(args.output), '--toolchain', str(args.toolchain)]
     if args.source_archive is not None:
         command.extend(('--source-archive', str(args.source_archive)))
-    for patch, contract in DEFAULT_CHAIN:
+    chain = DEFAULT_CHAIN + (NETBSD32_GUARD,) if args.include_netbsd32_guard else DEFAULT_CHAIN
+    for patch, contract in chain:
         command.extend(('--patch', str(patch), '--contract', str(contract)))
     return subprocess.run(command, check=False).returncode
 

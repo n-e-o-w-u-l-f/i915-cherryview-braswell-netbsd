@@ -1,0 +1,17 @@
+--- a/sys/compat/netbsd32/netbsd32_ioctl.c
++++ b/sys/compat/netbsd32/netbsd32_ioctl.c
+@@ -1352,6 +1352,14 @@
+ 	case FIONCLEX:
+ 	case FIOCLEX:
+ 		fd_set_exclose(l, fd, com == FIOCLEX);
++		goto out;
++	}
++
++	/* Modern Linux DRM has no verified Compat32 translation here.
++	 * Reject opted-in DRM before legacy marshalling or user access. */
++	if (fp->f_ops != NULL && fp->f_ops->fo_ioctl_user != NULL &&
++	    IOCGROUP(com) == 'd') {
++		error = ENOTTY;
+ 		goto out;
+ 	}
+ 

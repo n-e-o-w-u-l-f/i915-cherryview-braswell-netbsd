@@ -1,0 +1,628 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F32-NETBSD32-DRM-ADMISSION-20261110",
+  "source_head_before": "b6785fb6f17b9ebd96a82f806f90353be5679c36",
+  "root_verification": {
+    "state": "PASS",
+    "observed_at": "2026-11-10T00:17:48.648315+00:00",
+    "source_sha256": {
+      "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+      "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+      "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+      "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409",
+      "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+      "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+      "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb",
+      "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0",
+      "tools/build_hp_native_core_patch.py": "f7a0874cd33b83dac791e4654526f4539405edff253ba05a98dc5448105734fe",
+      "tests/test_native_generated_configuration_contract.py": "fa9f5e60ce389a955fa5711fb0cfb090e32c5cda34350285b5ac3be95074d3ce"
+    },
+    "objects": {
+      "sys_generic": {
+        "bytes": 154048,
+        "sha256": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6",
+        "elf": "ELF64 x86-64 relocatable",
+        "symbol": "0000000000000c07 T sys_ioctl",
+        "dependencies": 242,
+        "headers": 241
+      },
+      "kern_descrip": {
+        "bytes": 259968,
+        "sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+        "elf": "ELF64 x86-64 relocatable",
+        "symbol": "0000000000001839 T fd_get_linux_file",
+        "dependencies": 239,
+        "headers": 238
+      },
+      "netbsd32_ioctl": {
+        "bytes": 308104,
+        "sha256": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590",
+        "elf": "ELF64 x86-64 relocatable",
+        "symbol": "0000000000000000 T netbsd32_ioctl",
+        "dependencies": 337,
+        "headers": 336
+      }
+    },
+    "native_command_count": 14,
+    "archive_members": 306,
+    "generated_opt_headers": 34,
+    "declared_generated_headers": {
+      "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+    },
+    "prior_artifacts_unchanged": 9,
+    "protected_inputs_unchanged": true,
+    "default_source_checkout_unchanged": true,
+    "native_source_originals_unchanged": 5,
+    "selected_contracts_unchanged": 4,
+    "python_tests": 66,
+    "c_source_cases": 9,
+    "direction_size_combinations": 60,
+    "strict_mutants": 8,
+    "negative_cli_output_absent": true,
+    "full_kernel": "NOT_RUN",
+    "runtime": "NOT_RUN",
+    "compat32_translation": "NOT_IMPLEMENTED",
+    "source_receipt": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+    "source_receipt_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+    "full_kernel_link": "NOT_RUN",
+    "installed": false,
+    "booted": false
+  },
+  "receipts": {
+    "f32-generated-config-unit-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T00:13:11.840165+00:00",
+      "commands": [
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_generated_configuration_contract.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "tests": 21,
+          "stdout": "",
+          "stderr": "test_archive_source_same_basename_cannot_satisfy_declaration (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_archive_source_same_basename_cannot_satisfy_declaration) ... ok\ntest_declared_direct_header_is_distinct_from_archive_and_opt_configuration (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_declared_direct_header_is_distinct_from_archive_and_opt_configuration) ... ok\ntest_default_without_manifest_still_rejects_non_opt_header (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_default_without_manifest_still_rejects_non_opt_header) ... ok\ntest_missing_or_directory_instead_of_header_is_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_missing_or_directory_instead_of_header_is_rejected) ... ok\ntest_nested_same_basename_and_undeclared_direct_header_are_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_nested_same_basename_and_undeclared_direct_header_are_rejected) ... ok\ntest_patched_overlay_same_basename_cannot_satisfy_declaration (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_patched_overlay_same_basename_cannot_satisfy_declaration) ... ok\ntest_post_preflight_header_drift_is_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_post_preflight_header_drift_is_rejected) ... ok\ntest_symlink_escape_and_even_same_content_symlink_are_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_symlink_escape_and_even_same_content_symlink_are_rejected) ... ok\ntest_unused_or_partially_consumed_declaration_is_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_unused_or_partially_consumed_declaration_is_rejected) ... ok\ntest_wrong_declared_hash_is_rejected (test_native_generated_configuration_contract.ExactDeclaredHeaderInputs.test_wrong_declared_hash_is_rejected) ... ok\ntest_changed_selected_contract_is_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_changed_selected_contract_is_rejected) ... ok\ntest_core_rejects_non_archive_declaration_before_output_or_git (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_core_rejects_non_archive_declaration_before_output_or_git) ... ok\ntest_duplicate_json_keys_even_same_value_are_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_duplicate_json_keys_even_same_value_are_rejected) ... ok\ntest_missing_metadata_preserves_default_git_or_archive_admission (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_missing_metadata_preserves_default_git_or_archive_admission) ... ok\ntest_non_archive_metadata_is_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_non_archive_metadata_is_rejected) ... ok\ntest_non_string_and_malformed_hashes_are_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_non_string_and_malformed_hashes_are_rejected) ... ok\ntest_null_non_object_or_empty_mappings_are_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_null_non_object_or_empty_mappings_are_rejected) ... ok\ntest_repeated_declaration_across_contracts_even_same_hash_is_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_repeated_declaration_across_contracts_even_same_hash_is_rejected) ... ok\ntest_selected_mapping_records_exact_contract_origin (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_selected_mapping_records_exact_contract_origin) ... ok\ntest_unsafe_and_opt_names_are_rejected (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_unsafe_and_opt_names_are_rejected) ... ok\ntest_unselected_contract_metadata_is_not_read (test_native_generated_configuration_contract.SelectedConfigurationContracts.test_unselected_contract_metadata_is_not_read) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.262s\n\nOK\n"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_source_archive.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "tests": 24,
+          "stdout": "",
+          "stderr": "test_archive_in_place_drift_rejected (test_native_source_archive.ArchiveProvenance.test_archive_in_place_drift_rejected) ... ok\ntest_archive_symlink_and_replacement_rejected (test_native_source_archive.ArchiveProvenance.test_archive_symlink_and_replacement_rejected) ... ok\ntest_changed_source_bytes_rejected (test_native_source_archive.ArchiveProvenance.test_changed_source_bytes_rejected) ... ok\ntest_duplicate_selected_member_rejected (test_native_source_archive.ArchiveProvenance.test_duplicate_selected_member_rejected) ... ok\ntest_matching_regular_selected_member_and_narrow_receipt (test_native_source_archive.ArchiveProvenance.test_matching_regular_selected_member_and_narrow_receipt) ... ok\ntest_missing_and_wrong_prefix_members_rejected (test_native_source_archive.ArchiveProvenance.test_missing_and_wrong_prefix_members_rejected) ... ok\ntest_path_traversal_and_absolute_paths_rejected (test_native_source_archive.ArchiveProvenance.test_path_traversal_and_absolute_paths_rejected) ... ok\ntest_selected_symlink_rejected (test_native_source_archive.ArchiveProvenance.test_selected_symlink_rejected) ... ok\ntest_wrong_archive_hash_rejected (test_native_source_archive.ArchiveProvenance.test_wrong_archive_hash_rejected) ... ok\ntest_actual_paths_are_classified_and_generated_remains_separate (test_native_source_archive.DependencyProvenance.test_actual_paths_are_classified_and_generated_remains_separate) ... ok\ntest_added_or_removed_dependency_rejected (test_native_source_archive.DependencyProvenance.test_added_or_removed_dependency_rejected) ... ok\ntest_changed_overlay_and_unbound_overlay_are_rejected (test_native_source_archive.DependencyProvenance.test_changed_overlay_and_unbound_overlay_are_rejected) ... ok\ntest_contradictory_archive_expectations_rejected (test_native_source_archive.DependencyProvenance.test_contradictory_archive_expectations_rejected) ... ok\ntest_generated_or_source_dependency_drift_is_rejected (test_native_source_archive.DependencyProvenance.test_generated_or_source_dependency_drift_is_rejected) ... ok\ntest_original_patched_header_is_rejected (test_native_source_archive.DependencyProvenance.test_original_patched_header_is_rejected) ... ok\ntest_preprocessor_dependency_escaping_and_duplicates (test_native_source_archive.DependencyProvenance.test_preprocessor_dependency_escaping_and_duplicates) ... ok\ntest_source_alias_resolves_but_escape_is_rejected (test_native_source_archive.DependencyProvenance.test_source_alias_resolves_but_escape_is_rejected) ... ok\ntest_unexpected_and_nested_object_headers_rejected (test_native_source_archive.DependencyProvenance.test_unexpected_and_nested_object_headers_rejected) ... ok\ntest_core_default_clean_git_checks_remain_guarded (test_native_source_archive.ExplicitArchiveCLI.test_core_default_clean_git_checks_remain_guarded) ... ok\ntest_wrapper_forwards_archive_only_when_requested (test_native_source_archive.ExplicitArchiveCLI.test_wrapper_forwards_archive_only_when_requested) ... ok\ntest_old_artifact_creation_and_removal_are_rejected (test_native_source_archive.PrivateExecutionInputs.test_old_artifact_creation_and_removal_are_rejected) ... ok\ntest_old_artifact_symlinks_and_unsafe_names_are_rejected (test_native_source_archive.PrivateExecutionInputs.test_old_artifact_symlinks_and_unsafe_names_are_rejected) ... ok\ntest_old_artifacts_record_absence_and_reject_every_changed_extension (test_native_source_archive.PrivateExecutionInputs.test_old_artifacts_record_absence_and_reject_every_changed_extension) ... ok\ntest_private_git_environment_clears_all_repository_selectors (test_native_source_archive.PrivateExecutionInputs.test_private_git_environment_clears_all_repository_selectors) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 0.344s\n\nOK\n"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_native_core_patch_chain.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "tests": 8,
+          "stdout": "",
+          "stderr": "test_ambiguous_output_name_refused (test_native_core_patch_chain.ChainAdmission.test_ambiguous_output_name_refused) ... ok\ntest_duplicate_and_unpaired_refused (test_native_core_patch_chain.ChainAdmission.test_duplicate_and_unpaired_refused) ... ok\ntest_missing_c_owner_refused (test_native_core_patch_chain.ChainAdmission.test_missing_c_owner_refused) ... ok\ntest_noncomposing_source_digest_refused (test_native_core_patch_chain.ChainAdmission.test_noncomposing_source_digest_refused) ... ok\ntest_ordered_composition_keeps_original_and_final (test_native_core_patch_chain.ChainAdmission.test_ordered_composition_keeps_original_and_final) ... ok\ntest_patch_drift_refused (test_native_core_patch_chain.ChainAdmission.test_patch_drift_refused) ... ok\ntest_unsafe_source_path_refused (test_native_core_patch_chain.ChainAdmission.test_unsafe_source_path_refused) ... ok\ntest_wrong_order_refused (test_native_core_patch_chain.ChainAdmission.test_wrong_order_refused) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.070s\n\nOK\n"
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_f30_native_ioctl_chain.py",
+            "-v"
+          ],
+          "exit_code": 0,
+          "tests": 8,
+          "stdout": "",
+          "stderr": "test_active_default_has_exact_native_owners_and_f29_syscall (test_f30_native_ioctl_chain.ActiveChain.test_active_default_has_exact_native_owners_and_f29_syscall) ... ok\ntest_f29_reference_and_immediate_mmap_predecessor_are_bound (test_f30_native_ioctl_chain.ActiveChain.test_f29_reference_and_immediate_mmap_predecessor_are_bound) ... ok\ntest_recovered_headers_and_descriptor_owner_are_preserved (test_f30_native_ioctl_chain.ActiveChain.test_recovered_headers_and_descriptor_owner_are_preserved) ... ok\ntest_arbitrary_patch_override_is_not_a_public_escape (test_f30_native_ioctl_chain.PublicEntrypoint.test_arbitrary_patch_override_is_not_a_public_escape) ... ok\ntest_core_guard_refusal_exit_is_propagated (test_f30_native_ioctl_chain.PublicEntrypoint.test_core_guard_refusal_exit_is_propagated) ... ok\ntest_existing_and_source_alias_delegate_exact_active_chain (test_f30_native_ioctl_chain.PublicEntrypoint.test_existing_and_source_alias_delegate_exact_active_chain) ... ok\ntest_help_names_default_chain_without_executing_core (test_f30_native_ioctl_chain.PublicEntrypoint.test_help_names_default_chain_without_executing_core) ... ok\ntest_missing_toolchain_refuses_before_any_delegation (test_f30_native_ioctl_chain.PublicEntrypoint.test_missing_toolchain_refuses_before_any_delegation) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.027s\n\nOK\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check",
+            "--",
+            "tools/native_source_archive.py",
+            "tools/build_hp_native_core_patch.py",
+            "tests/test_native_generated_configuration_contract.py"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "source_sha256": {
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0",
+        "tools/build_hp_native_core_patch.py": "f7a0874cd33b83dac791e4654526f4539405edff253ba05a98dc5448105734fe",
+        "tests/test_native_generated_configuration_contract.py": "fa9f5e60ce389a955fa5711fb0cfb090e32c5cda34350285b5ac3be95074d3ce"
+      },
+      "log": "/home/andreas/projects/hp-i915-f26-20261106/f32-generated-config-unit-a01.log",
+      "log_sha256": "294b7d66ddfefd38f7ca1d98e2b4ccd526dd5c600d59fd3922b9df14caad2774",
+      "native_objects": "NOT_RUN",
+      "full_kernel": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f32-generated-config-cli-negative-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T00:13:39.283853+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "tools/build_hp_native_fileops.py",
+        "--include-netbsd32-guard",
+        "--netbsd-source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-generated-config-no-archive-output-a01",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: build_hp_native_core_patch.py [-h] --source SOURCE\n                                     --kernel-obj KERNEL_OBJ --output OUTPUT\n                                     --patch PATCH --contract CONTRACT\n                                     --toolchain TOOLCHAIN\n                                     [--source-archive SOURCE_ARCHIVE]\nbuild_hp_native_core_patch.py: error: generated_configuration requires explicit source archive mode\n",
+      "expected_rejection": "generated_configuration requires explicit source archive mode",
+      "output": "/home/andreas/projects/hp-i915-f26-20261106/f32-generated-config-no-archive-output-a01",
+      "output_absent": true,
+      "log": "/home/andreas/projects/hp-i915-f26-20261106/f32-generated-config-cli-negative-a01.log",
+      "log_sha256": "a3423600f843e26a63c97a5c84bf26cc910e987e9ace1a3184fbe9b40563cbfa",
+      "native_objects": "NOT_RUN",
+      "full_kernel": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f32-netbsd32-drm-admission-20261110-a01.json": {
+      "state": "FAIL",
+      "host": "hp-tpnw121.lan",
+      "uid": 1000,
+      "started_at": "2026-11-10T00:09:57.703829+00:00",
+      "source_sha256": {
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/check_f32_netbsd32_admission.py": "bdfe5cee7afb61688eeddde431834c358f5539a16559df38a34c61b956ff6d17",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb"
+      },
+      "protected_before": {
+        "compat/native-fileops/dispatch.patch": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+        "compat/native-fileops/dispatch.json": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9",
+        "compat/native-fileops/mmap-request.patch": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+        "compat/native-fileops/mmap-request.json": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f",
+        "compat/native-fileops/early-drm-ioctl.patch": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+        "compat/native-fileops/early-drm-ioctl.json": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed"
+      },
+      "commands": [
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_f32_cli_selection.py",
+            "-v"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-p",
+            "test_f30_native_ioctl_chain.py",
+            "-v"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "/usr/pkg/bin/python3",
+            "-B",
+            "tests/test_f32_netbsd32_admission.py",
+            "--source",
+            "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+            "--output",
+            "/home/andreas/projects/hp-i915-f26-20261106/f32-netbsd32-drm-admission-20261110-a01"
+          ],
+          "exit_code": 1
+        }
+      ],
+      "scope": "CLI Python tests and pinned early native syscall source excerpts with explicit FD/later-body C stubs; no real Compat32 support or native kernel compile",
+      "error": "F32 acceptance failed exit 1",
+      "finished_at": "2026-11-10T00:10:00.051214+00:00",
+      "log_sha256": "12f998a9e681fa73fd4bbf6912ccd5f1ba7ae740e6e6772305fef40d421ea61c"
+    },
+    "f32-netbsd32-drm-admission-20261110-a02.json": {
+      "state": "PASS",
+      "host": "hp-tpnw121.lan",
+      "uid": 1000,
+      "started_at": "2026-11-10T00:11:17.562863+00:00",
+      "source_before": {
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb"
+      },
+      "previous_attempt": "a01: CLI5 and F30default8 PASS; corrupt-context absent anchor fixed; complete original evidence retained",
+      "prior_unit_receipt": "/home/andreas/projects/hp-i915-f26-20261106/f32-netbsd32-drm-admission-20261110-a01.json",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "tests/test_f32_netbsd32_admission.py",
+        "--source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-netbsd32-drm-admission-20261110-a02"
+      ],
+      "exit_code": 0,
+      "finished_at": "2026-11-10T00:11:25.292999+00:00",
+      "log_sha256": "8ff607faba63db472741a6c167e7560fe90ef4e8d6359d9b7bc029dc1217336c",
+      "source_after": {
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb"
+      },
+      "native_kernel_compilation": "NOT_RUN",
+      "source_receipt": "/home/andreas/projects/hp-i915-f26-20261106/f32-netbsd32-drm-admission-20261110-a02/status.json"
+    },
+    "f32-native-abi-20261110-a01.launch.json": {
+      "state": "PASS",
+      "started": "2026-11-10T00:15:31.476184+00:00",
+      "launcher_pid": 3560,
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "tools/build_hp_native_fileops.py",
+        "--include-netbsd32-guard",
+        "--netbsd-source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools",
+        "--source-archive",
+        "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz"
+      ],
+      "cwd": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+      "output": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01",
+      "status": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+      "log": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01.log",
+      "exit_file": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01.exit",
+      "source_sha256": {
+        "tools/build_hp_native_core_patch.py": "f7a0874cd33b83dac791e4654526f4539405edff253ba05a98dc5448105734fe",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/test_native_generated_configuration_contract.py": "fa9f5e60ce389a955fa5711fb0cfb090e32c5cda34350285b5ac3be95074d3ce",
+        "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409"
+      },
+      "selected_chain": [
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch",
+          "patch_sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.json",
+          "contract_sha256": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch",
+          "patch_sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.json",
+          "contract_sha256": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch",
+          "patch_sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.json",
+          "contract_sha256": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.patch",
+          "patch_sha256": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.json",
+          "contract_sha256": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa"
+        }
+      ],
+      "prior_artifacts": {
+        "sys_generic.o": "5232ccc0da7fd4cce0f1cd9cc7ca6969d0c69e5609bde5994401d0e457b021d4",
+        "sys_generic.d": "473223d10e46b8491bd95de666bd0f86981072a07f85816316704828733ffcad",
+        "sys_generic.su": "5ee7278991f794f1f95e0904c758c42bf20dc26a965f27e305b43a889ee1b935",
+        "kern_descrip.o": "afb1c17e061133320d33a264f04000c6228b9a91d8635eef9169a3b0bc1415df",
+        "kern_descrip.d": "54e90c7846ee70e619c5819cfbc04dd2dadaea68056896c0d0c3a425e58f85f5",
+        "kern_descrip.su": "550cbb686e33ef6cced4b42cd21a6a37d98c8cd83177440ec288dd6b8a6fe721",
+        "netbsd32_ioctl.o": "f32d91e54aa9f10a6c38da521fbb6d92bdfa1a7712173887e93970faba8923ff",
+        "netbsd32_ioctl.d": "13eff355504a2239e713942fb199064cad20bca4541ae321ca00748b21f5f4d9",
+        "netbsd32_ioctl.su": "315d6c13456d9e51a3567c8f151e3714bb6a85ad930ab0f6044a2e4cf26e121f"
+      },
+      "configuration_sha256": {
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_netbsd32.h": "656c8ae56e1d721962062aa7f953639b4341f7f608a595205582fa7379f0dd75",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "compat_netbsd32": 1,
+      "makefile_sha256": "ffa140e1552a45d2cf15c6f312290668b5a6b4635c1266498f59f75f6b96a1e8",
+      "tool_sha256": {
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/nbmake-amd64": "dda9680d9b13eb34abc0107adcccbaa9ff505a74cd3114bbc26a22f4c91cd5a5",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools/bin/x86_64--netbsd-gcc": "34e3b5d21de6047acd46df0d5c52efe677eed51a028bbc6218f7f1cd4ba4a4f5"
+      },
+      "prior_kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "protected_sha256": {
+        "/netbsd": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde",
+        "/boot.cfg": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df"
+      },
+      "full_kernel": "NOT_RUN",
+      "compat32_runtime": "NOT_RUN",
+      "installed": false,
+      "booted": false,
+      "wrapper_pid": 6027,
+      "exit_code": 0,
+      "finished": "2026-11-10T00:17:19.523735+00:00",
+      "log_sha256": "b4d2bdd6321f30ceccbe29829601654ba5845113c87358e70fbb30a1e196d37d"
+    },
+    "f32-root-verification-20261110.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T00:17:48.648315+00:00",
+      "source_sha256": {
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb",
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0",
+        "tools/build_hp_native_core_patch.py": "f7a0874cd33b83dac791e4654526f4539405edff253ba05a98dc5448105734fe",
+        "tests/test_native_generated_configuration_contract.py": "fa9f5e60ce389a955fa5711fb0cfb090e32c5cda34350285b5ac3be95074d3ce"
+      },
+      "objects": {
+        "sys_generic": {
+          "bytes": 154048,
+          "sha256": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6",
+          "elf": "ELF64 x86-64 relocatable",
+          "symbol": "0000000000000c07 T sys_ioctl",
+          "dependencies": 242,
+          "headers": 241
+        },
+        "kern_descrip": {
+          "bytes": 259968,
+          "sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+          "elf": "ELF64 x86-64 relocatable",
+          "symbol": "0000000000001839 T fd_get_linux_file",
+          "dependencies": 239,
+          "headers": 238
+        },
+        "netbsd32_ioctl": {
+          "bytes": 308104,
+          "sha256": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590",
+          "elf": "ELF64 x86-64 relocatable",
+          "symbol": "0000000000000000 T netbsd32_ioctl",
+          "dependencies": 337,
+          "headers": 336
+        }
+      },
+      "native_command_count": 14,
+      "archive_members": 306,
+      "generated_opt_headers": 34,
+      "declared_generated_headers": {
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "prior_artifacts_unchanged": 9,
+      "protected_inputs_unchanged": true,
+      "default_source_checkout_unchanged": true,
+      "native_source_originals_unchanged": 5,
+      "selected_contracts_unchanged": 4,
+      "python_tests": 66,
+      "c_source_cases": 9,
+      "direction_size_combinations": 60,
+      "strict_mutants": 8,
+      "negative_cli_output_absent": true,
+      "full_kernel": "NOT_RUN",
+      "runtime": "NOT_RUN",
+      "compat32_translation": "NOT_IMPLEMENTED",
+      "source_receipt": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+      "source_receipt_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+      "full_kernel_link": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f32-native-abi-20261110-final.json": {
+      "schema_version": 1,
+      "state": "PASS",
+      "verified_at": "2026-11-10T00:18:52.488735+00:00",
+      "native_status": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+      "native_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+      "native_launch": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01.launch.json",
+      "native_launch_sha256": "1ebd89ef1e7ddb38be8a877fc209d4ea36486a60259ca5fab17876d440d742e2",
+      "native_exit": 0,
+      "core_pid": 13541,
+      "active_probe": false,
+      "command_count": 14,
+      "command_exits": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_sha256": {
+        "tools/build_hp_native_core_patch.py": "f7a0874cd33b83dac791e4654526f4539405edff253ba05a98dc5448105734fe",
+        "tools/build_hp_native_fileops.py": "7e171e6fa86dc2d8c8d637a0a22d6fb13e309ff56a7547220a6111a0aa04d348",
+        "tools/native_source_archive.py": "25ada0e6317b5c6e3b818fb02175ec3b061a5a541f141f2dd54003405f0407f0",
+        "compat/native-fileops/netbsd32-drm-admission.json": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa",
+        "compat/native-fileops/netbsd32-drm-admission.patch": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+        "tests/fixtures/f32_netbsd32_admission.c": "a8ecce1451d248f1aec82a5408775f82747dc2e4495d1a848e6287bf9941a6d5",
+        "tests/test_f32_cli_selection.py": "2ef7641860adbb4eff79083895b7994dc785a428c288fb872675f67acdefeaeb",
+        "tests/test_f32_netbsd32_admission.py": "e9eb490d5807206275067a9ca3164fdbbdf06c18d949c6615709df52b1c75c22",
+        "tests/test_native_generated_configuration_contract.py": "fa9f5e60ce389a955fa5711fb0cfb090e32c5cda34350285b5ac3be95074d3ce",
+        "tools/check_f32_netbsd32_admission.py": "372abf75cfc6d99698225ca873ad695fa96bb363e3c7d2ed7de94ff16bb7a409"
+      },
+      "selected_chain": [
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.patch",
+          "patch_sha256": "7d53efea4dfda1f91dcecdd4cfe77d0fe4ec59a3e84f48b1c394c7b5f5036612",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/dispatch.json",
+          "contract_sha256": "44eb07535c5ead2d342cc3078206158a21216b7728fcea013278548a5c74bac9"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.patch",
+          "patch_sha256": "2916325f27e47f9c0aacc3683a97b726f0dddd379d0e67ef2f9ff33883bfd1a9",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/mmap-request.json",
+          "contract_sha256": "7cf5c0b4f9472e81d37e483fa7614910572d4f166944337f55104b3c64e0432f"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.patch",
+          "patch_sha256": "93fec646d4cb1020ca4059c9c449a8774be74dcf2bb0de27a504e0058c867735",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/early-drm-ioctl.json",
+          "contract_sha256": "1476f331eb4f709fa3bc220f57d1f60db9741fb32444392976207f261ce1b7ed"
+        },
+        {
+          "patch": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.patch",
+          "patch_sha256": "b1953c0a3c94fbccc079fcfeaacbb1fb4b32c8ac89c4e0dc389fccad5eb8a6d5",
+          "contract": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-fileops/netbsd32-drm-admission.json",
+          "contract_sha256": "737f3d480765590965b36ff59b97998b8f84e92ce9857687167765ddaf5065fa"
+        }
+      ],
+      "prior_artifacts": {
+        "sys_generic.o": "5232ccc0da7fd4cce0f1cd9cc7ca6969d0c69e5609bde5994401d0e457b021d4",
+        "sys_generic.d": "473223d10e46b8491bd95de666bd0f86981072a07f85816316704828733ffcad",
+        "sys_generic.su": "5ee7278991f794f1f95e0904c758c42bf20dc26a965f27e305b43a889ee1b935",
+        "kern_descrip.o": "afb1c17e061133320d33a264f04000c6228b9a91d8635eef9169a3b0bc1415df",
+        "kern_descrip.d": "54e90c7846ee70e619c5819cfbc04dd2dadaea68056896c0d0c3a425e58f85f5",
+        "kern_descrip.su": "550cbb686e33ef6cced4b42cd21a6a37d98c8cd83177440ec288dd6b8a6fe721",
+        "netbsd32_ioctl.o": "f32d91e54aa9f10a6c38da521fbb6d92bdfa1a7712173887e93970faba8923ff",
+        "netbsd32_ioctl.d": "13eff355504a2239e713942fb199064cad20bca4541ae321ca00748b21f5f4d9",
+        "netbsd32_ioctl.su": "315d6c13456d9e51a3567c8f151e3714bb6a85ad930ab0f6044a2e4cf26e121f"
+      },
+      "protected_sha256": {
+        "/netbsd": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde",
+        "/boot.cfg": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df"
+      },
+      "configuration_sha256": {
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/opt_compat_netbsd32.h": "656c8ae56e1d721962062aa7f953639b4341f7f608a595205582fa7379f0dd75",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "source_provenance": {
+        "mode": "ARCHIVE_USED_SUBSET",
+        "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+        "verified_source_members": 306,
+        "full_tree_clean_git": "NOT_CLAIMED"
+      },
+      "generated_opt_header_count": 34,
+      "declared_generated_configuration": {
+        "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "declared_generated_configuration_inputs": {
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST/lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "consumed_declared_generated_configuration": {
+        "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+      },
+      "consumed_declared_header_count": 1,
+      "objects": {
+        "sys_generic": {
+          "bytes": 154048,
+          "sha256": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6",
+          "bound_dependencies": 242,
+          "headers": 241
+        },
+        "kern_descrip": {
+          "bytes": 259968,
+          "sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+          "bound_dependencies": 239,
+          "headers": 238
+        },
+        "netbsd32_ioctl": {
+          "bytes": 308104,
+          "sha256": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590",
+          "bound_dependencies": 337,
+          "headers": 336
+        }
+      },
+      "independent_root_verification": "/home/andreas/projects/hp-i915-f26-20261106/f32-root-verification-20261110.json",
+      "independent_root_verification_sha256": "ee8bc88c485d5fa37f9829e382a23a3a295b4b918b683a03dd763243c90af34b",
+      "independent_root_result": "PASS",
+      "full_kernel": "NOT_RUN",
+      "compat32_runtime_support": "NOT_RUN",
+      "hardware": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    }
+  },
+  "receipt_sha256": {
+    "f32-generated-config-unit-a01.json": "0640fc13ae816f720fae51e60181d107baf688019a614ca703aedf16048a203b",
+    "f32-generated-config-cli-negative-a01.json": "c972ad838313d1f493cd748e7f2a821b4940fee9c78e734a2d099f4bcf6816de",
+    "f32-netbsd32-drm-admission-20261110-a01.json": "2f73d53893f91ea048e5efa8307f79f024e906eb0c2255ace8b646f2cabe8cad",
+    "f32-netbsd32-drm-admission-20261110-a02.json": "bd30e8882ffbe96062023ec88c3f5f7d85ba006dc0c81b86f922911aa2080173",
+    "f32-native-abi-20261110-a01.launch.json": "1ebd89ef1e7ddb38be8a877fc209d4ea36486a60259ca5fab17876d440d742e2",
+    "f32-root-verification-20261110.json": "ee8bc88c485d5fa37f9829e382a23a3a295b4b918b683a03dd763243c90af34b",
+    "f32-native-abi-20261110-final.json": "2bb79a3542e824c8df0c5fc5e4025c87f88b00b61581d11243f2c365ad49bbff"
+  },
+  "limitations": [
+    "partial fail-closed admission only",
+    "Compat32 translation NOT_IMPLEMENTED",
+    "full provider/MM/UVM/kernel/runtime OPEN",
+    "fleet synchronization incomplete per F28"
+  ]
+}
