@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "project_id": "HP-I915",
+  "step_id": "HP-I915-F33-NATIVE-FILE-PROVIDER-ADMISSION-20261110",
+  "state": "PASS",
+  "source_head_before": "493c85d5ba0e3aabc32a61792f980736a6c1693f",
+  "source_sha256": {
+    "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+    "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+    "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+    "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+    "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+  },
+  "remote_git_anchors": [
+    {
+      "path": "compat/native-file/include/linux/file_api_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+      "size": 1318,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/271684bd9e980ab9e5bfb9847ff5ecc13a65357b"
+    },
+    {
+      "path": "compat/native-file/include/linux/file_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+      "size": 1614,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/e919f2f6a03bd58b85a40cea89ded14242983d2b"
+    },
+    {
+      "path": "compat/native-file/include/linux/file_ref_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+      "size": 2966,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/3b6c5b499380b6374ca9e7540e89d8cc55362678"
+    },
+    {
+      "path": "compat/native-file/include/linux/fs_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+      "size": 8568,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/2f304f344fdaf92fb0c412a140c27837fc1d3163"
+    },
+    {
+      "path": "compat/native-file/linux_fd.c",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2dc8720c9a33355e930e280cc98d4e8016002cb0",
+      "size": 5202,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/2dc8720c9a33355e930e280cc98d4e8016002cb0"
+    },
+    {
+      "path": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "034e1034ba925299a14bf85f6defd37998023bf3",
+      "size": 356,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/034e1034ba925299a14bf85f6defd37998023bf3"
+    },
+    {
+      "path": "compat/native-uio/include/linux/kiocb_netbsd.h",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e54e8be249a3975c91fd5710ea024da817571df9",
+      "size": 1349,
+      "url": "https://api.github.com/repos/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/git/blobs/e54e8be249a3975c91fd5710ea024da817571df9"
+    }
+  ],
+  "receipts": {
+    "f33-source-final-20261110-a01.json": {
+      "state": "CODE_READY",
+      "source_head": "493c85d5ba0e3aabc32a61792f980736a6c1693f",
+      "source_sha256": {
+        "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+        "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+      },
+      "receipts_sha256": {
+        "f33-provider-admission-tests-20261110-a01/status.json": "09452b9c8a85f769cb52af42251a990d1af87f6b2f4af8698f0527d8373441e9",
+        "f33-provider-admission-tests-20261110-a01/tests.log": "e7fd22b9423d0dd9b562eb176e8c080968570a4c733ca9d7f48ae116e0f48a11",
+        "f33-provider-admission-tests-20261110-a02/status.json": "f15e2e5f6de7c5042a33ee3acd4b4a4809e592d59d7e2837a731756979ebc003",
+        "f33-provider-admission-tests-20261110-a02/tests.log": "c65bdf28c3515e054ba4d7289e85f3204b446770186746281d204ee941817bc4",
+        "f33-provider-input-unit-a01.json": "3a461379476d44ae0e6e7ad2f197048908224ef6949db778907233b7cda3e1c4",
+        "f33-provider-input-unit-a01.log": "6ca825d8cdca15226b0f822fe2842bafee9fa24384d5495e115f224fc88a637f",
+        "f33-real-cli-negative-20261110-a01.json": "eb6cbb7589313eec6a72a820295a483977d4bc57d775d6917c972e68c069702e",
+        "f33-real-cli-negative-20261110-a01.log": "173163c54446354b759509f5115023b22ad66c84669b384b3661f2eb3ddb9f3a"
+      },
+      "source_tests_passed": 60,
+      "actual_input_admission": "PASS",
+      "actual_preprocessor": "NOT_RUN",
+      "actual_native_object": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "finished": "2026-11-10T00:45:51.423845+00:00"
+    },
+    "f33-root-source-verification-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T00:47:04.570541+00:00",
+      "source_sha256": {
+        "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+        "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c",
+        "tests/test_native_provider_archive_admission.py": "2799705c08cd1b3732614d197070c440bbd76497d8f7be0a1f45af34ca76ce73"
+      },
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_provider_archive_admission.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "log": "/home/andreas/projects/hp-i915-f26-20261106/f33-root-source-verification-20261110-a01.log",
+      "log_sha256": "dacf074c3d1c63c7102c5d6755e6c3293aee7d91097047af09c1dda54e8e5f13",
+      "test_binding_reason": "Bind exact final integration test bytes absent from original A02 receipt; only affected11 rerun, helper31 and existing18 reused with source/receipt identity checks.",
+      "tests": 60,
+      "repository_inputs": 7,
+      "remote_git_anchor": "PASS",
+      "actual_input_admission": "PASS",
+      "actual_preprocessor": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "protected_inputs": "UNCHANGED",
+      "full_kernel": "NOT_RUN",
+      "installed": false,
+      "booted": false
+    },
+    "f33-provider-admission-tests-20261110-a01/status.json": {
+      "state": "FAIL",
+      "exit_code": 1,
+      "scope": "source unit/admission tests; all compiler/preprocessor calls mocked",
+      "actual_preprocessor": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "log_sha256": "e7fd22b9423d0dd9b562eb176e8c080968570a4c733ca9d7f48ae116e0f48a11",
+      "finished": "2026-11-10T00:42:14.274587+00:00"
+    },
+    "f33-provider-admission-tests-20261110-a02/status.json": {
+      "state": "PASS",
+      "actual_preprocessor": "NOT_RUN",
+      "archive_member_scan": "NOT_RUN",
+      "native_object": "NOT_RUN",
+      "source_mutation": false,
+      "tests": [
+        {
+          "pattern": "test_native_provider_archive_admission.py",
+          "exit_code": 0
+        },
+        {
+          "pattern": "test_native_hp_build_preflight.py",
+          "exit_code": 0
+        }
+      ],
+      "actual_input_admission": {
+        "state": "PASS",
+        "provider_contract_sha256": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "repository_commit": "493c85d5ba0e3aabc32a61792f980736a6c1693f",
+        "repository_inputs": {
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/linux_fd.c": {
+            "kind": "repository",
+            "relative": "compat/native-file/linux_fd.c",
+            "role": "translation_unit",
+            "blob": "2dc8720c9a33355e930e280cc98d4e8016002cb0",
+            "sha256": "4a112f9f174b41851be56db6ea9b974c40dd9c3564f5a830cc362e8725d15591"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_api_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_api_netbsd.h",
+            "role": "file_header",
+            "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+            "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_netbsd.h",
+            "role": "file_header",
+            "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+            "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/fs_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/fs_netbsd.h",
+            "role": "file_header",
+            "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+            "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include/linux/file_ref_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-file/include/linux/file_ref_netbsd.h",
+            "role": "file_header",
+            "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+            "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-mm/include/linux/mm_abi_types_netbsd.h",
+            "role": "mm_abi_header",
+            "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+            "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+          },
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include/linux/kiocb_netbsd.h": {
+            "kind": "repository",
+            "relative": "compat/native-uio/include/linux/kiocb_netbsd.h",
+            "role": "uio_header",
+            "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+            "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+          }
+        },
+        "include_roots": [
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-mm/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-uio/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/common/include",
+          "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6/sys/external/bsd/drm2/include"
+        ],
+        "core_status": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+        "core_objects": {
+          "sys_generic": "7ec6e51289db74d055c9fd3dbc350277e3af997c3a532c90bfdadba6ad8411b6",
+          "kern_descrip": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+          "netbsd32_ioctl": "18d5c8bcdda0b71f3d075459d098c91c786d88f6b74d357be20405e78f469590"
+        },
+        "declared_generated_configuration": {
+          "lockstat.h": "844d3989147b86eaa7fb6315a3e70934fecd634b5ad8225b71fb81188e7a25cd"
+        }
+      },
+      "log_sha256": "c65bdf28c3515e054ba4d7289e85f3204b446770186746281d204ee941817bc4",
+      "finished": "2026-11-10T00:43:22.165433+00:00"
+    },
+    "f33-provider-input-unit-a01.json": {
+      "scope": "F33 focused isolated helper unit tests; no preprocessor/compiler",
+      "state": "PASS",
+      "launcher_pid": 6981,
+      "started": "2026-11-10T00:45:06.118700+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_provider_inputs.py",
+        "-v"
+      ],
+      "cwd": "/home/andreas/projects/hp-i915-f26-20261106/f28-integration",
+      "input_sha256": {
+        "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+        "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c"
+      },
+      "test_pid": 24279,
+      "exit_code": 0,
+      "finished": "2026-11-10T00:45:10.640378+00:00",
+      "after_sha256": {
+        "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+        "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3",
+        "tests/test_native_provider_inputs.py": "2b5da5c3c779499546899bed23c2080922c358caefff13547a274ad4ca434b6c"
+      },
+      "log_sha256": "6ca825d8cdca15226b0f822fe2842bafee9fa24384d5495e115f224fc88a637f"
+    },
+    "f33-real-cli-negative-20261110-a01.json": {
+      "state": "PASS",
+      "observed_at": "2026-11-10T00:43:32.216383+00:00",
+      "command": [
+        "/usr/pkg/bin/python3",
+        "-B",
+        "tools/build_hp_native_provider.py",
+        "--source",
+        "/home/andreas/projects/hp-i915-f26-20261106/src-03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+        "--kernel-obj",
+        "/tmp/hp-i915-f26-build-20261106-a01/obj/sys/arch/amd64/compile/F26_CHV_FULL_RTL_TEST",
+        "--core-status",
+        "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/status.json",
+        "--provider-root",
+        "/home/andreas/projects/hp-i915-f26-20261106/f28-integration/compat/native-file",
+        "--unit",
+        "linux_fd.c",
+        "--output",
+        "/home/andreas/projects/hp-i915-f26-20261106/f33-unpaired-contract-negative-20261110-a01",
+        "--toolchain",
+        "/tmp/hp-i915-f26-build-20261106-a01/tools",
+        "--source-archive",
+        "/home/andreas/projects/hp-i915-f26-20261106/netbsd-pinned.tar.gz"
+      ],
+      "exit_code": 2,
+      "expected_rejection": "--source-archive and --provider-contract must be selected together",
+      "output_absent": true,
+      "output": "/home/andreas/projects/hp-i915-f26-20261106/f33-unpaired-contract-negative-20261110-a01",
+      "log": "/home/andreas/projects/hp-i915-f26-20261106/f33-real-cli-negative-20261110-a01.log",
+      "log_sha256": "173163c54446354b759509f5115023b22ad66c84669b384b3661f2eb3ddb9f3a",
+      "source_sha256": {
+        "tools/build_hp_native_provider.py": "04e1fe35ca91a163d411c6549e6cedd9d4574794580b9ded9a7c3c2e7c4986cf",
+        "tools/native_provider_inputs.py": "d114eff640047f7fc57e03ffa2e403df32f0b5f87ed133c03277cfca0f67afab",
+        "compat/native-file/provider-inputs-f33.json": "f806ae775782b60513fae522bbe3c3325858152e77e39eb6ccea0f6f405a12b3"
+      },
+      "object_compilation": "NOT_RUN",
+      "native_preprocessor": "NOT_RUN"
+    }
+  },
+  "logs": {
+    "f33-root-source-verification-20261110-a01.log": "test_actual_dependency_set_drift_fails_with_receipt (test_native_provider_archive_admission.ProviderAdmissionTests.test_actual_dependency_set_drift_fails_with_receipt) ... ok\ntest_compile_requires_independent_scan_and_equal_actual_dependencies (test_native_provider_archive_admission.ProviderAdmissionTests.test_compile_requires_independent_scan_and_equal_actual_dependencies) ... ok\ntest_default_mode_still_rejects_dirty_native_git_source (test_native_provider_archive_admission.ProviderAdmissionTests.test_default_mode_still_rejects_dirty_native_git_source) ... ok\ntest_existing_output_is_preserved (test_native_provider_archive_admission.ProviderAdmissionTests.test_existing_output_is_preserved) ... ok\ntest_foreign_repository_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_foreign_repository_header_rejected_before_compile) ... ok\ntest_missing_patched_native_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_missing_patched_native_header_rejected_before_compile) ... ok\ntest_native_command_failure_retains_first_log_and_status (test_native_provider_archive_admission.ProviderAdmissionTests.test_native_command_failure_retains_first_log_and_status) ... ok\ntest_original_dependency_creation_is_reported_even_after_preflight (test_native_provider_archive_admission.ProviderAdmissionTests.test_original_dependency_creation_is_reported_even_after_preflight) ... ok\ntest_paired_flags_rejected_before_host_check_or_output (test_native_provider_archive_admission.ProviderAdmissionTests.test_paired_flags_rejected_before_host_check_or_output) ... ok\ntest_preflight_only_has_no_compile_or_object_pass (test_native_provider_archive_admission.ProviderAdmissionTests.test_preflight_only_has_no_compile_or_object_pass) ... ok\ntest_unselected_unit_and_include_root_fail_before_output_or_command (test_native_provider_archive_admission.ProviderAdmissionTests.test_unselected_unit_and_include_root_fail_before_output_or_command) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 1.105s\n\nOK\n",
+    "f33-provider-admission-tests-20261110-a01/tests.log": "test_actual_dependency_set_drift_fails_with_receipt (test_native_provider_archive_admission.ProviderAdmissionTests.test_actual_dependency_set_drift_fails_with_receipt) ... ok\ntest_compile_requires_independent_scan_and_equal_actual_dependencies (test_native_provider_archive_admission.ProviderAdmissionTests.test_compile_requires_independent_scan_and_equal_actual_dependencies) ... ok\ntest_default_mode_still_rejects_dirty_native_git_source (test_native_provider_archive_admission.ProviderAdmissionTests.test_default_mode_still_rejects_dirty_native_git_source) ... ok\ntest_existing_output_is_preserved (test_native_provider_archive_admission.ProviderAdmissionTests.test_existing_output_is_preserved) ... ok\ntest_foreign_repository_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_foreign_repository_header_rejected_before_compile) ... ok\ntest_missing_patched_native_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_missing_patched_native_header_rejected_before_compile) ... ok\ntest_native_command_failure_retains_first_log_and_status (test_native_provider_archive_admission.ProviderAdmissionTests.test_native_command_failure_retains_first_log_and_status) ... ok\ntest_original_dependency_creation_is_reported_even_after_preflight (test_native_provider_archive_admission.ProviderAdmissionTests.test_original_dependency_creation_is_reported_even_after_preflight) ... FAIL\ntest_paired_flags_rejected_before_host_check_or_output (test_native_provider_archive_admission.ProviderAdmissionTests.test_paired_flags_rejected_before_host_check_or_output) ... ok\ntest_preflight_only_has_no_compile_or_object_pass (test_native_provider_archive_admission.ProviderAdmissionTests.test_preflight_only_has_no_compile_or_object_pass) ... ok\ntest_unselected_unit_and_include_root_fail_before_output_or_command (test_native_provider_archive_admission.ProviderAdmissionTests.test_unselected_unit_and_include_root_fail_before_output_or_command) ... ok\n\n======================================================================\nFAIL: test_original_dependency_creation_is_reported_even_after_preflight (test_native_provider_archive_admission.ProviderAdmissionTests.test_original_dependency_creation_is_reported_even_after_preflight)\n----------------------------------------------------------------------\nRuntimeError: original object/dependency/stack artifact changed\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/andreas/projects/hp-i915-f26-20261106/f28-integration/tests/test_native_provider_archive_admission.py\", line 238, in test_original_dependency_creation_is_reported_even_after_preflight\n    with self.assertRaisesRegex(RuntimeError, 'original native artifact'):\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: \"original native artifact\" does not match \"original object/dependency/stack artifact changed\"\n\n----------------------------------------------------------------------\nRan 11 tests in 1.125s\n\nFAILED (failures=1)\n",
+    "f33-provider-admission-tests-20261110-a02/tests.log": "test_native_provider_archive_admission.py\ntest_actual_dependency_set_drift_fails_with_receipt (test_native_provider_archive_admission.ProviderAdmissionTests.test_actual_dependency_set_drift_fails_with_receipt) ... ok\ntest_compile_requires_independent_scan_and_equal_actual_dependencies (test_native_provider_archive_admission.ProviderAdmissionTests.test_compile_requires_independent_scan_and_equal_actual_dependencies) ... ok\ntest_default_mode_still_rejects_dirty_native_git_source (test_native_provider_archive_admission.ProviderAdmissionTests.test_default_mode_still_rejects_dirty_native_git_source) ... ok\ntest_existing_output_is_preserved (test_native_provider_archive_admission.ProviderAdmissionTests.test_existing_output_is_preserved) ... ok\ntest_foreign_repository_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_foreign_repository_header_rejected_before_compile) ... ok\ntest_missing_patched_native_header_rejected_before_compile (test_native_provider_archive_admission.ProviderAdmissionTests.test_missing_patched_native_header_rejected_before_compile) ... ok\ntest_native_command_failure_retains_first_log_and_status (test_native_provider_archive_admission.ProviderAdmissionTests.test_native_command_failure_retains_first_log_and_status) ... ok\ntest_original_dependency_creation_is_reported_even_after_preflight (test_native_provider_archive_admission.ProviderAdmissionTests.test_original_dependency_creation_is_reported_even_after_preflight) ... ok\ntest_paired_flags_rejected_before_host_check_or_output (test_native_provider_archive_admission.ProviderAdmissionTests.test_paired_flags_rejected_before_host_check_or_output) ... ok\ntest_preflight_only_has_no_compile_or_object_pass (test_native_provider_archive_admission.ProviderAdmissionTests.test_preflight_only_has_no_compile_or_object_pass) ... ok\ntest_unselected_unit_and_include_root_fail_before_output_or_command (test_native_provider_archive_admission.ProviderAdmissionTests.test_unselected_unit_and_include_root_fail_before_output_or_command) ... ok\n\n----------------------------------------------------------------------\nRan 11 tests in 1.217s\n\nOK\n\ntest_native_hp_build_preflight.py\ntest_core_hashes_for_different_tool_paths_are_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_core_hashes_for_different_tool_paths_are_rejected) ... ok\ntest_different_core_toolchain_root_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_different_core_toolchain_root_is_rejected) ... ok\ntest_historical_missing_root_or_tool_hashes_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_historical_missing_root_or_tool_hashes_is_rejected) ... ok\ntest_malformed_recorded_tool_digest_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_malformed_recorded_tool_digest_is_rejected) ... ok\ntest_matching_core_provenance_is_retained_without_rebaselining (test_native_hp_build_preflight.CoreToolchainReceipt.test_matching_core_provenance_is_retained_without_rebaselining) ... ok\ntest_same_path_tool_drift_after_core_pass_is_rejected (test_native_hp_build_preflight.CoreToolchainReceipt.test_same_path_tool_drift_after_core_pass_is_rejected) ... ok\ntest_current_and_previous_non_root_owners_are_admitted (test_native_hp_build_preflight.HostAdmission.test_current_and_previous_non_root_owners_are_admitted) ... ok\ntest_root_other_host_os_version_and_architecture_are_rejected (test_native_hp_build_preflight.HostAdmission.test_root_other_host_os_version_and_architecture_are_rejected) ... ok\ntest_exclusive_mkdir_preserves_path_created_after_preflight (test_native_hp_build_preflight.PrivateOutput.test_exclusive_mkdir_preserves_path_created_after_preflight) ... ok\ntest_existing_and_dangling_symlink_outputs_are_preserved (test_native_hp_build_preflight.PrivateOutput.test_existing_and_dangling_symlink_outputs_are_preserved) ... ok\ntest_output_inside_input_or_input_symlink_is_rejected (test_native_hp_build_preflight.PrivateOutput.test_output_inside_input_or_input_symlink_is_rejected) ... ok\ntest_owned_fresh_output_is_created_exclusively_with_private_permissions (test_native_hp_build_preflight.PrivateOutput.test_owned_fresh_output_is_created_exclusively_with_private_permissions) ... ok\ntest_sticky_shared_parent_is_admitted_for_safe_temporary_workflows (test_native_hp_build_preflight.PrivateOutput.test_sticky_shared_parent_is_admitted_for_safe_temporary_workflows) ... ok\ntest_unowned_non_sticky_parent_is_rejected_without_creating_output (test_native_hp_build_preflight.PrivateOutput.test_unowned_non_sticky_parent_is_rejected_without_creating_output) ... ok\ntest_actual_executable_paths_and_matching_config_are_admitted (test_native_hp_build_preflight.ToolchainAdmission.test_actual_executable_paths_and_matching_config_are_admitted) ... ok\ntest_foreign_relative_wrapped_or_additional_compiler_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_foreign_relative_wrapped_or_additional_compiler_is_rejected) ... ok\ntest_missing_or_non_executable_tool_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_missing_or_non_executable_tool_is_rejected) ... ok\ntest_tool_symlink_escaping_root_is_rejected (test_native_hp_build_preflight.ToolchainAdmission.test_tool_symlink_escaping_root_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.151s\n\nOK\n\nACTUAL_READONLY_INPUT_ADMISSION PASS: fixed contract, 7 Git/raw-byte inputs, include roles, full F32 core freeze; no PP/TAR/CC.\n",
+    "f33-provider-input-unit-a01.log": "test_archive_expectations_exclude_repository_and_detect_native_conflict (test_native_provider_inputs.ProviderInputTests.test_archive_expectations_exclude_repository_and_detect_native_conflict) ... ok\ntest_contract_rejects_duplicate_json_keys_and_foreign_pin (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_duplicate_json_keys_and_foreign_pin) ... ok\ntest_contract_rejects_modified_bytes_and_wrong_location (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_modified_bytes_and_wrong_location) ... ok\ntest_contract_rejects_symlink_even_with_identical_target (test_native_provider_inputs.ProviderInputTests.test_contract_rejects_symlink_even_with_identical_target) ... ok\ntest_core_freezes_old_artifact_bytes_and_absence (test_native_provider_inputs.ProviderInputTests.test_core_freezes_old_artifact_bytes_and_absence) ... ok\ntest_core_positive_revalidates_three_owners_and_unused_lockstat (test_native_provider_inputs.ProviderInputTests.test_core_positive_revalidates_three_owners_and_unused_lockstat) ... ok\ntest_core_rejects_dependency_proof_set_or_hash_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_dependency_proof_set_or_hash_drift) ... ok\ntest_core_rejects_object_makefile_and_prior_kernel_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_object_makefile_and_prior_kernel_drift) ... ok\ntest_core_rejects_opt_declared_and_tool_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_opt_declared_and_tool_drift) ... ok\ntest_core_rejects_overlay_patch_contract_and_source_drift (test_native_provider_inputs.ProviderInputTests.test_core_rejects_overlay_patch_contract_and_source_drift) ... ok\ntest_core_reparsed_document_must_equal_frozen_document (test_native_provider_inputs.ProviderInputTests.test_core_reparsed_document_must_equal_frozen_document) ... ok\ntest_core_state_owner_set_and_provenance_required (test_native_provider_inputs.ProviderInputTests.test_core_state_owner_set_and_provenance_required) ... ok\ntest_declared_lockstat_revalidated_without_requiring_provider_consumption (test_native_provider_inputs.ProviderInputTests.test_declared_lockstat_revalidated_without_requiring_provider_consumption) ... ok\ntest_directory_membership_does_not_admit_unreviewed_repository_header (test_native_provider_inputs.ProviderInputTests.test_directory_membership_does_not_admit_unreviewed_repository_header) ... ok\ntest_dirty_selected_input_rejected_but_unselected_file_not_trusted (test_native_provider_inputs.ProviderInputTests.test_dirty_selected_input_rejected_but_unselected_file_not_trusted) ... ok\ntest_empty_dependency_set_rejected (test_native_provider_inputs.ProviderInputTests.test_empty_dependency_set_rejected) ... ok\ntest_exact_core_receipt_bytes_required (test_native_provider_inputs.ProviderInputTests.test_exact_core_receipt_bytes_required) ... ok\ntest_include_roles_exact_order_and_unit_selection (test_native_provider_inputs.ProviderInputTests.test_include_roles_exact_order_and_unit_selection) ... ok\ntest_include_root_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_include_root_symlink_rejected) ... ok\ntest_inherited_git_selectors_cannot_redirect_identity_reads (test_native_provider_inputs.ProviderInputTests.test_inherited_git_selectors_cannot_redirect_identity_reads) ... ok\ntest_missing_patched_native_header_cannot_pass_provider_admission (test_native_provider_inputs.ProviderInputTests.test_missing_patched_native_header_cannot_pass_provider_admission) ... ok\ntest_original_patched_header_and_foreign_native_dependency_rejected (test_native_provider_inputs.ProviderInputTests.test_original_patched_header_and_foreign_native_dependency_rejected) ... ok\ntest_post_md_set_native_and_config_drift_rejected (test_native_provider_inputs.ProviderInputTests.test_post_md_set_native_and_config_drift_rejected) ... ok\ntest_provider_dependency_kinds_are_separate_and_exact (test_native_provider_inputs.ProviderInputTests.test_provider_dependency_kinds_are_separate_and_exact) ... ok\ntest_repository_commit_blob_and_working_bytes_agree (test_native_provider_inputs.ProviderInputTests.test_repository_commit_blob_and_working_bytes_agree) ... ok\ntest_repository_dependency_drift_after_scan_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_dependency_drift_after_scan_rejected) ... ok\ntest_repository_escape_and_selected_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_escape_and_selected_symlink_rejected) ... ok\ntest_repository_parent_symlink_rejected (test_native_provider_inputs.ProviderInputTests.test_repository_parent_symlink_rejected) ... ok\ntest_reviewed_real_contract_has_fixed_seven_identities_and_roles (test_native_provider_inputs.ProviderInputTests.test_reviewed_real_contract_has_fixed_seven_identities_and_roles) ... ok\ntest_selected_blob_sha_and_commit_path_each_required (test_native_provider_inputs.ProviderInputTests.test_selected_blob_sha_and_commit_path_each_required) ... ok\ntest_wrong_repository_cannot_supply_commit (test_native_provider_inputs.ProviderInputTests.test_wrong_repository_cannot_supply_commit) ... fatal: not a tree object\nok\n\n----------------------------------------------------------------------\nRan 31 tests in 3.765s\n\nOK\n",
+    "f33-real-cli-negative-20261110-a01.log": "usage: build_hp_native_provider.py [-h] --source SOURCE\n                                   --kernel-obj KERNEL_OBJ\n                                   --core-status CORE_STATUS\n                                   --provider-root PROVIDER_ROOT\n                                   --output OUTPUT --toolchain TOOLCHAIN\n                                   --unit UNIT [--include-root INCLUDE_ROOT]\n                                   [--source-archive SOURCE_ARCHIVE]\n                                   [--provider-contract PROVIDER_CONTRACT]\n                                   [--preflight-only]\nbuild_hp_native_provider.py: error: --source-archive and --provider-contract must be selected together\n"
+  },
+  "file_sha256": {
+    "f33-source-final-20261110-a01.json": "986e6bda0e4597e0d3a5ecb726829e9d2d83f064023a2b8817a7eb30e606cec4",
+    "f33-root-source-verification-20261110-a01.json": "4dd54e48eb4da64efe81b42b483d5e9fba4e0090a368a5ddd9a3356098ffbdc4",
+    "f33-provider-admission-tests-20261110-a01/status.json": "09452b9c8a85f769cb52af42251a990d1af87f6b2f4af8698f0527d8373441e9",
+    "f33-provider-admission-tests-20261110-a02/status.json": "f15e2e5f6de7c5042a33ee3acd4b4a4809e592d59d7e2837a731756979ebc003",
+    "f33-provider-input-unit-a01.json": "3a461379476d44ae0e6e7ad2f197048908224ef6949db778907233b7cda3e1c4",
+    "f33-real-cli-negative-20261110-a01.json": "eb6cbb7589313eec6a72a820295a483977d4bc57d775d6917c972e68c069702e",
+    "f33-root-source-verification-20261110-a01.log": "dacf074c3d1c63c7102c5d6755e6c3293aee7d91097047af09c1dda54e8e5f13",
+    "f33-provider-admission-tests-20261110-a01/tests.log": "e7fd22b9423d0dd9b562eb176e8c080968570a4c733ca9d7f48ae116e0f48a11",
+    "f33-provider-admission-tests-20261110-a02/tests.log": "c65bdf28c3515e054ba4d7289e85f3204b446770186746281d204ee941817bc4",
+    "f33-provider-input-unit-a01.log": "6ca825d8cdca15226b0f822fe2842bafee9fa24384d5495e115f224fc88a637f",
+    "f33-real-cli-negative-20261110-a01.log": "173163c54446354b759509f5115023b22ad66c84669b384b3661f2eb3ddb9f3a"
+  },
+  "actual_preprocessor": "NOT_RUN",
+  "native_object": "NOT_RUN",
+  "full_kernel": "NOT_RUN",
+  "installed": false,
+  "booted": false,
+  "default_git_body_unchanged": true,
+  "default_git_body_sha256": "e068dbb82705170e260828e8e1581161ba062ecd0c70fbf43e3b5f90117679ca"
+}

@@ -27,12 +27,21 @@ def main():
     parser.add_argument('--toolchain', type=Path, required=True)
     parser.add_argument('--unit', action='append', required=True)
     parser.add_argument('--include-root', action='append', type=Path, default=[])
+    parser.add_argument('--source-archive', type=Path)
+    parser.add_argument('--provider-contract', type=Path)
+    parser.add_argument('--preflight-only', action='store_true')
     args = parser.parse_args()
+    if (args.source_archive is None) != (args.provider_contract is None):
+        parser.error('--source-archive and --provider-contract must be selected together')
+    if args.preflight_only and args.source_archive is None:
+        parser.error('--preflight-only requires the explicit reviewed archive mode')
     try:
         require_hp_owner()
         tools = toolchain_paths(args.toolchain)
     except (ValueError, OSError) as error:
         parser.error(str(error))
+    if args.source_archive is not None:
+        return archive_provider(args, parser, tools)
     source, obj, core_path, provider = [v.resolve(strict=True) for v in
                                        (args.source, args.kernel_obj, args.core_status, args.provider_root)]
     includes = [v.resolve(strict=True) for v in args.include_root]
@@ -128,6 +137,135 @@ def main():
         state['finished']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
     print(json.dumps(dict(state=state['state'],objects=list(state['objects']),failures=failures,status=str(output/'status.json'))))
     return bool(failures)
+
+
+def archive_provider(args, parser, tools):
+    """Explicit reviewed archive mode; its dependency scan is independent of compilation."""
+    from native_provider_inputs import (
+        REPOSITORY, CONTRACT_SHA256, load_contract, native_archive_expectations,
+        provider_dependencies, recheck_provider_dependencies, repository_inputs,
+        require_provider_headers, selected_inputs, verify_core)
+    from native_source_archive import (
+        ArchiveSource, dependency_paths, recheck_prior_artifacts, snapshot_prior_artifacts)
+    try:
+        contract = load_contract(args.provider_contract)
+        source, obj, core_path, provider = [v.resolve(strict=True) for v in
+            (args.source, args.kernel_obj, args.core_status, args.provider_root)]
+        includes = selected_inputs(contract, REPOSITORY, source, provider, args.unit,
+                                   args.include_root)
+        inputs = repository_inputs(REPOSITORY, contract)
+        core = verify_core(core_path, contract, source, obj, tools)
+        overlay = core_path.parent / 'source'
+        cc = configured_compiler(core['flags']['CC'], tools)
+        configured = Path(core['flags']['S']).resolve(strict=True).parent
+        flags = shlex.split(core['flags']['CFLAGS']) + [
+            value.replace(str(configured) + '/', str(source) + '/')
+            for value in shlex.split(core['flags']['CPPFLAGS'])]
+        if not {'-Werror', '-D_KERNEL', '-nostdinc'}.issubset(flags):
+            raise ValueError('actual strict native compiler configuration required')
+        output = private_output(args.output, (source, obj, core_path.parent, provider,
+            *includes, tools['root'], REPOSITORY, args.source_archive.resolve(strict=True)))
+        units = [provider / relative for relative in contract['units']]
+        prior = snapshot_prior_artifacts(obj, [unit.stem for unit in units])
+    except (ValueError, OSError, KeyError) as error:
+        parser.error(str(error))
+    state = dict(state='RUNNING', stage='ADMITTED', started=datetime.datetime.now(
+        datetime.timezone.utc).isoformat(), pid=os.getpid(), host=socket.gethostname(),
+        netbsd_pin=PIN, core_status=str(core_path),
+        core_status_sha256=contract['core_status_sha256'],
+        provider_contract=str(args.provider_contract.resolve()),
+        provider_contract_sha256=CONTRACT_SHA256,
+        repository_commit=contract['repository_commit'], repository_inputs=inputs,
+        toolchain=str(tools['root']), native_tool_sha256=core['native_tool_sha256'],
+        flags=core['flags'], include_roots=[str(path) for path in includes],
+        prior_artifacts=prior, commands=[], precompile_dependencies={}, objects={},
+        full_kernel='NOT_RUN', runtime='NOT_RUN', installed=False, booted=False)
+    create_private_output(output)
+
+    def save():
+        temporary = output / 'status.tmp'
+        temporary.write_text(json.dumps(state, indent=2) + '\n', encoding='utf8')
+        temporary.replace(output / 'status.json')
+
+    def stage(name):
+        state['stage'] = name
+        save()
+
+    def run(command):
+        result = subprocess.run(command, cwd=obj, capture_output=True, text=True, timeout=180)
+        log = output / ('command-' + str(len(state['commands'])).zfill(3) + '.log')
+        log.write_text(result.stdout + result.stderr, encoding='utf8')
+        state['commands'].append(dict(command=command, cwd=str(obj),
+            exit_code=result.returncode, log=str(log), log_sha256=sha(log)))
+        save()
+        if result.returncode:
+            raise RuntimeError('native provider command failed: ' + str(log))
+
+    binding_arguments = (REPOSITORY, inputs, source, overlay, obj,
+                         core['patched_inputs'], core['declared_generated_configuration'])
+    save()
+    try:
+        with ArchiveSource(args.source_archive) as archive:
+            stage('SCANNING_PROVIDER_DEPENDENCIES')
+            all_bindings = {}
+            for unit in units:
+                dep = output / (unit.stem + '.pre.d')
+                command = cc + ['-I' + str(overlay / 'sys')] + [
+                    '-I' + str(path) for path in includes] + flags
+                run(command + ['-M', '-MF', str(dep), '-MT', unit.stem + '.o', str(unit)])
+                bindings = provider_dependencies(dependency_paths(dep, obj), *binding_arguments)
+                if str(unit) not in bindings:
+                    raise ValueError('dependency scan omitted the reviewed provider unit')
+                require_provider_headers(bindings, REPOSITORY, core)
+                for path, row in bindings.items():
+                    if path in all_bindings and all_bindings[path] != row:
+                        raise ValueError('provider dependency changed between scans')
+                    all_bindings[path] = row
+                state['precompile_dependencies'][unit.stem] = bindings
+            stage('VERIFYING_PROVIDER_DEPENDENCIES')
+            archive.verify_source_members(native_archive_expectations(core, all_bindings))
+            state['source_provenance'] = archive.receipt()
+            recheck_provider_dependencies(set(map(Path, all_bindings)), all_bindings,
+                                          *binding_arguments)
+            save()
+            if not args.preflight_only:
+                for unit in units:
+                    stage('COMPILING_' + unit.stem.upper())
+                    artifact, dep = output / (unit.stem + '.o'), output / (unit.stem + '.d')
+                    command = cc + ['-I' + str(overlay / 'sys')] + [
+                        '-I' + str(path) for path in includes] + flags
+                    run(command + ['-MD', '-MF', str(dep), '-c', str(unit),
+                                   '-o', str(artifact)])
+                    proof = recheck_provider_dependencies(dependency_paths(dep, obj),
+                        state['precompile_dependencies'][unit.stem], *binding_arguments)
+                    state['objects'][unit.stem] = dict(bytes=artifact.stat().st_size,
+                        sha256=sha(artifact), dependency_proof=proof)
+                    save()
+            archive.check_identity()
+            recheck_provider_dependencies(set(map(Path, all_bindings)), all_bindings,
+                                          *binding_arguments)
+        state.update(state='PREFLIGHT_PASS' if args.preflight_only else 'PASS',
+                     stage='ADMITTED_NO_OBJECTS' if args.preflight_only else 'COMPLETE',
+                     object_compilation='NOT_RUN' if args.preflight_only else 'COMPLETE')
+    except BaseException as error:
+        state.update(state='FAIL', stage='FAILED', error=str(error))
+        raise
+    finally:
+        try:
+            load_contract(args.provider_contract)
+            if repository_inputs(REPOSITORY, contract) != inputs:
+                raise ValueError('reviewed provider identity changed')
+            verify_core(core_path, contract, source, obj, tools, core=core)
+            recheck_prior_artifacts(obj, prior)
+        except BaseException as error:
+            state.update(state='FAIL', stage='FAILED', integrity_error=str(error))
+        state['finished'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        save()
+    if state['state'] == 'FAIL':
+        raise RuntimeError(state.get('integrity_error', 'provider admission failed'))
+    print(json.dumps(dict(state=state['state'], objects=list(state['objects']),
+                          status=str(output / 'status.json'))))
+    return 0
 
 
 if __name__ == '__main__':
