@@ -19,6 +19,7 @@
 
 #include <linux/kthread.h>
 #include <linux/sched.h>
+#include "task_entry_netbsd.h"
 
 static specificdata_key_t task_key = (specificdata_key_t)-1;
 static volatile unsigned int task_count;
@@ -213,6 +214,11 @@ linux_task_attach_current(struct task_struct *task)
     raw_spin_unlock_irqrestore(&task->lt_lock, flags);
     lwp_setspecific(task_key, task);
 }
+
+/* Entry/lifecycle fragments share this actual Task owner and its static resources. */
+#include "../../native-entry/task_entry.inc"
+#include "../../native-file/task_entry_preallocated.inc"
+#include "../../native-file/task_quiesce_retained.inc"
 
 struct task_struct *
 linux_task_enter_current(void)
