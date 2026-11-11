@@ -1,0 +1,395 @@
+{
+  "applied_owner_sections": 2,
+  "booted": false,
+  "definition_ownership": {
+    "linux_kthread_wake_locked": {
+      "declaration": "include/linux/kthread.h:132",
+      "file": "linux_kthread.c",
+      "line": 415
+    },
+    "private_kthread_structure": {
+      "file": "linux_kthread.c",
+      "line": 55
+    },
+    "private_static_spawn": {
+      "file": "linux_kthread.c",
+      "line": 183
+    },
+    "task_system_fini_checked": {
+      "assertion_line": 87,
+      "call_line": 86,
+      "file": "linux_kthread.c"
+    }
+  },
+  "files": {
+    "include/linux/kthread.h": {
+      "blob": "87bfe919c26654f034351f97acffc88d138cd861",
+      "sha256": "97c094ab5fbc3688334875500c23d5053186d35e6342d2668ce63659335b8814",
+      "size": 4700
+    },
+    "linux_kthread.c": {
+      "blob": "c8f72ebd33119c9a4e47cc58b3397074c0523887",
+      "sha256": "31d75082ff20da8d6cb5664c60dda8733555a572aafd40e8a82ed4f1774d2274",
+      "size": 19566
+    }
+  },
+  "historical_integration": {
+    "interpretation": "Historical candidate claims remain historical; the final selected patch output matches the later final identity record. No historical generator, compile or link is reproduced.",
+    "path": "compat/native-runtime/worker/INTEGRATION.txt"
+  },
+  "historical_recipe": {
+    "executed": false,
+    "limitation": "Its fini replacement discards the task-system return; the final selected patch retains the checked return.",
+    "path": "compat/native-runtime/worker/generate.py"
+  },
+  "historical_recipe_executed": false,
+  "installed": false,
+  "linked": false,
+  "native_compilation": "NOT_RUN",
+  "native_preprocessing": "NOT_RUN",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "open_gates": [
+    "separate exact provider input contract",
+    "actual native preprocessing and compilation",
+    "Task/Wait/Worker ownership and link closure",
+    "worker stop/park/drain/lifetime behavior",
+    "full kernel and physical hardware acceptance"
+  ],
+  "operations": [
+    {
+      "hunk_sha256": "7dc4ad8e9f12e60dee7b60fc173b9c75120fe0c423a925a30f185b9ae6d99c2c",
+      "new_count": 7,
+      "new_sha256": "1e225397f09f02b8f5b4699dcafc46892beb59e1bc9c80974cb09ddaa7011eef",
+      "new_start": 36,
+      "old_count": 3,
+      "old_sha256": "967cbe093c186884bfc267ed75ba9248a7403795af5bfa544815d5e17415ba77",
+      "old_start": 36,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "87734ff5364bb29f79b9ca1803d4f2ef03f59343c72d0c65bf417d7605aae685",
+      "new_count": 3,
+      "new_sha256": "bdbff84ce1e6f985802ab7bb5ed400b6db8736264b5f0327777c228e320f45f7",
+      "new_start": 49,
+      "old_count": 2,
+      "old_sha256": "0ac3c45dd782f0c50641500f850169b34358ad3ad809fd253c21312777c4c19f",
+      "old_start": 45,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "7bb75897571be92b7fce1d2538573f23b079e2ed86bf5e509725c8d2e7d516ad",
+      "new_count": 6,
+      "new_sha256": "96fd0484ee8abe9e3149f02bcda7bdbe560822dcbdf55e09c72f9d3a35615042",
+      "new_start": 54,
+      "old_count": 3,
+      "old_sha256": "b9751fe66ebc1daf85e034c0cf66a0963027fcaed83ba6a7b65d9b88b68e9373",
+      "old_start": 49,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "a3c69bd315dd583dab1fe19c4668b5f5f87855d90b9204b58ab3f1f41296784a",
+      "new_count": 2,
+      "new_sha256": "06f29775331fd1ed5b56aa8ebc1f9c2fcdc810056aa15bfee16e67a3cf338ba4",
+      "new_start": 73,
+      "old_count": 4,
+      "old_sha256": "b6a1112ff3ee3b7addfbbc9c70e3f1b1f919334dc24275255b9f854c5768b99e",
+      "old_start": 65,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "4ebf24826753444a8e1cd2c146a9e81b2f1f5fe2d0ea62933523f6669935f01f",
+      "new_count": 4,
+      "new_sha256": "f55f3ddd95043e5f9facb3900fd95812f2dcf067e8d38086b9646cec1a47492e",
+      "new_start": 76,
+      "old_count": 14,
+      "old_sha256": "443ec22060dd8662ffc38f542a4943b70eae82cbe4de43363ebd8fd10a02e86d",
+      "old_start": 70,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "123a65eefa0306f5ccb90e2f026979a024fe75bb9a408c1e75e468e31e5a0f92",
+      "new_count": 19,
+      "new_sha256": "ac8be8636ee0ccb76aaafc9c2897f6f697b83ab619673634b004e49b47fc0a3f",
+      "new_start": 83,
+      "old_count": 19,
+      "old_sha256": "68518e51769a62a78018a9fefec59b67f53dd8de91017f24bdc302c74be16bc6",
+      "old_start": 87,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "8513415df43e92f70373e6ab00de3faa11b8ccfdbde6a3a13969e5a2b6badf86",
+      "new_count": 10,
+      "new_sha256": "2cf17f23d6e270ee245b79db2ddfa0120ff0c8d915b9972741a68aa560a1cf85",
+      "new_start": 105,
+      "old_count": 6,
+      "old_sha256": "4127ab9fadaba999834e93b7ee59555eae5f9af000793af763c372efb2967573",
+      "old_start": 109,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "7df7f7ec4ed7551dd3b7f9d37109f5fd5f04a7121555db32aadd8c834214bc25",
+      "new_count": 3,
+      "new_sha256": "84f37365459fd192337375689e27c5551043d6cbafaea796698500868e76ff76",
+      "new_start": 130,
+      "old_count": 3,
+      "old_sha256": "0ddf5c72b37d7af0d6250e406d2a1cdc3d8c21a1fb3faec83320853555d6a661",
+      "old_start": 130,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "14e35b4d2a1eb93fc943171fd90730937654242d611d4da42821d74769edac87",
+      "new_count": 11,
+      "new_sha256": "8d209b5b8f66c5564feda9685d3a4f7d4e88624a88cb849f18f6d09f8673becd",
+      "new_start": 134,
+      "old_count": 5,
+      "old_sha256": "dd6790fb92edeb2139b32b9888351d146b938bdd6ab873fdcfebd8eea2e5575d",
+      "old_start": 134,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "d014b4775ebf281c06c2c6222602bc0e675903d095df0106bfa3796d3c827582",
+      "new_count": 14,
+      "new_sha256": "6d8fca2ffbd651669c0c3754abb0d2e6d11e791533b46468038388d16d859987",
+      "new_start": 162,
+      "old_count": 6,
+      "old_sha256": "2fbfb0942c0b8e469c5b7d22611d75a4ef975b8639a4f1128b273eeb117787ce",
+      "old_start": 156,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "1e5e3d48b0cfafccd558b4e5bd175a9fe00c2a4dacdb1dfa4e7642ad904ef0ed",
+      "new_count": 35,
+      "new_sha256": "57130b58dd8be8b5350e7a5d09430ee6af5adf3e151cf882e30fae0c54ce6576",
+      "new_start": 178,
+      "old_count": 2,
+      "old_sha256": "06cb99b249d6881d1fe79a38871fa52afb3027487941b5a5e21b1fb4c3cca45d",
+      "old_start": 164,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "e400042ffa531bf0a999d0eb0989c573a592fd7b64c4c9a81eb4d408e4af5e88",
+      "new_count": 5,
+      "new_sha256": "069be43dfee8e7f409c4bc6eacbb3cff16e0c0be8665c91b7b0111ec67ae3ac3",
+      "new_start": 217,
+      "old_count": 14,
+      "old_sha256": "ddf92b8802edf5a6a44aa48b9abf293ede8b4254c73cd9e18986890abff436e3",
+      "old_start": 170,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "878364462f035fa44cf719a8d9962428697e6016973433e0cc56f15f513d7b39",
+      "new_count": 8,
+      "new_sha256": "145b4e7288e1c16f5a22eebc4fa12762f5c7b4becadbb775c62bfd478fed949d",
+      "new_start": 223,
+      "old_count": 5,
+      "old_sha256": "5767a89982683f9b71ef31796ed355dd3e51917a72a22a47162543ea2852451b",
+      "old_start": 185,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "4e0bdd6acd05f492afc378c8c92004bb0fb0bb5a47d2725531581e323be20037",
+      "new_count": 5,
+      "new_sha256": "b40e6e30881724838b489d196a238035b583c67f4337ae1ff8b4a3fd7c67e9a6",
+      "new_start": 246,
+      "old_count": 2,
+      "old_sha256": "974a26feb9213bb80e6fa1bbac4040197662591d569b67ddad63e8e8378a6b29",
+      "old_start": 205,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "58d37c96f1ed840019b58c5f3e5813652080677a00931b89dc2aa6e69104eee8",
+      "new_count": 5,
+      "new_sha256": "2081d56fe9b9d138f73e4cb312693a3580384b8f24c98a4028085e1d5e1523de",
+      "new_start": 257,
+      "old_count": 2,
+      "old_sha256": "c14ef66a31638bfdaf918c9c44f2468c5b2a0edf1cad1c3399669735a6865734",
+      "old_start": 213,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "8c8af58a8f969ad5cd69c5c04258bed92777d51595ef0f28680b1469adab1bce",
+      "new_count": 3,
+      "new_sha256": "22407dfa92f6166327a1bd644075fe787e0fda1ea39151f028326b285ec5164e",
+      "new_start": 270,
+      "old_count": 3,
+      "old_sha256": "1798b6fb009b3c60b6e79295318e09a9bd3283159774bc5170148b71abcfe8a8",
+      "old_start": 223,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "0a75ae225f8578169a1de2680caeb116fbea3334afa3ff637cd4c7b4c21408cb",
+      "new_count": 5,
+      "new_sha256": "a865118529b673a976fa814e40e8e7bbba28af9b269ba9f4d4bd94a4a8b91f52",
+      "new_start": 281,
+      "old_count": 4,
+      "old_sha256": "82e1dee92d5885398febf0c200a4bb3e7b57f322621d3bb70a8d1b70ee399e38",
+      "old_start": 234,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "37e0a74382c3ee8f3fbf8bb9374f7171b695f8cdbe11562582db8fd1501ae462",
+      "new_count": 3,
+      "new_sha256": "33c3cd249e35c647369b2afa3e3a6a8b7a4672b21cca5b31bede737bf0faf478",
+      "new_start": 302,
+      "old_count": 2,
+      "old_sha256": "6b9e866ecc5e3b7e0eb71612cabbc7b03db574aba0548db26fafb9071b098439",
+      "old_start": 254,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "b25881ab2eb8ed2e698ed222a1ae4c6e57462148c04637762138a26123287d0d",
+      "new_count": 5,
+      "new_sha256": "fe330c5bc7c7ca7529406fd1b5b15545fe77dda98b1766f5c7fd1531ec84d67a",
+      "new_start": 319,
+      "old_count": 4,
+      "old_sha256": "f98260285610dfbab04084f78017da5a5595ac6f871f6733377ac17bfdc94e91",
+      "old_start": 270,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "76507bbe06ea83c92c4f8d0a1acf10495eda601eb6addd27f08c712c404f6268",
+      "new_count": 5,
+      "new_sha256": "e34589f49488ee726d671a3ee3fae1372af7927a69d4b3f1705853d1d4142cf0",
+      "new_start": 330,
+      "old_count": 4,
+      "old_sha256": "20b68c18680fdd553b9dc17a852aca9bad20ff0486041ff016e634b6d38ae7a3",
+      "old_start": 280,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "536d09deee68eb057d3d1790c8e24ad8277eab8a73662e541f698557bb434165",
+      "new_count": 5,
+      "new_sha256": "bb994636fe6c24e1dda8ba35d7d99f9903edf34309280beb95bd4be8bfa83b0f",
+      "new_start": 345,
+      "old_count": 5,
+      "old_sha256": "f7f16335232d4712d8dc4df4129bb4c33fd3a4e0d5d47e9181c6aa1faaa11d67",
+      "old_start": 294,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "db73bf7d3470ebfebe665ea0ae57ad99b1f9d4c2f21d64f4b9b308b709a37cc7",
+      "new_count": 3,
+      "new_sha256": "a71e1c2b411f4036c7aa650c0ea67029dbddd4482a3a9111db53206dcc481a72",
+      "new_start": 353,
+      "old_count": 3,
+      "old_sha256": "8bf9870bc5ffd4f098d041c65d1ea96dba7336fcf52edfd176d422ff68cd7c52",
+      "old_start": 302,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "33a23be71645dbab8ac0abfc57bf6d9e0543cca52abc48fcbc23591c76f098b7",
+      "new_count": 3,
+      "new_sha256": "869df1c860ab4d50d85e23e4f2bfcc859eb057433306b5a81eb01201c105117c",
+      "new_start": 360,
+      "old_count": 2,
+      "old_sha256": "47451960a4bab8151b0c056319ddb25c65339eee0962b934c94c83d0e6526550",
+      "old_start": 309,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "bf23765a3255c23d2b376305459b06662737ffe18f0bd18cfabcc653a614d087",
+      "new_count": 3,
+      "new_sha256": "0f18cf2998cc4f876b8553c65e9f2478593124a9122f7838adae26b5c1ba4ee7",
+      "new_start": 366,
+      "old_count": 2,
+      "old_sha256": "74b8aa6a6785df4ae390989eddbe79d9b6f33226b1a9ce37e341c2ad457e0659",
+      "old_start": 314,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "5e32528c104aab22250565d69da26cbade2368209762e57b1692a5be626e6c75",
+      "new_count": 370,
+      "new_sha256": "0a2dcb63f6a4ef63faa3eed756e4e3d34ce348ec325c092493a612d55847cae4",
+      "new_start": 370,
+      "old_count": 1,
+      "old_sha256": "412ca345ccf75bf9c0806bce695be8de808b79984251a7a54d202cf6101dd451",
+      "old_start": 317,
+      "owner": "sys/external/bsd/drm2/linux/linux_kthread.c"
+    },
+    {
+      "hunk_sha256": "6b02048b151e0b1e98f7ba0fcfe0f019d90dd2f26ebb64d9927b0159d1b8469e",
+      "new_count": 4,
+      "new_sha256": "a9f8e0fab9bdaa7cf3d7325f86e24cab4a7fa10fba2a369bf526f09d0e7c6684",
+      "new_start": 35,
+      "old_count": 2,
+      "old_sha256": "bcf274098bf4efdb98a237684f7fe05b399ece46ee0a555cf868f77343d65316",
+      "old_start": 35,
+      "owner": "sys/external/bsd/drm2/include/linux/kthread.h"
+    },
+    {
+      "hunk_sha256": "97dddfc9a57a4d4def27285d532b78fe50143aa066e9b2c6b42d5548c9104852",
+      "new_count": 70,
+      "new_sha256": "9f996d52ae47141ea17690ba52f115863ce0de5ea37ff1dcf0f2174795cd9834",
+      "new_start": 66,
+      "old_count": 2,
+      "old_sha256": "3da5d956c343d465c94c87dfb06df2bbcff36f7e53c8aaf0ba8ee81d67b7a533",
+      "old_start": 64,
+      "owner": "sys/external/bsd/drm2/include/linux/kthread.h"
+    }
+  ],
+  "patch_owner_sections": 14,
+  "recovery_tool_sha256": "83a2a0190b0b66714dedbfac9c025e2ba6828f00f64362fbaf65519329fc4379",
+  "repository_input_commit": "e7d7100c44322d3209d8f43d1d3a3842b52b340b",
+  "repository_inputs": {
+    "compat/native-runtime/worker/INTEGRATION.txt": {
+      "blob": "2ecf30dbfba159795fee0a2951cf1dc2c3f9d30f",
+      "role": "historical_and_final_patch_identity_record",
+      "sha256": "641fea8eb59177617cd1e54dd60bab45a59dec1c97205a6815bc74b859d7a12b",
+      "size": 6579
+    },
+    "compat/native-runtime/worker/base/kthread.h": {
+      "blob": "74af400efc77e55c821f11e7bafd7a499e141962",
+      "role": "pinned_native_header",
+      "sha256": "4384d635d5049d38bd322009007b04808afeb30e4c99c0e484ba95bfbd10933b",
+      "size": 2546
+    },
+    "compat/native-runtime/worker/base/linux_kthread.c": {
+      "blob": "a7735f8eb62a1ae697756deed51c718396e9b579",
+      "role": "pinned_native_source",
+      "sha256": "566260787e456fe3ea40fb50f2cc93500faf0ccb4927a0a5e977777ad89d61bf",
+      "size": 7207
+    },
+    "compat/native-runtime/worker/generate.py": {
+      "blob": "2ac669aba5f269d5e9b5c49fdfb43a2aaf3b3fde",
+      "role": "historical_recipe_read_only_not_executed",
+      "sha256": "722d9acb293caa2a1447a61656f954e82f9a54be63f4628362ad7d1e9180274b",
+      "size": 8005
+    },
+    "compat/native-runtime/worker/worker.inc": {
+      "blob": "54576a3a96d24f51788c40ae38fbb1f9b2f5d4e4",
+      "role": "embedded_worker_implementation_witness",
+      "sha256": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d",
+      "size": 10512
+    },
+    "compat/native-runtime/worker/worker_header.inc": {
+      "blob": "70aa0ef127e2b4c8f242f5868d6efda2fdd13c6f",
+      "role": "embedded_worker_declaration_witness",
+      "sha256": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2",
+      "size": 2098
+    },
+    "patches/0032-netbsd-linux-task-wait-worker.patch": {
+      "blob": "20e0b8bdcaaa29b5050e1ac353086604308f0cad",
+      "role": "selected_final_patch_authority",
+      "sha256": "9b53ce73daba8b6937c54209e2ff28087775409c9be2c386a97301f3781737fd",
+      "size": 130848
+    }
+  },
+  "runtime": "NOT_RUN",
+  "schema": 1,
+  "selected_sections": {
+    "sys/external/bsd/drm2/include/linux/kthread.h": {
+      "hunks": 2,
+      "sha256": "cd3bf675e1335dfe671d832178ce6a9828d198d7b4abc80387378f86ed489477",
+      "size": 2431
+    },
+    "sys/external/bsd/drm2/linux/linux_kthread.c": {
+      "hunks": 25,
+      "sha256": "25f4bae7984a11a355b06aefd2ba7ac37f424ca0b4390d89d95942f715c2091a",
+      "size": 17013
+    }
+  },
+  "source_mode": "PINNED_NETBSD_BLOBS_PLUS_EXACT_TWO_REVIEWED_PATCH_SECTIONS",
+  "state": "RECOVERED_SOURCE_ONLY_NOT_INSTALLED",
+  "unexecuted_owner_sections": 12,
+  "whole_patch_applied": false
+}
