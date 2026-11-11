@@ -1,37 +1,43 @@
 # HP-I915 F46: Poll owner API and input provenance
 
-F46 source and tests are verified. The separate Poll wrapper and seventh fixed contract preserve the previous protections. All 287 tests passed on the HP. The complete original F46 acceptance remains **BLOCKED** because 49 historical native build inputs under /tmp are absent; the full F32 core recheck cannot run.
+F46 is **PASS for its complete original source/admission criterion** after A02 revalidation. The Poll wrapper exposes the existing real Task API, the seventh fixed input contract preserves the previous protections, and all 287 source tests passed. Actual native Poll preprocessing and compilation remain the separate F48 gate.
 
-## Source ownership
+## Source ownership and fixed inputs
 
-The unchanged linux_poll.c calls linux_task_entry_enter and linux_task_entry_leave at lines 308 and 314. Their existing declaration companion is compat/native-runtime/task/task_entry_netbsd.h; their actual definitions remain in compat/native-entry/task_entry.inc. New linux_poll_owner.c includes that declaration header before the original Poll C. It copies no declaration, implementation or Task layout.
+Unchanged linux_poll.c calls linux_task_entry_enter and linux_task_entry_leave at lines 308 and 314. Their declaration companion remains compat/native-runtime/task/task_entry_netbsd.h; the real definitions remain in compat/native-entry/task_entry.inc. New linux_poll_owner.c includes that companion before the original Poll C. It copies no declaration, implementation or Task layout.
 
-The wrapper inputs were published and fetched back at d828f558b16806130c9a044e9795ca89e3c1f022 before the new contract bound them. The original Poll C, declaration companion, Task fragments and existing mapping headers remain byte-identical.
+The wrapper inputs were published and fetched back at d828f558b16806130c9a044e9795ca89e3c1f022 before the new contract bound them. Implementation/tests were published at c55836ef62fae1b3f5d314ecc383a6c713160755. Original Poll C, API companion, Task fragments and mapping headers remain unchanged.
 
-## Exact seventh selection
+compat/native-file/provider-inputs-f46-poll.json has SHA256 9f477521b790e036aaa0dbfddccee1c1ebb06bf62c6034c3d5b4d8b4e5e0db60. It binds 26 actual paths, Git blobs and SHA256 values. Seventeen must be consumed in both independent and compiler dependency proofs; eight generation-proof owners and one API definition owner are frozen and forbidden as compiler dependencies.
 
-compat/native-file/provider-inputs-f46-poll.json has SHA256 9f477521b790e036aaa0dbfddccee1c1ebb06bf62c6034c3d5b4d8b4e5e0db60. It binds 26 real paths, Git blobs and SHA256 values to the published input commit. Seventeen inputs must appear in both the independent dependency scan and the compiler dependency proof. Eight generation-proof owners and the Task-entry API definition owner remain frozen and forbidden as compiler dependencies.
+The sole unit is linux_poll_owner.c. Include order is narrow FILE, MM, UIO, recovered Wait and runtime mappings, then the two native common/drm2 roots. Patched sys/sys/file.h remains required.
 
-The sole unit is linux_poll_owner.c. Include order is the narrow FILE, MM, UIO, recovered Wait and runtime mappings, followed by the two existing native common/drm2 roots. The patched sys/sys/file.h remains required. No broad compatibility include root is admitted.
+Poll has its own exact selection. It separately loads the unchanged sixth fixed Wait contract and its 15 Git-bound rows, verifies the same-read generation chain and cross-checks every shared path/blob/SHA identity. Recovered linux_wait.c is proof-only for Poll. The proof runs before output creation and again during final verification. Existing Wait, Git, archive, full core, original-patched-header, private-output and proof-owner guards remain intact; all six previous contract files are unchanged.
 
-Poll has its own exact dispatch and never supplies a Poll-shaped contract to the existing Wait verifier. It separately loads the unchanged sixth fixed Wait contract, verifies its 15 Git-bound rows and generation chain, and cross-checks all 15 shared path/blob/SHA identities. Recovered linux_wait.c is proof-only for Poll. The referenced Wait proof is checked before output creation and again during final verification.
+## Tests and actual revalidation
 
-The previous six contract files, Wait checks, core proof, default Git mode, archive checks, original-patched-header rejection, private-output checks and proof-owner dependency prohibitions remain intact.
+The original HP batch ran 19 suites: all 245 prior tests plus 42 new tests, every exit zero. New tests cover all 17 omissions and nine proof-owner dependency rejections in both stages, binding/selection/include order, real API ownership, shared Wait provenance, duplicate/cross-linked JSON and final generation/core drift. Public-builder tests use private fixtures and simulated compiler results.
 
-## Validation
+A02 rechecked all 799 working Git blobs from the implementation/test baseline, including 180 tracked test files. All match c558 exactly; later source changes were only F47 evidence. The 287 recorded results were reused on that verified identity. No implementation or test change justified another identical suite run.
 
-The HP ran 19 suites: all 245 previous tests plus 42 new tests, every command exit zero. New tests cover all 17 consumed-input omissions and all nine proof-owner dependency rejections in both dependency stages, full binding identities, exact selection and include order, original API ownership, shared Wait provenance, duplicate/cross-linked JSON and final generation/core drift. Builder integration tests use private fixtures and simulated compiler results.
+Actual read-only A02 checks verified all 26 Poll Git identities, the independent 15-input Wait contract, both generation proofs and unchanged full F32 core before and after. The original core status remains SHA256 d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794.
 
-Actual read-only checks verified all 26 Poll Git identities, the separate 15-input Wait contract, its generation evidence and the old six policies. Two actual CLI negative checks exited 2 without creating output: preflight without archive selection and the unavailable historical native toolchain. An actual broad-include admission check and full native core verification remain blocked by those missing prerequisites; passing fixture tests do not replace them.
+Three actual public CLI negative cases exited 2 with the exact expected selector error and no output: a broad compatibility root, original linux_poll.c instead of its wrapper, and replacement of the recovered Wait include root. Rejection occurs before any native dependency scan or compiler command. All 1921 frozen states checked by A02 remain unchanged.
 
-All 1,327 states frozen at the start of this run remain unchanged, including all 177 previously tracked test files, six old manifests, protected kernel/boot state and durable prior private artifacts. Of the old 602-state F45 baseline, 551 states still match, two controller files were authorized for this change, and 49 historical temporary states were already absent at re-entry. Those absences are recorded explicitly and are not claimed as preserved native proof. The original checkout remains clean at 5c7ac64c8c740701365dfbf3bf9159cc13fcf344.
+Independent implementation and actual-receipt review confirmed the original criterion. Full receipts, hashes and the exact CLI commands/errors are in [the evidence](evidence/HP_F46_POLL_OWNER_API_PROVENANCE_20261111.json).
 
-Independent source/AST review found no actionable issue. No actual native preprocessing, compilation, production recovery, link, full kernel build, installation, boot, EFI/radio change, cleanup or hosted CI ran in F46.
+## Historical blocker and its recovery
 
-## Recovery dependency and synchronization
+F46 A01 preserved a real re-entry finding: 49 old native build paths under /tmp were absent. Its source/tests passed, but the full core prerequisite remained blocked. That original event and [immutable source evidence](https://github.com/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/blob/c55836ef62fae1b3f5d314ecc383a6c713160755/docs/evidence/HP_F46_POLL_OWNER_API_PROVENANCE_20261111.json) are retained.
 
-The missing paths include the configured Makefile, generated headers, prior three-owner object/dependency/stack-use files and original toolchain paths. The durable F26 artifact set does not contain all of their original bytes. Reconstructing or restoring them requires a separate scoped PRE and exact provenance checks. No guard, old contract or core receipt was relaxed to accept the missing state.
+Separate F47 A02 restored every one of the 49 original path/size/hash identities, ran the unchanged core proof and preserved 1364 states. Configuration and three stock owners required ten successful configuration/dependency/GCC/CTF commands. F47's earlier network-guard failure, causal fix and five focused local regressions remain separately recorded. [F47 recovery](HP_F47_NATIVE_PREREQUISITE_RECOVERY_20261111.md) provides its exact scope and evidence.
 
-Detailed receipts and the exact missing-state list are in [the evidence](evidence/HP_F46_POLL_OWNER_API_PROVENANCE_20261111.json). Source and evidence are published on work/hp-f28-modern-provider-integration-20261109, followed by scoped Governance POST and independent remote readback. Only the HP and canonical Git publication are verified; other hosts remain unverified. The expected SteamDeck source folder is absent.
+F46 A02 reopened the same original acceptance after F47 closed successfully. No old contract, receipt, hash, declaration, body or acceptance condition was weakened to close it.
 
-The next safe action is to establish the exact native recovery inputs and publish a separate recovery PRE, then re-run the original full core acceptance before any native Poll attempt. F77 and the protected boot files remain unchanged; the parent project remains PARTIAL.
+## Synchronization and next gate
+
+Implementation, updated source evidence and scoped Governance are published on the selected work branch and Governance main, then fetched and compared byte-for-byte. Only HP and canonical Git publication are verified; the expected SteamDeck source folder is absent and other hosts remain unverified.
+
+F77, /netbsd, /boot.cfg, EFI/radio and existing native artifacts remain unchanged. F46 itself ran no actual -M/CC, production generator, full graph, kernel/link, installation, boot, cleanup or hosted CI. The parent project remains PARTIAL.
+
+F48 may perform one separately governed native linux_poll_owner object proof using this exact contract, recovered core and preserved artifacts. Object success will still leave linking, runtime lifetimes, complete providers/kernel and physical acceptance open.
