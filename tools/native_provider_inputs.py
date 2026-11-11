@@ -1,4 +1,5 @@
 """Reviewed native FILE provider identities and independent dependency admission."""
+import copy
 import hashlib
 import json
 import os
@@ -27,6 +28,105 @@ WAIT_CONTRACT_PATH = 'compat/native-runtime/wait-contracts/provider-inputs-f44-w
 WAIT_CONTRACT_SHA256 = '5561d9005df2e8018262fb81437ae5abc88e2cb13a6f7306f604a3d4e728309c'
 POLL_CONTRACT_PATH = 'compat/native-file/provider-inputs-f46-poll.json'
 POLL_CONTRACT_SHA256 = '9f477521b790e036aaa0dbfddccee1c1ebb06bf62c6034c3d5b4d8b4e5e0db60'
+WORKER_CONTRACT_PATH = 'compat/native-runtime/worker-contracts/provider-inputs-f50-worker.json'
+WORKER_CONTRACT_SHA256 = '996f8a34b35e4345c16814f5d72dbd0bdbb1691bdd9a281b3a0bd9fb18560dc3'
+_WORKER_PROVENANCE_PATH = 'compat/native-runtime/worker-f49/provenance.json'
+_WORKER_PROVENANCE_SHA256 = '91f22a4fda6bdb0c9e61020acf31ac698c7ee009d65b07d58c7fa55c22a07fa1'
+_WORKER_INPUT_COMMIT = 'e7d7100c44322d3209d8f43d1d3a3842b52b340b'
+_WORKER_INPUT_ROLES = {'compat/native-runtime/worker-f49/linux_kthread.c': 'translation_unit',
+ 'compat/native-runtime/worker-f49/include/linux/kthread.h': 'worker_header',
+ 'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+ 'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+ 'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+ 'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+ 'compat/native-runtime/task/task_netbsd.h': 'task_header',
+ 'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+ 'compat/native-runtime/worker-f49/provenance.json': 'generation_proof_owner',
+ 'tools/recover_native_worker.py': 'generation_proof_owner',
+ 'compat/native-runtime/worker/INTEGRATION.txt': 'generation_proof_owner',
+ 'compat/native-runtime/worker/base/kthread.h': 'generation_proof_owner',
+ 'compat/native-runtime/worker/base/linux_kthread.c': 'generation_proof_owner',
+ 'compat/native-runtime/worker/generate.py': 'generation_proof_owner',
+ 'compat/native-runtime/worker/worker.inc': 'generation_proof_owner',
+ 'compat/native-runtime/worker/worker_header.inc': 'generation_proof_owner',
+ 'patches/0032-netbsd-linux-task-wait-worker.patch': 'generation_proof_owner'}
+_WORKER_SOURCE_IDENTITIES = {'compat/native-runtime/worker/INTEGRATION.txt': {'blob': '2ecf30dbfba159795fee0a2951cf1dc2c3f9d30f',
+                                                  'role': 'historical_and_final_patch_identity_record',
+                                                  'sha256': '641fea8eb59177617cd1e54dd60bab45a59dec1c97205a6815bc74b859d7a12b',
+                                                  'size': 6579},
+ 'compat/native-runtime/worker/base/kthread.h': {'blob': '74af400efc77e55c821f11e7bafd7a499e141962',
+                                                 'role': 'pinned_native_header',
+                                                 'sha256': '4384d635d5049d38bd322009007b04808afeb30e4c99c0e484ba95bfbd10933b',
+                                                 'size': 2546},
+ 'compat/native-runtime/worker/base/linux_kthread.c': {'blob': 'a7735f8eb62a1ae697756deed51c718396e9b579',
+                                                       'role': 'pinned_native_source',
+                                                       'sha256': '566260787e456fe3ea40fb50f2cc93500faf0ccb4927a0a5e977777ad89d61bf',
+                                                       'size': 7207},
+ 'compat/native-runtime/worker/generate.py': {'blob': '2ac669aba5f269d5e9b5c49fdfb43a2aaf3b3fde',
+                                              'role': 'historical_recipe_read_only_not_executed',
+                                              'sha256': '722d9acb293caa2a1447a61656f954e82f9a54be63f4628362ad7d1e9180274b',
+                                              'size': 8005},
+ 'compat/native-runtime/worker/worker.inc': {'blob': '54576a3a96d24f51788c40ae38fbb1f9b2f5d4e4',
+                                             'role': 'embedded_worker_implementation_witness',
+                                             'sha256': '2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d',
+                                             'size': 10512},
+ 'compat/native-runtime/worker/worker_header.inc': {'blob': '70aa0ef127e2b4c8f242f5868d6efda2fdd13c6f',
+                                                    'role': 'embedded_worker_declaration_witness',
+                                                    'sha256': '9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2',
+                                                    'size': 2098},
+ 'patches/0032-netbsd-linux-task-wait-worker.patch': {'blob': '20e0b8bdcaaa29b5050e1ac353086604308f0cad',
+                                                      'role': 'selected_final_patch_authority',
+                                                      'sha256': '9b53ce73daba8b6937c54209e2ff28087775409c9be2c386a97301f3781737fd',
+                                                      'size': 130848}}
+_WORKER_OUTPUT_IDENTITIES = {'include/linux/kthread.h': {'blob': '87bfe919c26654f034351f97acffc88d138cd861',
+                             'sha256': '97c094ab5fbc3688334875500c23d5053186d35e6342d2668ce63659335b8814',
+                             'size': 4700},
+ 'linux_kthread.c': {'blob': 'c8f72ebd33119c9a4e47cc58b3397074c0523887',
+                     'sha256': '31d75082ff20da8d6cb5664c60dda8733555a572aafd40e8a82ed4f1774d2274',
+                     'size': 19566}}
+_WORKER_SECTIONS = {'sys/external/bsd/drm2/include/linux/kthread.h': {'hunks': 2,
+                                                   'sha256': 'cd3bf675e1335dfe671d832178ce6a9828d198d7b4abc80387378f86ed489477',
+                                                   'size': 2431},
+ 'sys/external/bsd/drm2/linux/linux_kthread.c': {'hunks': 25,
+                                                 'sha256': '25f4bae7984a11a355b06aefd2ba7ac37f424ca0b4390d89d95942f715c2091a',
+                                                 'size': 17013}}
+_WORKER_RECOVERY_TOOL_SHA256 = '83a2a0190b0b66714dedbfac9c025e2ba6828f00f64362fbaf65519329fc4379'
+_WORKER_AUDIT_SHA256 = '3b7fd8d098fc40b9d4401f18121d461fb7821e0477587aba0843413bb73454ed'
+_WORKER_DEFINITION_OWNERSHIP = {'linux_kthread_wake_locked': {'declaration': 'include/linux/kthread.h:132',
+                               'file': 'linux_kthread.c',
+                               'line': 415},
+ 'private_kthread_structure': {'file': 'linux_kthread.c', 'line': 55},
+ 'private_static_spawn': {'file': 'linux_kthread.c', 'line': 183},
+ 'task_system_fini_checked': {'assertion_line': 87, 'call_line': 86, 'file': 'linux_kthread.c'}}
+_WORKER_HISTORICAL_RECIPE = {'executed': False,
+ 'limitation': 'Its fini replacement discards the task-system return; the final selected patch retains '
+               'the checked return.',
+ 'path': 'compat/native-runtime/worker/generate.py'}
+_WORKER_HISTORICAL_INTEGRATION = {'interpretation': 'Historical candidate claims remain historical; the final selected patch output '
+                   'matches the later final identity record. No historical generator, compile or link '
+                   'is reproduced.',
+ 'path': 'compat/native-runtime/worker/INTEGRATION.txt'}
+_WORKER_OPEN_GATES = ['separate exact provider input contract',
+ 'actual native preprocessing and compilation',
+ 'Task/Wait/Worker ownership and link closure',
+ 'worker stop/park/drain/lifetime behavior',
+ 'full kernel and physical hardware acceptance']
+_WORKER_SCOPE = {'applied_owner_sections': 2,
+ 'booted': False,
+ 'historical_recipe_executed': False,
+ 'installed': False,
+ 'linked': False,
+ 'native_compilation': 'NOT_RUN',
+ 'native_preprocessing': 'NOT_RUN',
+ 'patch_owner_sections': 14,
+ 'runtime': 'NOT_RUN',
+ 'source_mode': 'PINNED_NETBSD_BLOBS_PLUS_EXACT_TWO_REVIEWED_PATCH_SECTIONS',
+ 'state': 'RECOVERED_SOURCE_ONLY_NOT_INSTALLED',
+ 'unexecuted_owner_sections': 12,
+ 'whole_patch_applied': False}
+_WORKER_REQUIRED_INPUTS = frozenset(name for name, role in _WORKER_INPUT_ROLES.items()
+                                    if role != 'generation_proof_owner')
+_WORKER_PROVENANCE_KEYS = frozenset(['applied_owner_sections', 'booted', 'definition_ownership', 'files', 'historical_integration', 'historical_recipe', 'historical_recipe_executed', 'installed', 'linked', 'native_compilation', 'native_preprocessing', 'netbsd_pin', 'open_gates', 'operations', 'patch_owner_sections', 'recovery_tool_sha256', 'repository_input_commit', 'repository_inputs', 'runtime', 'schema', 'selected_sections', 'source_mode', 'state', 'unexecuted_owner_sections', 'whole_patch_applied'])
 WAIT_LINUX_PIN = 'fd179f8a05be3ccae366b9b96e176b51fbe54aab'
 _WAIT_INPUT_ROLES = {
     'compat/native-runtime/wait-f43/linux_wait.c': 'translation_unit',
@@ -150,7 +250,8 @@ def reviewed_contract_sha256(path, repository=REPOSITORY):
                                    (TASK_CONTRACT_PATH, TASK_CONTRACT_SHA256),
                                    (TASK_WORKER_CONTRACT_PATH, TASK_WORKER_CONTRACT_SHA256),
                                    (WAIT_CONTRACT_PATH, WAIT_CONTRACT_SHA256),
-                                   (POLL_CONTRACT_PATH, POLL_CONTRACT_SHA256)):
+                                   (POLL_CONTRACT_PATH, POLL_CONTRACT_SHA256),
+                                   (WORKER_CONTRACT_PATH, WORKER_CONTRACT_SHA256)):
             if resolved == repository / relative:
                 return expected
     raise ValueError('a reviewed source-owned native FILE provider contract is required')
@@ -312,6 +413,141 @@ def recheck_provider_dependencies(paths, before, *arguments):
 def native_archive_expectations(core, bindings):
     native = {path: row for path, row in bindings.items() if row['kind'] != 'repository'}
     return archive_expectations(core['source_provenance']['verified_source_members'], native)
+
+
+def worker_input_policy(contract=None, reviewed_sha256=None):
+    """Only the eighth fixed selection admits the complete recovered Worker owner."""
+    if reviewed_sha256 != WORKER_CONTRACT_SHA256:
+        rows = contract.get('repository_inputs', {}) if isinstance(contract, dict) else {}
+        if (isinstance(contract, dict) and contract.get('units') == ['linux_kthread.c'] or
+                isinstance(rows, dict) and any(isinstance(row, dict) and row.get('role') == 'worker_header'
+                                               for row in rows.values())):
+            raise ValueError('Worker inputs require the exact reviewed Worker contract')
+        return []
+    if not isinstance(contract, dict):
+        raise ValueError('reviewed Worker provider identity/shape differs')
+    rows = contract.get('repository_inputs')
+    shape = dict(schema=1, provider_root='compat/native-runtime/worker-f49',
+                 units=['linux_kthread.c'], required_patched_headers=[],
+                 repository_include_roots=['compat/native-runtime/worker-f49/include',
+                                           'compat/native-runtime/include'],
+                 native_include_roots=['sys/external/bsd/common/include',
+                                       'sys/external/bsd/drm2/include'],
+                 generation_provenance_sha256=_WORKER_PROVENANCE_SHA256)
+    if (type(contract.get('schema')) is not int or
+            any(contract.get(key) != value for key, value in shape.items()) or
+            not isinstance(rows, dict) or any(not isinstance(row, dict) for row in rows.values()) or
+            {name: row.get('role') for name, row in rows.items()} != _WORKER_INPUT_ROLES):
+        raise ValueError('reviewed Worker provider identity/shape differs')
+    return sorted(_WORKER_REQUIRED_INPUTS)
+
+
+def require_worker_inputs(bindings, repository, contract=None, reviewed_sha256=None):
+    for name in worker_input_policy(contract, reviewed_sha256):
+        expected = dict(kind='repository', relative=name, **contract['repository_inputs'][name])
+        if bindings.get(str(Path(repository) / name)) != expected:
+            raise ValueError('provider did not consume the required Worker input: ' + name)
+
+
+def verify_worker_generation(repository, contract, repository_bindings, reviewed_sha256=None):
+    """Cross-link same-read F49 source evidence; never import/run producer or recipe."""
+    if not worker_input_policy(contract, reviewed_sha256):
+        return {}
+    repository = Path(repository).resolve(strict=True)
+    try:
+        if set(repository_bindings) != {str(repository / name) for name in _WORKER_INPUT_ROLES}:
+            raise ValueError('exactly seventeen Git-bound rows required')
+
+        def read_bound(name):
+            expected = dict(kind='repository', relative=name, **contract['repository_inputs'][name])
+            if repository_bindings.get(str(repository / name)) != expected:
+                raise ValueError('Git-bound generation row differs: ' + name)
+            path = repository / name
+            if path.is_symlink() or path.resolve(strict=True) != path:
+                raise ValueError('generation input is aliased: ' + name)
+            raw = regular_bytes(path)
+            blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+            if (sha_bytes(raw) != expected['sha256'] or blob != expected['blob'] or
+                    path.is_symlink() or path.resolve(strict=True) != path):
+                raise ValueError('same-read generation SHA256/blob differs: ' + name)
+            return raw
+
+        payloads = {name: read_bound(name) for name in _WORKER_INPUT_ROLES}
+        raw = payloads[_WORKER_PROVENANCE_PATH]
+        if sha_bytes(raw) != contract['generation_provenance_sha256']:
+            raise ValueError('generation provenance pin differs')
+        document = json.loads(raw, object_pairs_hook=unique_object)
+        if (not isinstance(document, dict) or set(document) != _WORKER_PROVENANCE_KEYS or
+                type(document.get('schema')) is not int):
+            raise ValueError('generation scope/pins/flags differ')
+        expected = dict(_WORKER_SCOPE)
+        expected.update(schema=1, netbsd_pin=PIN, repository_input_commit=_WORKER_INPUT_COMMIT,
+            repository_inputs=_WORKER_SOURCE_IDENTITIES, files=_WORKER_OUTPUT_IDENTITIES,
+            selected_sections=_WORKER_SECTIONS, recovery_tool_sha256=_WORKER_RECOVERY_TOOL_SHA256,
+            definition_ownership=_WORKER_DEFINITION_OWNERSHIP, open_gates=_WORKER_OPEN_GATES,
+            historical_recipe=_WORKER_HISTORICAL_RECIPE,
+            historical_integration=_WORKER_HISTORICAL_INTEGRATION)
+        metadata = {key: value for key, value in document.items() if key != 'operations'}
+        canonical = lambda value: json.dumps(value, sort_keys=True, separators=(',', ':'))
+        if canonical(metadata) != canonical(expected):
+            raise ValueError('generation declared identities/scope/flags differ')
+        operations = document['operations']
+        if (not isinstance(operations, list) or len(operations) != 27 or
+                any(not isinstance(row, dict) for row in operations) or
+                sha_bytes(canonical(operations).encode()) != _WORKER_AUDIT_SHA256):
+            raise ValueError('generation operation audit differs')
+        for name, row in _WORKER_SOURCE_IDENTITIES.items():
+            payload = payloads[name]
+            blob = hashlib.sha1(b'blob ' + str(len(payload)).encode() + b'\0' + payload).hexdigest()
+            if len(payload) != row['size'] or sha_bytes(payload) != row['sha256'] or blob != row['blob']:
+                raise ValueError('origin provenance cross-link differs: ' + name)
+        for name, row in _WORKER_OUTPUT_IDENTITIES.items():
+            payload = payloads['compat/native-runtime/worker-f49/' + name]
+            blob = hashlib.sha1(b'blob ' + str(len(payload)).encode() + b'\0' + payload).hexdigest()
+            if len(payload) != row['size'] or sha_bytes(payload) != row['sha256'] or blob != row['blob']:
+                raise ValueError('recovered output cross-link differs: ' + name)
+        if sha_bytes(payloads['tools/recover_native_worker.py']) != document['recovery_tool_sha256']:
+            raise ValueError('producer cross-link differs')
+        patch = payloads['patches/0032-netbsd-linux-task-wait-worker.patch'].splitlines(keepends=True)
+        starts = [index for index, line in enumerate(patch) if line.startswith(b'--- a/')]
+        if len(starts) != 14:
+            raise ValueError('exact fourteen source patch owners required')
+        for owner, row in _WORKER_SECTIONS.items():
+            matching = [index for index in starts if patch[index] == b'--- a/' + owner.encode() + b'\n']
+            if len(matching) != 1:
+                raise ValueError('selected source patch owner differs: ' + owner)
+            first = matching[0]
+            last = next((index for index in starts if index > first), len(patch))
+            section = b''.join(patch[first:last])
+            if (patch[first + 1] != b'+++ b/' + owner.encode() + b'\n' or len(section) != row['size'] or
+                    sha_bytes(section) != row['sha256'] or
+                    sum(line.startswith(b'@@ ') for line in patch[first:last]) != row['hunks']):
+                raise ValueError('selected source patch section differs: ' + owner)
+        recovered_c = payloads['compat/native-runtime/worker-f49/linux_kthread.c']
+        recovered_h = payloads['compat/native-runtime/worker-f49/include/linux/kthread.h']
+        if not recovered_c.endswith(payloads['compat/native-runtime/worker/worker.inc']):
+            raise ValueError('complete Worker implementation witness differs')
+        if recovered_h.count(payloads['compat/native-runtime/worker/worker_header.inc']) != 1:
+            raise ValueError('complete Worker declaration witness differs')
+        checked_fini = (b'void\nlinux_kthread_fini(void)\n{\n\tint error;\n\n'
+                        b'\terror = linux_task_system_fini();\n\tKASSERT(error == 0);\n}\n')
+        if recovered_c.count(checked_fini) != 1:
+            raise ValueError('checked Task fini result differs')
+        integration = payloads['compat/native-runtime/worker/INTEGRATION.txt']
+        if any(row['sha256'].encode() not in integration for row in _WORKER_OUTPUT_IDENTITIES.values()):
+            raise ValueError('final integration identity record differs')
+        return dict(state='VERIFIED_WORKER_SOURCE_GENERATION_ONLY', provenance=_WORKER_PROVENANCE_PATH,
+            provenance_sha256=contract['generation_provenance_sha256'], netbsd_pin=PIN,
+            repository_input_commit=_WORKER_INPUT_COMMIT, operation_count=27,
+            inputs=copy.deepcopy(_WORKER_SOURCE_IDENTITIES), outputs=copy.deepcopy(_WORKER_OUTPUT_IDENTITIES),
+            selected_sections=copy.deepcopy(_WORKER_SECTIONS), recovery_tool_sha256=_WORKER_RECOVERY_TOOL_SHA256,
+            definition_ownership=copy.deepcopy(_WORKER_DEFINITION_OWNERSHIP),
+            historical_recipe=copy.deepcopy(_WORKER_HISTORICAL_RECIPE),
+            historical_integration=copy.deepcopy(_WORKER_HISTORICAL_INTEGRATION), open_gates=list(_WORKER_OPEN_GATES),
+            native_preprocessing='NOT_RUN', native_compilation='NOT_RUN', linked=False,
+            installed=False, booted=False, runtime='NOT_RUN')
+    except (ValueError, KeyError, TypeError, OSError, IndexError) as error:
+        raise ValueError('Worker generation: ' + str(error)) from error
 
 
 def poll_input_policy(contract=None, reviewed_sha256=None):
@@ -576,6 +812,9 @@ def require_task_fragments(bindings, repository, contract=None, reviewed_sha256=
 
 def provider_header_policy(core, contract=None, reviewed_sha256=None):
     """Keep the original all-header default; narrow only via reviewed contract metadata."""
+    if reviewed_sha256 == WORKER_CONTRACT_SHA256:
+        worker_input_policy(contract, reviewed_sha256)
+        return []
     if reviewed_sha256 == POLL_CONTRACT_SHA256:
         poll_input_policy(contract, reviewed_sha256)
     elif wait_input_policy(contract, reviewed_sha256):

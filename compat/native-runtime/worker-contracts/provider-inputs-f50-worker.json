@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "scope": "F50 exact recovered Worker source admission; native preprocessing, compilation, link and runtime remain separate gates",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "repository_commit": "7d9592e01f2efb41bbdd58e15346ffe6d7521136",
+  "provider_root": "compat/native-runtime/worker-f49",
+  "units": [
+    "linux_kthread.c"
+  ],
+  "required_patched_headers": [],
+  "repository_include_roots": [
+    "compat/native-runtime/worker-f49/include",
+    "compat/native-runtime/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "generation_provenance_sha256": "91f22a4fda6bdb0c9e61020acf31ac698c7ee009d65b07d58c7fa55c22a07fa1",
+  "repository_inputs": {
+    "compat/native-runtime/worker-f49/linux_kthread.c": {
+      "role": "translation_unit",
+      "blob": "c8f72ebd33119c9a4e47cc58b3397074c0523887",
+      "sha256": "31d75082ff20da8d6cb5664c60dda8733555a572aafd40e8a82ed4f1774d2274"
+    },
+    "compat/native-runtime/worker-f49/include/linux/kthread.h": {
+      "role": "worker_header",
+      "blob": "87bfe919c26654f034351f97acffc88d138cd861",
+      "sha256": "97c094ab5fbc3688334875500c23d5053186d35e6342d2668ce63659335b8814"
+    },
+    "compat/native-runtime/include/linux/sched.h": {
+      "role": "task_mapping_header",
+      "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+      "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+    },
+    "compat/native-runtime/include/linux/task_netbsd.h": {
+      "role": "task_mapping_header",
+      "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+      "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+    },
+    "compat/native-runtime/include/linux/raw_spinlock.h": {
+      "role": "task_mapping_header",
+      "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+      "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+    },
+    "compat/native-runtime/task/sched.h": {
+      "role": "task_scheduler_header",
+      "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+    },
+    "compat/native-runtime/task/task_netbsd.h": {
+      "role": "task_header",
+      "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+    },
+    "compat/linux/raw_spinlock.h": {
+      "role": "raw_spinlock_header",
+      "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+    },
+    "compat/native-runtime/worker-f49/provenance.json": {
+      "role": "generation_proof_owner",
+      "blob": "0317558ac2878ac2a2fb466cc1d79feaf0fb5c24",
+      "sha256": "91f22a4fda6bdb0c9e61020acf31ac698c7ee009d65b07d58c7fa55c22a07fa1"
+    },
+    "tools/recover_native_worker.py": {
+      "role": "generation_proof_owner",
+      "blob": "3fdfb2047d5a2eaa0dfeb8c5a06377d987c96ce2",
+      "sha256": "83a2a0190b0b66714dedbfac9c025e2ba6828f00f64362fbaf65519329fc4379"
+    },
+    "compat/native-runtime/worker/INTEGRATION.txt": {
+      "role": "generation_proof_owner",
+      "blob": "2ecf30dbfba159795fee0a2951cf1dc2c3f9d30f",
+      "sha256": "641fea8eb59177617cd1e54dd60bab45a59dec1c97205a6815bc74b859d7a12b"
+    },
+    "compat/native-runtime/worker/base/kthread.h": {
+      "role": "generation_proof_owner",
+      "blob": "74af400efc77e55c821f11e7bafd7a499e141962",
+      "sha256": "4384d635d5049d38bd322009007b04808afeb30e4c99c0e484ba95bfbd10933b"
+    },
+    "compat/native-runtime/worker/base/linux_kthread.c": {
+      "role": "generation_proof_owner",
+      "blob": "a7735f8eb62a1ae697756deed51c718396e9b579",
+      "sha256": "566260787e456fe3ea40fb50f2cc93500faf0ccb4927a0a5e977777ad89d61bf"
+    },
+    "compat/native-runtime/worker/generate.py": {
+      "role": "generation_proof_owner",
+      "blob": "2ac669aba5f269d5e9b5c49fdfb43a2aaf3b3fde",
+      "sha256": "722d9acb293caa2a1447a61656f954e82f9a54be63f4628362ad7d1e9180274b"
+    },
+    "compat/native-runtime/worker/worker.inc": {
+      "role": "generation_proof_owner",
+      "blob": "54576a3a96d24f51788c40ae38fbb1f9b2f5d4e4",
+      "sha256": "2ad653da9cb181aa9966e4e0e98b12c3fa0c197574f9d4f0021b9e744359001d"
+    },
+    "compat/native-runtime/worker/worker_header.inc": {
+      "role": "generation_proof_owner",
+      "blob": "70aa0ef127e2b4c8f242f5868d6efda2fdd13c6f",
+      "sha256": "9f3887613605b06fad70f45bd69f92cd7015de7775a859082bbedb991a2dc1a2"
+    },
+    "patches/0032-netbsd-linux-task-wait-worker.patch": {
+      "role": "generation_proof_owner",
+      "blob": "20e0b8bdcaaa29b5050e1ac353086604308f0cad",
+      "sha256": "9b53ce73daba8b6937c54209e2ff28087775409c9be2c386a97301f3781737fd"
+    }
+  }
+}
