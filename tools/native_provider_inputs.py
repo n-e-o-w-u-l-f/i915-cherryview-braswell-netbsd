@@ -25,6 +25,8 @@ TASK_WORKER_CONTRACT_PATH = 'compat/native-runtime/task/provider-inputs-f41-task
 TASK_WORKER_CONTRACT_SHA256 = '0741fbe18dfd9600edad6cc490e4f9609fcf706c461e21c067cb1a132adeb0a4'
 WAIT_CONTRACT_PATH = 'compat/native-runtime/wait-contracts/provider-inputs-f44-wait.json'
 WAIT_CONTRACT_SHA256 = '5561d9005df2e8018262fb81437ae5abc88e2cb13a6f7306f604a3d4e728309c'
+POLL_CONTRACT_PATH = 'compat/native-file/provider-inputs-f46-poll.json'
+POLL_CONTRACT_SHA256 = '9f477521b790e036aaa0dbfddccee1c1ebb06bf62c6034c3d5b4d8b4e5e0db60'
 WAIT_LINUX_PIN = 'fd179f8a05be3ccae366b9b96e176b51fbe54aab'
 _WAIT_INPUT_ROLES = {
     'compat/native-runtime/wait-f43/linux_wait.c': 'translation_unit',
@@ -43,6 +45,10 @@ _WAIT_INPUT_ROLES = {
     'compat/native-runtime/task/SOURCE_SHA256.json': 'generation_proof_owner',
     'tools/recover_native_wait.py': 'generation_proof_owner',
 }
+_POLL_INPUT_ROLES = dict(_WAIT_INPUT_ROLES)
+_POLL_INPUT_ROLES.update({'compat/native-runtime/wait-f43/linux_wait.c': 'generation_proof_owner', 'compat/native-file/linux_poll_owner.c': 'translation_unit', 'compat/native-file/linux_poll.c': 'poll_implementation_owner', 'compat/native-file/include/linux/poll_netbsd.h': 'poll_header', 'compat/native-file/include/linux/file_netbsd.h': 'file_header', 'compat/native-file/include/linux/fs_netbsd.h': 'file_header', 'compat/native-file/include/linux/file_api_netbsd.h': 'file_header', 'compat/native-file/include/linux/file_ref_netbsd.h': 'file_header', 'compat/native-mm/include/linux/mm_abi_types_netbsd.h': 'mm_abi_header', 'compat/native-uio/include/linux/kiocb_netbsd.h': 'uio_header', 'compat/native-runtime/task/task_entry_netbsd.h': 'task_entry_header', 'compat/native-entry/task_entry.inc': 'api_definition_owner'})
+_POLL_REQUIRED_INPUTS = frozenset(name for name, role in _POLL_INPUT_ROLES.items()
+                                  if role not in ('generation_proof_owner', 'api_definition_owner'))
 _WAIT_REQUIRED_INPUTS = frozenset(name for name, role in _WAIT_INPUT_ROLES.items()
                                   if role != 'generation_proof_owner')
 _WAIT_PROVENANCE_PATH = 'compat/native-runtime/wait-f43/provenance.json'
@@ -143,7 +149,8 @@ def reviewed_contract_sha256(path, repository=REPOSITORY):
                                    (FILE_CONTRACT_PATH, FILE_CONTRACT_SHA256),
                                    (TASK_CONTRACT_PATH, TASK_CONTRACT_SHA256),
                                    (TASK_WORKER_CONTRACT_PATH, TASK_WORKER_CONTRACT_SHA256),
-                                   (WAIT_CONTRACT_PATH, WAIT_CONTRACT_SHA256)):
+                                   (WAIT_CONTRACT_PATH, WAIT_CONTRACT_SHA256),
+                                   (POLL_CONTRACT_PATH, POLL_CONTRACT_SHA256)):
             if resolved == repository / relative:
                 return expected
     raise ValueError('a reviewed source-owned native FILE provider contract is required')
@@ -305,6 +312,79 @@ def recheck_provider_dependencies(paths, before, *arguments):
 def native_archive_expectations(core, bindings):
     native = {path: row for path, row in bindings.items() if row['kind'] != 'repository'}
     return archive_expectations(core['source_provenance']['verified_source_members'], native)
+
+
+def poll_input_policy(contract=None, reviewed_sha256=None):
+    """Only the seventh fixed profile composes Poll with the actual Task API."""
+    if reviewed_sha256 != POLL_CONTRACT_SHA256:
+        rows = contract.get('repository_inputs', {}) if isinstance(contract, dict) else {}
+        if (isinstance(contract, dict) and contract.get('units') == ['linux_poll_owner.c'] or
+                isinstance(rows, dict) and any(isinstance(row, dict) and row.get('role')
+                    in ('poll_implementation_owner', 'poll_header') for row in rows.values())):
+            raise ValueError('Poll inputs require the exact reviewed Poll contract')
+        return []
+    if not isinstance(contract, dict):
+        raise ValueError('reviewed Poll provider identity/shape differs')
+    rows = contract.get('repository_inputs')
+    shape = dict(schema=1, provider_root='compat/native-file',
+                 units=['linux_poll_owner.c'],
+                 repository_include_roots=['compat/native-file/include',
+                     'compat/native-mm/include', 'compat/native-uio/include',
+                     'compat/native-runtime/wait-f43/include',
+                     'compat/native-runtime/include'],
+                 native_include_roots=['sys/external/bsd/common/include',
+                                       'sys/external/bsd/drm2/include'],
+                 required_patched_headers=['sys/sys/file.h'],
+                 linux_pin=WAIT_LINUX_PIN, wait_contract_sha256=WAIT_CONTRACT_SHA256,
+                 generation_provenance_sha256=_WAIT_PROVENANCE_SHA256)
+    if (type(contract.get('schema')) is not int or
+            any(contract.get(key) != value for key, value in shape.items()) or
+            not isinstance(rows, dict) or
+            any(not isinstance(row, dict) for row in rows.values()) or
+            {name: row.get('role') for name, row in rows.items()} != _POLL_INPUT_ROLES):
+        raise ValueError('reviewed Poll provider identity/shape differs')
+    return sorted(_POLL_REQUIRED_INPUTS)
+
+
+def require_poll_inputs(bindings, repository, contract=None, reviewed_sha256=None):
+    for name in poll_input_policy(contract, reviewed_sha256):
+        expected = dict(kind='repository', relative=name, **contract['repository_inputs'][name])
+        if bindings.get(str(Path(repository) / name)) != expected:
+            raise ValueError('provider did not consume the required Poll input: ' + name)
+
+
+def verify_poll_generation(repository, contract, repository_bindings, reviewed_sha256=None):
+    """Check Poll against the separate unchanged Wait authority without executing a recipe."""
+    if not poll_input_policy(contract, reviewed_sha256):
+        return {}
+    repository = Path(repository).resolve(strict=True)
+    try:
+        expected_paths = {str(repository / name) for name in _POLL_INPUT_ROLES}
+        if set(repository_bindings) != expected_paths:
+            raise ValueError('exactly twenty-six Git-bound Poll rows required')
+        for name, row in contract['repository_inputs'].items():
+            expected = dict(kind='repository', relative=name, **row)
+            if repository_bindings.get(str(repository / name)) != expected:
+                raise ValueError('Git-bound Poll row differs: ' + name)
+        wait_contract = load_contract(repository / WAIT_CONTRACT_PATH, repository)
+        wait_bindings = repository_inputs(repository, wait_contract)
+        shared = {}
+        for name, row in wait_contract['repository_inputs'].items():
+            poll_row = contract['repository_inputs'].get(name, {})
+            identity = {key: row[key] for key in ('blob', 'sha256')}
+            if {key: poll_row.get(key) for key in identity} != identity:
+                raise ValueError('referenced Wait input identity differs: ' + name)
+            shared[name] = identity
+        generation = verify_wait_generation(repository, wait_contract, wait_bindings,
+                                            WAIT_CONTRACT_SHA256)
+        return dict(state='VERIFIED_REFERENCED_WAIT_GENERATION_ONLY',
+            wait_contract=WAIT_CONTRACT_PATH, wait_contract_sha256=WAIT_CONTRACT_SHA256,
+            wait_repository_commit=wait_contract['repository_commit'],
+            shared_repository_inputs=shared, wait_generation=generation,
+            native_preprocessing='NOT_RUN', native_compilation='NOT_RUN',
+            linked=False, runtime='NOT_RUN')
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        raise ValueError('Poll generation: ' + str(error)) from error
 
 
 def wait_input_policy(contract=None, reviewed_sha256=None):
@@ -496,7 +576,9 @@ def require_task_fragments(bindings, repository, contract=None, reviewed_sha256=
 
 def provider_header_policy(core, contract=None, reviewed_sha256=None):
     """Keep the original all-header default; narrow only via reviewed contract metadata."""
-    if wait_input_policy(contract, reviewed_sha256):
+    if reviewed_sha256 == POLL_CONTRACT_SHA256:
+        poll_input_policy(contract, reviewed_sha256)
+    elif wait_input_policy(contract, reviewed_sha256):
         return []
     if task_fragment_policy(contract, reviewed_sha256):
         return []
