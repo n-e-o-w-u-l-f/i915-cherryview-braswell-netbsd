@@ -1,29 +1,29 @@
-# HP-I915 F47: native prerequisite recovery, attempt A01
+# HP-I915 F47: exact native prerequisite recovery
 
-F47 remains **BLOCKED**. Attempt A01 stopped during its governance network preflight, before creating the historical native build directory or running native configuration, dependency generation, compilation or CTF conversion. F46 source and all 287 tests remain verified at c55836ef62fae1b3f5d314ecc383a6c713160755; its complete native core prerequisite is still open.
+F47 attempt A02 is **PASS for native prerequisite recovery**. All 49 historical missing files were reproduced byte-for-byte, and the unchanged full F32 core verification passed. All 1364 preserved states remain unchanged. Native Poll compilation is still a separate gate; F46's original complete admission criterion is revalidated next.
 
-## Concrete recovery plan
+## Verified restoration
 
-Read-only reconstruction established the exact previous 1495-byte make wrapper, the matching compiler and nm, the original configuration seed and derived 189-byte kernel configuration, 17 durable patched source inputs, and nine saved commands for the three original stock owners. Those nine commands include dependency generation, GCC compilation and the required CTF conversion.
+The restored tree is the original /tmp/hp-i915-f26-build-20261106-a01 path. The reviewed plan enumerates 724 source-forest entries and 1641 tool paths, totalling 305516952 regular tool bytes. Only the existing trusted source and tool inputs were used. The original make wrapper was reconstructed to its exact 1495 bytes and SHA256 dda9680d9b13eb34abc0107adcccbaa9ff505a74cd3114bbc26a22f4c91cd5a5; compiler and nm identities also match their historical receipts.
 
-A same-build durable drmfb.o, verified against the original manifest, contains the default CTF label. The executor explicitly leaves VERSION unset to reproduce that label. The plan enumerates 724 source-forest entries and 1641 private tool paths, with 305516952 regular tool bytes and one internal symlink. Native configuration has a fixed fresh object-directory resource, a 5000-entry/64-MiB bound, and an immediate per-path inventory before any compilation.
+Native configuration produced 522 inventoried entries and 953537 regular bytes within the declared bounded object resource. The original 252564-byte Makefile, SHA256 ffa140e1552a45d2cf15c6f312290668b5a6b4635c1266498f59f75f6b96a1e8, and every frozen generated-header identity matched before any stock compilation.
 
-All 49 original missing-path hashes and the unchanged F32 core receipt must pass. No replacement core receipt, contract relaxation, alternative object or successful fixture test can discharge that criterion. The original contracts and source remain unchanged.
+The real process executed exactly ten successful commands: one nbconfig followed by dependency generation, GCC compilation and CTF conversion for each of sys_generic, kern_descrip and netbsd32_ioctl. The nine original object/dependency/stack-use files all match their old hashes. CTF conversion used the default label independently recovered from a same-build durable object.
 
-## Actual attempt and diagnosed failure
+All 49 original path/size/SHA256 identities then matched. Actual unchanged verify_core passed against the original F32 status SHA256 d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794. No core receipt, contract hash, source body or original acceptance condition was replaced.
 
-The published PRE is 7388ccbadaedd9d26de85fd49748f3522cae6f06. Reviewed executor SHA256 is c13c9907eebb154938395fa5cbad7b2e94ef53a93156f582e7e5621161693cc4; static plan SHA256 is 32abb4e0563dc3603293f3650b9a56360ca1385f92abc18e205fd50ce142e245.
+## Attempt history and verification
 
-Real process 22727 started at 2026-11-11T04:38:35.626632+00:00 and exited 1 after 101.29 seconds. Its read-only input checks reached the fresh Governance reference check. The new guard incorrectly applied local Git configuration isolation to network access, disabling the existing configured authentication. The network reference command exited 128 before the executor created its status, baseline or native output tree.
+A01 failed in its fresh Git network guard before any native output. That new guard had incorrectly disabled the existing authorized Git authentication configuration. Normal configured Git access worked; the isolated network route exited 128. The A01 controller, launch record and independently labelled failure evidence are retained at [immutable report commit d6f5f16](https://github.com/n-e-o-w-u-l-f/i915-cherryview-braswell-netbsd/commit/d6f5f1666c510629ee297718faaba29c79025044).
 
-Independent diagnosis found normal existing Git configuration returned the exact published Governance head with exit 0. The isolated configuration failed with a missing-username error and terminal prompts disabled. DNS resolution worked. This is a guard defect; no credential content was read or changed.
+The A02 correction preserves normal configuration only for network reference checks, removes inherited Git environment overrides, and keeps local Git object and validator isolation unchanged. Five focused local mock regressions passed, and independent source review approved the corrected controller. Those mocks were not native HP tests.
 
-Independent readback confirms the process ended, the historical output root remains absent, all 49 missing native paths remain absent, and all 1327 current frozen states remain unchanged. Protected boot files and source are unchanged. Observer-labelled status and exit receipts were created after this readback; they are explicitly distinguished from native executor-produced receipts.
+A02 PRE 86d77217080690fe7cf674500aeef4373cda5250 bound executor a90d2d29335376f1e729393160dcce52811936f5f4f4ed861d84545269b42134 and plan b657aae97cc821e4f454f7a54b69821eae7c01263482368be9e38b7e57bcafe6. Real process 14668 exited zero after 274.66 seconds; terminal status records completion at 2026-11-11T04:56:20.184405+00:00. No unresolved child process or unknown effect remains.
 
-## Repair and next attempt
+The final preservation check passed for 1364 states, including source, seven contracts, old tests, protected boot files, archived inputs and durable native artifacts. An independent cold readback verifies the restored files, command logs, configuration inventory and unchanged full core separately. [Machine-readable evidence](evidence/HP_F47_NATIVE_PREREQUISITE_RECOVERY_20261111.json) contains the exact receipts and independent result.
 
-A corrected network check must retain normal authorized authentication configuration after removing inherited Git environment overrides. Local object reads retain their existing isolation. The correction also needs a focused regression and bounded redacted failure diagnostics.
+## Scope and continuation
 
-A01's original controller and evidence are retained. A02 requires a new published PRE binding the corrected controller and plan hashes, independent review, fresh source/Governance checks and the same complete original native acceptance. No blind native retry occurred.
+Only the private historical native prerequisite tree was restored. No modern provider object, production generator, full kernel build/link, installation, boot, EFI/radio change, cleanup or hosted CI ran. F77 and the protected /netbsd and /boot.cfg remain unchanged. The parent project remains PARTIAL.
 
-[Machine-readable evidence](evidence/HP_F47_NATIVE_PREREQUISITE_RECOVERY_20261111.json) includes the complete static plan, original executor, launch and independent readback receipts. Source evidence and scoped Governance are published and read back; only HP and canonical Git publication are covered. Native Poll, link, kernel build, installation, boot and physical acceptance remain NOT_RUN. The parent project remains PARTIAL.
+The existing 287 F46 tests remain tied to unchanged implementation/test bytes. Next, revalidate the original F46 admission criterion with the restored full core and actual public CLI rejection checks, publish its own PRE/POST, and only then plan a separate native Poll object attempt. Source/evidence and scoped Governance are published and fetched back on their canonical branches; other hosts remain unverified.
