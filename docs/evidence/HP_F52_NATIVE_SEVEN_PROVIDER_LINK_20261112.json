@@ -1,0 +1,691 @@
+{
+  "F26_kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+  "F32_kern_descrip_object_sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+  "attempt_id": "A01",
+  "booted": false,
+  "full_kernel": "NOT_RUN",
+  "governance_pre_commit": "9720d96cf995c6a182b05f733a512adb93231450",
+  "independent_review_sha256": "f5ff65b820a8eddddf66e2fbe60e86d658be60f9ad4034e8868e69e3d947b023",
+  "installed": false,
+  "link_symbols": {
+    "COMDAT_group_coalescing_verified": true,
+    "prelink_duplicate_definition_owners": {
+      "__x86_indirect_thunk_rax": [
+        "FILE",
+        "WAIT",
+        "POLL",
+        "WORKER"
+      ]
+    },
+    "thunks_after_coalescence": [
+      "__x86_indirect_thunk_r15",
+      "__x86_indirect_thunk_rax"
+    ],
+    "unresolved_linux": 8,
+    "unresolved_linux_names": [
+      "linux_call_rcu",
+      "linux_file_native_ops",
+      "linux_inode_alloc_system",
+      "linux_page_system_fini",
+      "linux_page_system_init",
+      "linux_rcu_barrier",
+      "linux_shmem_commit_fini",
+      "linux_shmem_commit_init"
+    ],
+    "unresolved_other": 72,
+    "unresolved_other_names": [
+      "__stack_chk_fail",
+      "__stack_chk_guard",
+      "atomic_cas_uint",
+      "atomic_cas_ulong",
+      "atomic_dec_uint",
+      "atomic_inc_uint",
+      "cv_broadcast",
+      "cv_destroy",
+      "cv_init",
+      "cv_signal",
+      "cv_timedwait",
+      "cv_timedwait_sig",
+      "cv_wait",
+      "cv_wait_sig",
+      "fd_abort",
+      "fd_affix",
+      "fd_allocfile",
+      "fd_get_linux_file",
+      "fd_set_exclose",
+      "getticks",
+      "ihold",
+      "iput",
+      "kauth_cred_free",
+      "kauth_cred_hold",
+      "kmem_alloc",
+      "kmem_free",
+      "kmem_zalloc",
+      "kpreempt_disable",
+      "kpreempt_enable",
+      "kthread_create",
+      "kthread_exit",
+      "kthread_join",
+      "lwp_changepri",
+      "lwp_getspecific",
+      "lwp_lock",
+      "lwp_setspecific",
+      "lwp_specific_key_create",
+      "lwp_specific_key_delete",
+      "lwp_unlock",
+      "membar_acquire",
+      "membar_release",
+      "membar_sync",
+      "memcpy",
+      "module_hold",
+      "module_rele",
+      "mutex_destroy",
+      "mutex_enter",
+      "mutex_exit",
+      "mutex_init",
+      "mutex_spin_enter",
+      "mutex_spin_exit",
+      "panic",
+      "preempt_point",
+      "seldestroy",
+      "selinit",
+      "selnotify",
+      "selrecord",
+      "selrecord_knote",
+      "selremove_knote",
+      "sigispending",
+      "softint_disestablish",
+      "softint_establish",
+      "softint_schedule",
+      "spllower",
+      "splraise",
+      "strlcpy",
+      "strlen",
+      "vsnprintf",
+      "workqueue_create",
+      "workqueue_destroy",
+      "workqueue_enqueue",
+      "yield"
+    ],
+    "unresolved_total": 80
+  },
+  "native_link": {
+    "commands": 1,
+    "elf": "ELF64 AMD64 ET_REL",
+    "exit_code": 0,
+    "inputs": [
+      {
+        "bytes": 99328,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f34-native-file-fd-20261110-a01/linux_fd.o",
+        "role": "FD",
+        "sha256": "d8d86e0a4448709f57c50fc723871f0ad24849933394c0357d9e128f5c067c6b"
+      },
+      {
+        "bytes": 100944,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f36-native-anon-file-20261110-a01/linux_anon.o",
+        "role": "ANON",
+        "sha256": "48e69c1b7cf3b73af35becf1c8202769ceecc5b175c6f02d65e50ff687305422"
+      },
+      {
+        "bytes": 138048,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f38-native-file-owner-20261110-a01/linux_file.o",
+        "role": "FILE",
+        "sha256": "c5853c8d6c5d26958a556a4f568b9f01d08b068165b8a4ec4287b1e381fc14bf"
+      },
+      {
+        "bytes": 153680,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f42-native-task-worker-owner-20261110-a01/linux_task_worker_owner.o",
+        "role": "TASK",
+        "sha256": "b867436f6175a4c0e42fd45a90d3833e3cb5aa4489cd8fda67536ad9762499db"
+      },
+      {
+        "bytes": 126264,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f45-native-generic-wait-owner-20261110-a01/linux_wait.o",
+        "role": "WAIT",
+        "sha256": "c1eb7e67bc1b522c21536dc33977b8887d1624dd6957283bc5ab4f9f542993d6"
+      },
+      {
+        "bytes": 114232,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f48-native-poll-owner-20261111-a01/linux_poll_owner.o",
+        "role": "POLL",
+        "sha256": "079c884e139eb0940b587a81d90d6d81f946b88dfe3828b3d7d2a23d26a22995"
+      },
+      {
+        "bytes": 144576,
+        "path": "/home/andreas/projects/hp-i915-f26-20261106/f51-native-worker-owner-20261111-a01/linux_kthread.o",
+        "role": "WORKER",
+        "sha256": "7d90f9bbb270c3d922de228967ef2b7efde0e1f522a7f4b4882bc7b0a632b7fe"
+      }
+    ],
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mode": "-r",
+    "object_bytes": 838952,
+    "object_sha256": "711322a068fbf3ada63bde09f7e1f5b036ccbca99845f7c68eb53a31ae542497",
+    "tool": "/usr/bin/ld"
+  },
+  "native_status_sha256": "c720c60d256d9e43a6205f350b3f15b345e24a98fa2388b888cb42242586188e",
+  "observed_at": "2026-11-12T19:31:26.354400+00:00",
+  "owner_review_sha256": "07f188fa8cafbc497e26703f0bfc58db2ec598c886932ec91bda3fa77323140e",
+  "parent_acceptance": "PARTIAL",
+  "platform": "hp-tpnw121.lan NetBSD 11.0 amd64 uid1000",
+  "project": "i915-cherryview-braswell-netbsd",
+  "protected_boot_hashes": {
+    "/boot.cfg": "f7e0ccc00308172d5787f47c2c66b33921c53341f896e2339079a66980b6a4df",
+    "/netbsd": "9b65629c0527bbd40f7ffa0d4ef0c59a32b5edceb597a5df8c86d1e7be1c8fde"
+  },
+  "remaining_owner_classes": {
+    "F26_linked_native_kernel": 71,
+    "F32_separate_native_object": 1,
+    "source_definition_uncompiled": 8
+  },
+  "remaining_symbol_owners": {
+    "__stack_chk_fail": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "__stack_chk_guard": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "D"
+    },
+    "atomic_cas_uint": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "atomic_cas_ulong": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "atomic_dec_uint": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "atomic_inc_uint": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_broadcast": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_destroy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_init": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_signal": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_timedwait": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_timedwait_sig": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_wait": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "cv_wait_sig": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "fd_abort": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "fd_affix": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "fd_allocfile": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "fd_get_linux_file": {
+      "kind": "F32_separate_native_object",
+      "linked_in_F52": false,
+      "provider": "/home/andreas/projects/hp-i915-f26-20261106/f32-native-abi-20261110-a01/kern_descrip.o",
+      "sha256": "18af52f144b9a2641a69f5d03ad819840242fbd2e388fa9b91042e7dd0625106",
+      "symbol_type": "T"
+    },
+    "fd_set_exclose": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "getticks": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "ihold": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_inode.c",
+      "source_sha256": "6da06a49966f02180c460ec1c809b9d3476f19d5232b266c1b63609d5897ced9"
+    },
+    "iput": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_inode.c",
+      "source_sha256": "6da06a49966f02180c460ec1c809b9d3476f19d5232b266c1b63609d5897ced9"
+    },
+    "kauth_cred_free": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kauth_cred_hold": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kmem_alloc": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kmem_free": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kmem_zalloc": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kpreempt_disable": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kpreempt_enable": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kthread_create": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kthread_exit": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "kthread_join": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "linux_call_rcu": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "linux_file_native_ops": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_native_fileops.c",
+      "source_sha256": "7cd66e99bf821b28c2afb9b39beac35d71f35c494e294dbb9641abe597840d53"
+    },
+    "linux_inode_alloc_system": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_inode.c",
+      "source_sha256": "6da06a49966f02180c460ec1c809b9d3476f19d5232b266c1b63609d5897ced9"
+    },
+    "linux_page_system_fini": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_page.c",
+      "source_sha256": "3aea446019e353f28d0a3719945056035a182ed500817c37ead665552001ce16"
+    },
+    "linux_page_system_init": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_page.c",
+      "source_sha256": "3aea446019e353f28d0a3719945056035a182ed500817c37ead665552001ce16"
+    },
+    "linux_rcu_barrier": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "linux_shmem_commit_fini": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_shmem_commit.c",
+      "source_sha256": "34def61853890235ae2a61a1fbce258041f655f2bd1eba1427081a9821b70fae"
+    },
+    "linux_shmem_commit_init": {
+      "kind": "source_definition_uncompiled",
+      "native_object": "NOT_RUN",
+      "provider": "compat/native-file/linux_shmem_commit.c",
+      "source_sha256": "34def61853890235ae2a61a1fbce258041f655f2bd1eba1427081a9821b70fae"
+    },
+    "lwp_changepri": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_getspecific": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_lock": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_setspecific": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_specific_key_create": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_specific_key_delete": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "lwp_unlock": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "membar_acquire": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "membar_release": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "membar_sync": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "memcpy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "module_hold": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "module_rele": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_destroy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_enter": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_exit": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_init": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_spin_enter": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "mutex_spin_exit": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "panic": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "preempt_point": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "seldestroy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "selinit": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "selnotify": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "selrecord": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "selrecord_knote": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "selremove_knote": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "sigispending": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "softint_disestablish": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "softint_establish": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "softint_schedule": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "spllower": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "splraise": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "strlcpy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "strlen": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "vsnprintf": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "workqueue_create": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "workqueue_destroy": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "workqueue_enqueue": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    },
+    "yield": {
+      "kernel_sha256": "d845e4c33ef26222641c20084ba46d7a31d3049ce9e281a9db88b99fb62092d2",
+      "kind": "F26_linked_native_kernel",
+      "provider": "F26 netbsd",
+      "symbol_type": "T"
+    }
+  },
+  "remaining_uncompiled_source_units": [
+    "compat/native-file/linux_inode.c",
+    "compat/native-file/linux_native_fileops.c",
+    "compat/native-file/linux_page.c",
+    "compat/native-file/linux_shmem_commit.c"
+  ],
+  "runtime": "NOT_RUN",
+  "schema_version": 1,
+  "source_parent_commit": "d59730839c4706b13e1cb90ca62a60266eac5275",
+  "state": "PASS_SEVEN_PROVIDER_PARTIAL_LINK",
+  "step_id": "HP-I915-F52-NATIVE-SEVEN-PROVIDER-LINK-20261112",
+  "verification_limits": "F52 is a relocatable partial link of exactly seven objects. Other source-owned FILE/MM providers need native compile, F32 kernel chain must be integrated, 410 graph and final kernel link and hardware tests remain open.",
+  "worker": {
+    "linux_unresolved_resolved_from_task": 8,
+    "native_unresolved_present_in_f26": 24,
+    "public_text_exports": 19,
+    "worker_linux_symbol_to_provider": {
+      "linux_current_task": "TASK",
+      "linux_put_task_struct": "TASK",
+      "linux_set_current_state": "TASK",
+      "linux_task_alloc": "TASK",
+      "linux_task_attach_current": "TASK",
+      "linux_task_system_fini": "TASK",
+      "linux_task_system_init": "TASK",
+      "linux_wake_up_process": "TASK"
+    }
+  }
+}
