@@ -148,7 +148,8 @@ def archive_provider(args, parser, tools):
         reviewed_contract_sha256, selected_inputs, task_fragment_policy,
         task_worker_input_policy, verify_core, wait_input_policy, require_wait_inputs,
         verify_wait_generation, poll_input_policy, require_poll_inputs, verify_poll_generation,
-        worker_input_policy, require_worker_inputs, verify_worker_generation)
+        worker_input_policy, require_worker_inputs, verify_worker_generation,
+        four_provider_input_policy, require_four_provider_inputs, verify_four_provider_ownership)
     from native_source_archive import (
         ArchiveSource, dependency_paths, recheck_prior_artifacts, snapshot_prior_artifacts)
     try:
@@ -161,6 +162,8 @@ def archive_provider(args, parser, tools):
         core = verify_core(core_path, contract, source, obj, tools)
         contract_digest = reviewed_contract_sha256(args.provider_contract, REPOSITORY)
         required_headers = provider_header_policy(core, contract, contract_digest)
+        required_four_inputs = four_provider_input_policy(contract, contract_digest)
+        four_ownership = verify_four_provider_ownership(REPOSITORY, contract, inputs, contract_digest)
         required_fragments = task_fragment_policy(contract, contract_digest)
         required_worker_inputs = task_worker_input_policy(contract, contract_digest)
         required_worker_owner_inputs = worker_input_policy(contract, contract_digest)
@@ -199,6 +202,7 @@ def archive_provider(args, parser, tools):
         provider_contract=str(args.provider_contract.resolve()),
         provider_contract_sha256=contract_digest, required_patched_headers=required_headers,
         required_task_fragments=required_fragments,
+        required_four_provider_inputs=required_four_inputs, four_provider_ownership_proof=four_ownership,
         required_task_worker_inputs=required_worker_inputs,
         required_wait_inputs=required_wait_inputs, wait_generation_proof=wait_generation,
         required_poll_inputs=required_poll_inputs, poll_generation_proof=poll_generation,
@@ -245,6 +249,7 @@ def archive_provider(args, parser, tools):
                 if str(unit) not in bindings:
                     raise ValueError('dependency scan omitted the reviewed provider unit')
                 require_provider_headers(bindings, REPOSITORY, core, contract, contract_digest)
+                require_four_provider_inputs(bindings, REPOSITORY, contract, contract_digest)
                 require_task_fragments(bindings, REPOSITORY, contract, contract_digest)
                 require_task_worker_inputs(bindings, REPOSITORY, contract, contract_digest)
                 if required_worker_owner_inputs:
@@ -274,6 +279,7 @@ def archive_provider(args, parser, tools):
                                    '-o', str(artifact)])
                     proof = recheck_provider_dependencies(dependency_paths(dep, obj),
                         state['precompile_dependencies'][unit.stem], *binding_arguments)
+                    require_four_provider_inputs(proof, REPOSITORY, contract, contract_digest)
                     require_task_fragments(proof, REPOSITORY, contract, contract_digest)
                     require_task_worker_inputs(proof, REPOSITORY, contract, contract_digest)
                     if required_worker_owner_inputs:
@@ -299,6 +305,8 @@ def archive_provider(args, parser, tools):
             load_contract(args.provider_contract)
             if repository_inputs(REPOSITORY, contract) != inputs:
                 raise ValueError('reviewed provider identity changed')
+            if verify_four_provider_ownership(REPOSITORY, contract, inputs, contract_digest) != four_ownership:
+                raise ValueError('F56 source ownership proof changed')
             if required_worker_owner_inputs:
                 if verify_worker_generation(REPOSITORY, contract, inputs, contract_digest) != worker_generation:
                     raise ValueError('Worker generation proof changed')

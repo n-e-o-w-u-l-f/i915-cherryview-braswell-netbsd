@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scope": "F56 native native_fileops source admission; no link, lifecycle or runtime claim",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "repository_commit": "96fcd33762cf93bf0b7aa7cbc1e3a2958b4379c6",
+  "provider_root": "compat/native-file",
+  "units": [
+    "linux_native_fileops_owner.c"
+  ],
+  "required_patched_headers": [
+    "sys/sys/file.h"
+  ],
+  "repository_include_roots": [
+    "compat/native-file/include",
+    "compat/native-mm/include",
+    "compat/native-uio/include",
+    "compat/native-runtime/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "four_provider_kind": "native_fileops",
+  "repository_inputs": {
+    "compat/linux/raw_spinlock.h": {
+      "role": "raw_spinlock_header",
+      "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+    },
+    "compat/native-entry/task_entry.inc": {
+      "role": "api_definition_owner",
+      "blob": "d2b65c9c6c2a9c5057e6060f742e2288a45ca97f",
+      "sha256": "8ea9c5916936e90ec5957f32c10fda2f0e92ec5a7a891d2d322b33d73f0cc026"
+    },
+    "compat/native-file/include/linux/file_api_netbsd.h": {
+      "role": "file_header",
+      "blob": "271684bd9e980ab9e5bfb9847ff5ecc13a65357b",
+      "sha256": "69ff9305b30b31a94658dd6d13b171c402feef1431f0ab2d7675b4b0eaa41850"
+    },
+    "compat/native-file/include/linux/file_netbsd.h": {
+      "role": "file_header",
+      "blob": "e919f2f6a03bd58b85a40cea89ded14242983d2b",
+      "sha256": "c18fde8fff1b499d751cd3dd2b5bad10070ac67c4b0a680bcbe99976537d2c1c"
+    },
+    "compat/native-file/include/linux/file_ref_netbsd.h": {
+      "role": "file_header",
+      "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+      "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+    },
+    "compat/native-file/include/linux/fs_netbsd.h": {
+      "role": "file_header",
+      "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+      "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+    },
+    "compat/native-file/include/linux/pagemap_netbsd.h": {
+      "role": "file_page_header",
+      "blob": "50f0e56ddea3edba091fe5fcaffc338674b0cef9",
+      "sha256": "c67512a393508a3aac0d4e45b176e2292804d849f6b088ba5101d8076fb4b828"
+    },
+    "compat/native-file/include/linux/shmem_fs_netbsd.h": {
+      "role": "file_shmem_header",
+      "blob": "ccee8334afea5b7d6877a20e250ff4531250fe80",
+      "sha256": "f66c3cd37b1e4c61b9db24c6094ee74fab4a3e0379005b947b8e5de0080f214a"
+    },
+    "compat/native-file/linux_native_fileops.c": {
+      "role": "implementation_owner",
+      "blob": "20263438dd5fa3cc06fdbcb8d4b10ab04cc9acc9",
+      "sha256": "7cd66e99bf821b28c2afb9b39beac35d71f35c494e294dbb9641abe597840d53"
+    },
+    "compat/native-file/linux_native_fileops_owner.c": {
+      "role": "translation_unit",
+      "blob": "da79752d07ef11f9d9cc14a75288999a533f8643",
+      "sha256": "7c8ae90e12656f532665bc9cf06232950b17ef62ce926d9b727b8493ef3b6b92"
+    },
+    "compat/native-file/task_entry_preallocated.inc": {
+      "role": "api_definition_owner",
+      "blob": "384ada1242f913aeb5de6af145ea8cba0dcc1b4f",
+      "sha256": "41f1a9451d7f299f0a3aa124f070718ee9ece3ef80cf34671c33f708a5475fd6"
+    },
+    "compat/native-file/task_quiesce_retained.inc": {
+      "role": "api_definition_owner",
+      "blob": "2baa526b613ab171303c623a4bde64f68026dedf",
+      "sha256": "7f7b60dd20794d5999888a702f9faa2a7a725337f3da1ab54fa0ecc81037ae90"
+    },
+    "compat/native-mm/include/linux/mapping_netbsd.h": {
+      "role": "mm_mapping_header",
+      "blob": "8780194c46a422d620cd81a437bdda78762144e2",
+      "sha256": "a8f72c1d49af870ceeed774e1d9049662c046d6f66367daba6ee79a84ffe42b3"
+    },
+    "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+      "role": "mm_abi_header",
+      "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+      "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+    },
+    "compat/native-mm/include/linux/mm_identity_netbsd.h": {
+      "role": "mm_identity_header",
+      "blob": "a9e6aae6c176fe0c2b5dd0e7fcbc96daf3032c60",
+      "sha256": "d2c58803d143be00ae5fcfb352d364c16f5321f45159ed2f9a6da189f6f231e6"
+    },
+    "compat/native-mm/include/linux/mm_netbsd.h": {
+      "role": "mm_header",
+      "blob": "3ac8604602f9c0d14615e30cde124a979eba9ecd",
+      "sha256": "1e5d364aa0c5c33e929e74f576e339e258b86c96af966d5fa87c596ea763ac99"
+    },
+    "compat/native-mm/include/linux/vma_netbsd.h": {
+      "role": "mm_vma_header",
+      "blob": "a4b15106f2df86befb7fbc287bf065008fe9321d",
+      "sha256": "4d1048cd6c5ca8390bead7e494a620fb26a159b2d97d1d8d025d42e6101e24af"
+    },
+    "compat/native-runtime/include/linux/raw_spinlock.h": {
+      "role": "task_mapping_header",
+      "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+      "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+    },
+    "compat/native-runtime/include/linux/sched.h": {
+      "role": "task_mapping_header",
+      "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+      "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+    },
+    "compat/native-runtime/include/linux/task_netbsd.h": {
+      "role": "task_mapping_header",
+      "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+      "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+    },
+    "compat/native-runtime/task/linux_task.c": {
+      "role": "api_definition_owner",
+      "blob": "30b7605fb2d02f01187b1f99b537572334dc460a",
+      "sha256": "43c9aded415ce9794704c7bababc6475012365e0876fa7f3a8f493b93eff685d"
+    },
+    "compat/native-runtime/task/sched.h": {
+      "role": "task_scheduler_header",
+      "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+    },
+    "compat/native-runtime/task/task_entry_netbsd.h": {
+      "role": "task_entry_header",
+      "blob": "7cddab0b8ae8f863f7896c10809465d4efa0afc9",
+      "sha256": "a452e9a552e80972bdf311b34a86f8e7c1a54d0736fdb8e4bf72b06fe8cbb032"
+    },
+    "compat/native-runtime/task/task_netbsd.h": {
+      "role": "task_header",
+      "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+    },
+    "compat/native-uio/include/linux/kiocb_netbsd.h": {
+      "role": "uio_header",
+      "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+      "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+    },
+    "compat/native-uio/include/linux/uio_netbsd.h": {
+      "role": "uio_header",
+      "blob": "1af3764605fee44ffb79b2b59736101d8d2c826e",
+      "sha256": "1670ca4370196f9f6719947d14d7bf4fcdf8cd5d287037332b0cc80163c217a9"
+    }
+  }
+}

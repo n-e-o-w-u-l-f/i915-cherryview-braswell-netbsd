@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "scope": "F56 native shmem_commit source admission; no link, lifecycle or runtime claim",
+  "netbsd_pin": "03d918f6d0e81fa05b8f1160eca0628ad39988a6",
+  "archive_sha256": "3645aca2c1ac9716558075b7747a98583a8e87435f00ff30c786b4b438dbe15b",
+  "core_status_sha256": "d1dbd25236da2d7825a432734ff8807467bd2f135348b436d1b86251c0562794",
+  "repository_commit": "96fcd33762cf93bf0b7aa7cbc1e3a2958b4379c6",
+  "provider_root": "compat/native-file",
+  "units": [
+    "linux_shmem_commit.c"
+  ],
+  "required_patched_headers": [],
+  "repository_include_roots": [
+    "compat/native-file/include",
+    "compat/native-mm/include",
+    "compat/native-uio/include",
+    "compat/native-runtime/include"
+  ],
+  "native_include_roots": [
+    "sys/external/bsd/common/include",
+    "sys/external/bsd/drm2/include"
+  ],
+  "four_provider_kind": "shmem_commit",
+  "repository_inputs": {
+    "compat/linux/raw_spinlock.h": {
+      "role": "raw_spinlock_header",
+      "blob": "4ecd3caa782b6817921e1d5287663a3cb5db3ceb",
+      "sha256": "ff0596532483491ba4f224a942ee6886bf27e04833d166d8830530976b05f4c9"
+    },
+    "compat/native-file/include/linux/file_ref_netbsd.h": {
+      "role": "file_header",
+      "blob": "3b6c5b499380b6374ca9e7540e89d8cc55362678",
+      "sha256": "165ebc64c91141db3215eb9d13dced5c8902100e92760be6301b34d9a8a3cba8"
+    },
+    "compat/native-file/include/linux/fs_netbsd.h": {
+      "role": "file_header",
+      "blob": "2f304f344fdaf92fb0c412a140c27837fc1d3163",
+      "sha256": "d416cd53ad84e1195173ff0361a65a7b624ddb0a0f14d1f1cd6741642514f229"
+    },
+    "compat/native-file/linux_shmem_commit.c": {
+      "role": "translation_unit",
+      "blob": "beb01c5f30bb8ed7b390cb426b96e5d7b48a025b",
+      "sha256": "34def61853890235ae2a61a1fbce258041f655f2bd1eba1427081a9821b70fae"
+    },
+    "compat/native-mm/include/linux/mm_abi_types_netbsd.h": {
+      "role": "mm_abi_header",
+      "blob": "034e1034ba925299a14bf85f6defd37998023bf3",
+      "sha256": "c7d01e8f97fa6f38eb4c4663346087f87b34a4e0731cff4ddd417d5b6ad19054"
+    },
+    "compat/native-runtime/include/linux/raw_spinlock.h": {
+      "role": "task_mapping_header",
+      "blob": "b5a76b8cc0196624607d26609d03c9a3930689d1",
+      "sha256": "24b94f8b0c7db3eba473009873ef7ad598ae4dec7dfd0768272bcfb0f2385506"
+    },
+    "compat/native-runtime/include/linux/sched.h": {
+      "role": "task_mapping_header",
+      "blob": "5d3b76c9291e04221dba0b883f730e1abd32b370",
+      "sha256": "ca36a8c255e27088296ebb81e31cdb2a34aceb11aa0242660c8f78b4f088b6de"
+    },
+    "compat/native-runtime/include/linux/task_netbsd.h": {
+      "role": "task_mapping_header",
+      "blob": "9a5f1091f2ec19a5c1499f0d1c93c97aab365605",
+      "sha256": "7f41bd539dceae47b9fec6e907a8f391818d601bc472ad9a074a6519a827b121"
+    },
+    "compat/native-runtime/task/sched.h": {
+      "role": "task_scheduler_header",
+      "blob": "c73b0405e05678f8acac4b2cc8084afcf7690f5a",
+      "sha256": "4ce0c06140c7048bf079aabcaaa8a28800f0668fa76d6d618037974caa8f0ff4"
+    },
+    "compat/native-runtime/task/task_netbsd.h": {
+      "role": "task_header",
+      "blob": "bd87eaf96aa3174154226a55e59ed0162e7b92ee",
+      "sha256": "293683066abd75d96f6cb486c7ed7d20e11ba0955380b2aa6f64f77d9976af68"
+    },
+    "compat/native-uio/include/linux/kiocb_netbsd.h": {
+      "role": "uio_header",
+      "blob": "e54e8be249a3975c91fd5710ea024da817571df9",
+      "sha256": "4a84beb2739ef38ab0911c94511c541c6995384111724caae5a92b88d4c8659a"
+    }
+  }
+}

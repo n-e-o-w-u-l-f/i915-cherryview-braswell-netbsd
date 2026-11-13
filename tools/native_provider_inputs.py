@@ -30,6 +30,170 @@ POLL_CONTRACT_PATH = 'compat/native-file/provider-inputs-f46-poll.json'
 POLL_CONTRACT_SHA256 = '9f477521b790e036aaa0dbfddccee1c1ebb06bf62c6034c3d5b4d8b4e5e0db60'
 WORKER_CONTRACT_PATH = 'compat/native-runtime/worker-contracts/provider-inputs-f50-worker.json'
 WORKER_CONTRACT_SHA256 = '996f8a34b35e4345c16814f5d72dbd0bdbb1691bdd9a281b3a0bd9fb18560dc3'
+INODE_CONTRACT_PATH = 'compat/native-file/provider-inputs-f56-inode.json'
+INODE_CONTRACT_SHA256 = '4970532ac77de0ab04636bd73950fc77ef175119d6472bac07af7881907b28b4'
+NATIVE_FILEOPS_CONTRACT_PATH = 'compat/native-file/provider-inputs-f56-native-fileops.json'
+NATIVE_FILEOPS_CONTRACT_SHA256 = '393b0cb2b6d30a2c27a1218dff4175d5238ebc0d5843170ede392dfaaeec06d0'
+PAGE_CONTRACT_PATH = 'compat/native-file/provider-inputs-f56-page.json'
+PAGE_CONTRACT_SHA256 = '2917b686e9b26bb1993a50aee928fcd373e4295ad0f4432601f091d08e7519ce'
+SHMEM_COMMIT_CONTRACT_PATH = 'compat/native-file/provider-inputs-f56-shmem-commit.json'
+SHMEM_COMMIT_CONTRACT_SHA256 = '8292b0ca9f13df28889b868ac68b36ff30cef358ba9cddd82447ab5e4026c5fa'
+_FOUR_PROVIDER_INPUT_COMMIT = '96fcd33762cf93bf0b7aa7cbc1e3a2958b4379c6'
+_FOUR_PROVIDER_PROFILES = {'inode': {'unit': 'linux_inode.c',
+           'roles': {'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+                     'compat/native-file/include/linux/file_api_netbsd.h': 'file_header',
+                     'compat/native-file/include/linux/file_netbsd.h': 'file_header',
+                     'compat/native-file/include/linux/file_ref_netbsd.h': 'file_header',
+                     'compat/native-file/include/linux/fs_netbsd.h': 'file_header',
+                     'compat/native-file/include/linux/pagemap_netbsd.h': 'file_page_header',
+                     'compat/native-file/linux_inode.c': 'translation_unit',
+                     'compat/native-mm/include/linux/mapping_netbsd.h': 'mm_mapping_header',
+                     'compat/native-mm/include/linux/mm_abi_types_netbsd.h': 'mm_abi_header',
+                     'compat/native-mm/include/linux/mm_identity_netbsd.h': 'mm_identity_header',
+                     'compat/native-mm/include/linux/vma_netbsd.h': 'mm_vma_header',
+                     'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+                     'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+                     'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+                     'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+                     'compat/native-runtime/task/task_netbsd.h': 'task_header',
+                     'compat/native-uio/include/linux/kiocb_netbsd.h': 'uio_header'},
+           'required': ['compat/native-file/include/linux/file_api_netbsd.h',
+                        'compat/native-file/include/linux/file_netbsd.h',
+                        'compat/native-file/include/linux/file_ref_netbsd.h',
+                        'compat/native-file/include/linux/fs_netbsd.h',
+                        'compat/native-file/include/linux/pagemap_netbsd.h',
+                        'compat/native-file/linux_inode.c',
+                        'compat/native-mm/include/linux/mapping_netbsd.h',
+                        'compat/native-mm/include/linux/mm_abi_types_netbsd.h',
+                        'compat/native-mm/include/linux/mm_identity_netbsd.h',
+                        'compat/native-mm/include/linux/vma_netbsd.h',
+                        'compat/native-uio/include/linux/kiocb_netbsd.h'],
+           'optional': ['compat/linux/raw_spinlock.h',
+                        'compat/native-runtime/include/linux/raw_spinlock.h',
+                        'compat/native-runtime/include/linux/sched.h',
+                        'compat/native-runtime/include/linux/task_netbsd.h',
+                        'compat/native-runtime/task/sched.h',
+                        'compat/native-runtime/task/task_netbsd.h'],
+           'definitions': []},
+ 'native_fileops': {'unit': 'linux_native_fileops_owner.c',
+                    'roles': {'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+                              'compat/native-entry/task_entry.inc': 'api_definition_owner',
+                              'compat/native-file/include/linux/file_api_netbsd.h': 'file_header',
+                              'compat/native-file/include/linux/file_netbsd.h': 'file_header',
+                              'compat/native-file/include/linux/file_ref_netbsd.h': 'file_header',
+                              'compat/native-file/include/linux/fs_netbsd.h': 'file_header',
+                              'compat/native-file/include/linux/pagemap_netbsd.h': 'file_page_header',
+                              'compat/native-file/include/linux/shmem_fs_netbsd.h': 'file_shmem_header',
+                              'compat/native-file/linux_native_fileops.c': 'implementation_owner',
+                              'compat/native-file/linux_native_fileops_owner.c': 'translation_unit',
+                              'compat/native-file/task_entry_preallocated.inc': 'api_definition_owner',
+                              'compat/native-file/task_quiesce_retained.inc': 'api_definition_owner',
+                              'compat/native-mm/include/linux/mapping_netbsd.h': 'mm_mapping_header',
+                              'compat/native-mm/include/linux/mm_abi_types_netbsd.h': 'mm_abi_header',
+                              'compat/native-mm/include/linux/mm_identity_netbsd.h': 'mm_identity_header',
+                              'compat/native-mm/include/linux/mm_netbsd.h': 'mm_header',
+                              'compat/native-mm/include/linux/vma_netbsd.h': 'mm_vma_header',
+                              'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+                              'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+                              'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+                              'compat/native-runtime/task/linux_task.c': 'api_definition_owner',
+                              'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+                              'compat/native-runtime/task/task_entry_netbsd.h': 'task_entry_header',
+                              'compat/native-runtime/task/task_netbsd.h': 'task_header',
+                              'compat/native-uio/include/linux/kiocb_netbsd.h': 'uio_header',
+                              'compat/native-uio/include/linux/uio_netbsd.h': 'uio_header'},
+                    'required': ['compat/linux/raw_spinlock.h',
+                                 'compat/native-file/include/linux/file_api_netbsd.h',
+                                 'compat/native-file/include/linux/file_netbsd.h',
+                                 'compat/native-file/include/linux/file_ref_netbsd.h',
+                                 'compat/native-file/include/linux/fs_netbsd.h',
+                                 'compat/native-file/include/linux/pagemap_netbsd.h',
+                                 'compat/native-file/include/linux/shmem_fs_netbsd.h',
+                                 'compat/native-file/linux_native_fileops.c',
+                                 'compat/native-file/linux_native_fileops_owner.c',
+                                 'compat/native-mm/include/linux/mapping_netbsd.h',
+                                 'compat/native-mm/include/linux/mm_abi_types_netbsd.h',
+                                 'compat/native-mm/include/linux/mm_identity_netbsd.h',
+                                 'compat/native-mm/include/linux/mm_netbsd.h',
+                                 'compat/native-mm/include/linux/vma_netbsd.h',
+                                 'compat/native-runtime/include/linux/raw_spinlock.h',
+                                 'compat/native-runtime/include/linux/task_netbsd.h',
+                                 'compat/native-runtime/task/task_entry_netbsd.h',
+                                 'compat/native-runtime/task/task_netbsd.h',
+                                 'compat/native-uio/include/linux/kiocb_netbsd.h',
+                                 'compat/native-uio/include/linux/uio_netbsd.h'],
+                    'optional': ['compat/native-runtime/include/linux/sched.h',
+                                 'compat/native-runtime/task/sched.h'],
+                    'definitions': ['compat/native-runtime/task/linux_task.c',
+                                    'compat/native-entry/task_entry.inc',
+                                    'compat/native-file/task_entry_preallocated.inc',
+                                    'compat/native-file/task_quiesce_retained.inc']},
+ 'page': {'unit': 'linux_page.c',
+          'roles': {'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+                    'compat/native-file/include/linux/file_api_netbsd.h': 'file_header',
+                    'compat/native-file/include/linux/file_netbsd.h': 'file_header',
+                    'compat/native-file/include/linux/file_ref_netbsd.h': 'file_header',
+                    'compat/native-file/include/linux/fs_netbsd.h': 'file_header',
+                    'compat/native-file/include/linux/pagemap_netbsd.h': 'file_page_header',
+                    'compat/native-file/linux_page.c': 'translation_unit',
+                    'compat/native-mm/include/linux/mapping_netbsd.h': 'mm_mapping_header',
+                    'compat/native-mm/include/linux/mm_abi_types_netbsd.h': 'mm_abi_header',
+                    'compat/native-mm/include/linux/mm_identity_netbsd.h': 'mm_identity_header',
+                    'compat/native-mm/include/linux/vma_netbsd.h': 'mm_vma_header',
+                    'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+                    'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+                    'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+                    'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+                    'compat/native-runtime/task/task_netbsd.h': 'task_header',
+                    'compat/native-uio/include/linux/kiocb_netbsd.h': 'uio_header'},
+          'required': ['compat/native-file/include/linux/file_api_netbsd.h',
+                       'compat/native-file/include/linux/file_netbsd.h',
+                       'compat/native-file/include/linux/file_ref_netbsd.h',
+                       'compat/native-file/include/linux/fs_netbsd.h',
+                       'compat/native-file/include/linux/pagemap_netbsd.h',
+                       'compat/native-file/linux_page.c',
+                       'compat/native-mm/include/linux/mapping_netbsd.h',
+                       'compat/native-mm/include/linux/mm_abi_types_netbsd.h',
+                       'compat/native-mm/include/linux/mm_identity_netbsd.h',
+                       'compat/native-mm/include/linux/vma_netbsd.h',
+                       'compat/native-uio/include/linux/kiocb_netbsd.h'],
+          'optional': ['compat/linux/raw_spinlock.h',
+                       'compat/native-runtime/include/linux/raw_spinlock.h',
+                       'compat/native-runtime/include/linux/sched.h',
+                       'compat/native-runtime/include/linux/task_netbsd.h',
+                       'compat/native-runtime/task/sched.h',
+                       'compat/native-runtime/task/task_netbsd.h'],
+          'definitions': []},
+ 'shmem_commit': {'unit': 'linux_shmem_commit.c',
+                  'roles': {'compat/linux/raw_spinlock.h': 'raw_spinlock_header',
+                            'compat/native-file/include/linux/file_ref_netbsd.h': 'file_header',
+                            'compat/native-file/include/linux/fs_netbsd.h': 'file_header',
+                            'compat/native-file/linux_shmem_commit.c': 'translation_unit',
+                            'compat/native-mm/include/linux/mm_abi_types_netbsd.h': 'mm_abi_header',
+                            'compat/native-runtime/include/linux/raw_spinlock.h': 'task_mapping_header',
+                            'compat/native-runtime/include/linux/sched.h': 'task_mapping_header',
+                            'compat/native-runtime/include/linux/task_netbsd.h': 'task_mapping_header',
+                            'compat/native-runtime/task/sched.h': 'task_scheduler_header',
+                            'compat/native-runtime/task/task_netbsd.h': 'task_header',
+                            'compat/native-uio/include/linux/kiocb_netbsd.h': 'uio_header'},
+                  'required': ['compat/native-file/include/linux/file_ref_netbsd.h',
+                               'compat/native-file/include/linux/fs_netbsd.h',
+                               'compat/native-file/linux_shmem_commit.c',
+                               'compat/native-mm/include/linux/mm_abi_types_netbsd.h',
+                               'compat/native-uio/include/linux/kiocb_netbsd.h'],
+                  'optional': ['compat/linux/raw_spinlock.h',
+                               'compat/native-runtime/include/linux/raw_spinlock.h',
+                               'compat/native-runtime/include/linux/sched.h',
+                               'compat/native-runtime/include/linux/task_netbsd.h',
+                               'compat/native-runtime/task/sched.h',
+                               'compat/native-runtime/task/task_netbsd.h'],
+                  'definitions': []}}
+_FOUR_PROVIDER_DIGESTS = {
+    INODE_CONTRACT_SHA256: 'inode',
+    NATIVE_FILEOPS_CONTRACT_SHA256: 'native_fileops',
+    PAGE_CONTRACT_SHA256: 'page',
+    SHMEM_COMMIT_CONTRACT_SHA256: 'shmem_commit',
+}
 _WORKER_PROVENANCE_PATH = 'compat/native-runtime/worker-f49/provenance.json'
 _WORKER_PROVENANCE_SHA256 = '91f22a4fda6bdb0c9e61020acf31ac698c7ee009d65b07d58c7fa55c22a07fa1'
 _WORKER_INPUT_COMMIT = 'e7d7100c44322d3209d8f43d1d3a3842b52b340b'
@@ -251,7 +415,11 @@ def reviewed_contract_sha256(path, repository=REPOSITORY):
                                    (TASK_WORKER_CONTRACT_PATH, TASK_WORKER_CONTRACT_SHA256),
                                    (WAIT_CONTRACT_PATH, WAIT_CONTRACT_SHA256),
                                    (POLL_CONTRACT_PATH, POLL_CONTRACT_SHA256),
-                                   (WORKER_CONTRACT_PATH, WORKER_CONTRACT_SHA256)):
+                                   (WORKER_CONTRACT_PATH, WORKER_CONTRACT_SHA256),
+                                   (INODE_CONTRACT_PATH, INODE_CONTRACT_SHA256),
+                                   (NATIVE_FILEOPS_CONTRACT_PATH, NATIVE_FILEOPS_CONTRACT_SHA256),
+                                   (PAGE_CONTRACT_PATH, PAGE_CONTRACT_SHA256),
+                                   (SHMEM_COMMIT_CONTRACT_PATH, SHMEM_COMMIT_CONTRACT_SHA256)):
             if resolved == repository / relative:
                 return expected
     raise ValueError('a reviewed source-owned native FILE provider contract is required')
@@ -810,8 +978,78 @@ def require_task_fragments(bindings, repository, contract=None, reviewed_sha256=
             raise ValueError('provider did not consume the exact reviewed Task fragment: ' + name)
 
 
+def four_provider_input_policy(contract=None, reviewed_sha256=None):
+    """Admit only the four fixed F56 source selections, without composing Wait."""
+    kind = _FOUR_PROVIDER_DIGESTS.get(reviewed_sha256)
+    if kind is None:
+        rows = contract.get('repository_inputs', {}) if isinstance(contract, dict) else {}
+        selected = {profile['unit'] for profile in _FOUR_PROVIDER_PROFILES.values()}
+        selected.add('linux_native_fileops.c')
+        units = contract.get('units', []) if isinstance(contract, dict) else []
+        if (isinstance(contract, dict) and 'four_provider_kind' in contract or
+                isinstance(units, list) and any(name in selected for name in units) or
+                isinstance(rows, dict) and any(isinstance(row, dict) and
+                    row.get('role') == 'implementation_owner' for row in rows.values())):
+            raise ValueError('F56 inputs require their exact reviewed provider contract')
+        return []
+    if not isinstance(contract, dict):
+        raise ValueError('reviewed F56 provider identity/shape differs')
+    profile = _FOUR_PROVIDER_PROFILES[kind]
+    shape = dict(schema=1, provider_root='compat/native-file', units=[profile['unit']],
+        repository_include_roots=['compat/native-file/include', 'compat/native-mm/include',
+            'compat/native-uio/include', 'compat/native-runtime/include'],
+        native_include_roots=['sys/external/bsd/common/include',
+                              'sys/external/bsd/drm2/include'],
+        required_patched_headers=[] if kind == 'shmem_commit' else ['sys/sys/file.h'],
+        repository_commit=_FOUR_PROVIDER_INPUT_COMMIT, four_provider_kind=kind)
+    rows = contract.get('repository_inputs')
+    commit = _FOUR_PROVIDER_INPUT_COMMIT
+    if (type(contract.get('schema')) is not int or
+            not isinstance(commit, str) or len(commit) != 40 or
+            any(character not in '0123456789abcdef' for character in commit) or
+            any(contract.get(key) != value for key, value in shape.items()) or
+            not isinstance(rows, dict) or
+            any(not isinstance(row, dict) for row in rows.values()) or
+            {name: row.get('role') for name, row in rows.items()} != profile['roles'] or
+            sha_bytes((json.dumps(contract, indent=2) + '\n').encode('utf8')) != reviewed_sha256):
+        raise ValueError('reviewed F56 provider identity/shape differs')
+    return list(profile['required'])
+
+
+def require_four_provider_inputs(bindings, repository, contract=None, reviewed_sha256=None):
+    for name in four_provider_input_policy(contract, reviewed_sha256):
+        expected = dict(kind='repository', relative=name, **contract['repository_inputs'][name])
+        if bindings.get(str(Path(repository) / name)) != expected:
+            raise ValueError('provider did not consume the required F56 input: ' + name)
+
+
+def verify_four_provider_ownership(repository, contract, repository_bindings, reviewed_sha256=None):
+    """Freeze actual source/API owners; this does not execute or admit their implementation."""
+    required = four_provider_input_policy(contract, reviewed_sha256)
+    if not required:
+        return {}
+    repository = Path(repository).resolve(strict=True)
+    profile = _FOUR_PROVIDER_PROFILES[contract['four_provider_kind']]
+    expected_paths = {str(repository / name) for name in profile['roles']}
+    if set(repository_bindings) != expected_paths:
+        raise ValueError('exact Git-bound F56 repository rows required')
+    for name, row in contract['repository_inputs'].items():
+        expected = dict(kind='repository', relative=name, **row)
+        if repository_bindings.get(str(repository / name)) != expected:
+            raise ValueError('Git-bound F56 repository row differs: ' + name)
+    return dict(state='VERIFIED_SOURCE_OWNERSHIP_ONLY',
+        repository_commit=contract['repository_commit'], provider_unit=profile['unit'],
+        required_repository_inputs=required, optional_repository_inputs=list(profile['optional']),
+        excluded_definition_owners={name: contract['repository_inputs'][name]
+                                    for name in profile['definitions']},
+        native_preprocessing='NOT_RUN', native_compilation='NOT_RUN', linked=False, runtime='NOT_RUN')
+
+
 def provider_header_policy(core, contract=None, reviewed_sha256=None):
     """Keep the original all-header default; narrow only via reviewed contract metadata."""
+    if four_provider_input_policy(contract, reviewed_sha256):
+        if contract['four_provider_kind'] == 'shmem_commit':
+            return []
     if reviewed_sha256 == WORKER_CONTRACT_SHA256:
         worker_input_policy(contract, reviewed_sha256)
         return []
